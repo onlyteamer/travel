@@ -47,7 +47,7 @@
 
             <van-row >
                 <van-col span="24" style="padding: 10px 0">
-                    <van-button type="default" color="#0CC893" style="width: 100%;margin: 0 auto">发布行程</van-button>
+                    <van-button type="default" color="#0CC893" style="width: 100%;margin: 0 auto">修改行程</van-button>
                 </van-col>
             </van-row>
 
@@ -111,7 +111,7 @@
         data(){
             return{
                 checked:true,
-                title:"发布行程",
+                title:"修改行程",
                 minDate: new Date(),
                 currentDate: new Date(),
                 showPop:false,

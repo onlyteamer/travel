@@ -29,7 +29,28 @@ const routes = [
         meta: {
             title: '发布行程'
         }
-    }
+    },
+    {
+        name: 'updateStroke',
+        component: () => import('./view/carpool/updateStroke.vue'),
+        meta: {
+            title: '修改行程'
+        }
+    },
+    {
+        name: 'reserve',
+        component: () => import('./view/carpool/reserve.vue'),
+        meta: {
+            title: '预约'
+        }
+    },
+    {
+        name: 'declare',
+        component: () => import('./view/carpool/declare.vue'),
+        meta: {
+            title: '车辆预约'
+        }
+    },
 
   // {
   //   name: 'cart',
