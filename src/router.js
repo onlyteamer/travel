@@ -12,9 +12,16 @@ const routes = [
     name: 'register',
     component: () => import('./view/register/register.vue'),
     meta: {
-      title: '会员中心'
+      title: '注册'
     }
   },
+    {
+        name: 'user',
+        component: () => import('./view/user/user.vue'),
+        meta: {
+            title: '个人中心'
+        }
+    },
 
     {
         name: 'carIndex',
