@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <van-nav-bar
             :title="title"
             left-text=""
@@ -34,7 +34,7 @@
             },
             onClickRight() {
 
-            }
+  console.log(1111);          }
         }
     }
 </script>
