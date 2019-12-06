@@ -86,6 +86,13 @@ const routes = [
             title: '拼车列表'
         }
     },
+    {
+        name: 'lineDetails',
+        component: () => import('./view/carpool/lineDetails.vue'),
+        meta: {
+            title: '拼车详情'
+        }
+    },
 
   // {
   //   name: 'cart',
