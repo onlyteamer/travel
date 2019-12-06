@@ -22,6 +22,27 @@ const routes = [
             title: '个人中心'
         }
     },
+    {
+        name: 'ownerCertification',
+        component: () => import('./view/user/ownerCertification.vue'),
+        meta: {
+            title: '车主认证'
+        }
+    },
+    {
+        name: 'ownerCertificationRemind',
+        component: () => import('./view/user/ownerCertificationRemind.vue'),
+        meta: {
+            title: '车辆认证提示'
+        }
+    },
+    {
+        name: 'addCar',
+        component: () => import('./view/user/addCar.vue'),
+        meta: {
+            title: '车辆信息添加'
+        }
+    },
 
     {
         name: 'carIndex',
