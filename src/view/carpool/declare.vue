@@ -2,9 +2,62 @@
     <div class="contain">
         <Title :title="title" @onClickLeft="onClickLeft"></Title>
         <div class="content">
-
-
+            <div class="declareImg">
+                <img src="./../../static/images/declare.png">
+            </div>
+            <div class="declare">免责条款说明</div>
+            <div class="declareContent">
+                友情提醒：本平台不对拼车过程中可能发生的人员伤亡或财产损失等承担任何赔偿责任，就拼车交通事故造成的人身伤害，在意外保险责任范围年内由保险公司进行赔偿，本平台和车主不再承担赔偿责任。
+            </div>
         </div>
+
+        <div class="fate">
+            <div style="font-size: 16px;font-weight: bold">同车缘分</div>
+            <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" />
+            <van-row style="padding: 10px 0;border-bottom: 1px solid #ECECEC;">
+                <van-col span="12">
+                    <div class="left">
+                        <img src="./../../static/images/avatar.png" style="height: 44px;width: 44px">
+                        <div>
+                            <p style="font-size: 12px;margin: 5px 0"><span>【乘客】</span><span>加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px"></p>
+                            <p style="color:#9E9E9E;font-size: 12px;margin: 5px 5px 0 ">同城过1次</p>
+                        </div>
+                    </div>
+                </van-col>
+                <van-col span="12">
+                    <div class="left">
+                        <img src="./../../static/images/avatar.png" style="height: 44px;width: 44px">
+                        <div>
+                            <p style="font-size: 12px;margin: 5px 0"><span>【乘客】</span><span>加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px"></p>
+                            <p style="color:#9E9E9E;font-size: 12px;margin: 5px 5px 0 ">同城过1次</p>
+                        </div>
+                    </div>
+                </van-col>
+            </van-row>
+
+            <van-row style="padding: 10px 0">
+                <van-col span="12">
+                    <div class="left">
+                        <img src="./../../static/images/avatar.png" style="height: 44px;width: 44px">
+                        <div>
+                            <p style="font-size: 12px;margin: 5px 0"><span>【乘客】</span><span>加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px"></p>
+                            <p style="color:#9E9E9E;font-size: 12px;margin: 5px 5px 0 ">同城过1次</p>
+                        </div>
+                    </div>
+                </van-col>
+                <van-col span="12">
+                    <div class="left">
+                        <img src="./../../static/images/avatar.png" style="height: 44px;width: 44px">
+                        <div>
+                            <p style="font-size: 12px;margin: 5px 0"><span>【乘客】</span><span>加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px"></p>
+                            <p style="color:#9E9E9E;font-size: 12px;margin: 5px 5px 0 ">同城过1次</p>
+                        </div>
+                    </div>
+                </van-col>
+            </van-row>
+        </div>
+
+
         <div class="footer">
             <div><van-icon name="warning" color="#F55456"/> 注意:</div>
             <div class="notice">
@@ -27,7 +80,7 @@
 
 <script>
     import Title from './../../components/header'
-    import { Cell, CellGroup,DatetimePicker,Popup,Row, Col,Icon,Picker ,Checkbox, CheckboxGroup ,Button,Tag,Field  } from 'vant';
+    import { Cell, CellGroup,Row, Col ,Button,Tag,Field, Divider ,Icon  } from 'vant';
 
     import greenBar from './../../static/images/green.png'
     import redBar from './../../static/images/red.png'
@@ -38,17 +91,13 @@
             Title,
             [Cell.name]:Cell,
             [CellGroup.name]:CellGroup,
-            [DatetimePicker.name]:DatetimePicker,
-            [Popup.name]:Popup,
             [Row.name]:Row,
             [Col.name]:Col,
-            [Icon.name]:Icon,
-            [Picker.name]:Picker,
-            [Checkbox.name]:Checkbox,
-            [CheckboxGroup.name]:CheckboxGroup,
             [Button.name]:Button,
             [Tag.name]:Tag,
-            [Field.name]:Field
+            [Field.name]:Field,
+            [Divider.name]:Divider,
+            [Icon.name]:Icon
         },
         data(){
             return{
@@ -81,13 +130,14 @@
     }
 
     .contain{
-        background: #FFFFFF;
         font-size: 14px;
     }
 
     .contain .content{
+        background: #FFFFFF;
         border-top: 1px solid #ECECEC;
-        width: 90%;
+        /*width: 90%;*/
+        padding: 5px 20px;
         margin: 0 auto;
         color: #202020;
     }
@@ -95,6 +145,18 @@
     .contain .content .valStyle{
         color: #9E9E9E;
         font-size: 14px;
+    }
+
+    .contain .fate{
+        margin-top: 10px;
+        padding: 5px 10px;
+        background: #ffffff;
+    }
+
+    .declareImg{
+        width: 100%;
+        display: flex;
+        justify-content: center;
     }
 
     .seatTag{
@@ -129,9 +191,10 @@
     }
 
     .footer{
-        width: 90%;
-        margin: 0 auto;
-        padding: 5px 0;
+        margin-top: 10px;
+        padding:  10px;
+        background: #FFFFFF;
+        margin-bottom: 50px;
     }
 
     .footer .notice{
@@ -143,5 +206,36 @@
         position: fixed;
         bottom: 0;
         width: 100%;
+    }
+
+    .declareImg{
+        margin-top: 16px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .declareImg img{
+        width: 80px;
+        height: 80px;
+    }
+
+    .declareContent{
+        line-height: 24px;
+        font-size: 14px;
+        color: #202020;
+    }
+
+    .declare{
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 5px;
+        margin-bottom: 15px;
+    }
+
+    .left{
+        display: flex;
+        align-items: center;
     }
 </style>
