@@ -41,7 +41,7 @@
                 this.$router.back(-1);
             },
             submit() {
-
+                this.$router.push({path:'/addCar'});
             }
         }
     }
