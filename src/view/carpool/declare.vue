@@ -17,7 +17,7 @@
             <van-row style="padding: 10px 0;border-bottom: 1px solid #ECECEC;">
                 <van-col span="12">
                     <div class="left">
-                        <img src="./../../static/images/avatar.png" style="height: 44px;width: 44px">
+                        <img src="../../static/images/userAvatar.png" style="height: 44px;width: 44px">
                         <div>
                             <p style="font-size: 12px;margin: 5px 0"><span>【乘客】</span><span>加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px"></p>
                             <p style="color:#9E9E9E;font-size: 12px;margin: 5px 5px 0 ">同城过1次</p>
@@ -26,7 +26,7 @@
                 </van-col>
                 <van-col span="12">
                     <div class="left">
-                        <img src="./../../static/images/avatar.png" style="height: 44px;width: 44px">
+                        <img src="../../static/images/userAvatar.png" style="height: 44px;width: 44px">
                         <div>
                             <p style="font-size: 12px;margin: 5px 0"><span>【乘客】</span><span>加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px"></p>
                             <p style="color:#9E9E9E;font-size: 12px;margin: 5px 5px 0 ">同城过1次</p>
@@ -38,7 +38,7 @@
             <van-row style="padding: 10px 0">
                 <van-col span="12">
                     <div class="left">
-                        <img src="./../../static/images/avatar.png" style="height: 44px;width: 44px">
+                        <img src="../../static/images/userAvatar.png" style="height: 44px;width: 44px">
                         <div>
                             <p style="font-size: 12px;margin: 5px 0"><span>【乘客】</span><span>加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px"></p>
                             <p style="color:#9E9E9E;font-size: 12px;margin: 5px 5px 0 ">同城过1次</p>
@@ -47,7 +47,7 @@
                 </van-col>
                 <van-col span="12">
                     <div class="left">
-                        <img src="./../../static/images/avatar.png" style="height: 44px;width: 44px">
+                        <img src="../../static/images/userAvatar.png" style="height: 44px;width: 44px">
                         <div>
                             <p style="font-size: 12px;margin: 5px 0"><span>【乘客】</span><span>加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px"></p>
                             <p style="color:#9E9E9E;font-size: 12px;margin: 5px 5px 0 ">同城过1次</p>
