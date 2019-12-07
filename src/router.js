@@ -79,6 +79,20 @@ const routes = [
             title: '车辆预约'
         }
     },
+    {
+        name: 'carLine',
+        component: () => import('./view/carpool/carLine.vue'),
+        meta: {
+            title: '拼车列表'
+        }
+    },
+    {
+        name: 'lineDetails',
+        component: () => import('./view/carpool/lineDetails.vue'),
+        meta: {
+            title: '拼车详情'
+        }
+    },
 
   // {
   //   name: 'cart',
