@@ -2,12 +2,14 @@
     <div class="content" ref="content">
         <img src="../../static/images/register-Icon.png" class="register_icon"/>
         <div class="form-wrap">
-            <van-field v-model="definition.phone" type="tel" class="phone-input" custom-style="color:#fff"
+            <van-field v-model="definition.phone" :border=false type="tel" class="phone-input"
+                       custom-style="color:#fff"
                        placeholder="手机号码">
             </van-field>
             <van-field class="code-input"
                        v-model="definition.code"
                        center
+                       :border=false
                        clearable
                        placeholder="请输入短信验证码">
                 <van-button slot="button" size="small"
@@ -119,6 +121,9 @@
         padding-right: 44px;
     }
 
+    /deep/ .van-cell:not(:last-child)::after {
+        border: none;
+    }
     .code-input {
         background-color: transparent;
         border-bottom: 1px solid white !important;

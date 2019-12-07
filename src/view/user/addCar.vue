@@ -52,8 +52,14 @@
                     以上信息承诺真实有效，如果填写有虚假信息，车主承担全部责任。
                 </van-checkbox>
             </div>
-            <van-button @click="submit" style="margin-top:39px;width: 100%;height:44px" color="#0CC893" type="default">
+            <van-button @click="submit" style="margin-top:15px;width: 100%;height:44px" color="#0CC893" type="default">
                 添加
+            </van-button>
+            <van-button @click="edit" v-if="id" style="margin-top:15px;width: 100%;height:44px" color="#0CC893" type="default">
+                修改
+            </van-button>
+            <van-button @click="del" v-if="id" style="margin-top:15px;width: 100%;height:44px" color="#9E9E9E" type="default">
+                删除
             </van-button>
         </div>
     </div>
@@ -76,6 +82,7 @@
         },
         data() {
             return {
+                id:false,
                 imgURL: [],
                 imgURL2: [],
                 imgURL3: [],
@@ -87,6 +94,12 @@
             }
         },
         methods: {
+            edit(){
+
+            },
+            del(){
+
+            },
             onClickLeft() {
                 this.$router.back(-1);
             },
