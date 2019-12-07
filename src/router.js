@@ -150,6 +150,13 @@ const routes = [
             title: '乘客列表'
         }
     },
+    {
+        name: 'carFate',
+        component: () => import('./view/carpool/carFate.vue'),
+        meta: {
+            title: '同车缘分'
+        }
+    },
 
 
 
