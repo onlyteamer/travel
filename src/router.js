@@ -58,6 +58,27 @@ const routes = [
         }
     },
     {
+        name: 'busDriver',
+        component: () => import('./view/user/busDriver.vue'),
+        meta: {
+            title: '班车司机'
+        }
+    },
+    {
+        name: 'integral',
+        component: () => import('./view/user/integral.vue'),
+        meta: {
+            title: '我的积分'
+        }
+    },
+    {
+        name: 'coupon',
+        component: () => import('./view/user/coupon.vue'),
+        meta: {
+            title: '优惠券'
+        }
+    },
+    {
         name: 'carIndex',
         component: () => import('./view/carpool/carIndex.vue'),
         meta: {
