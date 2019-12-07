@@ -5,7 +5,7 @@
         <div>
             <div class="black" v-for="index in 6">
                 <van-row >
-                    <van-col span="12" >
+                    <van-col span="16" >
                         <div style="display: flex;align-items: center">
                             <img src="../../static/images/userAvatar.png" style="height: 50px;width: 50px;margin-right: 10px">
                             <div>
@@ -20,7 +20,7 @@
                             </div>
                         </div>
                     </van-col>
-                    <van-col span="12" align="right">
+                    <van-col span="8" align="right">
                         <div>
                             <div class="userType" v-if="index%2 != '0'">车主</div>
                             <div v-else class="passer">乘客</div>

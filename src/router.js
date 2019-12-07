@@ -157,6 +157,21 @@ const routes = [
             title: '同车缘分'
         }
     },
+    {
+        name: 'passengerDetails',
+        component: () => import('./view/carpool/passengerDetails.vue'),
+        meta: {
+            title: '乘客详情'
+        }
+    },
+    {
+        name: 'carOwnerDetails',
+        component: () => import('./view/carpool/carOwnerDetails.vue'),
+        meta: {
+            title: '车主详情'
+        }
+    },
+
 
 
 
