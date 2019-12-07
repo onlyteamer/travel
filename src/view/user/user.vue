@@ -47,35 +47,49 @@
                 <div class="func-wrap">
                     <div class="func-title"><span>我的账户</span></div>
                     <div class="func-content">
-                        <div class="func-content-item"><img src="../../static/images/user/cztx.png"/><span>充值提现</span></div>
-                        <div class="func-content-item"><img src="../../static/images/user/wdzl.png"/><span>我的资料</span></div>
-                        <div class="func-content-item"><img src="../../static/images/user/qhlx.png"/><span>切换路线</span></div>
-                        <div class="func-content-item"><img src="../../static/images/user/wdjf.png"/><span>我的积分</span></div>
-                        <div class="func-content-item"><img src="../../static/images/user/yhq.png"/><span>优惠券</span></div>
-                        <div class="func-content-item"><img src="../../static/images/user/hmd.png"/><span>黑名单</span></div>
-                        <div class="func-content-item"><img src="../../static/images/user/wdts.png"/><span>我的投诉</span></div>
+                        <div class="func-content-item" @click="goWealth"><img
+                                src="../../static/images/user/cztx.png"/><span>充值提现</span></div>
+                        <div class="func-content-item"><img src="../../static/images/user/wdzl.png"/><span>我的资料</span>
+                        </div>
+                        <div class="func-content-item"><img src="../../static/images/user/qhlx.png"/><span>切换路线</span>
+                        </div>
+                        <div class="func-content-item"><img src="../../static/images/user/wdjf.png"/><span>我的积分</span>
+                        </div>
+                        <div class="func-content-item"><img src="../../static/images/user/yhq.png"/><span>优惠券</span>
+                        </div>
+                        <div class="func-content-item"><img src="../../static/images/user/hmd.png"/><span>黑名单</span>
+                        </div>
+                        <div class="func-content-item"><img src="../../static/images/user/wdts.png"/><span>我的投诉</span>
+                        </div>
                     </div>
                 </div>
                 <div class="func-wrap">
                     <div class="func-title"><span>乘车服务</span></div>
                     <div class="func-content">
-                        <div class="func-content-item"><img src="../../static/images/user/ccr.png"/><span>乘车人</span></div>
-                        <div class="func-content-item"><img src="../../static/images/user/wdgz.png"/><span>我的关注</span></div>
+                        <div class="func-content-item"><img src="../../static/images/user/ccr.png"/><span>乘车人</span>
+                        </div>
+                        <div class="func-content-item"><img src="../../static/images/user/wdgz.png"/><span>我的关注</span>
+                        </div>
                     </div>
                 </div>
                 <div class="func-wrap">
                     <div class="func-title"><span>车主服务</span></div>
                     <div class="func-content">
-                        <div class="func-content-item" @click="goOwnerCertification"><img src="../../static/images/user/czrz.png"/><span>车主认证</span></div>
-                        <div class="func-content-item"><img src="../../static/images/user/clgl.png"/><span>车辆管理</span></div>
-                        <div class="func-content-item"><img src="../../static/images/user/wdfs.png"/><span>我的粉丝</span></div>
+                        <div class="func-content-item" @click="goOwnerCertification"><img
+                                src="../../static/images/user/czrz.png"/><span>车主认证</span></div>
+                        <div class="func-content-item"><img src="../../static/images/user/clgl.png"/><span>车辆管理</span>
+                        </div>
+                        <div class="func-content-item"><img src="../../static/images/user/wdfs.png"/><span>我的粉丝</span>
+                        </div>
                     </div>
                 </div>
                 <div class="func-wrap">
                     <div class="func-title"><span>其他服务</span></div>
                     <div class="func-content">
-                        <div class="func-content-item"><img src="../../static/images/user/jfsc.png"/><span>积分商城</span></div>
-                        <div class="func-content-item"><img src="../../static/images/user/lxkf.png"/><span>联系客服</span></div>
+                        <div class="func-content-item"><img src="../../static/images/user/jfsc.png"/><span>积分商城</span>
+                        </div>
+                        <div class="func-content-item"><img src="../../static/images/user/lxkf.png"/><span>联系客服</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -99,24 +113,30 @@
                 listImg: listImg,
             }
         },
-        methods:{
-            goOwnerCertification(){
-                this.$router.push({path:'/ownerCertification'});
+        methods: {
+            goWealth() {
+                //    充值提现
+                this.$router.push({path: '/wealth'});
+            },
+            goOwnerCertification() {
+                //车主认证
+                this.$router.push({path: '/ownerCertification'});
             }
         }
     }
 </script>
 
 <style scoped>
-    .content{
+    .content {
         background-color: white;
     }
+
     .func-content {
         height: auto;
         width: 100%;
         display: flex;
         align-items: center;
-        justify-content:flex-start;
+        justify-content: flex-start;
         flex-wrap: wrap;
     }
 
@@ -125,7 +145,7 @@
         height: 80px;
         display: flex;
         flex-direction: column;
-        align-items:center;
+        align-items: center;
         justify-content: center;
     }
 
@@ -133,7 +153,8 @@
         width: 22px;
         height: 22px;
     }
-    .func-content-item span{
+
+    .func-content-item span {
         font-size: 14px;
         color: #666666;
         padding-top: 8px;
