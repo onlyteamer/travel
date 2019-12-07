@@ -117,5 +117,6 @@
 
     .content {
         padding: 15px;
+        margin-top: 46px;
     }
 </style>
