@@ -108,6 +108,13 @@ const routes = [
         }
     },
     {
+        name: 'vehicleManagement',
+        component: () => import('./view/user/vehicleManagement.vue'),
+        meta: {
+            title: '车辆管理'
+        }
+    },
+    {
         name: 'carIndex',
         component: () => import('./view/carpool/carIndex.vue'),
         meta: {
