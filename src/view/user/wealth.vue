@@ -38,19 +38,19 @@
         <div class="content">
             <div style="position: relative;top: -35px;">
                 <van-row class="bag-wrap">
-                    <van-col span="6" class="bag-col">
+                    <van-col span="6" class="bag-col"  @click="goDetail(0)" >
                         <div class="bag-wrap-item"><img src="../../static/images/user/wdzl.png"/></div>
                         <div class="bag-wrap-item">账单记录</div>
                     </van-col>
-                    <van-col span="6" class="bag-col">
+                    <van-col span="6" class="bag-col":value="1" @click="goDetail(1)">
                         <div class="bag-wrap-item"><img src="../../static/images/user/wdzl.png"/></div>
                         <div class="bag-wrap-item">消费记录</div>
                     </van-col>
-                    <van-col span="6" class="bag-col">
+                    <van-col span="6" class="bag-col" :value="2" @click="goDetail(2)">
                         <div class="bag-wrap-item"><img src="../../static/images/user/wdzl.png"/></div>
                         <div class="bag-wrap-item">收益记录</div>
                     </van-col>
-                    <van-col span="6" class="bag-col">
+                    <van-col span="6" class="bag-col" :value="3" @click="goDetail(3)">
                         <div class="bag-wrap-item"><img src="../../static/images/user/wdzl.png"/></div>
                         <div class="bag-wrap-item">充值记录</div>
                     </van-col>
@@ -69,9 +69,9 @@
                 </div>
                 <div class="func-wrap">
                     <div class="func-title">
-                            <van-field v-model="czje1" type="number" :border=false
-                                       placeholder="最低提现金额100" label="余额提现"/>
-                            <span style="color: #5E5E5E;font-size: 17px">元</span>
+                        <van-field v-model="czje1" type="number" :border=false
+                                   placeholder="最低提现金额100" label="余额提现"/>
+                        <span style="color: #5E5E5E;font-size: 17px">元</span>
                     </div>
                     <div class="func-content">
                         <van-button style="width: 100%;height:40px" color="#5083ED" type="default">
@@ -118,9 +118,12 @@
             }
         },
         methods: {
-            onClickLeft(){
+            onClickLeft() {
                 this.$router.back(-1);
-            }
+            },
+            goDetail(e) {
+                this.$router.push({path: '/wealthDetail', query: {activeIndex: e}});
+            },
         }
     }
 </script>
