@@ -38,13 +38,11 @@
 </template>
 <!--乘车人管理-->
 <script>
-    import {NavBar, Row, Col, Button} from 'vant';
+    import {NavBar, Button} from 'vant';
 
     export default {
         components: {
             [NavBar.name]: NavBar,
-            [Row.name]: Row,
-            [Col.name]: Col,
             [Button.name]: Button,
         },
         data() {
