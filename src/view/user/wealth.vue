@@ -2,7 +2,7 @@
     <div>
         <div class="info-wrap">
             <van-row style="height: 40px">
-                <van-col span="8" style="height: 40px">
+                <van-col span="8" style="height: 40px" @click="onClickLeft">
                     <div><img src="../../static/images/left.png" style="width: 11px;height: 18px"/></div>
                 </van-col>
                 <van-col span="8" style="height: 40px;text-align: center"><span style="color: white;font-size: 16px;">充值提现</span>
@@ -11,13 +11,13 @@
             <div>
                 <van-row style="height: 69px">
                     <van-col span="12" class="item-col">
-                        <div style="width:100%;height:100%;border-bottom: 1px white dashed;">
+                        <div class="item-col-wrap">
                             <div style="font-size: 14px;color: white">总资产（元）</div>
                             <div style="font-size: 20px;color: white;font-weight: bold">8000.00</div>
                         </div>
                     </van-col>
                     <van-col span="12" class="item-col">
-                        <div style="width:100%;height:100%;border-bottom: 1px white dashed;">
+                        <div class="item-col-wrap">
                             <div style="font-size: 14px;color: white">累计收益（元）</div>
                             <div style="font-size: 20px;color: white;font-weight: bold">200.00</div>
                         </div>
@@ -42,7 +42,7 @@
                         <div class="bag-wrap-item"><img src="../../static/images/user/wdzl.png"/></div>
                         <div class="bag-wrap-item">账单记录</div>
                     </van-col>
-                    <van-col span="6" class="bag-col":value="1" @click="goDetail(1)">
+                    <van-col span="6" class="bag-col" :value="1" @click="goDetail(1)">
                         <div class="bag-wrap-item"><img src="../../static/images/user/wdzl.png"/></div>
                         <div class="bag-wrap-item">消费记录</div>
                     </van-col>
@@ -129,6 +129,15 @@
 </script>
 
 <style scoped>
+    .item-col-wrap {
+        width: 100%;
+        height: 100%;
+        border-bottom: 1px white dashed;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
     .item-col {
         text-align: center;
         height: 69px;

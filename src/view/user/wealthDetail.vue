@@ -57,7 +57,7 @@
         </div>
     </div>
 </template>
-
+<!--账单明细-->
 <script>
     import {NavBar, Tab, Tabs,Row, Col, List } from 'vant';
 
@@ -106,18 +106,18 @@
             },
             onLoad(){
                 // 异步更新数据
-                setTimeout(() => {
-                    for (let i = 0; i < 10; i++) {
-                        this.list.push(this.list.length + 1);
-                    }
-                    // 加载状态结束
-                    this.loading = false;
-
-                    // 数据全部加载完成
-                    if (this.list.length >= 40) {
-                        this.finished = true;
-                    }
-                }, 500);
+            //     setTimeout(() => {
+            //         for (let i = 0; i < 10; i++) {
+            //             this.list.push(this.list.length + 1);
+            //         }
+            //         // 加载状态结束
+            //         this.loading = false;
+            //
+            //         // 数据全部加载完成
+            //         if (this.list.length >= 40) {
+            //             this.finished = true;
+            //         }
+            //     }, 500);
             }
         },
         created: function(){
