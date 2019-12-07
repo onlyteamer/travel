@@ -115,6 +115,22 @@ const routes = [
         }
     },
 
+    {
+        name: 'blacklist',
+        component: () => import('./view/carpool/blacklist.vue'),
+        meta: {
+            title: '黑名单'
+        }
+    },
+    {
+        name: 'passengerList',
+        component: () => import('./view/carpool/passengerList.vue'),
+        meta: {
+            title: '乘客列表'
+        }
+    },
+
+
 
   // {
   //   name: 'cart',
