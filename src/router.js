@@ -43,7 +43,20 @@ const routes = [
             title: '车辆信息添加'
         }
     },
-
+    {
+        name: 'wealth',
+        component: () => import('./view/user/wealth.vue'),
+        meta: {
+            title: '充值提现'
+        }
+    },
+    {
+        name: 'wealthDetail',
+        component: () => import('./view/user/wealthDetail.vue'),
+        meta: {
+            title: '账单明细'
+        }
+    },
     {
         name: 'carIndex',
         component: () => import('./view/carpool/carIndex.vue'),
