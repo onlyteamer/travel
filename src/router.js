@@ -79,6 +79,35 @@ const routes = [
         }
     },
     {
+        name: 'passenger',
+        component: () => import('./view/user/passenger.vue'),
+        meta: {
+            title: '乘车人管理'
+        }
+    },
+    {
+        name: 'passenger-edit',
+        component: () => import('./view/user/passenger-edit.vue'),
+        meta: {
+            title: '乘车人编辑'
+        }
+    },
+    {
+        name: 'complain',
+        component: () => import('./view/user/complain.vue'),
+        meta: {
+            title: '我的投诉'
+        }
+    },
+
+    {
+        name: 'setting',
+        component: () => import('./view/user/setting.vue'),
+        meta: {
+            title: '我的资料'
+        }
+    },
+    {
         name: 'carIndex',
         component: () => import('./view/carpool/carIndex.vue'),
         meta: {
