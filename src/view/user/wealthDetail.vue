@@ -1,9 +1,9 @@
 <template>
     <div>
         <div>
-            <van-nav-bar title="账单明细" left-arrow @click-left="onClickLeft"/>
+            <van-nav-bar title="账单明细" :fixed="true" left-arrow @click-left="onClickLeft"/>
         </div>
-        <div>
+        <div style="margin-top: 46px;">
             <van-tabs  sticky type="card" v-model="active" @click="onClick" title-active-color="#fff" title-inactive-color="#0CC893" color="#0CC893">
                 <van-tab title="全部">
                     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
