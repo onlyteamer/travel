@@ -165,6 +165,44 @@ const routes = [
         }
     },
 
+    {
+        name: 'blacklist',
+        component: () => import('./view/carpool/blacklist.vue'),
+        meta: {
+            title: '黑名单'
+        }
+    },
+    {
+        name: 'passengerList',
+        component: () => import('./view/carpool/passengerList.vue'),
+        meta: {
+            title: '乘客列表'
+        }
+    },
+    {
+        name: 'carFate',
+        component: () => import('./view/carpool/carFate.vue'),
+        meta: {
+            title: '同车缘分'
+        }
+    },
+    {
+        name: 'passengerDetails',
+        component: () => import('./view/carpool/passengerDetails.vue'),
+        meta: {
+            title: '乘客详情'
+        }
+    },
+    {
+        name: 'carOwnerDetails',
+        component: () => import('./view/carpool/carOwnerDetails.vue'),
+        meta: {
+            title: '车主详情'
+        }
+    },
+
+
+
 
   // {
   //   name: 'cart',
