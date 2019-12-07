@@ -8,7 +8,7 @@
                 <van-col span="8" style="text-align: center"><span style="color: white;font-size: 16px;">个人中心</span>
                 </van-col>
             </van-row>
-            <div style="display: flex;align-items: center;justify-content: space-between">
+            <div style="display: flex;align-items: center;justify-content: space-between;margin-top: 20px">
                 <van-image round width="61px" height="61px" :src="listImg"/>
                 <div>
                     <span style="font-size: 14px;color: white;margin-right: 3px;font-weight: bold">加菲猫</span>
@@ -53,7 +53,7 @@
                         </div>
                         <div class="func-content-item"><img src="../../static/images/user/qhlx.png"/><span>切换路线</span>
                         </div>
-                        <div class="func-content-item"><img src="../../static/images/user/wdjf.png"/><span>我的积分</span>
+                        <div class="func-content-item" @click="goIntegral"><img src="../../static/images/user/wdjf.png"/><span>我的积分</span>
                         </div>
                         <div class="func-content-item"><img src="../../static/images/user/yhq.png"/><span>优惠券</span>
                         </div>
@@ -121,6 +121,10 @@
             goOwnerCertification() {
                 //车主认证
                 this.$router.push({path: '/ownerCertification'});
+            },
+            goIntegral(){
+              //我的积分
+              this.$router.push({path: '/integral'});
             }
         }
     }
@@ -217,7 +221,7 @@
     .info-wrap {
         background-image: -webkit-linear-gradient(-49deg, #5C77FE, #05CF8A);
         background-image: linear-gradient(-49deg, #5C77FE, #05CF8A);
-        height: 126px;
+        height: 146px;
         padding: 20px 15px 0 15px;
     }
 
