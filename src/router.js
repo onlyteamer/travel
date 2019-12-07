@@ -128,6 +128,15 @@ const routes = [
         }
     },
 
+    {
+        name: 'myStroke',
+        component: () => import('./view/carpool/myStroke.vue'),
+        meta: {
+            title: '我的行程'
+        }
+    },
+
+
   // {
   //   name: 'cart',
   //   component: () => import('./view/cart'),
