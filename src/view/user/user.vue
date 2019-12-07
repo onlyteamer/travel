@@ -79,7 +79,7 @@
                     <div class="func-content">
                         <div class="func-content-item" @click="goOwnerCertification"><img
                                 src="../../static/images/user/czrz.png"/><span>车主认证</span></div>
-                        <div class="func-content-item"><img src="../../static/images/user/clgl.png"/><span>车辆管理</span>
+                        <div class="func-content-item" @click="goVehicleManagement"><img src="../../static/images/user/clgl.png"/><span>车辆管理</span>
                         </div>
                         <div class="func-content-item"><img src="../../static/images/user/wdfs.png"/><span>我的粉丝</span>
                         </div>
@@ -116,6 +116,10 @@
             }
         },
         methods: {
+            goVehicleManagement(){
+              //车辆管理
+              this.$router.push({path:'/vehicleManagement'});
+            },
             goSetting(){
                 //我的资料
                 this.$router.push({path:'/setting'});
