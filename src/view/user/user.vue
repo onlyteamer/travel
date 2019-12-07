@@ -18,7 +18,9 @@
                     <img style="width: 20px;height: 14px;margin-right: 3px" src="../../static/images/idCard.png"/>
                     <span class="real_name">实名认证</span>
                 </div>
-                <img style="width: 22px;height: 22px;float: right;margin-right: 7px" src="../../static/images/set.png"/>
+                <div @click="goSetting">
+                    <img style="width: 22px;height: 22px;float: right;margin-right: 7px" src="../../static/images/set.png"/>
+                </div>
             </div>
         </div>
         <div class="content">
@@ -49,24 +51,24 @@
                     <div class="func-content">
                         <div class="func-content-item" @click="goWealth"><img
                                 src="../../static/images/user/cztx.png"/><span>充值提现</span></div>
-                        <div class="func-content-item"><img src="../../static/images/user/wdzl.png"/><span>我的资料</span>
+                        <div class="func-content-item" @click="goSetting"><img src="../../static/images/user/wdzl.png"/><span>我的资料</span>
                         </div>
                         <div class="func-content-item"><img src="../../static/images/user/qhlx.png"/><span>切换路线</span>
                         </div>
                         <div class="func-content-item" @click="goIntegral"><img src="../../static/images/user/wdjf.png"/><span>我的积分</span>
                         </div>
-                        <div class="func-content-item"><img src="../../static/images/user/yhq.png"/><span>优惠券</span>
+                        <div class="func-content-item" @click="goCoupon"><img src="../../static/images/user/yhq.png"/><span>优惠券</span>
                         </div>
                         <div class="func-content-item"><img src="../../static/images/user/hmd.png"/><span>黑名单</span>
                         </div>
-                        <div class="func-content-item"><img src="../../static/images/user/wdts.png"/><span>我的投诉</span>
+                        <div class="func-content-item" @click="goComplain"><img src="../../static/images/user/wdts.png"/><span>我的投诉</span>
                         </div>
                     </div>
                 </div>
                 <div class="func-wrap">
                     <div class="func-title"><span>乘车服务</span></div>
                     <div class="func-content">
-                        <div class="func-content-item"><img src="../../static/images/user/ccr.png"/><span>乘车人</span>
+                        <div class="func-content-item" @click="goPassenger"><img src="../../static/images/user/ccr.png"/><span>乘车人</span>
                         </div>
                         <div class="func-content-item"><img src="../../static/images/user/wdgz.png"/><span>我的关注</span>
                         </div>
@@ -114,9 +116,25 @@
             }
         },
         methods: {
+            goSetting(){
+                //我的资料
+                this.$router.push({path:'/setting'});
+            },
+            goComplain(){
+              //我的投诉
+                this.$router.push({path:'/complain'});
+            },
+            goPassenger(){
+              //乘车人管理
+              this.$router.push({path:'/passenger'});
+            },
             goWealth() {
                 //    充值提现
                 this.$router.push({path: '/wealth'});
+            },
+            goCoupon(){
+                //优惠券
+                this.$router.push({path: '/coupon'});
             },
             goOwnerCertification() {
                 //车主认证
