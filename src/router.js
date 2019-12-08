@@ -256,7 +256,7 @@ const routes = [
         name: 'carOwnPosition',
         component: () => import('./view/carpool/carOwnPosition.vue'),
         meta: {
-            title: '其他操作'
+            title: '车主位置'
         }
     },
   // {
