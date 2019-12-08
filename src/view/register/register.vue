@@ -2,7 +2,7 @@
     <div class="content" ref="content">
         <img src="../../static/images/register-Icon.png" class="register_icon"/>
         <div class="form-wrap">
-            <van-field v-model="definition.phone" :border=false type="tel" class="phone-input"
+            <van-field v-model="definition.phone" :border=false type="number" class="phone-input"
                        custom-style="color:#fff"
                        placeholder="手机号码">
             </van-field>
@@ -22,23 +22,26 @@
             <van-checkbox
                     style="margin-top: 25px"
                     v-model="definition.checked"
-                    checked-color="#0CC893">我已阅读并同意《绿色出行用户协议》
+                    checked-color="#0CC893">我已阅读并同意 <span @click="goAgreement">《绿色出行用户协议》</span>
             </van-checkbox>
-            <van-button style="margin-top:39px;width: 100%;height:44px" color="#0CC893" type="default" @click="goIndex">登录
+            <van-button style="margin-top:39px;width: 100%;height:44px" color="#0CC893" type="default" @click="login">
+                登录
             </van-button>
         </div>
     </div>
 </template>
 
 <script>
-    import {Field, Button, Checkbox, Image} from 'vant';
+    import {Field, Button, Checkbox, Image, Toast} from 'vant';
+    import request from '../../utils/request';
 
     export default {
         components: {
             [Field.name]: Field,
             [Button.name]: Button,
             [Image.name]: Image,
-            [Checkbox.name]: Checkbox
+            [Checkbox.name]: Checkbox,
+            [Toast.name]: Toast,
         },
         data() {
             return {
@@ -47,24 +50,37 @@
                 definition: {
                     phone: '',
                     code: '',
-                    checked: ''
+                    checked: true
                 }
             }
         },
         methods: {
-            goIndex(){
-                this.$router.push({path:'/carIndex'});
-            },
             setHeight() {
                 let content = document.getElementsByClassName('content')[0];
                 let height = window.innerHeight;
                 content.style.height = height + 'px';
             },
+            checkPhone(phone) {
+                if(!(/^1[3456789]\d{9}$/.test(phone))){
+                    return false;
+                }
+                return true;
+            },
             async sendCode() {
-                if (this.definition.phone) {
-                    this.countDown(60)
+                if (this.definition.phone&&this.checkPhone(this.definition.phone)) {
+                    this.countDown(60);
+                    request.sendGet({
+                        url: 'getcode',
+                        params: {
+                            phone: this.definition.phone
+                        }
+                    }).then((res) => {
+                    })
+                } else {
+                    Toast('请输入正确的手机号');
                 }
             },
+
             // 倒计时方法
             countDown(time) {
                 if (time === 0) {
@@ -82,19 +98,37 @@
             },
             // 登录
             login() {
-                // if (this.verifyPhone()) {
-                //     Toast(this.verifyPhone())
-                // } else {
-                //     let params = {
-                //         phone: this.phone,
-                //         code: this.verifycode
-                //     }
-                //     // 这里写登录的接口
-                // }
-            }
-        },
-        created: function () {
+                if(!(this.definition.phone&&this.checkPhone(this.definition.phone))){
+                    Toast('请输入正确的手机号');
+                    return;
+                }
+                if(!this.definition.code){
+                    Toast('请输入验证码');
+                    return;
+                }
+                if(!this.definition.checked){
+                    return;
+                }
+                request.sendPost({
+                    url:'/bindphone',
+                    params:{
+                        openid:localStorage.getItem('openid'),
+                        code:this.definition.code,
+                        phone:this.definition.phone,
+                    }
+                }).then((res)=>{
+                    if(res.data.code==200){
+                        this.$router.push({path: '/carIndex'});
+                    }else{
+                        Toast(res.data.msg);
+                    }
 
+                })
+            },
+            goAgreement(){
+                //协议页面
+                this.$router.push({path:'/agreement',query:{name:'绿色出行用户协议'}})
+            }
         },
         mounted: function () {
             this.setHeight();
@@ -127,6 +161,7 @@
     /deep/ .van-cell:not(:last-child)::after {
         border: none;
     }
+
     .code-input {
         background-color: transparent;
         border-bottom: 1px solid white !important;
