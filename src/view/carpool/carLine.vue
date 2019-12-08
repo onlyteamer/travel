@@ -120,6 +120,9 @@
 
     }
 
+    .dateTag{
+        margin-top: 48px;
+    }
     .placeTab{
         width: 90%;
         margin: 10px auto;

@@ -122,9 +122,9 @@
 <style scoped>
     .lineDetails{
         width: 90%;
-        margin: 15px auto;
+        margin: 55px auto 15px;
         background: #FFFFFF;
-        padding: 5px;
+        padding: 10px 5px;
     }
 
     .collect{

@@ -81,7 +81,7 @@
 <style scoped>
     .userInfo{
         width: 85%;
-        margin: 15px auto;
+        margin: 55px auto 15px;
         padding: 5px 10px;
         background: #FFFFFF;
     }

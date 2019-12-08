@@ -2,7 +2,7 @@
     <div class="contain">
         <Title :title="title" @onClickLeft="onClickLeft"></Title>
 
-        <div>
+        <div style="margin-top: 46px">
             <div class="black" v-for="index in 6">
                 <van-row style="display: flex;align-items: center">
                     <van-col span="14" >

@@ -6,7 +6,6 @@
                     left-text=""
                     right-text=""
                     left-arrow
-                    :fixed="true"
                     @click-left="onClickLeft"
                     @click-right="onClickRight"
             />

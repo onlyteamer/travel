@@ -21,7 +21,7 @@
                                 <img src="./../../static/images/tel.png" style="width: 14px" /><span style="font-size: 14px;color: #5E5E5E">13884997727</span>
                             </p>
 
-                            <p style="margin: 5px 0;display: flex;align-items: ">
+                            <p style="margin: 5px 0;display: flex;align-items:center">
                                 <span style="color: #FFFFFF;border-radius: 2px;padding: 0px 5px;background-color: #5083ED;margin-right: 10px">京A***99</span><img src="./../../static/images/car.png" style="width: 18px;height: 18px" /><span style="font-size: 14px;color: #5E5E5E">大众15款速腾</span>
                             </p>
                         </div>
@@ -85,7 +85,7 @@
 <style scoped>
     .userInfo{
         width: 85%;
-        margin: 15px auto;
+        margin: 55px auto 15px;
         padding: 5px 10px;
         background: #FFFFFF;
     }

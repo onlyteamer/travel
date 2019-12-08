@@ -228,6 +228,7 @@
     }
     .tab{
         border-top: 1px solid #ECECEC;
+        margin-top: 46px;
     }
 
     .listInfo{

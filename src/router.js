@@ -208,9 +208,35 @@ const routes = [
         }
     },
 
+    {
+        name: 'passengerAppraise',
+        component: () => import('./view/carpool/passengerAppraise.vue'),
+        meta: {
+            title: '车主评价详情'
+        }
+    },
+    {
+        name: 'carOwnerAppraise',
+        component: () => import('./view/carpool/carOwnerAppraise.vue'),
+        meta: {
+            title: '乘客评价详情'
+        }
+    },
 
-
-
+    {
+        name: 'otherOpt',
+        component: () => import('./view/carpool/otherOpt.vue'),
+        meta: {
+            title: '其他操作'
+        }
+    },
+    {
+        name: 'carOwnPosition',
+        component: () => import('./view/carpool/carOwnPosition.vue'),
+        meta: {
+            title: '其他操作'
+        }
+    },
   // {
   //   name: 'cart',
   //   component: () => import('./view/cart'),

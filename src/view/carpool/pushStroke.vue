@@ -199,7 +199,7 @@
     .contain .content{
         border-top: 1px solid #ECECEC;
         width: 90%;
-        margin: 0 auto;
+        margin: 46px auto 0;
         color: #202020;
     }
 

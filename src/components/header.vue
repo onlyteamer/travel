@@ -52,4 +52,8 @@
     .van-icon-arrow-left{
         color: #9E9E9E;
     }
+
+    .van-nav-bar {
+        z-index: 999 !important;
+    }
 </style>

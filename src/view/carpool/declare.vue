@@ -138,7 +138,7 @@
         border-top: 1px solid #ECECEC;
         /*width: 90%;*/
         padding: 5px 20px;
-        margin: 0 auto;
+        margin: 46px auto 0;
         color: #202020;
     }
 
