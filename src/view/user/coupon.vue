@@ -1,9 +1,9 @@
 <template>
     <div>
         <div>
-            <van-nav-bar title="优惠券" left-arrow @click-left="onClickLeft"/>
+            <van-nav-bar title="优惠券" :fixed="true" left-arrow @click-left="onClickLeft"/>
         </div>
-        <div>
+        <div style="  margin-top: 46px;">
             <van-coupon-list
                     :coupons="coupons"
                     :chosen-coupon="chosenCoupon"

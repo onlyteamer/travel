@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <van-nav-bar title="车辆信息添加" fixed="true" left-arrow @click-left="onClickLeft"/>
+            <van-nav-bar title="车辆信息添加" :fixed="true" left-arrow @click-left="onClickLeft"/>
         </div>
         <div class="content">
             <div class="item">
@@ -162,7 +162,7 @@
 
     .content {
         background-color: white;
-        padding: 0 15px;
+        padding: 0 15px 17px 15px;
         margin-top: 46px;
     }
 
