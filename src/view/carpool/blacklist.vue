@@ -23,7 +23,7 @@
                     <van-col span="12" align="right">
                         <div><div class="userType">车主</div></div>
 
-                        <div><div class="removeTag">移除黑名单</div></div>
+                        <div><div class="removeTag">移出黑名单</div></div>
                     </van-col>
                 </van-row>
 
