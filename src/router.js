@@ -22,11 +22,19 @@ const routes = [
             title: '个人中心'
         }
     },
+
     {
         name: 'ownerCertification',
         component: () => import('./view/user/ownerCertification.vue'),
         meta: {
             title: '车主认证'
+        }
+    },
+    {
+        name: 'agreement',
+        component: () => import('./view/agreement/agreement.vue'),
+        meta: {
+            title: '协议'
         }
     },
     {
