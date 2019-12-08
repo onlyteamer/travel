@@ -53,7 +53,7 @@
 
             <van-row >
                 <van-col span="24" style="padding: 10px 0">
-                    <van-button type="default" color="#9E9E9E" style="width: 100%;margin: 0 auto">取消</van-button>
+                    <van-button @click="onClickLeft" type="default" color="#9E9E9E" style="width: 100%;margin: 0 auto">取消</van-button>
                 </van-col>
             </van-row>
         </div>
@@ -140,8 +140,8 @@
             }
         },
         methods:{
-            onClickLeft(){
-
+            onClickLeft() {
+                this.$router.back(-1);
             },
 
             changePoint(){

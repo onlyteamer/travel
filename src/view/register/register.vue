@@ -24,7 +24,7 @@
                     v-model="definition.checked"
                     checked-color="#0CC893">我已阅读并同意《绿色出行用户协议》
             </van-checkbox>
-            <van-button style="margin-top:39px;width: 100%;height:44px" color="#0CC893" type="default">登录
+            <van-button style="margin-top:39px;width: 100%;height:44px" color="#0CC893" type="default" @click="goIndex">登录
             </van-button>
         </div>
     </div>
@@ -52,6 +52,9 @@
             }
         },
         methods: {
+            goIndex(){
+                this.$router.push({path:'/carIndex'});
+            },
             setHeight() {
                 let content = document.getElementsByClassName('content')[0];
                 let height = window.innerHeight;

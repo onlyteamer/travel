@@ -3,7 +3,8 @@
         <div class="info-wrap">
             <van-row>
                 <van-col span="8">
-                    <div><img src="../../static/images/left.png" style="width: 11px;height: 18px"/></div>
+                    <div @click="onClickLeft"><img src="../../static/images/left.png" style="width: 11px;height: 18px"/>
+                    </div>
                 </van-col>
                 <van-col span="8" style="text-align: center"><span style="color: white;font-size: 16px;">个人中心</span>
                 </van-col>
@@ -44,7 +45,7 @@
                     <div class="func-title"><span>我的行程</span></div>
                     <div class="func-content">
                         <div class="func-content-item"><img src="../../static/images/user/bc.png"/><span>班车</span></div>
-                        <div class="func-content-item"><img src="../../static/images/user/pc.png"/><span>拼车</span></div>
+                        <div class="func-content-item" @click="goMyStroke"><img src="../../static/images/user/pc.png"/><span>拼车</span></div>
                     </div>
                 </div>
                 <div class="func-wrap">
@@ -62,7 +63,8 @@
                         <div class="func-content-item" @click="goCoupon"><img
                                 src="../../static/images/user/yhq.png"/><span>优惠券</span>
                         </div>
-                        <div class="func-content-item"><img src="../../static/images/user/hmd.png"/><span>黑名单</span>
+                        <div class="func-content-item" @click="goBlackList"><img
+                                src="../../static/images/user/hmd.png"/><span>黑名单</span>
                         </div>
                         <div class="func-content-item" @click="goComplain"><img
                                 src="../../static/images/user/wdts.png"/><span>我的投诉</span>
@@ -110,7 +112,6 @@
     import {Row, Col, Image} from 'vant';
     import listImg from "./../../static/images/listImg.png";
     import request from '../../utils/request'
-    import axios from 'axios';
 
     export default {
         components: {
@@ -124,13 +125,24 @@
             }
         },
         methods: {
+            goMyStroke(){
+              //拼车
+                this.$router.push({path: '/myStroke'});
+            },
+            goBlackList() {
+                //黑名单
+                this.$router.push({path: '/blacklist'});
+            },
+            onClickLeft() {
+                this.$router.back(-1);
+            },
             login() {
                 request.sendPost({
                     url: '/wxlogin',
                     params: {
                         openid: localStorage.getItem("openid"),
                     },
-                }).then((res)=>{
+                }).then((res) => {
                     console.log(res);
                 });
             },

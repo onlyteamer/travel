@@ -8,35 +8,44 @@
                     <van-col span="16">2019年12月04日 05:20</van-col>
                     <van-col span="8" align="right">已完成</van-col>
                 </van-row>
-                <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false" />
+                <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
                 <van-row style="display: flex;align-items: center;font-size: 14px">
-                    <van-col span="24" >
+                    <van-col span="24">
                         <div style="display: flex;align-items: center">
-                            <img src="../../static/images/userAvatar.png" style="height: 52px;width: 52px;margin-right: 10px">
+                            <img src="../../static/images/userAvatar.png"
+                                 style="height: 52px;width: 52px;margin-right: 10px">
                             <div style="width: 100%">
                                 <p style="margin: 5px 0">
-                                    <span style="color: #5E5E5E;font-weight: bold">加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px">
+                                    <span style="color: #5E5E5E;font-weight: bold">加菲猫</span><img
+                                        src="../../static/images/sexTag.png"
+                                        style="width: 12px;height: 12px;margin-left: 5px">
                                 </p>
                                 <p style="margin: 5px 0;">
-                                    <van-row >
+                                    <van-row>
                                         <van-col span="12" style="display: flex;align-items: center">
-                                            <img src="../../static/images/userInfo.png" style="width: 14px;height: 16px;margin-right: 5px" /><span style="font-size: 14px;color: #5E5E5E">张**</span>
+                                            <img src="../../static/images/userInfo.png"
+                                                 style="width: 14px;height: 16px;margin-right: 5px"/><span
+                                                style="font-size: 14px;color: #5E5E5E">张**</span>
                                         </van-col>
                                         <van-col span="12">
-                                            <img src="./../../static/images/tel.png" style="width: 14px" /><span style="font-size: 14px;color: #5E5E5E">13884997727</span>
+                                            <img src="./../../static/images/tel.png" style="width: 14px"/><span
+                                                style="font-size: 14px;color: #5E5E5E">13884997727</span>
                                         </van-col>
                                     </van-row>
                                 </p>
                                 <p style="margin: 5px 0">
-                                    <van-row >
+                                    <van-row>
                                         <van-col span="12">
                                             <span style="color: #FFFFFF;border-radius: 2px;padding: 0px 5px;background-color: #5083ED;margin-right: 10px">京A***99</span>
                                         </van-col>
-                                        <van-col span="12" style="display: flex;align-items: center"> <img src="./../../static/images/car.png" style="width: 18px;height: 18px" /><span style="font-size: 14px;color: #5E5E5E">大众15款速腾</span></van-col>
+                                        <van-col span="12" style="display: flex;align-items: center"><img
+                                                src="./../../static/images/car.png"
+                                                style="width: 18px;height: 18px"/><span
+                                                style="font-size: 14px;color: #5E5E5E">大众15款速腾</span></van-col>
                                     </van-row>
                                 </p>
                                 <p style="margin: 5px 0;">
-                                    <van-row >
+                                    <van-row>
                                         <van-col span="12">
                                             <div><i class="startTag"></i>发车地点:上河湾</div>
                                         </van-col>
@@ -49,25 +58,36 @@
                         </div>
                     </van-col>
                 </van-row>
-                <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false" />
+                <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
 
                 <div>
-                    <div style="margin-bottom: 10px"><span style="font-weight: bold">路线：</span><span>上河湾出发，李各庄，康居，果园，少年宫，万象汇，京城高速，芍药居，西坝河，东直门重点。</span></div>
-                    <div style="margin-bottom: 10px"><span style="font-weight: bold">座位数：</span><span>1位（23元）</span></div>
+                    <div style="margin-bottom: 10px"><span style="font-weight: bold">路线：</span><span>上河湾出发，李各庄，康居，果园，少年宫，万象汇，京城高速，芍药居，西坝河，东直门重点。</span>
+                    </div>
+                    <div style="margin-bottom: 10px"><span style="font-weight: bold">座位数：</span><span>1位（23元）</span>
+                    </div>
                     <div style="margin-bottom: 10px"><span style="font-weight: bold">乘车人：</span><span>李国思</span></div>
                     <div style="margin-bottom: 10px"><span style="font-weight: bold">乘车人：</span><span>暂无</span></div>
                 </div>
                 <!--<van-row>-->
-                    <!--<van-col span="4" align="right">路线:</van-col>-->
-                    <!--<van-col span="20">上河湾出发，李各庄，康居，果园，少年宫，万象汇，京城高速，芍药居，西坝河，东直门重点。</van-col>-->
+                <!--<van-col span="4" align="right">路线:</van-col>-->
+                <!--<van-col span="20">上河湾出发，李各庄，康居，果园，少年宫，万象汇，京城高速，芍药居，西坝河，东直门重点。</van-col>-->
                 <!--</van-row>-->
             </div>
             <div style="width: 100%;height: 100%;position: absolute;top: 0;background:rgba(0, 0, 0, 0.3);"></div>
         </div>
         <div class="assess" align="right">
-            <van-button type="default" color="#0CC893" style="font-size: 14px;margin-bottom: 10px;height: 28px;width: 72px;border-radius: 5px" size="mini" >关注</van-button>
-            <van-button type="default" color="#0CC893" style="font-size: 14px;margin-bottom: 10px;height: 28px;width: 72px;border-radius: 5px" size="mini">黑名单</van-button>
-            <van-button type="default" color="#0CC893" style="font-size: 14px;margin-bottom: 10px;height: 28px;width: 72px;border-radius: 5px" size="mini">投诉</van-button>
+            <van-button type="default" color="#0CC893"
+                        style="font-size: 14px;margin-bottom: 10px;height: 28px;width: 72px;border-radius: 5px"
+                        size="mini">关注
+            </van-button>
+            <van-button type="default" color="#0CC893"
+                        style="font-size: 14px;margin-bottom: 10px;height: 28px;width: 72px;border-radius: 5px"
+                        size="mini">黑名单
+            </van-button>
+            <van-button type="default" color="#0CC893"
+                        style="font-size: 14px;margin-bottom: 10px;height: 28px;width: 72px;border-radius: 5px"
+                        size="mini">投诉
+            </van-button>
         </div>
 
 
@@ -76,28 +96,28 @@
 
 <script>
     import Title from './../../components/header'
-    import { Row, Col,Divider,Button,Rate,Tag ,Field,CellGroup } from 'vant';
+    import {Row, Col, Divider, Button, Rate, Tag, Field, CellGroup} from 'vant';
 
     export default {
         name: "otherOpt",
-        components:{
+        components: {
             Title,
-            [Row.name]:Row,
-            [Col.name]:Col,
-            [Divider.name]:Divider,
-            [Button.name]:Button,
-            [Rate.name]:Rate,
-            [Tag.name]:Tag,
-            [Field.name]:Field,
-            [CellGroup.name]:CellGroup
+            [Row.name]: Row,
+            [Col.name]: Col,
+            [Divider.name]: Divider,
+            [Button.name]: Button,
+            [Rate.name]: Rate,
+            [Tag.name]: Tag,
+            [Field.name]: Field,
+            [CellGroup.name]: CellGroup
         },
-        data(){
-            return{
-                title:"其他操作"
+        data() {
+            return {
+                title: "其他操作"
             }
         },
-        methods:{
-            onClickLeft(){
+        methods: {
+            onClickLeft() {
 
             }
         }
@@ -105,7 +125,7 @@
 </script>
 
 <style scoped>
-    .userInfo{
+    .userInfo {
         width: 85%;
         margin: 0px auto;
         padding: 5px 10px;
@@ -113,26 +133,30 @@
         font-size: 14px;
     }
 
-    .assess{
+    /deep/ .van-cell {
+        padding: 0;
+    }
+
+    .assess {
         padding: 10px 15px;
         background: #FFFFFF;
     }
 
-    .card{
+    .card {
         padding: 10px;
         margin: 15px auto;
         border: 1px solid #ECECEC;
     }
 
-    .assessTag{
+    .assessTag {
         margin: 15px auto;
     }
 
-    .tagStyle{
+    .tagStyle {
         margin: 0.4rem 0.5rem;
     }
 
-    .startTag{
+    .startTag {
         width: 10px;
         display: inline-block;
         height: 10px;
@@ -141,7 +165,7 @@
         margin-right: 5px;
     }
 
-    .endTag{
+    .endTag {
         width: 10px;
         display: inline-block;
         height: 10px;
@@ -151,8 +175,3 @@
     }
 </style>
 
-<style>
-    .van-cell{
-        padding: 0;
-    }
-</style>

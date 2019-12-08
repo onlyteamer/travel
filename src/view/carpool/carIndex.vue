@@ -110,10 +110,10 @@
 
         <div class="footer">
             <van-tabbar v-model="active" active-color="#FF0200" inactive-color="#FFFFFF">
-                <van-tabbar-item :icon="chengK">我是乘客</van-tabbar-item>
-                <van-tabbar-item :icon="xingC">我的行程</van-tabbar-item>
-                <van-tabbar-item :icon="push">发布行程</van-tabbar-item>
-                <van-tabbar-item :icon="person">个人中心</van-tabbar-item>
+                <van-tabbar-item :icon="chengK" to="/carLine">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user">个人中心</van-tabbar-item>
             </van-tabbar>
         </div>
     </div>
