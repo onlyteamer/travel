@@ -72,7 +72,7 @@
         },
         methods:{
             onClickLeft(){
-
+                this.$router.back(-1);
             }
         }
     }

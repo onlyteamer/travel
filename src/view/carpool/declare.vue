@@ -68,10 +68,10 @@
         <div class="bottomBar">
             <van-row>
                 <van-col span="12">
-                    <van-button type="default" color="#9E9E9E" style="width: 100%;margin: 0 auto;border: none;border-radius: unset">取消</van-button>
+                    <van-button @click="cancel" type="default" color="#9E9E9E" style="width: 100%;margin: 0 auto;border: none;border-radius: unset">取消</van-button>
                 </van-col>
                 <van-col span="12">
-                    <van-button type="default" color="#0CC893" style="width: 100%;margin: 0 auto;border: none;border-radius: unset">同意</van-button>
+                    <van-button @click="goReserve" type="default" color="#0CC893" style="width: 100%;margin: 0 auto;border: none;border-radius: unset">同意</van-button>
                 </van-col>
             </van-row>
         </div>
@@ -118,7 +118,13 @@
         },
         methods:{
             onClickLeft(){
-
+                this.$router.back(-1);
+            },
+            cancel(){
+                this.$router.back(-1);
+            },
+            goReserve(){
+                this.$router.push({path:'/reserve'});
             }
         }
     }

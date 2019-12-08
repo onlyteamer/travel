@@ -40,25 +40,25 @@
                         <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">分享</van-button>
                     </van-col>
                     <van-col span="6">
-                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">关注</van-button>
+                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">车主位置</van-button>
                     </van-col>
                     <van-col span="6">
-                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">电话</van-button>
+                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">联系车主</van-button>
                     </van-col>
                     <van-col span="6">
-                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">预约</van-button>
+                        <van-button @click="goCarFate" type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">同车缘分</van-button>
                     </van-col>
                 </van-row>
 
                 <van-row style="margin: 10px 0" v-if="index == '1'">
                     <van-col span="6">
-                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">调整座位</van-button>
+
                     </van-col>
                     <van-col span="6">
-                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">设为车满</van-button>
+                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">已到达</van-button>
                     </van-col>
                     <van-col span="6">
-                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">修改行程</van-button>
+                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">上车支付</van-button>
                     </van-col>
                     <van-col span="6">
                         <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">取消行程</van-button>
@@ -115,13 +115,13 @@
                         <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">分享</van-button>
                     </van-col>
                     <van-col span="6">
-                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">关注</van-button>
+                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">已发车</van-button>
                     </van-col>
                     <van-col span="6">
-                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">电话</van-button>
+                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">已到达</van-button>
                     </van-col>
                     <van-col span="6">
-                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">预约</van-button>
+                        <van-button @click="goPassengerList" type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">乘客</van-button>
                     </van-col>
                 </van-row>
 
@@ -211,9 +211,14 @@
         },
         methods: {
             onClickLeft(){
-                console.log(11111);
-
+                this.$router.back(-1);
             },
+            goCarFate(){
+                this.$router.push({path:'/carFate'});
+            },
+            goPassengerList(){
+                this.$router.push({path:'/passengerList'});
+            }
         }
     }
 </script>

@@ -71,7 +71,7 @@
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 95%;height: 34px" size="mini">电话</van-button>
                         </van-col>
                         <van-col span="8">
-                            <van-button type="default" color="#0CC893" style="font-size: 14px;width: 95%;height: 34px" size="mini">马上预约</van-button>
+                            <van-button type="default" @click="goDeclare" color="#0CC893" style="font-size: 14px;width: 95%;height: 34px" size="mini">马上预约</van-button>
                         </van-col>
                     </van-row>
 
@@ -105,8 +105,12 @@
         },
         methods: {
             onClickLeft(){
-
+                this.$router.back(-1);
             },
+            goDeclare(){
+                //车辆预约
+                this.$router.push({path:'/declare'});
+            }
         }
     }
 </script>
