@@ -60,7 +60,7 @@ server.sendPost = function (options) {
 };
 server.sendGet = function (options) {
     return new window.Promise((resolve) => {
-        baas.get(options.url).then((response) => {
+        baas.get(options.url+'?'+qs.stringify(options.params)).then((response) => {
             resolve(response);
         }).catch((error) => {
 
