@@ -15,7 +15,7 @@
                                 <img src="./../../static/images/unhapply.png" style="width: 14px;height: 14px;margin: 0 5px 0 20px" /> <span>3</span>
                             </p>
                             <p style="margin: 5px 0;display: flex;align-items: center">
-                                <img src="./../../static/images/userInfo.png" style="width: 14px;height: 16px;margin-right: 5px" /><span style="font-size: 14px;color: #5E5E5E">张**</span>
+                                <img src="../../static/images/userInfo.png" style="width: 14px;height: 16px;margin-right: 5px" /><span style="font-size: 14px;color: #5E5E5E">张**</span>
                             </p>
                             <p style="margin: 5px 0">
                                 <img src="./../../static/images/tel.png" style="width: 14px" /><span style="font-size: 14px;color: #5E5E5E">13884997727</span>
