@@ -4,7 +4,7 @@
 
         <div style="margin-top: 46px">
             <div class="black" v-for="index in 6">
-                <van-row >
+                <van-row  @click="goPassengerDetails">
                     <van-col span="16" >
                         <div style="display: flex;align-items: center">
                             <img src="../../static/images/userAvatar.png" style="height: 50px;width: 50px;margin-right: 10px">
@@ -27,8 +27,6 @@
                         </div>
                     </van-col>
                 </van-row>
-
-
             </div>
         </div>
 
@@ -53,7 +51,10 @@
         },
         methods:{
             onClickLeft(){
-
+                this.$router.back(-1);
+            },
+            goPassengerDetails(){
+                this.$router.push({path:'/passengerDetails'});
             }
         }
     }

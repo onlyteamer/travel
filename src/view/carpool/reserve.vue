@@ -108,7 +108,7 @@
 
             <van-row >
                 <van-col span="24" style="padding: 10px 0">
-                    <van-button type="default" color="#0CC893" style="width: 100%;margin: 0 auto">预定（23元/座）</van-button>
+                    <van-button @click="goMyStroke" type="default" color="#0CC893" style="width: 100%;margin: 0 auto">预定（23元/座）</van-button>
                 </van-col>
             </van-row>
 
@@ -167,7 +167,10 @@
         },
         methods:{
             onClickLeft(){
-
+                this.$router.back(-1);
+            },
+            goMyStroke(){
+                this.$router.push({path:'/myStroke'});
             }
         }
     }

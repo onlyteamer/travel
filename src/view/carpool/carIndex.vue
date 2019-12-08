@@ -7,7 +7,6 @@
                     right-text=""
                     left-arrow
                     @click-left="onClickLeft"
-                    @click-right="onClickRight"
             />
             <van-row type="flex" justify="center" gutter="30">
                 <van-col span="6">
@@ -66,7 +65,7 @@
                 />
             </van-cell-group>
             <div align="center" style="margin-bottom: 10px">
-                <van-button  color="#0CC893" style="width: 95%">立即乘车</van-button>
+                <van-button @click="goCarList"  color="#0CC893" style="width: 95%">立即找车</van-button>
             </div>
         </div>
 
@@ -171,8 +170,8 @@
             onClickLeft() {
                 Toast('返回');
             },
-            onClickRight() {
-                Toast('按钮');
+            goCarList(){
+                this.$router.push({path:'/carLine'});
             }
         }
     }
