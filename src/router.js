@@ -115,6 +115,28 @@ const routes = [
         }
     },
     {
+        name: 'cancelTrip-passenger',
+        component: () => import('./view/carpool/cancelTrip-passenger.vue'),
+        meta: {
+            title: '取消行程'
+        }
+    },
+    {
+        name: 'cancelTrip-driver',
+        component: () => import('./view/carpool/cancelTrip-driver.vue'),
+        meta: {
+            title: '取消行程'
+        }
+    },
+    {
+        name: 'complain-passenger',
+        component: () => import('./view/carpool/complain.vue'),
+        meta: {
+            title: '投诉'
+        }
+    },
+
+    {
         name: 'carIndex',
         component: () => import('./view/carpool/carIndex.vue'),
         meta: {
