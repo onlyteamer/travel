@@ -11,23 +11,23 @@
                 </van-button>
             </div>
             <div class="item" style="margin-top: 10px;padding-left: 13px;padding-right: 9px">
-                <div v-for="item in list" :key="item.id" class="item-li">
+                <div v-for="item in dataMain.data" :key="item.id" class="item-li">
                     <div class="item-li-flex" style="align-items: flex-start">
                         <div>
-                            <span style="color:#202020;font-size: 16px;margin-right: 8px;font-weight: bolder">{{item.name}}</span>
+                            <span style="color:#202020;font-size: 16px;margin-right: 8px;font-weight: bolder">{{item.passName}}</span>
                             <span v-if="item.dft==1" class="dft-tag">默认</span>
                         </div>
                         <div style="display:flex;align-items: center;margin-top: 5px">
                             <img src="../../static/images/idCard-black.png"
                                  style="width: 20px;height: 20px;margin-right: 3px"/>
-                            <span>{{item.idcard}}</span>
+                            <span>{{item.cardId}}</span>
                         </div>
                     </div>
                     <div class="item-li-flex" style="   align-items: center;">
                         <van-button type="default" color="#5083ED" plain v-if="item.dft==1" @click="setDft"
                                     style="width: 66px;height: 25px;margin-bottom:7px;padding: 0;line-height: 25px">默认
                         </van-button>
-                        <van-button type="default" color="#0CC893" plain  @click="goEdit"
+                        <van-button type="default" color="#0CC893" plain  @click="goEdit(item.id)"
                                     style="width: 66px;height: 25px;padding: 0;line-height: 25px">编辑
                         </van-button>
                     </div>
@@ -39,7 +39,7 @@
 <!--乘车人管理-->
 <script>
     import {NavBar, Button} from 'vant';
-
+    import request from '../../utils/request';
     export default {
         components: {
             [NavBar.name]: NavBar,
@@ -47,26 +47,41 @@
         },
         data() {
             return {
-                list: [
-                    {id: '1', name: '张三', idcard: '1234555568855', dft: '1'},
-                    {id: '2', name: '李四', idcard: '1234555325565', dft: '0'},
-                    {id: '3', name: '张三', idcard: '1234551233855', dft: '0'},
-                ],
+                dataMain:{
+                    data:[],
+                    limit:10,
+                    start:0,
+                    total:0
+                },
             }
         },
         methods: {
+            initData(){
+                request.sendGet({
+                    url:'/sharecar/pass/list',
+                    params:{
+                        limit: this.dataMain.limit,
+                        start:this.dataMain.start,
+                    }
+                }).then((res)=>{
+                   this.dataMain.data = res.data.rows;
+                });
+            },
             onClickLeft() {
                 this.$router.back(-1);
             },
             goAdd(){
                 this.$router.push({path:'/passenger-edit'});
             },
-            goEdit(){
-                this.$router.push({path:'/passenger-edit'});
+            goEdit(id){
+                this.$router.push({path:'/passenger-edit',query:{'id':id}});
             },
             setDft(){
 
             },
+        },
+        created(){
+            this.initData();
         }
     }
 </script>

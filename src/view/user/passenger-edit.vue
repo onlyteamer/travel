@@ -5,17 +5,17 @@
         </div>
         <div class="content">
             <div class="item">
-                <van-field label-class="item-label" label="乘车人姓名"></van-field>
+                <van-field label-class="item-label" label="乘车人姓名" v-model="definition.passName"></van-field>
             </div>
             <div class="item">
-                <van-field label-class="item-label" label="身份证号码" ></van-field>
+                <van-field label-class="item-label" label="身份证号码" v-model="definition.cardId"></van-field>
             </div>
             <div>
                 <van-checkbox style="margin-top: 20px" v-model="definition.checked" checked-color="#0CC893">
-                    同意：因信息填写错误导致出现意外无法理赔由用户自己承担损失；未成年赔付上限依据保监会同意。同意《保险条款》
+                    同意：因信息填写错误导致出现意外无法理赔由用户自己承担损失；未成年赔付上限依据保监会同意。同意<span style="color:#0CC893;" @click="goAgreement">《保险条款》</span>
                 </van-checkbox>
             </div>
-            <van-button @click="submit" style="margin-top:15px;margin-bottom:17px;width: 100%;height:44px" color="#0CC893" type="default">
+            <van-button @click="submitInfo" style="margin-top:15px;margin-bottom:17px;width: 100%;height:44px" color="#0CC893" type="default">
                 保存
             </van-button>
         </div>
@@ -23,29 +23,100 @@
 </template>
 <!--乘车人编辑页-->
 <script>
-    import {NavBar, Field, Button, Checkbox} from 'vant';
+    import {NavBar, Field, Button, Checkbox,Toast} from 'vant';
+    import request from '../../utils/request';
 
     export default {
         components: {
             [NavBar.name]: NavBar,
             [Field.name]: Field,
             [Button.name]: Button,
-            [Checkbox.name]: Checkbox
+            [Checkbox.name]: Checkbox,
+            [Toast.name]: Toast,
         },
         data(){
             return{
                 definition:{
-                    checked:''
+                    checked:true,
+                    cardId:'',
+                    passName:'',
+                    id:'',
+                    passPhone:''
                 }
             }
         },
         methods: {
-            submit(){
-
+            goAgreement(){
+                //协议页面
+                this.$router.push({path:'/agreement',query:{name:'保险条款'}})
+            },
+            checkIdCard(idCard){
+                if(/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$/.test(idCard)
+                    || /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/.test(idCard)){
+                    return true;
+                    console.log("sss");
+                }
+                return false;
+            },
+            //新增乘车人
+            submitInfo(){
+                if(!this.definition.passName){
+                    Toast("请填写乘车人姓名");
+                    return;
+                }
+                if(!this.definition.cardId || !this.checkIdCard(this.definition.cardId)){
+                    Toast("请输入正确的身份证号");
+                    return;
+                }
+                if(this.definition.id){
+                    this.edit()
+                }else{
+                    this.add();
+                }
+            },
+            add(){
+                request.sendPost({
+                    url:'/sharecar/pass/add',
+                    params:{
+                        passName:this.definition.passName,
+                        cardId:this.definition.cardId
+                    }
+                }).then((res)=>{
+                    if(res.data.code==0){
+                        Toast(res.data.msg);
+                        this.$router.back(-1);
+                    }else{
+                        Toast(res.data.msg);
+                    }
+                })
+            },
+            edit(){
+                request.sendPost({
+                    url:'/sharecar/pass/update',
+                    params:{
+                        passName:this.definition.passName,
+                        cardId:this.definition.cardId,
+                        id:this.definition.id
+                    }
+                }).then((res)=>{
+                    if(res.data.code==0){
+                        Toast(res.data.msg);
+                        this.$router.back(-1);
+                    }else{
+                        Toast(res.data.msg);
+                    }
+                })
             },
             onClickLeft() {
                 this.$router.back(-1);
             },
+        },
+        created(){
+            let id = this.$route.query.id;
+            if(id){
+                this.definition.id = id;
+                //TODO 这里应该根据id查询乘车人信息,然后给definition赋值
+            }
         }
     }
 </script>
