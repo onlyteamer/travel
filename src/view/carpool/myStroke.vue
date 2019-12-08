@@ -40,7 +40,7 @@
                         <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">分享</van-button>
                     </van-col>
                     <van-col span="6">
-                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">车主位置</van-button>
+                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini" @click="linkCarPosition">车主位置</van-button>
                     </van-col>
                     <van-col span="6">
                         <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">联系车主</van-button>
@@ -211,6 +211,7 @@
         },
         methods: {
             onClickLeft(){
+                console.log(111);
                 this.$router.back(-1);
             },
             goCarFate(){
@@ -218,6 +219,9 @@
             },
             goPassengerList(){
                 this.$router.push({path:'/passengerList'});
+            },
+            linkCarPosition(){
+                this.$router.push({path:'/carOwnPosition'});
             }
         }
     }
