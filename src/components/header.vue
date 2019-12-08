@@ -31,11 +31,12 @@
         },
         methods: {
             onClickLeft() {
-               this.$emit("onClickLeft")
+                this.$router.back(-1);
+               // this.$emit("onClickLeft")
             },
             onClickRight() {
 
-  console.log(1111);          }
+            }
         }
     }
 </script>

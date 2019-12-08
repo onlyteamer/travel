@@ -252,6 +252,7 @@
 
     .datetime{
         color: #5E5E5E;
+        padding-left: 8px ;
     }
 
     .seatNum{

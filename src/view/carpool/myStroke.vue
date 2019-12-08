@@ -70,10 +70,10 @@
 
                     </van-col>
                     <van-col span="6">
-                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">行车评价</van-button>
+                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini" @click="linkCarAppraise">行车评价</van-button>
                     </van-col>
                     <van-col span="6">
-                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">同车缘分</van-button>
+                        <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini" @click="goCarFate">同车缘分</van-button>
                     </van-col>
                     <van-col span="6">
                         <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px" size="mini">其他操作</van-button>
@@ -211,8 +211,8 @@
         },
         methods: {
             onClickLeft(){
-                console.log(111);
-                this.$router.back(-1);
+
+                this.$router.back(-1)
             },
             goCarFate(){
                 this.$router.push({path:'/carFate'});
@@ -222,6 +222,9 @@
             },
             linkCarPosition(){
                 this.$router.push({path:'/carOwnPosition'});
+            },
+            linkCarAppraise(){
+                this.$router.push({path:'/carOwnerAppraise'});
             }
         }
     }

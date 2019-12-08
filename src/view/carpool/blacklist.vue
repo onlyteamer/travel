@@ -2,9 +2,9 @@
     <div class="contain">
         <Title :title="title" @onClickLeft="onClickLeft"></Title>
 
-        <div style="margin-top: 46px">
+        <div style="margin-top: 55px">
             <div class="black" v-for="index in 6">
-                <van-row style="display: flex;align-items: center">
+                <van-row style="display: flex;align-items: center"  @click="goPassengerDetails(index)">
                     <van-col span="12" >
                         <div style="display: flex;align-items: center">
                             <img src="../../static/images/userAvatar.png" style="height: 50px;width: 50px;margin-right: 10px">
@@ -21,7 +21,10 @@
                         </div>
                     </van-col>
                     <van-col span="12" align="right">
-                        <div><div class="userType">车主</div></div>
+                        <div>
+                            <div class="userType" v-if="index%2 != '0'" >车主</div>
+                            <div v-else class="passer" >乘客</div>
+                        </div>
 
                         <div><div class="removeTag">移出黑名单</div></div>
                     </van-col>
@@ -53,6 +56,18 @@
         methods:{
             onClickLeft(){
                 this.$router.back(-1);
+            },
+            goPassengerDetails(val){
+                if(val){
+                    if(val%2 != 0){
+                        this.$router.push({path:'/carOwnerDetails'});
+                    }else {
+                        this.$router.push({path:'/passengerDetails'});
+                    }
+                }else {
+                    this.$router.push({path:'/passengerDetails'});
+                }
+
             }
         }
     }
@@ -84,4 +99,13 @@
         border-radius: 5px;
         border: 1px solid #0CC893;
     }
+
+    .passer{
+        width: fit-content;
+        padding: 2px 8px;
+        border-radius: 5px;
+        color: #FFFFFF;
+        background: #0CC893;
+    }
+
 </style>

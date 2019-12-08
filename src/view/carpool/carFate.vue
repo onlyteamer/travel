@@ -4,7 +4,7 @@
 
         <div style="margin-top: 46px">
             <div class="black" v-for="index in 6">
-                <van-row  @click="goPassengerDetails">
+                <van-row  @click="goPassengerDetails(index)">
                     <van-col span="16" >
                         <div style="display: flex;align-items: center">
                             <img src="../../static/images/userAvatar.png" style="height: 50px;width: 50px;margin-right: 10px">
@@ -22,8 +22,8 @@
                     </van-col>
                     <van-col span="8" align="right">
                         <div>
-                            <div class="userType" v-if="index%2 != '0'">车主</div>
-                            <div v-else class="passer">乘客</div>
+                            <div class="userType" v-if="index%2 != '0'" >车主</div>
+                            <div v-else class="passer" >乘客</div>
                         </div>
                     </van-col>
                 </van-row>
@@ -53,8 +53,17 @@
             onClickLeft(){
                 this.$router.back(-1);
             },
-            goPassengerDetails(){
-                this.$router.push({path:'/passengerDetails'});
+            goPassengerDetails(val){
+                if(val){
+                    if(val%2 != 0){
+                        this.$router.push({path:'/carOwnerDetails'});
+                    }else {
+                        this.$router.push({path:'/passengerDetails'});
+                    }
+                }else {
+                    this.$router.push({path:'/passengerDetails'});
+                }
+
             }
         }
     }
