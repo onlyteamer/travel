@@ -2,7 +2,7 @@
     <div class="contain">
         <Title :title="title" @onClickLeft="onClickLeft"></Title>
         <div class="dateTag">
-            <van-tabs type="card" background="#FFFFFF" color="#5083ED"  title-active-color="#FFFFFF" title-inactive-color="#202020">
+            <van-tabs type="card" v-model="active" background="#FFFFFF" color="#5083ED"  title-active-color="#FFFFFF" title-inactive-color="#202020">
                 <van-tab title="周日"></van-tab>
                 <van-tab title="周一"></van-tab>
                 <van-tab title="周二"></van-tab>
@@ -100,9 +100,18 @@
         },
         data(){
             return{
-                title:"线路：北京←→密云"
+                title:"线路：北京←→密云",
+                active:1
             }
         },
+        mounted(){
+            let info = JSON.parse(sessionStorage.getItem("queryStroke"));
+
+            this.title = "线路："+info.startPlace +"←→" + info.endPlace;
+
+            this.active = Number(info.week)
+        },
+
         methods: {
             onClickLeft(){
                 this.$router.back(-1);

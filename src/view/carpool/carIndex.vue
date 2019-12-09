@@ -40,6 +40,7 @@
             <van-cell title="常用路线选择:" is-link title-style="color:#0CC893" />
             <van-cell-group>
                 <van-field
+                        v-model="strokeInfo.startPlace"
                         placeholder="出发地点"
                         label=""
                         label-width="5px"
@@ -49,6 +50,7 @@
             <van-divider style="width: 90%;margin: 0 auto" />
             <van-cell-group >
                 <van-field
+                        v-model="strokeInfo.endPlace"
                         placeholder="目的地点"
                         label=""
                         label-width="5px"
@@ -58,10 +60,13 @@
             <van-divider  style="width: 90%;margin: 0 auto"/>
             <van-cell-group >
                 <van-field
+                        v-model="strokeInfo.driveTime"
                         placeholder="乘车时间"
                         label=""
                         label-width="5px"
                         :left-icon="timeBar"
+                        disabled
+                        @click="showPop = true"
                 />
             </van-cell-group>
             <div align="center" style="margin-bottom: 10px">
@@ -116,11 +121,25 @@
                 <van-tabbar-item :icon="person" to="/user">个人中心</van-tabbar-item>
             </van-tabbar>
         </div>
+
+        <van-popup
+                v-model="showPop"
+                position="bottom"
+                :style="{ height: '30%' }"
+        >
+            <van-datetime-picker
+                    v-model="currentDate"
+                    type="datetime"
+                    :min-date="minDate"
+                    @cancel="cancel"
+                    @confirm="changeTimer"
+            />
+        </van-popup>
     </div>
 </template>
 
 <script>
-    import {NavBar,Row,Col,Image,NoticeBar,Cell,CellGroup,Field,Divider,Button,Card,Tabbar, TabbarItem  } from 'vant';
+    import {NavBar,Row,Col,Image,NoticeBar,Cell,CellGroup,Field,Divider,Button,Card,Tabbar, TabbarItem,Toast ,DatetimePicker,Popup } from 'vant';
     import logo from './../../static/images/logo.png'
     import laba from './../../static/images/laba.png'
     import greenBar from './../../static/images/green.png'
@@ -132,6 +151,9 @@
     import xingC from './../../static/images/xingC.png'
     import push from './../../static/images/push.png'
     import person from './../../static/images/chengk.png'
+
+    import request from '../../utils/request'
+    import moment from 'moment'
 
 
     export default {
@@ -149,10 +171,16 @@
             [Button.name]:Button,
             [Card.name]:Card,
             [Tabbar.name]:Tabbar,
-            [TabbarItem.name]:TabbarItem
+            [TabbarItem.name]:TabbarItem,
+            [Toast.name]:Toast,
+            [DatetimePicker.name]:DatetimePicker,
+            [Popup.name]:Popup,
         },
         data(){
             return{
+                minDate: new Date(),
+                currentDate:"",
+                showPop:false,
                 logo:logo,
                 laba:laba,
                 greenBar:greenBar,
@@ -163,14 +191,66 @@
                 xingC:xingC,
                 push:push,
                 person:person,
-                active: 0
+                active: 0,
+                strokeInfo:{
+                    startPlace:"",
+                    endPlace:"",
+                    driveTime:"",
+                    week:""
+                }
             }
         },
+        mounted(){
+            //初始化列表
+            this.initListData();
+
+        },
+
+
         methods: {
+            //列表
+            initListData(){
+
+            },
+
+            cancel(){
+                this.showPop = false
+            },
+
+            changeTimer(val){
+                // let timer = this.formatTime(val.getTime());
+                //
+                // this.stroke.startDate = timer;
+                var timer = moment(val).format("YYYY-MM-DD");
+                this.strokeInfo.driveTime = timer;
+
+                let week = moment(val).format('d');
+                console.log(week);
+                this.strokeInfo.week = week;
+                this.showPop = false;
+
+            },
+
             onClickLeft() {
-                Toast('返回');
+                // Toast('返回');
+                this.$router.back(-1);
             },
             goCarList(){
+                console.log(this.strokeInfo)
+                if(!this.strokeInfo.startPlace){
+                    Toast.fail("请填写出发地点");
+                    return;
+                }
+                if(!this.strokeInfo.endPlace){
+                    Toast.fail("请填写目的地点");
+                    return;
+                }
+                if(!this.strokeInfo.driveTime){
+                    Toast.fail("请填写乘车时间");
+                    return;
+                }
+                sessionStorage.removeItem("queryStroke");
+                sessionStorage.setItem("queryStroke",JSON.stringify(this.strokeInfo));
                 this.$router.push({path:'/carLine'});
             }
         }

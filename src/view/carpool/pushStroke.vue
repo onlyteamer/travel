@@ -4,50 +4,64 @@
         <div class="content">
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
                 <van-col span="8">始发时间</van-col>
-                <van-col span="16" class="valStyle" @click="openTimer"><span v-text="stroke.startDate"></span></van-col>
+                <van-col span="16" class="valStyle" @click="openTimer">
+                    <van-field v-model="stroke.tripDateTime"  placeholder="请选择始发时间"  disabled style="padding: 0"/>
+                </van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
                 <van-col span="8">方向</van-col>
-                <van-col span="14" class="valStyle">{{stroke.point}}</van-col>
+                <van-col span="14" class="valStyle">
+                    <van-field v-model="stroke.directLineid"  placeholder="请选择方向"  disabled style="padding: 0"/>
+                </van-col>
                 <van-col span="2" @click="changePoint"><van-icon name="arrow" color="#9E9E9E"/></van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px;display: flex;align-items: center">
                 <van-col span="8">行驶路线</van-col>
-                <van-col span="16" class="valStyle">{{stroke.route}}</van-col>
+                <van-col span="16" class="valStyle">
+                    <van-field v-model="stroke.route"    type="textarea" autosize placeholder="上河湾出发，李哥庄，绿地，果园，少年宫，万象城" />
+                </van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
                 <van-col span="8">座位数</van-col>
-                <van-col span="16" class="valStyle">{{stroke.seatCount}}</van-col>
+                <van-col span="16" class="valStyle">
+                    <van-field v-model="stroke.totalSeat" style="padding: 0" placeholder="请输入座位数" />
+                </van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
                 <van-col span="8">价格</van-col>
-                <van-col span="16" class="valStyle">{{stroke.price}}</van-col>
+                <van-col span="16" class="valStyle">
+                    <van-field v-model="stroke.tripPrice" style="padding: 0" placeholder="请输入价格" />
+                 </van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 10px 2px">
                 <van-col span="8">车辆信息</van-col>
-                <van-col span="14" class="valStyle">{{stroke.carInfo}}</van-col>
+                <van-col span="14" class="valStyle">
+                    <van-field v-model="stroke.carInfo" style="padding: 0" placeholder="请选择车辆信息" />
+                </van-col>
                 <van-col span="2" @click="changePoint"><van-icon name="arrow" color="#9E9E9E"/></van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px;" >
                 <van-col span="8" style="display: flex;align-items: center;min-height: 80px"><span>备注信息</span></van-col>
-                <van-col span="14" class="valStyle" style="min-height: 80px">{{stroke.remark}}</van-col>
+                <van-col span="14" class="valStyle" style="min-height: 80px">
+                    <van-field v-model="stroke.remark" style="padding: 0"   type="textarea" autosize  placeholder="请输入备注信息" />
+                </van-col>
             </van-row>
 
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 10px 0px;" >
+            <van-row style="border-bottom: 1px solid #ECECEC;padding: 10px 0px;font-size: 13px" >
                 <van-col span="24">
-                    <van-checkbox v-model="checked" checked-color="#07c160" shape="square">阅读并同意《免责协议和条款》和《平台支付条款></van-checkbox>
+                    <van-checkbox v-model="checked" checked-color="#07c160" shape="square">阅读并同意<span @click="goAgreement">《免责协议和条款》</span>和<span @click="goAgreement">《平台支付条款></span></van-checkbox>
                 </van-col>
             </van-row>
 
             <van-row >
                 <van-col span="24" style="padding: 10px 0">
-                    <van-button type="default" color="#0CC893" style="width: 100%;margin: 0 auto">发布行程</van-button>
+                    <van-button type="default" color="#0CC893" style="width: 100%;margin: 0 auto" @click="pushStroke">发布行程</van-button>
                 </van-col>
             </van-row>
 
@@ -85,7 +99,9 @@
 
 <script>
     import Title from './../../components/header'
-    import { Cell, CellGroup,DatetimePicker,Popup,Row, Col,Icon,Picker ,Checkbox, CheckboxGroup ,Button  } from 'vant';
+    import { Cell, CellGroup,DatetimePicker,Popup,Row, Col,Icon,Picker ,Checkbox, CheckboxGroup ,Button,Toast ,Field  } from 'vant';
+    import request from '../../utils/request'
+
 
     const citys = {
         '浙江': ['杭州', '宁波', '温州', '嘉兴', '湖州'],
@@ -106,7 +122,9 @@
             [Picker.name]:Picker,
             [Checkbox.name]:Checkbox,
             [CheckboxGroup.name]:CheckboxGroup,
-            [Button.name]:Button
+            [Button.name]:Button,
+            [Toast.name]:Toast,
+            [Field.name]:Field
         },
         data(){
             return{
@@ -117,13 +135,24 @@
                 showPop:false,
                 showPoint:false,
                 stroke:{
-                    startDate:"2019年12月2日 06:55",
-                    point:"北京",
-                    route:"上河湾出发，李哥庄，绿地，果园，少年宫，万象城",
+                    carBrand:"",
+                    carColor:"",
+                    carNumber:"",
+                    carType:"",
+                    directLineid:"",
+                    endPlace:"",
+                    startPlace:"",
+                    totalSeat:"",
+                    tripDateTime:"",
+                    tripLine:"",
+                    tripPrice:"",
+
+
+                    route:"",
                     seatCount:3,
                     price:23,
                     carInfo:"大众速腾（京A***356）",
-                    remark:"车上不能抽烟，不能长时间打电话"
+                    remark:""
                 },
                 cityList:this.citys,
                 columns: [
@@ -152,11 +181,53 @@
                 console.log(picker);
                 console.log(values);
 
-                this.stroke.point = picker[1];
+                this.stroke.directLineid = picker[1];
                 this.showPoint = false;
                 // picker.setColumnValues(1, citys[values[0]]);
             },
 
+            //发布行程
+            pushStroke(){
+                if(!this.checked){
+                    Toast.fail("请同意协议再提交");
+                    return;
+                }
+
+
+                if(!this.stroke.tripDateTime){
+                    Toast.fail("始发时间不能为空");
+                    return;
+                }
+
+                if(!this.stroke.route){
+                    Toast.fail("行驶路线不能为空");
+                    return;
+                }
+                if(!this.stroke.totalSeat){
+                    Toast.fail("座位数不能为空");
+                    return;
+                }
+                if(!this.stroke.tripPrice){
+                    Toast.fail("价格不能为空");
+                    return;
+                }
+                console.log(this.stroke);
+                request.sendPost({
+                    url:'/sharecar/trip/addtrip',
+                    params:this.stroke
+                }).then((res)=>{
+                    if(res.data.code==0){
+                        console.log(res.data)
+                    }else{
+                        Toast(res.data.msg);
+                    }
+
+                })
+
+
+
+
+            },
 
             openTimer(){
                 this.showPop = true;
@@ -165,10 +236,14 @@
                 this.showPop = false
             },
 
+            goAgreement(){
+                this.$router.push({path:'/agreement',query:{name:'绿色出行用户协议'}})
+            },
+
             changeTimer(val){
                 let timer = this.formatTime(val.getTime());
 
-                this.stroke.startDate = timer;
+                this.stroke.tripDateTime = timer;
 
                 this.showPop = false;
 
