@@ -19,24 +19,24 @@
                     <div class="row-wrap-content">
                         <van-row style="height: 50%;display: flex;align-items: center;">
                             <van-col span="12" class="col-flex">
-                                <img src="../../static/images/user/wdzl.png"/>
+                                <img src="../../static/images/cp.png" width="16px" height="14px"/>
                                 <span >车牌：</span>
                                 <span>京A12345</span>
                             </van-col>
                             <van-col span="12" class="col-flex">
-                                <img src="../../static/images/user/wdzl.png"/>
+                                <img src="../../static/images/cx.png" width="17px" height="14px"/>
                                 <span >车型：</span>
                                 <span>大众15款速腾</span>
                             </van-col>
                         </van-row>
                         <van-row style="height: 50%;display: flex;align-items: center;">
                             <van-col span="12" class="col-flex">
-                                <img src="../../static/images/user/wdzl.png"/>
+                                <img src="../../static/images/ys.png" width="15px" height="15px"/>
                                 <span >颜色：</span>
                                 <span>白色</span>
                                 </van-col>
                             <van-col span="12" class="col-flex">
-                                <img src="../../static/images/user/wdzl.png"/>
+                                <img src="../../static/images/sfrz.png" width="17px" height="16px"/>
                                 <span>是否认证：</span>
                                 <span>认证通过</span>
                             </van-col>
@@ -115,8 +115,6 @@
         justify-content: flex-start;
     }
     .col-flex img{
-        width: auto;
-        height: 14px;
         margin-right: 3px;
     }
     .col-flex span{

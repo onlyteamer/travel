@@ -94,6 +94,8 @@
         background-repeat: no-repeat;
         background-color:transparent;
         box-shadow:none;
+        margin-left: 0;
+        margin-right: 8px;
     }
     /deep/.van-coupon__amount{
         color: white;
@@ -110,6 +112,8 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        padding-bottom: 10px;
+        padding-left: 10px;
     }
     /deep/.van-coupon__head p{
         margin-top: 3px;
@@ -119,6 +123,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        padding-bottom: 10px;
     }
     /deep/.van-coupon__name{
         font-size: 18px;

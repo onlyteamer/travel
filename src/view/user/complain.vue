@@ -8,23 +8,31 @@
                 <div v-for="item in list" :key="item.id">
                     <div class="item">
                         <div class="item-li">
-                            <img src="../../static/images/user/wdzl.png"/>
+                            <div style="width: 20px;margin-right: 8px;">
+                                <img src="../../static/images/tsrq.png"/>
+                            </div>
                             <div>投诉日期：</div>
                             <div style="flex: 1">2019年10月12日</div>
                         </div>
                         <div class="item-li">
-                            <img src="../../static/images/user/wdzl.png"/>
-                            <div >投诉对象：</div>
+                            <div style="width: 20px;margin-right: 8px;">
+                                <img src="../../static/images/tsdx.png" width="19px"/>
+                            </div>
+                            <div>投诉对象：</div>
                             <div style="flex: 1">乘客</div>
                         </div>
                         <div class="item-li">
-                            <img src="../../static/images/user/wdzl.png"/>
-                            <div >投诉内容：</div>
+                            <div style="width: 20px;margin-right: 8px;">
+                                <img src="../../static/images/tsnr.png"/>
+                            </div>
+                            <div>投诉内容：</div>
                             <div style="flex: 1">不给钱</div>
                         </div>
                         <div class="item-li">
-                            <img src="../../static/images/user/wdzl.png"/>
-                            <div >处理结果：</div>
+                            <div style="width: 20px;margin-right: 8px;">
+                                <img src="../../static/images/cljg.png"/>
+                            </div>
+                            <div>处理结果：</div>
                             <div style="flex:1">给钱给钱给钱给钱给钱给钱给钱给钱给钱给钱给钱给钱</div>
                         </div>
                     </div>
@@ -86,12 +94,13 @@
         align-items: center;
         font-size: 14px;
         color: #202020;
+        margin-top: 5px;
+        margin-bottom: 5px;
     }
 
     .item-li img {
-        height: 17px;
-        width: auto;
-        margin-right: 8px;
+        margin: auto;
+        width: 17px;
         display: block;
     }
 </style>

@@ -39,19 +39,19 @@
             <div style="position: relative;top: -35px;">
                 <van-row class="bag-wrap">
                     <van-col span="6" class="bag-col"  @click="goDetail(0)" >
-                        <div class="bag-wrap-item"><img src="../../static/images/user/wdzl.png"/></div>
+                        <div class="bag-wrap-item"><img src="../../static/images/zdjl.png"/></div>
                         <div class="bag-wrap-item">账单记录</div>
                     </van-col>
                     <van-col span="6" class="bag-col" :value="1" @click="goDetail(1)">
-                        <div class="bag-wrap-item"><img src="../../static/images/user/wdzl.png"/></div>
+                        <div class="bag-wrap-item"><img src="../../static/images/xfjl.png"/></div>
                         <div class="bag-wrap-item">消费记录</div>
                     </van-col>
                     <van-col span="6" class="bag-col" :value="2" @click="goDetail(2)">
-                        <div class="bag-wrap-item"><img src="../../static/images/user/wdzl.png"/></div>
+                        <div class="bag-wrap-item"><img src="../../static/images/syjl.png"/></div>
                         <div class="bag-wrap-item">收益记录</div>
                     </van-col>
                     <van-col span="6" class="bag-col" :value="3" @click="goDetail(3)">
-                        <div class="bag-wrap-item"><img src="../../static/images/user/wdzl.png"/></div>
+                        <div class="bag-wrap-item"><img src="../../static/images/txdx.png"/></div>
                         <div class="bag-wrap-item">充值记录</div>
                     </van-col>
                 </van-row>
@@ -171,7 +171,6 @@
     }
 
     .bag-wrap-item img {
-        width: auto;
         height: 20px;
     }
 

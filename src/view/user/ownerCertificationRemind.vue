@@ -5,7 +5,7 @@
         </div>
         <div class="content">
             <div class="img-wrap">
-                <van-image :src="imageURL"></van-image>
+                <van-image width="80px" height="80px" :src="imageURL"/>
                 <div style="color: #202020;font-size: 18px;margin-top: 15px">实名认证车辆要求</div>
             </div>
             <div class="info-wrap">
@@ -23,7 +23,7 @@
 
 <script>
     import {NavBar, Button, Image,} from 'vant';
-    import imageURL from '../../static/images/upload.png';
+    import imageURL from '../../static/images/clrz.png';
 
     export default {
         components: {
