@@ -117,7 +117,7 @@
                         phone:this.definition.phone,
                     }
                 }).then((res)=>{
-                    if(res.data.code==200){
+                    if(res.data.code==0){
                         this.$router.push({path: '/carIndex'});
                     }else{
                         Toast(res.data.msg);
