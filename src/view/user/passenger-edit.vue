@@ -10,20 +10,31 @@
             <div class="item">
                 <van-field label-class="item-label" label="身份证号码" v-model="definition.cardId"></van-field>
             </div>
+            <div class="item">
+                <van-field label-class="item-label" label="手机号码" v-model="definition.passPhone"></van-field>
+            </div>
             <div>
                 <van-checkbox style="margin-top: 20px" v-model="definition.checked" checked-color="#0CC893">
                     同意：因信息填写错误导致出现意外无法理赔由用户自己承担损失；未成年赔付上限依据保监会同意。同意<span style="color:#0CC893;" @click="goAgreement">《保险条款》</span>
                 </van-checkbox>
             </div>
-            <van-button @click="submitInfo" style="margin-top:15px;margin-bottom:17px;width: 100%;height:44px" color="#0CC893" type="default">
-                保存
-            </van-button>
+            <div style="margin-bottom:17px;">
+                <van-button @click="submitInfo" style="margin-top:15px;width: 100%;height:44px"
+                            color="#0CC893" type="default">
+                    保存
+                </van-button>
+                <van-button @click="del" style="margin-top:15px;width: 100%;height:44px" v-if="definition.id"
+                            color="#9E9E9E" type="default">
+                    删除
+                </van-button>
+            </div>
+
         </div>
     </div>
 </template>
 <!--乘车人编辑页-->
 <script>
-    import {NavBar, Field, Button, Checkbox,Toast} from 'vant';
+    import {NavBar, Field, Button, Checkbox, Toast} from 'vant';
     import request from '../../utils/request';
 
     export default {
@@ -34,75 +45,103 @@
             [Checkbox.name]: Checkbox,
             [Toast.name]: Toast,
         },
-        data(){
-            return{
-                definition:{
-                    checked:true,
-                    cardId:'',
-                    passName:'',
-                    id:'',
-                    passPhone:''
+        data() {
+            return {
+                definition: {
+                    checked: true,
+                    cardId: '',
+                    passName: '',
+                    id: '',
+                    passPhone: ''
                 }
             }
         },
         methods: {
-            goAgreement(){
-                //协议页面
-                this.$router.push({path:'/agreement',query:{name:'保险条款'}})
-            },
-            checkIdCard(idCard){
-                if(/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$/.test(idCard)
-                    || /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/.test(idCard)){
-                    return true;
-                    console.log("sss");
-                }
-                return false;
-            },
-            //新增乘车人
-            submitInfo(){
-                if(!this.definition.passName){
-                    Toast("请填写乘车人姓名");
-                    return;
-                }
-                if(!this.definition.cardId || !this.checkIdCard(this.definition.cardId)){
-                    Toast("请输入正确的身份证号");
-                    return;
-                }
-                if(this.definition.id){
-                    this.edit()
-                }else{
-                    this.add();
-                }
-            },
-            add(){
+            del(){
                 request.sendPost({
-                    url:'/sharecar/pass/add',
-                    params:{
-                        passName:this.definition.passName,
-                        cardId:this.definition.cardId
+                    url: '/sharecar/pass/delete',
+                    params: {
+                        id: this.definition.id,
                     }
-                }).then((res)=>{
-                    if(res.data.code==0){
+                }).then((res) => {
+                    if (res.data.code == 0) {
                         Toast(res.data.msg);
                         this.$router.back(-1);
-                    }else{
+                    } else {
                         Toast(res.data.msg);
                     }
                 })
             },
-            edit(){
+            goAgreement() {
+                //协议页面
+                this.$router.push({path: '/agreement', query: {name: '保险条款'}})
+            },
+            checkIdCard(idCard) {
+                if (/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$/.test(idCard)
+                    || /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/.test(idCard)) {
+                    return true;
+                }
+                return false;
+            },
+            checkPhone(phone) {
+                if (/^1[3456789]\d{9}$/.test(phone)) {
+                    return true;
+                }
+                return false;
+            },
+            //新增乘车人
+            submitInfo() {
+                if (!this.definition.passName) {
+                    Toast("请填写乘车人姓名");
+                    return;
+                }
+                if (!this.definition.cardId || !this.checkIdCard(this.definition.cardId)) {
+                    Toast("请输入正确的身份证号");
+                    return;
+                }
+                if (!this.definition.passPhone || !this.checkPhone(this.definition.passPhone)) {
+                    Toast("请输入正确的手机号");
+                    return;
+                }
+                if (this.definition.id) {
+                    this.edit()
+                } else {
+                    this.add();
+                }
+            },
+            add() {
                 request.sendPost({
-                    url:'/sharecar/pass/update',
-                    params:{
-                        passName:this.definition.passName,
-                        cardId:this.definition.cardId,
-                        id:this.definition.id
+                    url: '/sharecar/pass/add',
+                    params: {
+                        passName: this.definition.passName,
+                        cardId: this.definition.cardId,
+                        passPhone: this.definition.passPhone,
+                        isDefault:0,
                     }
-                }).then((res)=>{
-                    if(res.data.code==0){
+                }).then((res) => {
+                    if (res.data.code == 0) {
                         Toast(res.data.msg);
                         this.$router.back(-1);
-                    }else{
+                    } else {
+                        Toast(res.data.msg);
+                    }
+                })
+            },
+            edit() {
+                request.sendPost({
+                    url: '/sharecar/pass/update',
+                    params: {
+                        passName: this.definition.passName,
+                        cardId: this.definition.cardId,
+                        id: this.definition.id,
+                        passPhone: this.definition.passPhone,
+                        isDefault:this.definition.isDefault
+                    }
+                }).then((res) => {
+                    if (res.data.code == 0) {
+                        Toast(res.data.msg);
+                        this.$router.back(-1);
+                    } else {
                         Toast(res.data.msg);
                     }
                 })
@@ -110,12 +149,23 @@
             onClickLeft() {
                 this.$router.back(-1);
             },
+            queryPassenger() {
+                request.sendPost({
+                    url: '/sharecar/pass/select',
+                    params: {
+                        id: this.definition.id
+                    }
+                }).then((res) => {
+                    this.definition = res.data.data;
+                    this.definition.checked = true;
+                })
+            },
         },
-        created(){
+        created() {
             let id = this.$route.query.id;
-            if(id){
+            if (id) {
                 this.definition.id = id;
-                //TODO 这里应该根据id查询乘车人信息,然后给definition赋值
+                this.queryPassenger();
             }
         }
     }
@@ -127,13 +177,14 @@
         font-size: 14px !important;
         color: #202020 !important;
     }
+
     /deep/ .van-nav-bar .van-icon {
         color: #5E5E5E
     }
 
     .content {
         background-color: white;
-        padding: 15px  15px 0 15px;
+        padding: 15px 15px 0 15px;
         margin-top: 46px;
     }
 
