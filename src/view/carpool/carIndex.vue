@@ -75,7 +75,16 @@
         </div>
 
         <div class="listInfo">
-            <div v-for="item in 3">
+            <van-list
+                    v-model="loading"
+                    :error.sync="error"
+                    error-text="请求失败，点击重新加载"
+                    @load="onLoad"
+                    :offset="10"
+                    :immediate-check="false"
+            >
+
+            <div v-for="item in 10">
                 <div class="card">
                     <van-row style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;padding: 8px 2px;">
                         <van-col span="16">
@@ -110,6 +119,7 @@
                     </van-row>
                 </div>
             </div>
+            </van-list>
         </div>
 
 
@@ -139,7 +149,7 @@
 </template>
 
 <script>
-    import {NavBar,Row,Col,Image,NoticeBar,Cell,CellGroup,Field,Divider,Button,Card,Tabbar, TabbarItem,Toast ,DatetimePicker,Popup } from 'vant';
+    import {NavBar,Row,Col,Image,NoticeBar,Cell,CellGroup,Field,Divider,Button,Card,Tabbar, TabbarItem,Toast ,DatetimePicker,Popup,List } from 'vant';
     import logo from './../../static/images/logo.png'
     import laba from './../../static/images/laba.png'
     import greenBar from './../../static/images/green.png'
@@ -175,9 +185,12 @@
             [Toast.name]:Toast,
             [DatetimePicker.name]:DatetimePicker,
             [Popup.name]:Popup,
+            [List.name]:List
         },
         data(){
             return{
+                error: false,
+                loading: false,
                 minDate: new Date(),
                 currentDate:"",
                 showPop:false,
@@ -229,6 +242,10 @@
                 this.strokeInfo.week = week;
                 this.showPop = false;
 
+            },
+
+            async  onLoad() {
+                console.log(1111);
             },
 
             onClickLeft() {
@@ -318,6 +335,7 @@
     }
     .listInfo{
         margin-bottom: 60px;
+        height: 300px;
     }
 
     .listInfo .card{

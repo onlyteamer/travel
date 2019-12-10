@@ -5,10 +5,10 @@
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px;display: flex;align-items: center">
                 <van-col span="6">预定座位数</van-col>
                 <van-col span="18" >
-                    <van-tag color="#0CC893" class="seatTag">1座</van-tag>
-                    <van-tag color="#FFFFFF" text-color="#202020" style="border: 1px solid #CFCFCF" class="seatTag">2座</van-tag>
-                    <van-tag color="#FFFFFF" text-color="#202020" style="border: 1px solid #CFCFCF" class="seatTag">3座</van-tag>
-                    <van-tag color="#FFFFFF" text-color="#202020" style="border: 1px solid #CFCFCF" class="seatTag">4座</van-tag>
+                    <van-tag :color="seatIndex== '1'?'#0CC893':'#FFFFFF'" :text-color="seatIndex=='1'?'#FFFFFF':'#202020'" class="seatTag" @click="changeSeat('1')">1座</van-tag>
+                    <van-tag :color="seatIndex== '2'?'#0CC893':'#FFFFFF'" :text-color="seatIndex=='2'?'#FFFFFF':'#202020'" style="border: 1px solid #CFCFCF" class="seatTag" @click="changeSeat('2')">2座</van-tag>
+                    <van-tag :color="seatIndex== '3'?'#0CC893':'#FFFFFF'" :text-color="seatIndex=='3'?'#FFFFFF':'#202020'" style="border: 1px solid #CFCFCF" class="seatTag" @click="changeSeat('3')">3座</van-tag>
+                    <van-tag :color="seatIndex== '4'?'#0CC893':'#FFFFFF'" :text-color="seatIndex=='4'?'#FFFFFF':'#202020'" style="border: 1px solid #CFCFCF" class="seatTag" @click="changeSeat('4')">4座</van-tag>
                 </van-col>
             </van-row>
 
@@ -21,6 +21,7 @@
                 <van-col span="13">
                     <div>
                         <van-field
+                            v-model="stroke.startPlace"
                             placeholder="上车地点"
                             label=""
                             label-width="5px"
@@ -37,6 +38,7 @@
                 <van-col span="13">
                     <div>
                         <van-field
+                                v-model="stroke.endPlace"
                                 placeholder="下车地点"
                                 label=""
                                 label-width="5px"
@@ -51,12 +53,14 @@
 
             <van-row style="display: flex;align-items: center">
                 <van-col span="24">
-                    <div>
+                    <div v-for="(item,index) in riderList" :key="index">
                         <van-field
+                                v-model="item.riderName"
                                 placeholder="乘客人姓名"
                                 label=""
                                 label-width="5px"
                                 left-icon="user-circle-o"
+                                disabled
                         />
                     </div>
                 </van-col>
@@ -65,9 +69,7 @@
             <van-row style="display: flex;align-items: center;border-bottom: 1px solid #ECECEC;padding: 0px 2px 12px">
                 <van-col span="15">
                     <div>
-                        <van-tag color="#FFFFFF" text-color="#202020" style="border: 1px solid #CFCFCF" class="contactTag">张三</van-tag>
-                        <van-tag color="#0CC893" text-color="#FFFFFF" style="border: 1px solid #CFCFCF" class="contactTag">李四</van-tag>
-                        <van-tag color="#0CC893" text-color="#FFFFFF" style="border: 1px solid #CFCFCF" class="contactTag">王五</van-tag>
+                        <van-tag :color="item.isNormal == '1'?'#FFFFFF':'#0CC893'" :text-color="item.isNormal == '1'?'#202020':'#FFFFFF'" style="border: 1px solid #CFCFCF" class="contactTag" v-for="(item,index) in normalRiders" :key="index" @click="selectRider(item)">{{item.riderName}}</van-tag>
                     </div>
                 </van-col>
                 <van-col span="9" align="right">（常用联系人）</van-col>
@@ -89,12 +91,14 @@
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 8px 0px">
                 <van-col span="24">
-                    <div>
+                    <div v-for="(item,index) in riderList" :key="index">
                         <van-field
+                                v-model="item.phone"
                                 placeholder="乘客手机号"
                                 label=""
                                 label-width="5px"
                                 left-icon="phone-circle-o"
+                                disabled
                         />
                     </div>
                 </van-col>
@@ -108,13 +112,13 @@
 
             <van-row >
                 <van-col span="24" style="padding: 10px 0">
-                    <van-button @click="goMyStroke" type="default" color="#0CC893" style="width: 100%;margin: 0 auto">预定（23元/座）</van-button>
+                    <van-button type="default" color="#0CC893" style="width: 100%;margin: 0 auto" @click="reserveCar">预定（23元/座）</van-button>
                 </van-col>
             </van-row>
 
             <van-row >
                 <van-col span="24" style="padding: 10px 0">
-                    <van-button type="default" color="#9E9E9E" style="width: 100%;margin: 0 auto">取消</van-button>
+                    <van-button type="default" color="#9E9E9E" style="width: 100%;margin: 0 auto" @click="goMyStroke">取消</van-button>
                 </van-col>
             </van-row>
         </div>
@@ -130,10 +134,11 @@
 
 <script>
     import Title from './../../components/header'
-    import { Row, Col,Icon,Checkbox, CheckboxGroup ,Button,Tag,Field  } from 'vant';
+    import { Row, Col,Icon,Checkbox, CheckboxGroup ,Button,Tag,Field,Toast   } from 'vant';
 
     import greenBar from './../../static/images/green.png'
     import redBar from './../../static/images/red.png'
+    import request from '../../utils/request'
 
     export default {
         name: "reserve",
@@ -146,31 +151,149 @@
             [CheckboxGroup.name]:CheckboxGroup,
             [Button.name]:Button,
             [Tag.name]:Tag,
-            [Field.name]:Field
+            [Field.name]:Field,
+            [Toast.name]:Toast
         },
         data(){
             return{
+                seatIndex:1,
                 redBar:redBar,
                 greenBar:greenBar,
                 checked:true,
                 title:"预约",
+                normalRiders:[],
+                riderList:[{
+                    riderId:"",
+                    riderName:"",
+                    phone:""
+                }],
                 stroke:{
-                    startDate:"2019年12月2日 06:55",
-                    point:"北京",
-                    route:"上河湾出发，李哥庄，绿地，果园，少年宫，万象城",
-                    seatCount:3,
-                    price:23,
-                    carInfo:"大众速腾（京A***356）",
-                    remark:"车上不能抽烟，不能长时间打电话"
+                    startPlace:"",
+                    endPlace:"",
+                    tripId:"",
+                    riderNames:[],
+                    riderIds:[],
+                    phone:"",
+                    seatCount:"1",
+                    price:"23",
+                    remark:""
                 }
             }
         },
+        mounted(){
+            //获取最近乘车人
+            request.sendPost({
+                url:'/sharecar/pass/lastpass',
+                params:{}
+            }).then((res) =>{
+                if(res.data.code==0){
+                    console.log(res.data)
+                }else{
+
+                }
+
+            });
+
+            this.normalRiders = [
+                {
+                    riderId:"1",
+                    riderName:"李四",
+                    phone:"15872919149",
+                    isNormal:"1"
+                },
+                {
+                    riderId:"2",
+                    riderName:"王五",
+                    phone:"15872919149",
+                    isNormal:"0"
+                },
+                {
+                    riderId:"3",
+                    riderName:"张三",
+                    phone:"15872919149",
+                    isNormal:"0"
+                }]
+
+
+
+
+        },
+
         methods:{
+            //预约
+            reserveCar(){
+                if(!this.checked){
+                    Toast.fail("请选协议后进行操作");
+                    return;
+                }
+
+                if(this.normalRiders.length>0){
+                    this.stroke.phone = this.normalRiders[0].phone;
+                }
+                if(!this.stroke.startPlace){
+                    Toast.fail("上车地点不能为空");
+                    return;
+                }
+                if(!this.stroke.endPlace){
+                    Toast.fail("下车地点不能为空");
+                    return;
+                }
+
+                if(this.stroke.riderIds.length == 0){
+                    Toast.fail("乘客不能为空");
+                    return;
+                }
+
+                request.sendPost({
+                    url:'/sharecar/pass/booktrip',
+                    params:this.stroke
+                }).then((res) =>{
+                    if(res.data.code==0){
+                        this.$router.push({path:'/myStroke'});
+                    }else{
+
+                    }
+
+                })
+
+            },
+
             onClickLeft(){
                 this.$router.back(-1);
             },
             goMyStroke(){
                 this.$router.push({path:'/myStroke'});
+            },
+            changeSeat(val){
+                this.seatIndex = val;
+
+                this.stroke.seatCount = val;
+            },
+            selectRider(val){
+                if(val){
+                    if(this.stroke.riderIds.indexOf(val.riderId) == -1){
+                        this.stroke.riderIds.push(val.riderId);
+
+                        this.stroke.riderNames.push(val.riderName);
+
+                        //电话待定
+
+                    }else {
+                        Toast.fail("请勿重复添加乘客");
+                        return;
+                    }
+
+                    if(this.riderList.length == 1){
+                        if(this.riderList[0].riderId == ''){
+                           this.riderList.splice(0,1,val);
+                        }else {
+                            this.riderList.push(val);
+                        }
+                    }else {
+                        this.riderList.push(val);
+                    }
+
+                }
             }
         }
     }
