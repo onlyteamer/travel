@@ -11,76 +11,123 @@
                 </van-button>
             </div>
             <div class="item" style="margin-top: 10px;padding-left: 13px;padding-right: 9px">
-                <div v-for="item in dataMain.data" :key="item.id" class="item-li">
-                    <div class="item-li-flex" style="align-items: flex-start">
-                        <div>
-                            <span style="color:#202020;font-size: 16px;margin-right: 8px;font-weight: bolder">{{item.passName}}</span>
-                            <span v-if="item.dft==1" class="dft-tag">默认</span>
+                <van-list
+                        v-model="loading"
+                        :finished="finished"
+                        finished-text="没有更多了"
+                        @load="onLoad"
+                >
+                    <div v-for="item in dataMain.data" :key="item.id" class="item-li">
+                        <div class="item-li-flex" style="align-items: flex-start">
+                            <div>
+                                <span style="color:#202020;font-size: 16px;margin-right: 8px;font-weight: bolder">{{item.passName}}</span>
+                                <span v-if="item.isDefault===1" class="dft-tag">默认</span>
+                            </div>
+                            <div style="display:flex;align-items: center;margin-top: 5px">
+                                <img src="../../static/images/idCard-black.png"
+                                     style="width: 20px;height: 14px;margin-right: 3px"/>
+                                <span>{{item.cardId}}</span>
+                            </div>
+                            <div style="display:flex;align-items: center;margin-top: 5px">
+                                <img src="../../static/images/tel.png"
+                                     style="width: 14px;height:14px;margin-right: 9px"/>
+                                <span>{{item.passPhone}}</span>
+                            </div>
                         </div>
-                        <div style="display:flex;align-items: center;margin-top: 5px">
-                            <img src="../../static/images/idCard-black.png"
-                                 style="width: 20px;height: 20px;margin-right: 3px"/>
-                            <span>{{item.cardId}}</span>
+                        <div class="item-li-flex" style="align-items: center;">
+                            <van-button type="default" color="#5083ED" plain v-if="item.isDefault===0"
+                                        @click="setDft(item.id)"
+                                        style="width: 66px;height: 25px;margin-bottom:7px;padding: 0;line-height: 25px">
+                                默认
+                            </van-button>
+                            <van-button type="default" color="#0CC893" plain @click="goEdit(item.id)"
+                                        style="width: 66px;height: 25px;padding: 0;line-height: 25px">编辑
+                            </van-button>
                         </div>
                     </div>
-                    <div class="item-li-flex" style="   align-items: center;">
-                        <van-button type="default" color="#5083ED" plain v-if="item.dft==1" @click="setDft"
-                                    style="width: 66px;height: 25px;margin-bottom:7px;padding: 0;line-height: 25px">默认
-                        </van-button>
-                        <van-button type="default" color="#0CC893" plain  @click="goEdit(item.id)"
-                                    style="width: 66px;height: 25px;padding: 0;line-height: 25px">编辑
-                        </van-button>
-                    </div>
-                </div>
+                </van-list>
             </div>
         </div>
     </div>
 </template>
 <!--乘车人管理-->
 <script>
-    import {NavBar, Button} from 'vant';
+    import {NavBar, Button, List} from 'vant';
     import request from '../../utils/request';
+
     export default {
         components: {
             [NavBar.name]: NavBar,
             [Button.name]: Button,
+            [List.name]: List
         },
         data() {
             return {
-                dataMain:{
-                    data:[],
-                    limit:10,
-                    start:1,
-                    total:0
+                isOneHttp: true,
+                loading: false,
+                finished: false,
+                dataMain: {
+                    data: [],
+                    limit: 6,
+                    start: 1,
+                    total: 0
                 },
             }
         },
         methods: {
-            initData(){
+            initData() {
                 request.sendGet({
-                    url:'/sharecar/pass/list',
-                    params:{
+                    url: '/sharecar/pass/list',
+                    params: {
                         limit: this.dataMain.limit,
-                        start:this.dataMain.start,
+                        start: this.dataMain.start,
                     }
-                }).then((res)=>{
-                   this.dataMain.data = res.data.rows;
+                }).then((res) => {
+                    this.dataMain.total = res.data.total;
+                    //判断是否是第一次请求数据
+                    if (this.isOneHttp) {
+                        this.dataMain.data = res.data.rows;
+                        this.isOneHttp = false;
+                    } else {
+                        this.dataMain.data.concat(res.data.rows);
+                    }
+                    this.loading = false;
                 });
             },
             onClickLeft() {
                 this.$router.back(-1);
             },
-            goAdd(){
-                this.$router.push({path:'/passenger-edit'});
+            goAdd() {
+                this.$router.push({path: '/passenger-edit'});
             },
-            goEdit(id){
-                this.$router.push({path:'/passenger-edit',query:{'id':id}});
+            goEdit(id) {
+                this.$router.push({path: '/passenger-edit', query: {'id': id}});
             },
-            setDft(){
-
+            setDft(id) {
+                request.sendPost({
+                    url: '/sharecar/pass/default',
+                    params: {
+                        id: id,
+                    }
+                }).then((res) => {
+                    this.isOneHttp = true;
+                    this.dataMain.data = [];
+                    this.dataMain.start = 1;
+                    this.dataMain.total = 0;
+                    this.finished = false;
+                    this.initData();
+                });
+            },
+            onLoad() {
+                this.dataMain.start = this.dataMain.data.length;
+                if (this.dataMain.total > this.dataMain.data.length) {
+                    this.initData();
+                } else {
+                    this.finished = true;
+                }
             },
         },
-        created(){
+        created() {
             this.initData();
         }
     }
@@ -115,7 +162,8 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 75px;
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 
     .item-li-flex {
