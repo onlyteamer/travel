@@ -267,6 +267,13 @@ const routes = [
             title: '车主位置'
         }
     },
+    {
+        name: 'ticketPayment',
+        component: () => import('./view/busTrip/ticketPayment.vue'),
+        meta: {
+            title: '购票支付'
+        }
+    }
   // {
   //   name: 'cart',
   //   component: () => import('./view/cart'),
