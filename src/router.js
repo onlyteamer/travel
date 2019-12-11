@@ -267,20 +267,13 @@ const routes = [
             title: '车主位置'
         }
     },
-  // {
-  //   name: 'cart',
-  //   component: () => import('./view/cart'),
-  //   meta: {
-  //     title: '购物车'
-  //   }
-  // },
-  // {
-  //   name: 'goods',
-  //   component: () => import('./view/goods'),
-  //   meta: {
-  //     title: '商品详情'
-  //   }
-  // }
+    {
+        name: 'buyTicket',
+        component: () => import('./view/bus/buyTicket.vue'),
+        meta: {
+            title: '购票'
+        }
+    },
 ];
 
 // add route path
