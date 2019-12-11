@@ -268,26 +268,19 @@ const routes = [
         }
     },
     {
+        name: 'buyTicket',
+        component: () => import('./view/bus/buyTicket.vue'),
+        meta: {
+            title: '购票'
+        }
+    },
+    {
         name: 'ticketPayment',
         component: () => import('./view/busTrip/ticketPayment.vue'),
         meta: {
             title: '购票支付'
         }
     }
-  // {
-  //   name: 'cart',
-  //   component: () => import('./view/cart'),
-  //   meta: {
-  //     title: '购物车'
-  //   }
-  // },
-  // {
-  //   name: 'goods',
-  //   component: () => import('./view/goods'),
-  //   meta: {
-  //     title: '商品详情'
-  //   }
-  // }
 ];
 
 // add route path
