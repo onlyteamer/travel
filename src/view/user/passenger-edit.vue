@@ -151,9 +151,8 @@
             },
             queryPassenger() {
                 request.sendPost({
-                    url: '/sharecar/pass/select',
+                    url: '/sharecar/pass/select/'+this.definition.id,
                     params: {
-                        id: this.definition.id
                     }
                 }).then((res) => {
                     this.definition = res.data.data;

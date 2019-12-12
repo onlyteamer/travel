@@ -12,10 +12,12 @@
             </div>
             <div class="item" style="margin-top: 10px;padding-left: 13px;padding-right: 9px">
                 <van-list
+                        :offset="10"
                         v-model="loading"
                         :finished="finished"
                         finished-text="没有更多了"
                         @load="onLoad"
+                        :immediate-check="false"
                 >
                     <div v-for="item in dataMain.data" :key="item.id" class="item-li">
                         <div class="item-li-flex" style="align-items: flex-start">
@@ -68,8 +70,8 @@
                 finished: false,
                 dataMain: {
                     data: [],
-                    limit: 6,
-                    start: 1,
+                    pageSize: 6,
+                    pageNum: 1,
                     total: 0
                 },
             }
@@ -79,8 +81,8 @@
                 request.sendGet({
                     url: '/sharecar/pass/list',
                     params: {
-                        limit: this.dataMain.limit,
-                        start: this.dataMain.start,
+                        pageSize: this.dataMain.pageSize,
+                        pageNum: this.dataMain.pageNum,
                     }
                 }).then((res) => {
                     this.dataMain.total = res.data.total;
@@ -89,7 +91,11 @@
                         this.dataMain.data = res.data.rows;
                         this.isOneHttp = false;
                     } else {
-                        this.dataMain.data.concat(res.data.rows);
+                        this.dataMain.data=this.dataMain.data.concat(res.data.rows);
+                    }
+
+                    if (this.dataMain.total === this.dataMain.data.length) {
+                        this.finished = true;
                     }
                     this.loading = false;
                 });
@@ -105,31 +111,28 @@
             },
             setDft(id) {
                 request.sendPost({
-                    url: '/sharecar/pass/default',
-                    params: {
-                        id: id,
-                    }
+                    url: '/sharecar/pass/default/'+ id,
+                    params: {}
                 }).then((res) => {
                     this.isOneHttp = true;
                     this.dataMain.data = [];
-                    this.dataMain.start = 1;
+                    this.dataMain.pageNum = 1;
                     this.dataMain.total = 0;
                     this.finished = false;
                     this.initData();
                 });
             },
             onLoad() {
-                this.dataMain.start = this.dataMain.data.length;
-                if (this.dataMain.total > this.dataMain.data.length) {
+              if (this.dataMain.total > this.dataMain.data.length) {
+                    this.dataMain.pageNum += 1;
                     this.initData();
-                } else {
-                    this.finished = true;
                 }
             },
         },
         created() {
             this.initData();
         }
+
     }
 </script>
 
