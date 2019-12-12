@@ -2,7 +2,7 @@
     <div class="contain">
         <Title :title="title" @onClickLeft="onClickLeft"></Title>
         <div style="margin-top: 46px">
-            <div class="black" v-for="index in 6">
+            <div class="black" v-for="(item,index) in passList" :key="index">
                 <div @click="goPassengerDetails">
                     <van-row style="display: flex;align-items: center">
                         <van-col span="14" >
@@ -29,10 +29,10 @@
                     <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false" />
                     <van-row>
                         <van-col span="6" offset="11">
-                            <van-button type="default" color="#9E9E9E" size="mini" style="height: 34px;font-size: 14px;width: 100%">拒绝</van-button>
+                            <van-button type="default" color="#9E9E9E" size="mini" style="height: 34px;font-size: 14px;width: 100%" @click="confirmTrip('2')">拒绝</van-button>
                         </van-col>
                         <van-col span="6">
-                            <van-button type="default" color="#0CC893" size="mini" style="height: 34px;font-size: 14px;width: 100%;margin-left: 10px">预约确定</van-button>
+                            <van-button type="default" color="#0CC893" size="mini" style="height: 34px;font-size: 14px;width: 100%;margin-left: 10px" @click="confirmTrip('1')">预约确定</van-button>
                         </van-col>
                     </van-row>
                 </div>
@@ -46,6 +46,8 @@
     import Title from './../../components/header'
     import { Row, Col,Divider,Button} from 'vant';
 
+    import request from '../../utils/request'
+
     export default {
         name: "passengerList",
         components:{
@@ -57,15 +59,60 @@
         },
         data(){
             return{
-                title:"乘客列表"
+                title:"乘客列表",
+                passList:[]
             }
         },
+        mounted(){
+            //初始化列表数据
+            this.initPassList();
+        },
+
         methods:{
             onClickLeft(){
                 this.$router.back(-1);
             },
             goPassengerDetails(){
                 this.$router.push({path:'/passengerDetails'});
+            },
+            initPassList(){
+                //获取行程id
+                let tripId = this.$route.query.tripId;
+
+                request.sendGet({
+                    url:"/sharecar/trip/passlist",
+                    params: {
+                        tripId:tripId
+                    }
+                }).then(res =>{
+                    if(res.data.code==0){
+                        this.passList = res.data.rows;
+                    }else{
+                        //接口错误
+
+                    }
+                })
+
+
+
+
+            },
+
+            confirmTrip(val){
+                //1-确认 2-拒绝
+                request.sendPost({
+                    url:'/sharecar/trip/confirm',
+                    params:{
+                        bookId:"1",
+                        state:val,
+                        tripId:"1"
+                    }
+                }).then(res =>{
+                    //刷新列表
+
+                })
+
+
             }
         }
     }

@@ -76,9 +76,10 @@
             <div style="width: 100%;height: 100%;position: absolute;top: 0;background:rgba(0, 0, 0, 0.3);"></div>
         </div>
         <div class="assess" align="right">
-            <van-button type="default" color="#0CC893"
+            <van-button type="default" :color="isFollow == '0'?'#0CC893':'#9E9E9E'"
                         style="font-size: 14px;margin-bottom: 10px;height: 28px;width: 72px;border-radius: 5px"
-                        size="mini">关注
+                        size="mini" @click="followUser">
+                {{isFollow=='0'?'关注':'已关注'}}
             </van-button>
             <van-button type="default" color="#0CC893"
                         style="font-size: 14px;margin-bottom: 10px;height: 28px;width: 72px;border-radius: 5px"
@@ -98,6 +99,8 @@
     import Title from './../../components/header'
     import {Row, Col, Divider, Button, Rate, Tag, Field, CellGroup} from 'vant';
 
+    import request from '../../utils/request'
+
     export default {
         name: "otherOpt",
         components: {
@@ -113,12 +116,32 @@
         },
         data() {
             return {
-                title: "其他操作"
+                title: "其他操作",
+                isFollow:"0"
             }
         },
         methods: {
             onClickLeft() {
 
+            },
+            followUser(){
+                if(this.isFollow == '0'){
+                    //关注
+                    request.sendPost({
+                        url:"/user/center/follow",
+                        params:{
+                            followerId:"1"
+                        }
+                    }).then(res =>{
+                        if(res.data.code == '0'){
+                            this.isFollow = '1'
+                        }
+                    })
+
+                }else {
+                    //取消关注
+                    this.isFollow = '0'
+                }
             }
         }
     }
