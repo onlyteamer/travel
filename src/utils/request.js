@@ -17,6 +17,27 @@ let baas = axios.create({
     timeout: 30000,
     withCredentials: true
 });
+
+let fileBaas = axios.create({
+    baseURL: ajaxUrl,
+    timeout: 30000,
+    withCredentials: true
+});
+
+//添加请求拦截器(后台验证Token先找头部信息是否包含)
+fileBaas.interceptors.request.use(function (config) {
+    config.headers['Content-Type'] = 'multipart/form-data';
+    //在发送请求之前做某事
+    if (localStorage.getItem('openid')) {
+        let openid = localStorage.getItem('openid');
+        config.headers['openid'] = openid;
+    } else {
+        throw new Error('logout');
+    }
+    return config;
+});
+
+
 //添加请求拦截器(后台验证Token先找头部信息是否包含)
 baas.interceptors.request.use(function (config) {
     config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -25,6 +46,17 @@ baas.interceptors.request.use(function (config) {
         let openid = localStorage.getItem('openid');
         config.headers['openid'] = openid;
     } else {
+        // throw new Error('logout');
+        // axios.get(ajaxUrl + '/wx/authorize')
+        //     .then(function (response) {
+        //             //获取到验证URL,给微信发送请求
+        //             let authURL = response.data.data.url;
+        //             console.log(authURL);
+        //             // window.location.href = authURL;
+        //         }
+        //     ).catch(function (error) {
+        //     console.log(error);
+        // });
         throw new Error('logout');
     }
     return config;
@@ -60,7 +92,16 @@ server.sendPost = function (options) {
 };
 server.sendGet = function (options) {
     return new window.Promise((resolve) => {
-        baas.get(options.url+'?'+qs.stringify(options.params)).then((response) => {
+        baas.get(options.url + '?' + qs.stringify(options.params)).then((response) => {
+            resolve(response);
+        }).catch((error) => {
+
+        });
+    });
+};
+server.uploadFile = function (options) {
+    return new window.Promise((resolve) => {
+        baas.post(options.url, options.params).then((response) => {
             resolve(response);
         }).catch((error) => {
 
