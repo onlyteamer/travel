@@ -8,11 +8,11 @@
                             style="width: 66px;height: 25px;padding: 0;line-height: 25px">增加
                 </van-button>
             </div>
-            <div v-for="item in list" :key="item.id" style="margin-top: 10px">
+            <div v-for="item in dataMain.data" :key="item.id" style="margin-top: 10px">
                 <div class="row-wrap">
                     <div class="row-wrap-title">
-                        <span style="font-size: 16px;color: #202020;font-weight: bold">车辆自定义名称</span>
-                        <van-button type="default" color="#0CC893" plain  @click="goEdit"
+                        <span style="font-size: 16px;color: #202020;font-weight: bold">{{item.carName}}</span>
+                        <van-button type="default" color="#0CC893" plain  @click="goEdit(item.id)"
                                     style="width: 66px;height: 25px;padding: 0;line-height: 25px">编辑
                         </van-button>
                     </div>
@@ -21,24 +21,24 @@
                             <van-col span="12" class="col-flex">
                                 <img src="../../static/images/cp.png" width="16px" height="14px"/>
                                 <span >车牌：</span>
-                                <span>京A12345</span>
+                                <span>{{item.carNumber}}</span>
                             </van-col>
                             <van-col span="12" class="col-flex">
                                 <img src="../../static/images/cx.png" width="17px" height="14px"/>
                                 <span >车型：</span>
-                                <span>大众15款速腾</span>
+                                <span>{{item.carType}}</span>
                             </van-col>
                         </van-row>
                         <van-row style="height: 50%;display: flex;align-items: center;">
                             <van-col span="12" class="col-flex">
                                 <img src="../../static/images/ys.png" width="15px" height="15px"/>
                                 <span >颜色：</span>
-                                <span>白色</span>
+                                <span>{{item.carColor}}</span>
                                 </van-col>
                             <van-col span="12" class="col-flex">
                                 <img src="../../static/images/sfrz.png" width="17px" height="16px"/>
                                 <span>是否认证：</span>
-                                <span>认证通过</span>
+                                <span>{{item.isAudite === 1?'认证通过':'认证不通过'}}</span>
                             </van-col>
                         </van-row>
                     </div>
@@ -50,6 +50,7 @@
 
 <script>
     import {NavBar, Field,Row, Col, Button, } from 'vant';
+    import request from "../../utils/request";
     export default {
         components: {
             [NavBar.name]: NavBar,
@@ -60,12 +61,15 @@
         },
         data(){
           return{
-              list:[
-                  {id:'1',name:'1'},
-                  {id:'2',name:'1'},
-                  {id:'3',name:'1'},
-                  {id:'4',name:'1'},
-              ]
+              isOneHttp: true,
+              loading: false,
+              finished: false,
+              dataMain: {
+                  data: [],
+                  pageSize: 6,
+                  pageNum: 1,
+                  total: 0
+              },
           }
         },
         methods:{
@@ -75,9 +79,41 @@
             goAdd(){
                 this.$router.push({path:'/ownerCertificationRemind'});
             },
-            goEdit(){
-                this.$router.push({path:'/addCar'});
+            goEdit(id){
+                this.$router.push({path:'/addCar', query: {'id': id}});
             },
+            initData() {
+                request.sendPost({
+                    url: '/user/center/carlist',
+                    params: {
+                        pageSize: this.dataMain.pageSize,
+                        pageNum: this.dataMain.pageNum,
+                    }
+                }).then((res) => {
+                    this.dataMain.total = res.data.total;
+                    //判断是否是第一次请求数据
+                    if (this.isOneHttp) {
+                        this.dataMain.data = res.data.rows;
+                        this.isOneHttp = false;
+                    } else {
+                        this.dataMain.data=this.dataMain.data.concat(res.data.rows);
+                    }
+
+                    if (this.dataMain.total === this.dataMain.data.length) {
+                        this.finished = true;
+                    }
+                    this.loading = false;
+                });
+            },
+            onLoad() {
+                if (this.dataMain.total > this.dataMain.data.length) {
+                    this.dataMain.pageNum += 1;
+                    this.initData();
+                }
+            },
+        },
+        created() {
+            this.initData();
         }
     }
 </script>
