@@ -81,7 +81,7 @@
                         size="mini" @click="followUser">
                 {{isFollow=='0'?'关注':'已关注'}}
             </van-button>
-            <van-button type="default" color="#0CC893"
+            <van-button type="default" color="#0CC893" @click="addBlackList"
                         style="font-size: 14px;margin-bottom: 10px;height: 28px;width: 72px;border-radius: 5px"
                         size="mini">黑名单
             </van-button>
@@ -97,7 +97,7 @@
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Divider, Button, Rate, Tag, Field, CellGroup} from 'vant';
+    import {Row, Col, Divider, Button, Rate, Tag, Field, CellGroup,Toast} from 'vant';
 
     import request from '../../utils/request'
 
@@ -112,37 +112,56 @@
             [Rate.name]: Rate,
             [Tag.name]: Tag,
             [Field.name]: Field,
-            [CellGroup.name]: CellGroup
+            [CellGroup.name]: CellGroup,
+            [Toast.name]:Toast
         },
         data() {
             return {
                 title: "其他操作",
-                isFollow:"0"
+                isFollow: "0",
+                tag:'',
             }
         },
         methods: {
             onClickLeft() {
 
             },
-            followUser(){
-                if(this.isFollow == '0'){
+            //加入黑名单
+            addBlackList() {
+                request.sendPost({
+                    url: '/user/center/blackadd',
+                    params: {
+                        blackuserId:'',
+                        tag:this.tag,//用户标签：1 乘客 2 车主
+                    }
+                }).then((res)=>{
+                    if (res.data.code === 0) {
+                        Toast("加入黑名单成功");
+                    }
+                })
+            },
+            followUser() {
+                if (this.isFollow == '0') {
                     //关注
                     request.sendPost({
-                        url:"/user/center/follow",
-                        params:{
-                            followerId:"1"
+                        url: "/user/center/follow",
+                        params: {
+                            followerId: "1"
                         }
-                    }).then(res =>{
-                        if(res.data.code == '0'){
+                    }).then(res => {
+                        if (res.data.code == '0') {
                             this.isFollow = '1'
                         }
                     })
 
-                }else {
+                } else {
                     //取消关注
                     this.isFollow = '0'
                 }
             }
+        },
+        created(){
+            this.tag = this.$route.query.tag;
         }
     }
 </script>
