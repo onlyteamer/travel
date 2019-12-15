@@ -5,28 +5,12 @@
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px;display: flex;align-items: center">
                 <van-col span="6">预定座位数</van-col>
                 <van-col span="18">
-                    <van-col v-for="item in stroke.totalSeats">
-                        <van-tag :color="stroke.seatCount== item?'#0CC893':'#FFFFFF'"
-                                 :text-color="stroke.seatCount== item?'#FFFFFF':'#202020'" :disabled="true" class="seatTag"
+                    <van-col v-for="item in stroke.totalSeats" style="padding-bottom:5px " :key="item">
+                        <van-tag :color="stroke.seatCount == item?'#0CC893':'#FFFFFF'"
+                                 :text-color="stroke.seatCount == item?'#FFFFFF':'#202020'" class="seatTag"
                                  @click="changeSeat(item)">{{item}}座
                         </van-tag>
                     </van-col>
-<!--                    <van-tag :color="seatIndex== '1'?'#0CC893':'#FFFFFF'"-->
-<!--                             :text-color="seatIndex=='1'?'#FFFFFF':'#202020'" :disabled="true" class="seatTag"-->
-<!--                             @click="changeSeat('1')">1座-->
-<!--                    </van-tag>-->
-<!--                    <van-tag :color="seatIndex== '2'?'#0CC893':'#FFFFFF'"-->
-<!--                             :text-color="seatIndex=='2'?'#FFFFFF':'#202020'" class="seatTag" @click="changeSeat('2')">-->
-<!--                        2座-->
-<!--                    </van-tag>-->
-<!--                    <van-tag :color="seatIndex== '3'?'#0CC893':'#FFFFFF'"-->
-<!--                             :text-color="seatIndex=='3'?'#FFFFFF':'#202020'" class="seatTag" @click="changeSeat('3')">-->
-<!--                        3座-->
-<!--                    </van-tag>-->
-<!--                    <van-tag :color="seatIndex== '4'?'#0CC893':'#FFFFFF'"-->
-<!--                             :text-color="seatIndex=='4'?'#FFFFFF':'#202020'" class="seatTag" @click="changeSeat('4')">-->
-<!--                        4座-->
-<!--                    </van-tag>-->
                 </van-col>
             </van-row>
 
@@ -183,7 +167,6 @@
             return {
                 showPassenger: false,
                 passengerData: [],
-                seatIndex: 1,
                 redBar: redBar,
                 greenBar: greenBar,
                 checked: true,
@@ -246,22 +229,24 @@
                     if (res.data.code == 0) {
                         this.$router.push({path: '/myStroke'});
                     } else {
-
+                        Toast(res.data.msg);
                     }
 
                 })
 
             },
-
             onClickLeft() {
                 this.$router.back(-1);
             },
             goMyStroke() {
                 this.$router.push({path: '/myStroke'});
             },
-            changeSeat(val) {
-                this.seatIndex = val;
-                this.stroke.seatCount = val;
+            changeSeat(item) {
+                let val = this.stroke.totalSeats - this.stroke.bookSeat;
+                if (item > val) {
+                    return;
+                }
+                this.stroke.seatCount = item;
             },
             selectRider(data) {
                 this.stroke.riderNames = data.passName;
