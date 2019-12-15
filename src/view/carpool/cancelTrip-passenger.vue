@@ -6,11 +6,8 @@
         <div class="content">
             <div class="radio-wrap">
                 <div class="radio-wrap-title">取消行程原因：</div>
-                <van-radio-group v-model="radio" class="radio-wrap-content">
-                    <van-radio name="个人原因取消行程" checked-color="#07BD06">个人原因取消行程</van-radio>
-                    <van-radio name="车主原因取消行程" checked-color="#07BD06">车主原因取消行程</van-radio>
-                    <van-radio name="其他原因" checked-color="#07BD06">其他原因</van-radio>
-                    <van-radio name="与车主协商取消行程" checked-color="#07BD06">与车主协商取消行程</van-radio>
+                <van-radio-group v-model="reasonId" class="radio-wrap-content">
+                    <van-radio :name="item.reasonId" checked-color="#07BD06" v-for="(item,index) in reasonList">{{item.reasonContext}}</van-radio>
                 </van-radio-group>
             </div>
             <van-button @click="submit" style="margin-top:15px;width: 100%;height:44px" color="#0CC893" type="default">
@@ -21,7 +18,8 @@
 </template>
 
 <script>
-    import {NavBar, Button, RadioGroup, Radio} from 'vant';
+    import {NavBar, Button, RadioGroup, Radio, Toast} from 'vant';
+    import request from '../../utils/request'
 
     export default {
         components: {
@@ -29,18 +27,49 @@
             [Button.name]: Button,
             [RadioGroup.name]: RadioGroup,
             [Radio.name]: Radio,
-            [Image.name]: Image,
+            [Toast.name]: Toast
         },
         data() {
             return {
-                radio: ''
+                reasonId: 1,
+                reasonList:[]
             }
         },
+        mounted(){
+            this.initReasonList();
+        },
+
         methods: {
+            //理由列表
+            initReasonList(){
+                request.sendGet({
+                    url:"/sharecar/pass/cancelreason",
+                    params:{}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        this.reasonList = res.data.rows;
+                    }
+                })
+            },
+
             onClickLeft() {
                 this.$router.back(-1);
             },
-            submit(){
+            submit() {
+                let tripId = "1";
+                let reasonId = this.reasonId;
+
+                //无偿
+                request.sendPost({
+                    url: "/sharecar/pass/cancel/" + tripId + "/" + reasonId,
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == '0') {
+                        Toast.success("操作成功")
+                    } else {
+                        Toast.fail("操作失败")
+                    }
+                })
 
             }
         }
@@ -58,14 +87,16 @@
         font-size: 18px;
         font-weight: bold;
     }
-    /deep/.van-radio{
+
+    /deep/ .van-radio {
         height: 40px;
     }
 
     /deep/ .van-nav-bar .van-icon {
         color: #5E5E5E
     }
-    /deep/.van-radio__label{
+
+    /deep/ .van-radio__label {
         color: #202020;
         font-weight: bold;
         font-size: 16px;

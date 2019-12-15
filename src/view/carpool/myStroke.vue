@@ -2,12 +2,12 @@
     <div class="contain">
         <Title :title="title" @onClickLeft="onClickLeft"></Title>
         <div class="tab">
-            <van-tabs v-model="strokeType" color="#5083ED" title-active-color="#5083ED" title-inactive-color="#202020">
+            <van-tabs v-model="strokeType" @change="changeTab" color="#5083ED" title-active-color="#5083ED" title-inactive-color="#202020">
                 <van-tab title="乘客行程"></van-tab>
                 <van-tab title="车主行程"></van-tab>
             </van-tabs>
         </div>
-        <div  style="margin-top: 105px">
+        <div style="margin-top: 105px">
             <div v-for="(item,index) in passTripList" :key="index" v-if="strokeType == '0'">
                 <div class="listInfo">
                     <van-row style="border-bottom: 1px solid #ECECEC;padding: 10px 2px">
@@ -74,7 +74,7 @@
                         </van-col>
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini">取消行程
+                                        size="mini" @click="linkToCancel(item)">取消行程
                             </van-button>
                         </van-col>
                     </van-row>
@@ -103,7 +103,7 @@
                 </div>
             </div>
 
-            <div v-for="index in 3" v-if="strokeType != '0'" >
+            <div v-for="(item,index) in carOwnerTripList" v-if="strokeType != '0'">
                 <div class="listInfo">
                     <van-row style="border-bottom: 1px solid #ECECEC;padding: 10px 2px">
                         <van-col span="14">
@@ -112,8 +112,8 @@
                         <van-col span="5" style="font-weight: bold">
                             ¥ 20
                         </van-col>
-                        <van-col span="5" align="right" :style="{color:'#FF0200'}">
-                            待出行
+                        <van-col span="5" align="right" :style="{color: index == '2'?'#202020':'#FF0200'}">
+                            {{index =='2'?'已完成':'待出行'}}
                         </van-col>
                     </van-row>
 
@@ -121,16 +121,16 @@
                         <van-col span="12">
                             <p><span>发车地点：上河湾</span></p>
                             <p><span>座位：3/ 4个</span></p>
-                            <p><span>待确认：1人</span></p>
+                            <p><span v-if="index != 2">待确认：1人</span></p>
                         </van-col>
                         <van-col span="12">
                             <p><span>目的地：安贞门</span></p>
                             <p><span>车型：银色大众速腾</span></p>
-                            <p><span>已确认：2人</span></p>
+                            <p><span v-if="index != 2">已确认：2人</span></p>
                         </van-col>
                     </van-row>
 
-                    <van-row style="margin: 10px 0">
+                    <van-row style="margin: 10px 0" v-if="index != '2'">
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
                                         size="mini">分享
@@ -143,7 +143,7 @@
                         </van-col>
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini">已到达
+                                        size="mini" @click="changeArrive('1')">已到达
                             </van-button>
                         </van-col>
                         <van-col span="6">
@@ -153,7 +153,7 @@
                         </van-col>
                     </van-row>
 
-                    <van-row style="margin: 10px 0">
+                    <van-row style="margin: 10px 0" v-if="index != 2">
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
                                         size="mini">调整座位
@@ -171,62 +171,30 @@
                         </van-col>
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini" @click="showPopup = true">取消行程
+                                        size="mini" @click="linkToCancel(item)">取消行程
                             </van-button>
                         </van-col>
                     </van-row>
-                </div>
 
-            </div>
-        </div>
-        <van-popup
-                v-model="showPopup"
-                position="bottom"
-                :style="{ height: '50%',background:'#F6F6F6' }"
-        >
-            <div v-for="index in 3">
-                <div class="popInfo">
-                    <van-row style="border-bottom: 1px solid #ECECEC;padding: 10px 2px">
-                        <van-col span="14">
-                            2019年12月04日 05:20
-                        </van-col>
-                        <van-col span="5" style="font-weight: bold">
-                            ¥ 20
-                        </van-col>
-                        <van-col span="5" align="right" :style="{color:'#202020'}">
-                            已完成
-                        </van-col>
-                    </van-row>
-
-                    <van-row style="padding: 5px 2px">
-                        <van-col span="12">
-                            <p><span>发车地点：上河湾</span></p>
-                            <p><span>座位：3/ 4个</span></p>
-                        </van-col>
-                        <van-col span="12">
-                            <p><span>目的地：安贞门</span></p>
-                            <p><span>车型：银色大众速腾</span></p>
-                        </van-col>
-                    </van-row>
-
-                    <van-row>
+                    <van-row v-if="index == '2'" style="margin: 10px 0">
                         <van-col span="6" offset="18">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
                                         size="mini">乘客
                             </van-button>
                         </van-col>
                     </van-row>
+
+                    <div class="cover" v-if="index == '3'"></div>
                 </div>
+
             </div>
-        </van-popup>
-
-
+        </div>
     </div>
 </template>
 
 <script>
     import Title from './../../components/header'
-    import {Tab, Tabs, Divider, Row, Col, Button, Popup} from 'vant';
+    import {Tab, Tabs, Divider, Row, Col, Button, Popup, Dialog, Toast} from 'vant';
 
     import request from '../../utils/request'
 
@@ -240,36 +208,88 @@
             [Row.name]: Row,
             [Col.name]: Col,
             [Button.name]: Button,
-            [Popup.name]: Popup
+            [Popup.name]: Popup,
+            [Dialog.name]: Dialog,
+            [Toast.name]: Toast
         },
         data() {
             return {
                 title: "我的行程",
                 strokeType: "0",
-                showPopup: false,
-                passTripList:[]
+                passTripList: [],
+                carOwnerTripList: [
+                    {}, {}, {}
+                ]
             }
         },
-        mounted(){
-            //乘客列表
-            this.initPassTripList();
+        mounted() {
+            this.changeTab(this.strokeType);
         },
 
         methods: {
 
-            initPassTripList(){
-              request.sendGet({
-                  url:"/sharecar/pass/triplist",
-                  params:{}
-              }).then(res =>{
-                  if(res.data.code==0){
-                      this.passTripList = res.data.rows;
-                  }else{
-                      //接口错误
-
-                  }
-              })
+            changeTab(val){
+               if(val == '0'){
+                   //乘客
+                    this.initPassTripList();
+               }else {
+                   //车主
+                    this.initCarOwnerTripList();
+               }
             },
+
+            initCarOwnerTripList(){
+                request.sendGet({
+                    url: "/sharecar/trip/list",
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == 0) {
+                        this.carOwnerTripList = res.data.rows;
+                    } else {
+                        //接口错误
+
+                    }
+                })
+            },
+
+            initPassTripList() {
+                request.sendGet({
+                    url: "/sharecar/pass/triplist",
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == 0) {
+                        this.passTripList = res.data.rows;
+                    } else {
+                        //接口错误
+
+                    }
+                })
+            },
+
+            //已到达
+            changeArrive(val) {
+                // localStorage.setItem("openid", "abcdefghigklmm");
+                Dialog.confirm({
+                    title: '',
+                    message: '是否确认已到达'
+                }).then(() => {
+                    // 确定
+                    request.sendPost({
+                        url: "/sharecar/trip/arrive/" + val,
+                        params: {}
+                    }).then(res => {
+                        if (res.data.code == '0') {
+                            Toast.success("操作成功")
+                        } else {
+                            Toast.fail("操作失败")
+                        }
+                    })
+                }).catch(() => {
+                    //取消
+
+                });
+            },
+
 
             onClickLeft() {
 
@@ -286,6 +306,16 @@
             },
             linkCarAppraise() {
                 this.$router.push({path: '/carOwnerAppraise'});
+            },
+
+            //跳转取消
+            linkToCancel(val) {
+
+                if (this.strokeType == '0') {
+                    this.$router.push({path: '/cancelTrip-passenger', query: {tripId: val.id}})
+                } else {
+                    this.$router.push({path: '/cancelTrip-driver', query: {tripId:val.id,seat:val.seatNum,confirm:val.confirmNum,unconfig:val.unconfirm}})
+                }
             }
         }
     }
@@ -315,6 +345,16 @@
         background: #FFFFFF;
         padding: 5px 10px;
         font-size: 14px;
+        position: relative;
+    }
+
+    .cover {
+        position: absolute;
+        background: rgba(0, 0, 0, 0.5);
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
     }
 
     .popInfo {

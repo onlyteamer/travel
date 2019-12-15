@@ -27,10 +27,8 @@
                     <span class="tips" v-else>存在已确认订单，需赔偿乘客10元/人。</span>
                 </div>
                 <div class="radio-wrap-title">取消行程原因：</div>
-                <van-radio-group v-model="radio" class="radio-wrap-content">
-                    <van-radio name="个人原因取消行程" checked-color="#07BD06">个人原因取消行程</van-radio>
-                    <van-radio name="其他原因" checked-color="#07BD06">其他原因</van-radio>
-                    <van-radio name="与乘客协商取消行程" checked-color="#07BD06">与车主协商取消行程</van-radio>
+                <van-radio-group v-model="reasonId" class="radio-wrap-content">
+                    <van-radio :name="item.reasonId" checked-color="#07BD06" v-for="(item,index) in reasonList">{{item.reasonContext}}</van-radio>
                 </van-radio-group>
             </div>
             <van-button @click="submit" style="margin-top:15px;width: 100%;height:44px" color="#0CC893" type="default">
@@ -41,8 +39,10 @@
 </template>
 
 <script>
-    import {NavBar, Button, Image, RadioGroup, Radio, Row, Col,} from 'vant';
+    import {NavBar, Button, Image, RadioGroup, Radio, Row, Col,Toast} from 'vant';
     import imageURL from '../../static/images/stop.png';
+
+    import request from '../../utils/request'
 
     export default {
         components: {
@@ -53,19 +53,68 @@
             [Radio.name]: Radio,
             [Row.name]: Row,
             [Col.name]: Col,
+            [Toast.name]:Toast
         },
         data() {
             return {
-                radio: '',
+                reasonId: 1,
                 imageURL: imageURL,
-                state:true
+                state:true,
+                reasonList:[]
             }
         },
+
+        mounted(){
+            this.initReasonList();
+        },
         methods: {
+            //初始化理由列表
+            initReasonList(){
+                request.sendGet({
+                    url:"/sharecar/trip/cancelreason",
+                    params:{}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                       this.reasonList = res.data.rows;
+                    }
+                })
+            },
+
             onClickLeft() {
                 this.$router.back(-1);
             },
             submit() {
+                let tripId = "1";
+                let reasonId = this.reasonId;
+                if(this.state){
+                    //无偿
+                    request.sendPost({
+                        url:"/sharecar/trip/cancel/"+tripId+"/"+reasonId,
+                        params:{}
+                    }).then(res =>{
+                        if(res.data.code == '0'){
+                            Toast.success("操作成功")
+                        }else {
+                            Toast.fail("操作失败")
+                        }
+                    })
+                }else {
+                    //有偿
+                    request.sendPost({
+                        url:"/sharecar/trip/paycancel/"+tripId+"/"+reasonId,
+                        params:{}
+                    }).then(res =>{
+                        if(res.data.code == '0'){
+                            Toast.success("操作成功")
+                        }else {
+                            Toast.fail("操作失败")
+                        }
+                    })
+                }
+
+
+
+
 
             }
         }
