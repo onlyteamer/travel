@@ -3,7 +3,7 @@
         <Title :title="title" @onClickLeft="onClickLeft"></Title>
 
         <div style="margin-top: 46px">
-            <div class="black" v-for="index in 6">
+            <div class="black" v-for="(item,index) in carFateList">
                 <van-row  @click="goPassengerDetails(index)">
                     <van-col span="16" >
                         <div style="display: flex;align-items: center">
@@ -37,6 +37,8 @@
     import Title from './../../components/header'
     import { Row, Col} from 'vant';
 
+    import request from '../../utils/request'
+
     export default {
         name: "carFate",
         components:{
@@ -46,10 +48,30 @@
         },
         data(){
             return{
-                title:"同车缘分"
+                title:"同车缘分",
+                carFateList:[{},{}]
             }
         },
+        mounted(){
+            this.initCarFate();
+        },
+
         methods:{
+            //同车缘分
+            initCarFate(){
+                let tripId = this.$route.query.tripId;
+                if(tripId){
+                    request.sendGet({
+                        url:"/sharecar/pass/samecar/"+ tripId,
+                        params:{}
+                    }).then(res =>{
+                        if(res.data.code == '0'){
+                            this.carFateList = res.data.rows;
+                        }
+                    })
+                }
+            },
+
             onClickLeft(){
                 this.$router.back(-1);
             },

@@ -52,7 +52,7 @@
                             </van-button>
                         </van-col>
                         <van-col span="6">
-                            <van-button @click="goCarFate" type="default" color="#0CC893"
+                            <van-button @click="goCarFate(item.id)" type="default" color="#0CC893"
                                         style="font-size: 14px;width: 96%;height: 28px" size="mini">同车缘分
                             </van-button>
                         </van-col>
@@ -64,12 +64,12 @@
                         </van-col>
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini">已到达
+                                        size="mini" @click="changeArrive(item.id)">已到达
                             </van-button>
                         </van-col>
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini">上车支付
+                                        size="mini" @click="passengerPayment(item)">上车支付
                             </van-button>
                         </van-col>
                         <van-col span="6">
@@ -90,12 +90,12 @@
                         </van-col>
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini" @click="goCarFate">同车缘分
+                                        size="mini" @click="goCarFate(item.id)">同车缘分
                             </van-button>
                         </van-col>
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini">其他操作
+                                        size="mini" @click="linkOpt(item)">其他操作
                             </van-button>
                         </van-col>
                     </van-row>
@@ -143,11 +143,11 @@
                         </van-col>
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini" @click="changeArrive('1')">已到达
+                                        size="mini" @click="changeArrive(item.id)">已到达
                             </van-button>
                         </van-col>
                         <van-col span="6">
-                            <van-button @click="goPassengerList" type="default" color="#0CC893"
+                            <van-button @click="goPassengerList(item.id)" type="default" color="#0CC893"
                                         style="font-size: 14px;width: 96%;height: 28px" size="mini">乘客
                             </van-button>
                         </van-col>
@@ -156,17 +156,17 @@
                     <van-row style="margin: 10px 0" v-if="index != 2">
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini">调整座位
+                                        size="mini" @click="showSeat(item.id)">调整座位
                             </van-button>
                         </van-col>
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini">设为车满
+                                        size="mini" @click="fullSeat(item.id)">设为车满
                             </van-button>
                         </van-col>
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini">修改行程
+                                        size="mini" @click="linkUpdateStroke(item.tripId)">修改行程
                             </van-button>
                         </van-col>
                         <van-col span="6">
@@ -189,12 +189,27 @@
 
             </div>
         </div>
+
+        <van-dialog
+                v-model="showSeatDialog"
+                title="座位调整"
+                show-cancel-button
+                @confirm="updateSeat"
+        >
+            <van-field
+                    v-model="changeSeatInfo.seatCount"
+                    type="number"
+                    label="座位数"
+                    placeholder="请输入座位数"
+                    required
+            />
+        </van-dialog>
     </div>
 </template>
 
 <script>
     import Title from './../../components/header'
-    import {Tab, Tabs, Divider, Row, Col, Button, Popup, Dialog, Toast} from 'vant';
+    import {Tab, Tabs, Divider, Row, Col, Button, Popup, Dialog, Toast,Field } from 'vant';
 
     import request from '../../utils/request'
 
@@ -210,13 +225,20 @@
             [Button.name]: Button,
             [Popup.name]: Popup,
             [Dialog.name]: Dialog,
-            [Toast.name]: Toast
+            [Toast.name]: Toast,
+            [Field.name]:Field,
+            [Dialog.Component.name]:Dialog.Component
         },
         data() {
             return {
+                showSeatDialog:false,
+                changeSeatInfo:{
+                    tripId:"",
+                    seatCount:""
+                },
                 title: "我的行程",
                 strokeType: "0",
-                passTripList: [],
+                passTripList: [{},{}],
                 carOwnerTripList: [
                     {}, {}, {}
                 ]
@@ -238,10 +260,78 @@
                }
             },
 
+            updateSeat(){
+                if(!this.changeSeatInfo.seatCount){
+                    Toast.fail("请填写座位数");
+                    return;
+                }
+
+                request.sendPost({
+                    url:"/sharecar/trip/updateseat/"+this.changeSeatInfo.seatCount,
+                    params:{
+                        tripId:this.changeSeatInfo.tripId
+                    }
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        Toast.success("操作成功");
+                    }else {
+                        Toast.fail("操作失败")
+                    }
+
+                })
+            },
+
+            showSeat(val){
+                this.showSeatDialog = true;
+                this.changeSeatInfo.tripId = val;
+            },
+            fullSeat(val){
+                Dialog.confirm({
+                    title: '',
+                    message: '是否确认设置车满'
+                }).then(() => {
+                    // 确定
+                    request.sendPost({
+                        url: "/sharecar/trip/full/" + val,
+                        params: {}
+                    }).then(res => {
+                        if (res.data.code == '0') {
+                            Toast.success("操作成功");
+                        } else {
+                            Toast.fail("操作失败")
+                        }
+                    })
+                })
+            },
+
+            //上车支付
+            passengerPayment(val){
+                Dialog.confirm({
+                    title: '',
+                    message: '是否确认上车支付'
+                }).then(() => {
+                    // 确定
+                    request.sendPost({
+                        url: "/sharecar/pass/pay/" + val.id,
+                        params: {}
+                    }).then(res => {
+                        if (res.data.code == '0') {
+                            Toast.success("操作成功");
+                            this.changeSeatInfo.seatCount = "";
+                        } else {
+                            Toast.fail("操作失败")
+                        }
+                    })
+                })
+            },
+
             initCarOwnerTripList(){
                 request.sendGet({
                     url: "/sharecar/trip/list",
-                    params: {}
+                    params: {
+                        pageNum:1,
+                        pageSize:10
+                    }
                 }).then(res => {
                     if (res.data.code == 0) {
                         this.carOwnerTripList = res.data.rows;
@@ -268,26 +358,48 @@
 
             //已到达
             changeArrive(val) {
-                // localStorage.setItem("openid", "abcdefghigklmm");
-                Dialog.confirm({
-                    title: '',
-                    message: '是否确认已到达'
-                }).then(() => {
-                    // 确定
-                    request.sendPost({
-                        url: "/sharecar/trip/arrive/" + val,
-                        params: {}
-                    }).then(res => {
-                        if (res.data.code == '0') {
-                            Toast.success("操作成功")
-                        } else {
-                            Toast.fail("操作失败")
-                        }
-                    })
-                }).catch(() => {
-                    //取消
+               if(this.strokeType == '0'){
+                   //乘客
+                   Dialog.confirm({
+                       title: '',
+                       message: '是否确认已到达'
+                   }).then(() => {
+                       // 确定
+                       request.sendPost({
+                           url: "/sharecar/pass/arrive/" + val,
+                           params: {}
+                       }).then(res => {
+                           if (res.data.code == '0') {
+                               Toast.success("操作成功")
+                           } else {
+                               Toast.fail("操作失败")
+                           }
+                       })
+                   }).catch(() => {
+                       //取消
 
-                });
+                   });
+               }else {
+                   Dialog.confirm({
+                       title: '',
+                       message: '是否确认已到达'
+                   }).then(() => {
+                       // 确定
+                       request.sendPost({
+                           url: "/sharecar/trip/arrive/" + val,
+                           params: {}
+                       }).then(res => {
+                           if (res.data.code == '0') {
+                               Toast.success("操作成功")
+                           } else {
+                               Toast.fail("操作失败")
+                           }
+                       })
+                   }).catch(() => {
+                       //取消
+
+                   });
+               }
             },
 
 
@@ -295,17 +407,23 @@
 
                 this.$router.back(-1)
             },
-            goCarFate() {
-                this.$router.push({path: '/carFate'});
+            goCarFate(val) {
+                this.$router.push({path: '/carFate',query:{tripId:1}});
             },
-            goPassengerList() {
-                this.$router.push({path: '/passengerList'});
+            goPassengerList(val) {
+                this.$router.push({path: '/passengerList',query:{tripId:val}});
             },
             linkCarPosition() {
                 this.$router.push({path: '/carOwnPosition'});
             },
             linkCarAppraise() {
                 this.$router.push({path: '/carOwnerAppraise'});
+            },
+            linkOpt(val){
+                this.$router.push({path:'/otherOpt',query:{tripId:val.id}})
+            },
+            linkUpdateStroke(val){
+                this.$router.push({path:'/updateStroke',query:{tripId:val}})
             },
 
             //跳转取消

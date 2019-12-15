@@ -80,10 +80,8 @@
                 let tripId = this.$route.query.tripId;
 
                 request.sendGet({
-                    url:"/sharecar/trip/passlist",
-                    params: {
-                        tripId:tripId
-                    }
+                    url:"/sharecar/trip/passlist/"+tripId,
+                    params: {}
                 }).then(res =>{
                     if(res.data.code==0){
                         this.passList = res.data.rows;
