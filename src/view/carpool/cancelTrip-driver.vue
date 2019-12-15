@@ -84,7 +84,7 @@
                 this.$router.back(-1);
             },
             submit() {
-                let tripId = "1";
+                let tripId = this.$route.query.tripId;
                 let reasonId = this.reasonId;
                 if(this.state){
                     //无偿

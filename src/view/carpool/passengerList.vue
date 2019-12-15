@@ -7,32 +7,32 @@
                     <van-row style="display: flex;align-items: center">
                         <van-col span="14" >
                             <div style="display: flex;align-items: center">
-                                <img src="../../static/images/userAvatar.png" style="height: 50px;width: 50px;margin-right: 10px">
+                                <img :src="item.headimgurl?item.headimgurl:defaultAvatar" style="height: 50px;width: 50px;margin-right: 10px">
                                 <div>
-                                    <p style="margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px"> </p>
+                                    <p style="margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">{{item.nickname}}</span> <img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="item.sex == '1'"><img src="./../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px" v-else> </p>
                                     <p style="margin: 5px 0">
-                                        <img src="./../../static/images/xin.png" style="width: 14px;height: 14px;margin-right: 5px"/><span>231</span>
-                                        <img src="./../../static/images/unhapply.png" style="width: 14px;height: 14px;margin: 0 5px 0 20px" /> <span>3</span>
+                                        <img src="./../../static/images/xin.png" style="width: 14px;height: 14px;margin-right: 5px"/><span>{{item.goodCount}}</span>
+                                        <img src="./../../static/images/unhapply.png" style="width: 14px;height: 14px;margin: 0 5px 0 20px" /> <span>{{item.badCount}}</span>
                                     </p>
                                     <p style="margin: 5px 0">
-                                        <span style="color: #5E5E5E">乘车地点：芍药居</span>
+                                        <span style="color: #5E5E5E">乘车地点：{{item.startPlace}}</span>
                                     </p>
                                 </div>
                             </div>
                         </van-col>
                         <van-col span="10" align="right">
-                            <div><div class="userType">乘客</div></div>
-                            <div style="color: #5E5E5E;margin: 5px 0">乘坐过 2 次</div>
-                            <div><div style="color: #5E5E5E">下车地点：少年宫</div></div>
+                            <div><div class="userType" v-if="item.tag == '0'">乘客</div></div>
+                            <div style="color: #5E5E5E;margin: 5px 0">乘坐过 {{item.passCount}} 次</div>
+                            <div><div style="color: #5E5E5E">下车地点：{{item.endPlace}}</div></div>
                         </van-col>
                     </van-row>
                     <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false" />
                     <van-row>
                         <van-col span="6" offset="11">
-                            <van-button type="default" color="#9E9E9E" size="mini" style="height: 34px;font-size: 14px;width: 100%" @click="confirmTrip('2')">拒绝</van-button>
+                            <van-button type="default" color="#9E9E9E" size="mini" style="height: 34px;font-size: 14px;width: 100%" @click="confirmTrip(item,'1')">拒绝</van-button>
                         </van-col>
                         <van-col span="6">
-                            <van-button type="default" color="#0CC893" size="mini" style="height: 34px;font-size: 14px;width: 100%;margin-left: 10px" @click="confirmTrip('1')">预约确定</van-button>
+                            <van-button type="default" color="#0CC893" size="mini" style="height: 34px;font-size: 14px;width: 100%;margin-left: 10px" @click="confirmTrip(item,'2')">预约确定</van-button>
                         </van-col>
                     </van-row>
                 </div>
@@ -45,6 +45,8 @@
 <script>
     import Title from './../../components/header'
     import { Row, Col,Divider,Button} from 'vant';
+
+    import avatar from "../../static/images/userAvatar.png"
 
     import request from '../../utils/request'
 
@@ -60,7 +62,8 @@
         data(){
             return{
                 title:"乘客列表",
-                passList:[]
+                passList:[],
+                defaultAvatar:avatar
             }
         },
         mounted(){
@@ -90,24 +93,22 @@
 
                     }
                 })
-
-
-
-
             },
 
-            confirmTrip(val){
+            confirmTrip(val,flag){
                 //1-确认 2-拒绝
                 request.sendPost({
                     url:'/sharecar/trip/confirm',
                     params:{
                         bookId:"1",
-                        state:val,
-                        tripId:"1"
+                        state:flag,
+                        tripId:item.tripId
                     }
                 }).then(res =>{
                     //刷新列表
-
+                    if(res.data.code == '0'){
+                        this.initPassList();
+                    }
                 })
 
 

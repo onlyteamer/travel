@@ -49,7 +49,7 @@
         data(){
             return{
                 title:"同车缘分",
-                carFateList:[{},{}]
+                carFateList:[]
             }
         },
         mounted(){

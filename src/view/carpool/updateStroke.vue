@@ -219,9 +219,13 @@
                         let lineinfo = res.data.data.lineinfo;
                         let tripinfo = res.data.data.tripinfo;
                         let carKey = Object.keys(carinfo);
-                        console.log(carKey)
-                        this.stroke.carInfo = carinfo[carKey[0]]
-                        console.log(this.stroke.carInfo)
+                        console.log(carKey);
+                        this.stroke.carInfo = carinfo[carKey[0]];
+
+                        this.stroke.directLine = lineinfo.lineName;
+
+
+
                     }
                 })
             },
