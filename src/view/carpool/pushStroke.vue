@@ -197,8 +197,6 @@
                     tripLine: "",
                     tripPrice: "",
                     route: "",
-                    seatCount: 3,
-                    price: 23,
                     carInfo: "",
                     remark: ""
                 },
@@ -359,6 +357,12 @@
                             car.id = i;
                             car.name = carinfo[i];
                             this.carData.push(car);
+                        }
+                        let tripinfo = res.data.data.tripinfo;
+                        if(tripinfo){
+                            this.stroke.totalSeat = tripinfo.totalSeat;
+                            this.stroke.tripPrice = tripinfo.tripPrice;
+                            this.stroke.remark = tripinfo.remark;
                         }
 
                     }
