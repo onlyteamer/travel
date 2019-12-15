@@ -77,7 +77,7 @@
                         <div class="func-content-item" @click="goPassenger"><img
                                 src="../../static/images/user/ccr.png"/><span>乘车人</span>
                         </div>
-                        <div class="func-content-item"><img src="../../static/images/user/wdgz.png"/><span>我的关注</span>
+                        <div class="func-content-item" @click="goMyLike"><img src="../../static/images/user/wdgz.png"/><span>我的关注</span>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                         <div class="func-content-item" @click="goVehicleManagement"><img
                                 src="../../static/images/user/clgl.png"/><span>车辆管理</span>
                         </div>
-                        <div class="func-content-item"><img src="../../static/images/user/wdfs.png"/><span>我的粉丝</span>
+                        <div class="func-content-item" @click="goMyFans"><img src="../../static/images/user/wdfs.png"/><span>我的粉丝</span>
                         </div>
                     </div>
                 </div>
@@ -177,6 +177,14 @@
             goIntegral() {
                 //我的积分
                 this.$router.push({path: '/integral'});
+            },
+            goMyFans(){
+                //我的粉丝
+                this.$router.push({path: '/myFans'});
+            },
+            goMyLike(){
+                //我的关注
+                this.$router.push({path: '/myLike'});
             }
         },
         created() {
