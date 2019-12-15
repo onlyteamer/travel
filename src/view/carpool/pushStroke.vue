@@ -183,10 +183,7 @@
                 showLine: false,
                 showCar:false,
                 stroke: {
-                    carBrand: "",
-                    carColor: "",
-                    carNumber: "",
-                    carType: "",
+                    carId:'',
                     directLineid: "",
                     directLine: "",
                     point: "",
@@ -215,6 +212,7 @@
                 this.stroke.endPlace = '';
                 this.stroke.startPlace = '';
                 this.stroke.direction = '';
+                this.pointData2 = [];
                 for (let i in this.pointData) {
                     if (this.pointData[i].lineId === picker.lineId) {
                         let point1 = {
@@ -241,20 +239,8 @@
             },
             onCarChange(picker, values){
                 this.stroke.carInfo = picker.name;
-                request.sendPost({
-                    url: '/user/center/selectcar',
-                    params: {
-                        id: picker.id
-                    }
-                }).then((res)=>{
-                    if(res.data.code===0){
-                     this.stroke.carBrand = res.data.data.carBrand;
-                     this.stroke.carColor = res.data.data.carColor;
-                     this.stroke.carNumber = res.data.data.carNumber;
-                     this.stroke.carType = res.data.data.carType;
-                    }
-                    this.showCar = false;
-                })
+                this.stroke.carId = picker.id;
+                this.showCar = false;
             },
             onClickLeft() {
                 this.$router.back(-1);
@@ -345,7 +331,9 @@
                             this.lineData.push(line);
                             if (linesData[i].default === 1) {
                                 this.stroke.directLineid = linesData[i].lineId;
+                                this.stroke.directLine = linesData[i].lineName;
                                 this.stroke.direction = linesData[i].endId;
+                                this.stroke.point = linesData[i].endIdName;
                                 this.stroke.startPlace = linesData[i].startName;
                                 this.stroke.endPlace = linesData[i].endIdName;
                             }

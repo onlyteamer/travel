@@ -1,10 +1,17 @@
 <template>
     <div class="contain">
         <Title :title="title" @onClickLeft="onClickLeft"></Title>
-
         <div style="margin-top: 55px">
-            <div class="black" v-for="index in 6">
-                <van-row style="display: flex;align-items: center"  @click="goPassengerDetails(index)">
+            <van-list
+                    :offset="10"
+                    v-model="loading"
+                    :finished="finished"
+                    finished-text="没有更多了"
+                    @load="onLoad"
+                    :immediate-check="false"
+            >
+            <div class="black" v-for="(item,index) in dataMain.data" :key="item.id">
+                <van-row style="display: flex;align-items: center">
                     <van-col span="12" >
                         <div style="display: flex;align-items: center">
                             <img src="../../static/images/userAvatar.png" style="height: 50px;width: 50px;margin-right: 10px">
@@ -25,13 +32,13 @@
                             <div class="userType" v-if="index%2 != '0'" >车主</div>
                             <div v-else class="passer" >乘客</div>
                         </div>
-
-                        <div><div class="removeTag">移出黑名单</div></div>
+                        <div><div class="removeTag" @click="del(index)">移出黑名单</div></div>
                     </van-col>
                 </van-row>
 
 
             </div>
+            </van-list>
         </div>
 
     </div>
@@ -39,23 +46,42 @@
 
 <script>
     import Title from './../../components/header'
-    import { Row, Col} from 'vant';
+    import { Row, Col,List} from 'vant';
+    import  request from '../../utils/request'
 
     export default {
-        name: "blacklist",
         components:{
             Title,
             [Row.name]:Row,
-            [Col.name]:Col
+            [Col.name]:Col,
+            [List.name]: List
         },
         data(){
             return{
-                title:"黑名单"
+                title:"黑名单",
+                isOneHttp: true,
+                loading: false,
+                finished: false,
+                dataMain: {
+                    data: [],
+                    pageSize: 6,
+                    pageNum: 1,
+                    total: 0
+                },
             }
         },
         methods:{
             onClickLeft(){
                 this.$router.back(-1);
+            },
+            del(index){
+                let data = this.dataMain.data[index];
+                request.sendPost({
+                    url:'/user/center/blackdelete/'+data.id,
+                    params:{}
+                }).then((res)=>{
+                    this.dataMain.data.splice(index);
+                })
             },
             goPassengerDetails(val){
                 if(val){
@@ -68,7 +94,39 @@
                     this.$router.push({path:'/passengerDetails'});
                 }
 
-            }
+            },
+            initData() {
+                request.sendGet({
+                    url: '/user/center/blacklist',
+                    params: {
+                        pageSize: this.dataMain.pageSize,
+                        pageNum: this.dataMain.pageNum,
+                    }
+                }).then((res) => {
+                    this.dataMain.total = res.data.total;
+                    //判断是否是第一次请求数据
+                    if (this.isOneHttp) {
+                        this.dataMain.data = res.data.rows;
+                        this.isOneHttp = false;
+                    } else {
+                        this.dataMain.data=this.dataMain.data.concat(res.data.rows);
+                    }
+
+                    if (this.dataMain.total === this.dataMain.data.length) {
+                        this.finished = true;
+                    }
+                    this.loading = false;
+                });
+            },
+            onLoad() {
+                if (this.dataMain.total > this.dataMain.data.length) {
+                    this.dataMain.pageNum += 1;
+                    this.initData();
+                }
+            },
+        },
+        created(){
+            this.initData();
         }
     }
 </script>
