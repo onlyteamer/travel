@@ -215,6 +215,7 @@
                 this.stroke.endPlace = '';
                 this.stroke.startPlace = '';
                 this.stroke.direction = '';
+                this.pointData2 = [];
                 for (let i in this.pointData) {
                     if (this.pointData[i].lineId === picker.lineId) {
                         let point1 = {
@@ -345,7 +346,9 @@
                             this.lineData.push(line);
                             if (linesData[i].default === 1) {
                                 this.stroke.directLineid = linesData[i].lineId;
+                                this.stroke.directLine = linesData[i].lineName;
                                 this.stroke.direction = linesData[i].endId;
+                                this.stroke.point = linesData[i].endIdName;
                                 this.stroke.startPlace = linesData[i].startName;
                                 this.stroke.endPlace = linesData[i].endIdName;
                             }
