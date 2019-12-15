@@ -5,28 +5,34 @@
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px;display: flex;align-items: center">
                 <van-col span="6">预定座位数</van-col>
                 <van-col span="18">
-                    <van-tag :color="seatIndex== '1'?'#0CC893':'#FFFFFF'"
-                             :text-color="seatIndex=='1'?'#FFFFFF':'#202020'" :disabled="true" class="seatTag"
-                             @click="changeSeat('1')">1座
-                    </van-tag>
-                    <van-tag :color="seatIndex== '2'?'#0CC893':'#FFFFFF'"
-                             :text-color="seatIndex=='2'?'#FFFFFF':'#202020'" class="seatTag" @click="changeSeat('2')">
-                        2座
-                    </van-tag>
-                    <van-tag :color="seatIndex== '3'?'#0CC893':'#FFFFFF'"
-                             :text-color="seatIndex=='3'?'#FFFFFF':'#202020'" class="seatTag" @click="changeSeat('3')">
-                        3座
-                    </van-tag>
-                    <van-tag :color="seatIndex== '4'?'#0CC893':'#FFFFFF'"
-                             :text-color="seatIndex=='4'?'#FFFFFF':'#202020'" class="seatTag" @click="changeSeat('4')">
-                        4座
-                    </van-tag>
+                    <van-col v-for="item in stroke.totalSeats">
+                        <van-tag :color="stroke.seatCount== item?'#0CC893':'#FFFFFF'"
+                                 :text-color="stroke.seatCount== item?'#FFFFFF':'#202020'" :disabled="true" class="seatTag"
+                                 @click="changeSeat(item)">{{item}}座
+                        </van-tag>
+                    </van-col>
+<!--                    <van-tag :color="seatIndex== '1'?'#0CC893':'#FFFFFF'"-->
+<!--                             :text-color="seatIndex=='1'?'#FFFFFF':'#202020'" :disabled="true" class="seatTag"-->
+<!--                             @click="changeSeat('1')">1座-->
+<!--                    </van-tag>-->
+<!--                    <van-tag :color="seatIndex== '2'?'#0CC893':'#FFFFFF'"-->
+<!--                             :text-color="seatIndex=='2'?'#FFFFFF':'#202020'" class="seatTag" @click="changeSeat('2')">-->
+<!--                        2座-->
+<!--                    </van-tag>-->
+<!--                    <van-tag :color="seatIndex== '3'?'#0CC893':'#FFFFFF'"-->
+<!--                             :text-color="seatIndex=='3'?'#FFFFFF':'#202020'" class="seatTag" @click="changeSeat('3')">-->
+<!--                        3座-->
+<!--                    </van-tag>-->
+<!--                    <van-tag :color="seatIndex== '4'?'#0CC893':'#FFFFFF'"-->
+<!--                             :text-color="seatIndex=='4'?'#FFFFFF':'#202020'" class="seatTag" @click="changeSeat('4')">-->
+<!--                        4座-->
+<!--                    </van-tag>-->
                 </van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
-                <van-col span="6">剩余2座</van-col>
-                <van-col span="14" style="color: #FF0200">每人限预定4座</van-col>
+                <van-col span="6">剩余{{stroke.totalSeats-stroke.bookSeat}}座</van-col>
+                <van-col span="14" style="color: #FF0200">每人限预定{{stroke.totalSeats}}座</van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center">
@@ -77,8 +83,8 @@
             <van-row style="display: flex;align-items: center;border-bottom: 1px solid #ECECEC;padding: 0px 2px 12px">
                 <van-col span="15">
                     <div>
-                        <van-tag :color="item.isDefault === 1?'#FFFFFF':'#0CC893'"
-                                 :text-color="item.isDefault === 1?'#202020':'#FFFFFF'"
+                        <van-tag :color="stroke.riderIds === item.id?'#0CC893':'#FFFFFF'"
+                                 :text-color="stroke.riderIds === item.id?'#FFFFFF':'#202020'"
                                  style="border: 1px solid #CFCFCF" class="contactTag"
                                  v-for="item in normalRiders" :key="item.id" @click="selectRider(item)">
                             {{item.passName}}
@@ -118,7 +124,7 @@
             <van-row>
                 <van-col span="24" style="padding: 10px 0">
                     <van-button type="default" color="#0CC893" style="width: 100%;margin: 0 auto" @click="reserveCar">
-                        预定（23元/座）
+                        预定（{{stroke.price}}元/座）
                     </van-button>
                 </van-col>
             </van-row>
@@ -190,9 +196,11 @@
                     riderNames: '',
                     riderIds: '',
                     phone: "",
-                    seatCount: "1",
-                    price: "23",
-                    remark: ""
+                    seatCount: "",
+                    price: "",
+                    remark: "",
+                    bookSeat: "",
+                    totalSeats: ""
                 }
             }
         },
@@ -261,13 +269,24 @@
                 this.stroke.phone = data.passPhone;
             },
             queryTrip() {
-                //TODO 这里查询默认信息
-                //   request.sendGet({
-                //     url:'/sharecar/trip/select/'+this.stroke.tripId,
-                //     params:{}
-                // }).then((res)=>{
-                //     console.log(res.data.data);
-                // })
+                request.sendPost({
+                    url: '/sharecar/pass/booktripinfo/' + this.stroke.tripId,
+                    params: {}
+                }).then((res) => {
+                    if (res.data.code === 0) {
+                        this.normalRiders = res.data.data.passengerList;
+                        if (this.normalRiders.length > 0) {
+                            this.stroke.riderNames = this.normalRiders[0].passName;
+                            this.stroke.riderIds = this.normalRiders[0].id;
+                            this.stroke.phone = this.normalRiders[0].passPhone;
+                        }
+                        this.stroke.startPlace = res.data.data.startPlace;
+                        this.stroke.endPlace = res.data.data.endPlace;
+                        this.stroke.price = res.data.data.tripPrice;
+                        this.stroke.bookSeat = res.data.data.bookSeat;
+                        this.stroke.totalSeats = res.data.data.totalSeats;
+                    }
+                })
             },
             initPassengerData() {
                 //TODO 需要处理一下分页
@@ -282,27 +301,10 @@
 
                 });
             },
-            initlastPassengerData() {
-                request.sendPost({
-                    url: '/sharecar/pass/lastpass',
-                    params: {}
-                }).then((res) => {
-                    if (res.data.code == 0) {
-                        this.normalRiders = res.data.rows;
-                        if(this.normalRiders.length>0){
-                            this.stroke.riderNames = this.normalRiders[0].passName;
-                            this.stroke.riderIds = this.normalRiders[0].id;
-                            this.stroke.phone = this.normalRiders[0].passPhone;
-                        }
-                    }
-                });
-            }
-
         },
         created() {
             this.stroke.tripId = this.$route.query.id;
             this.queryTrip();
-            this.initlastPassengerData();
             this.initPassengerData();
         }
     }
