@@ -46,6 +46,8 @@ baas.interceptors.request.use(function (config) {
         let openid = localStorage.getItem('openid');
         config.headers['openid'] = openid;
     } else {
+        //TODO 这里暂时写测试openid,后续需要调接口获取授权
+        localStorage.setItem("openid","abcdefghigklmm")
         // throw new Error('logout');
         // axios.get(ajaxUrl + '/wx/authorize')
         //     .then(function (response) {
@@ -57,7 +59,7 @@ baas.interceptors.request.use(function (config) {
         //     ).catch(function (error) {
         //     console.log(error);
         // });
-        throw new Error('logout');
+        // throw new Error('logout');
     }
     return config;
 });
