@@ -243,6 +243,10 @@
             }
         },
         mounted() {
+            let strokeType = sessionStorage.getItem("strokeType");
+            if(strokeType){
+                this.strokeType = Number(strokeType);
+            }
             this.changeTab(this.strokeType);
         },
 
@@ -444,8 +448,10 @@
             linkToCancel(val) {
 
                 if (this.strokeType == '0') {
+                    sessionStorage.setItem("strokeType","0");
                     this.$router.push({path: '/cancelTrip-passenger', query: {tripId: val.tripId}})
                 } else {
+                    sessionStorage.setItem("strokeType","1");
                     this.$router.push({path: '/cancelTrip-driver', query: {tripId:val.tripId,seat:val.seatNum,confirm:val.confirmNum,unconfig:val.unconfirm}})
                 }
             }
