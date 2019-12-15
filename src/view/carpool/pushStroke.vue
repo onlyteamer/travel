@@ -183,10 +183,7 @@
                 showLine: false,
                 showCar:false,
                 stroke: {
-                    carBrand: "",
-                    carColor: "",
-                    carNumber: "",
-                    carType: "",
+                    carId:'',
                     directLineid: "",
                     directLine: "",
                     point: "",
@@ -242,20 +239,8 @@
             },
             onCarChange(picker, values){
                 this.stroke.carInfo = picker.name;
-                request.sendPost({
-                    url: '/user/center/selectcar',
-                    params: {
-                        id: picker.id
-                    }
-                }).then((res)=>{
-                    if(res.data.code===0){
-                     this.stroke.carBrand = res.data.data.carBrand;
-                     this.stroke.carColor = res.data.data.carColor;
-                     this.stroke.carNumber = res.data.data.carNumber;
-                     this.stroke.carType = res.data.data.carType;
-                    }
-                    this.showCar = false;
-                })
+                this.stroke.carId = picker.id;
+                this.showCar = false;
             },
             onClickLeft() {
                 this.$router.back(-1);
