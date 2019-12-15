@@ -101,6 +101,7 @@
         },
         data(){
             return{
+                id:'',//行程id
                 redBar:redBar,
                 greenBar:greenBar,
                 checked:true,
@@ -124,9 +125,13 @@
                 this.$router.back(-1);
             },
             goReserve(){
-                this.$router.push({path:'/reserve'});
+                this.$router.push({path:'/reserve',query:{id:this.id}});
             }
-        }
+        },
+        created(){
+            this.id = this.$route.query.id;
+
+        },
     }
 </script>
 
