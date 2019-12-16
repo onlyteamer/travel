@@ -37,7 +37,7 @@
             </van-notice-bar>
         </div>
         <div class="travel">
-            <van-cell title="常用路线选择:" is-link title-style="color:#0CC893" />
+            <van-cell title="常用路线选择:" is-link title-style="color:#0CC893" @click="openDefaultLine" />
             <van-cell-group>
                 <van-field
                         v-model="strokeInfo.startPlace"
@@ -145,11 +145,25 @@
                     @confirm="changeTimer"
             />
         </van-popup>
+
+        <van-popup
+                v-model="showLinePop"
+                position="bottom"
+                :style="{ height: '30%' }"
+        >
+            <van-picker
+                    show-toolbar
+                    title=""
+                    :columns="columns"
+                    @cancel="showLinePop = true"
+                    @confirm="changeDefaultLine"
+            />
+        </van-popup>
     </div>
 </template>
 
 <script>
-    import {NavBar,Row,Col,Image,NoticeBar,Cell,CellGroup,Field,Divider,Button,Card,Tabbar, TabbarItem,Toast ,DatetimePicker,Popup,List } from 'vant';
+    import {NavBar,Row,Col,Image,NoticeBar,Cell,CellGroup,Field,Divider,Button,Card,Tabbar, TabbarItem,Toast ,DatetimePicker,Popup,List,Picker  } from 'vant';
     import logo from './../../static/images/logo.png'
     import laba from './../../static/images/laba.png'
     import greenBar from './../../static/images/green.png'
@@ -185,10 +199,14 @@
             [Toast.name]:Toast,
             [DatetimePicker.name]:DatetimePicker,
             [Popup.name]:Popup,
-            [List.name]:List
+            [List.name]:List,
+            [Picker.name]:Picker
         },
         data(){
             return{
+                columns:[],
+                lineList:[],
+                showLinePop:false,
                 error: false,
                 loading: false,
                 minDate: new Date(),
@@ -221,6 +239,39 @@
 
 
         methods: {
+            //常用线路
+            changeDefaultLine(val){
+                console.log(val);
+
+                this.lineList.forEach(e =>{
+                    if(e.lineName == val){
+                        this.strokeInfo.startPlace = e.startName;
+                        this.strokeInfo.endPlace = e.endIdName;
+                    }
+                });
+                this.showLinePop = false;
+            },
+
+            openDefaultLine(){
+                if(this.lineList.length == 0){
+                    request.sendGet({
+                        url:"/sharecar/trip/defaultinfo",
+                        params:{}
+                    }).then(res =>{
+                        if(res.data.code == '0'){
+                            //处理数据
+                            let lineInfo = res.data.data.lineinfo;
+                            for (let key in lineInfo){
+                                let obj = lineInfo[key];
+                                this.columns.push(obj.lineName);
+                                this.lineList.push(obj);
+                            }
+                        }
+                    });
+                }
+                this.showLinePop = true;
+            },
+
             //列表
             initListData(){
 
