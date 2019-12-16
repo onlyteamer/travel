@@ -28,11 +28,19 @@ let fileBaas = axios.create({
 fileBaas.interceptors.request.use(function (config) {
     config.headers['Content-Type'] = 'multipart/form-data';
     //在发送请求之前做某事
-    if (localStorage.getItem('openid')) {
+    if (localStorage.getItem('openid') && localStorage.getItem("isLogin") === '1') {
         let openid = localStorage.getItem('openid');
         config.headers['openid'] = openid;
     } else {
-        throw new Error('logout');
+        axios.get(ajaxUrl + '/wx/authorize')
+            .then(function (response) {
+                    //获取到验证URL,给微信发送请求
+                    let authURL = response.data.data.url;
+                    window.location.href = authURL;
+                }
+            ).catch(function (error) {
+            console.log(error);
+        });
     }
     return config;
 });
@@ -42,24 +50,19 @@ fileBaas.interceptors.request.use(function (config) {
 baas.interceptors.request.use(function (config) {
     config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
     //在发送请求之前做某事
-    if (localStorage.getItem('openid')) {
+    if (localStorage.getItem('openid') && localStorage.getItem("isLogin") === '1') {
         let openid = localStorage.getItem('openid');
         config.headers['openid'] = openid;
     } else {
-        //TODO 这里暂时写测试openid,后续需要调接口获取授权
-        localStorage.setItem("openid","abcdefghigklmm")
-        // throw new Error('logout');
-        // axios.get(ajaxUrl + '/wx/authorize')
-        //     .then(function (response) {
-        //             //获取到验证URL,给微信发送请求
-        //             let authURL = response.data.data.url;
-        //             console.log(authURL);
-        //             // window.location.href = authURL;
-        //         }
-        //     ).catch(function (error) {
-        //     console.log(error);
-        // });
-        // throw new Error('logout');
+        axios.get(ajaxUrl + '/wx/authorize')
+            .then(function (response) {
+                    //获取到验证URL,给微信发送请求
+                    let authURL = response.data.data.url;
+                    window.location.href = authURL;
+                }
+            ).catch(function (error) {
+            console.log(error);
+        });
     }
     return config;
 });

@@ -234,10 +234,7 @@
         mounted(){
             //初始化列表
             this.initListData();
-
         },
-
-
         methods: {
             //常用线路
             changeDefaultLine(val){
@@ -321,7 +318,41 @@
                 sessionStorage.setItem("queryStroke",JSON.stringify(this.strokeInfo));
                 this.$router.push({path:'/carLine'});
             }
-        }
+        },
+        created(){
+            let url = location.href;
+            if(url.indexOf("?")!=-1 && !localStorage.getItem("openid")){
+                let str = url.substr(url.indexOf("?")+1);
+                let strs = str.split("&");
+                let code = strs[0].split("=")[1];
+                let state = strs[1].split("=")[1];
+                request.sendGet({
+                    url:'/wx/getopenid',
+                    params:{
+                        code:code
+                    }
+                }).then((res)=>{
+                    if(res.data.code===0){
+                        let openid = res.data.data.openid;
+                        localStorage.setItem("openid",openid);
+                        request.sendPost({
+                            url:'/wx/login',
+                            params: {
+                                openid:openid
+                            }
+                        }).then((res)=>{
+                            //TODO 判断登录状态
+                            if(res.data.data.isLogin==="1"){
+                                //登陆成功
+                                localStorage.setItem("isLogin","1");
+                            }else{
+                                this.$router.push({path:'/register'})
+                            }
+                        })
+                    }
+                })
+            }
+        },
     }
 </script>
 

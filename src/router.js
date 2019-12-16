@@ -22,7 +22,20 @@ const routes = [
             title: '个人中心'
         }
     },
-
+    {
+        name: 'myLike',
+        component: () => import('./view/user/myLike.vue'),
+        meta: {
+            title: '个人中心'
+        }
+    },
+    {
+        name: 'myFans',
+        component: () => import('./view/user/myFans.vue'),
+        meta: {
+            title: '个人中心'
+        }
+    },
     {
         name: 'ownerCertification',
         component: () => import('./view/user/ownerCertification.vue'),

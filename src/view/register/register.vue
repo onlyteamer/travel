@@ -118,11 +118,23 @@
                     }
                 }).then((res)=>{
                     if(res.data.code==0){
-                        this.$router.push({path: '/carIndex'});
+                        request.sendPost({
+                            url:'/wx/login',
+                            params: {
+                                openid:localStorage.getItem('openid'),
+                            }
+                        }).then((res)=>{
+                            if(res.data.data.isLogin==="1"){
+                                //登陆成功
+                                localStorage.setItem("isLogin","1");
+                                this.$router.push({path: '/carIndex'});
+                            }else{
+                                Toast(res.data.msg);
+                            }
+                        })
                     }else{
                         Toast(res.data.msg);
                     }
-
                 })
             },
             goAgreement(){
