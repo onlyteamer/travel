@@ -13,24 +13,24 @@
                     <van-col span="12" class="item-col">
                         <div class="item-col-wrap">
                             <div style="font-size: 14px;color: white">总资产（元）</div>
-                            <div style="font-size: 20px;color: white;font-weight: bold">8000.00</div>
+                            <div style="font-size: 20px;color: white;font-weight: bold">{{dataMain.balance}}</div>
                         </div>
                     </van-col>
                     <van-col span="12" class="item-col">
                         <div class="item-col-wrap">
                             <div style="font-size: 14px;color: white">累计收益（元）</div>
-                            <div style="font-size: 20px;color: white;font-weight: bold">200.00</div>
+                            <div style="font-size: 20px;color: white;font-weight: bold">{{dataMain.income}}</div>
                         </div>
                     </van-col>
                 </van-row>
                 <van-row style="height: 69px">
                     <van-col span="12" class="item-col">
                         <div style="font-size: 14px;color: white">累计充值（元）</div>
-                        <div style="font-size: 20px;color: white;font-weight: bold">400.00</div>
+                        <div style="font-size: 20px;color: white;font-weight: bold">{{dataMain.recharge}}</div>
                     </van-col>
                     <van-col span="12" class="item-col">
                         <div style="font-size: 14px;color: white">累计消费（元）</div>
-                        <div style="font-size: 20px;color: white;font-weight: bold">200.00</div>
+                        <div style="font-size: 20px;color: white;font-weight: bold">{{dataMain.consume}}</div>
                     </van-col>
                 </van-row>
             </div>
@@ -38,21 +38,22 @@
         <div class="content">
             <div style="position: relative;top: -35px;">
                 <van-row class="bag-wrap">
-                    <van-col span="6" class="bag-col"  @click="goDetail(0)" >
-                        <div class="bag-wrap-item"><img src="../../static/images/zdjl.png"/></div>
-                        <div class="bag-wrap-item">账单记录</div>
-                    </van-col>
-                    <van-col span="6" class="bag-col" :value="1" @click="goDetail(1)">
+
+                    <van-col span="6" class="bag-col" :value="1" @click="goDetail(0)">
                         <div class="bag-wrap-item"><img src="../../static/images/xfjl.png"/></div>
-                        <div class="bag-wrap-item">消费记录</div>
+                        <div class="bag-wrap-item">消费</div>
                     </van-col>
-                    <van-col span="6" class="bag-col" :value="2" @click="goDetail(2)">
+                    <van-col span="6" class="bag-col" :value="2" @click="goDetail(1)">
                         <div class="bag-wrap-item"><img src="../../static/images/syjl.png"/></div>
-                        <div class="bag-wrap-item">收益记录</div>
+                        <div class="bag-wrap-item">收益</div>
                     </van-col>
-                    <van-col span="6" class="bag-col" :value="3" @click="goDetail(3)">
+                    <van-col span="6" class="bag-col" :value="3" @click="goDetail(2)">
                         <div class="bag-wrap-item"><img src="../../static/images/txdx.png"/></div>
-                        <div class="bag-wrap-item">充值记录</div>
+                        <div class="bag-wrap-item">充值</div>
+                    </van-col>
+                    <van-col span="6" class="bag-col" @click="goDetail(3)">
+                        <div class="bag-wrap-item"><img src="../../static/images/zdjl.png"/></div>
+                        <div class="bag-wrap-item">提现</div>
                     </van-col>
                 </van-row>
                 <div class="func-wrap">
@@ -102,6 +103,7 @@
 <!--个人中心-充值提现-->
 <script>
     import {NavBar, Row, Col, Field, Button} from 'vant';
+    import request from "../../utils/request"
 
     export default {
         components: {
@@ -113,8 +115,15 @@
         },
         data() {
             return {
-                czje: '',
-                czje1: '',
+                dataMain:{
+                    balance: 0,
+                    recharge: 0,
+                    income: 0,
+                    cashout: 0,
+                    consume: 0,
+                },
+                czje:'',
+                czje1:''
             }
         },
         methods: {
@@ -124,7 +133,20 @@
             goDetail(e) {
                 this.$router.push({path: '/wealthDetail', query: {activeIndex: e}});
             },
-        }
+            initData() {
+                request.sendGet({
+                    url: '/user/center/finance',
+                    params: {}
+                }).then((res) => {
+                    if (res.data.code === 0) {
+                        this.dataMain = res.data.data;
+                    }
+                })
+            },
+        },
+        created() {
+            this.initData()
+        },
     }
 </script>
 
@@ -138,6 +160,7 @@
         align-items: center;
         justify-content: center;
     }
+
     .item-col {
         text-align: center;
         height: 69px;
