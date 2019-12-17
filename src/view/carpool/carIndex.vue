@@ -27,14 +27,16 @@
             </van-row>
         </div>
         <div class="notice">
-            <van-notice-bar
-                    color="#0BCA92"
-                    background="#FFFFFF"
-                    :left-icon="laba"
-                    :scrollable="false"
-            >
-                昌坤出行新版本与大家见面了！公告滚动循环！
-            </van-notice-bar>
+            <div>
+                <van-notice-bar
+                        color="#0BCA92"
+                        background="#FFFFFF"
+                        :left-icon="laba"
+                        :scrollable="true"
+                >
+                    昌坤出行新版本与大家见面了！公告滚动循环！超出才会滚动
+                </van-notice-bar>
+            </div>
         </div>
         <div class="travel">
             <van-cell title="常用路线选择:" is-link title-style="color:#0CC893" @click="openDefaultLine" />
@@ -389,7 +391,7 @@
     }
 
     .notice{
-
+        background: #FFFFFF;
 
     }
 

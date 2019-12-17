@@ -222,9 +222,39 @@
                         console.log(carKey);
                         this.stroke.carInfo = carinfo[carKey[0]];
 
+                        this.stroke.startPlace = lineinfo.startName;
+                        this.stroke.endPlace = lineinfo.endIdName;
+
+                        this.stroke.seatCount = tripinfo.totalSeat;
+                        this.stroke.tripPrice =  tripinfo.tripPrice;
+                        this.stroke.tripDateTime = tripinfo.tripDateTime;
+
+                        this.stroke.remark = tripinfo.remark;
+
                         this.stroke.directLine = lineinfo.lineName;
+                        this.stroke.directLineid = lineinfo.lineId;
+                        this.stroke.point = "";
 
-
+                        //初始化方向
+                        this.pointData2 = [];
+                        console.log(this.pointData);
+                        for (let i in this.pointData) {
+                            if (this.pointData[i].lineId == lineinfo.lineId) {
+                                let point1 = {
+                                    "pointId": this.pointData[i].endId,
+                                    "pointName": this.pointData[i].endIdName,
+                                    "endPlace": this.pointData[i].startName
+                                };
+                                let point2 = {
+                                    "pointId": this.pointData[i].startId,
+                                    "pointName": this.pointData[i].startName,
+                                    "endPlace": this.pointData[i].endIdName
+                                };
+                                this.pointData2.push(point1);
+                                this.pointData2.push(point2);
+                            }
+                        }
+                        console.log(this.pointData2)
 
                     }
                 })
