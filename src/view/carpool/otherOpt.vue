@@ -87,7 +87,7 @@
             </van-button>
             <van-button type="default" color="#0CC893"
                         style="font-size: 14px;margin-bottom: 10px;height: 28px;width: 72px;border-radius: 5px"
-                        size="mini">投诉
+                        size="mini" @click="linkComplain">投诉
             </van-button>
         </div>
 
@@ -119,10 +119,15 @@
             return {
                 title: "其他操作",
                 isFollow: "0",
-                tag:'',
+                tag:'2',
             }
         },
         methods: {
+            //跳转投诉页面
+            linkComplain(){
+                this.$router.push({path:"complain-passenger"});
+            },
+
             onClickLeft() {
 
             },
@@ -137,6 +142,8 @@
                 }).then((res)=>{
                     if (res.data.code === 0) {
                         Toast("加入黑名单成功");
+                    }else {
+                        Toast.fail(res.data.msg);
                     }
                 })
             },
@@ -150,7 +157,10 @@
                         }
                     }).then(res => {
                         if (res.data.code == '0') {
-                            this.isFollow = '1'
+                            // this.isFollow = '1'
+                            Toast.success("关注成功");
+                        }else {
+                            Toast.fail(res.data.msg)
                         }
                     })
 
@@ -161,7 +171,7 @@
             }
         },
         created(){
-            this.tag = this.$route.query.tag;
+            // this.tag = this.$route.query.tag;
         }
     }
 </script>

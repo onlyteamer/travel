@@ -79,13 +79,13 @@
                         </van-col>
                     </van-row>
 
-                    <van-row style="margin: 10px 0" v-if="item.tripState == '已完成'">
+                    <van-row style="margin: 10px 0" v-if="item.tripState != '已完成'">
                         <van-col span="6">
 
                         </van-col>
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini" @click="linkCarAppraise">行车评价
+                                        size="mini" @click="linkCarAppraise(item.tripId)">行车评价
                             </van-button>
                         </van-col>
                         <van-col span="6">
@@ -438,9 +438,9 @@
             },
 
             //行车评价
-            linkCarAppraise() {
+            linkCarAppraise(val) {
                 sessionStorage.setItem("strokeType","0");
-                this.$router.push({path: '/carOwnerAppraise'});
+                this.$router.push({path: '/carOwnerAppraise',query:{tripId:val}});
             },
             linkOpt(val){
                 sessionStorage.setItem("strokeType","0");

@@ -7,8 +7,8 @@
             <div class="radio-wrap">
                 <div class="radio-wrap-title">投诉对象</div>
                 <van-radio-group v-model="radio" class="radio-wrap-content">
-                    <van-radio name="车主" checked-color="#07BD06">车主</van-radio>
-                    <van-radio name="乘客" checked-color="#07BD06">乘客</van-radio>
+                    <van-radio name="1" checked-color="#07BD06">车主</van-radio>
+                    <van-radio name="2" checked-color="#07BD06">乘客</van-radio>
                 </van-radio-group>
             </div>
             <div class="reason-wrap">
@@ -38,7 +38,7 @@
         },
         data() {
             return {
-                radio: '',
+                radio: '1',
                 value:''
             }
         },

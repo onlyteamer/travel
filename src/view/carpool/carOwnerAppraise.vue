@@ -63,35 +63,20 @@
         </div>
         <div class="assess">
             <div>
-                <van-rate v-model="rateVal" :size="25" color="#FF7E00"/>
+                <van-rate v-model="appraise.level" :size="25" color="#FF7E00"/>
             </div>
             <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
             <div class="assessTag">
 
-                <van-tag round type="primary" size="large" color="#0CC893" plain class="tagStyle">准时到达</van-tag>
-
-                <van-tag round type="primary" size="large" color="#5E5E5E" plain class="tagStyle">比较健谈</van-tag>
-
-                <van-tag round type="primary" size="large" color="#0CC893" plain class="tagStyle">付款及时</van-tag>
-
-                <van-tag round type="primary" size="large" color="#5E5E5E" plain class="tagStyle">迟到严重</van-tag>
-
-                <van-tag round type="primary" size="large" color="#0CC893" plain class="tagStyle">态度好有礼貌</van-tag>
-
-                <van-tag round type="primary" size="large" color="#5E5E5E" plain class="tagStyle">车内吸烟</van-tag>
-
-                <van-tag round type="primary" size="large" color="#0CC893" plain class="tagStyle">车内有异味</van-tag>
-
-                <van-tag round type="primary" size="large" color="#5E5E5E" plain class="tagStyle">态度恶劣</van-tag>
-
-                <van-tag round type="primary" size="large" color="#0CC893" plain class="tagStyle">车辆宽敞整洁</van-tag>
-
-                <van-tag round type="primary" size="large" color="#5E5E5E" plain class="tagStyle">驾驶平稳</van-tag>
+                <van-tag round type="primary" size="large" v-for="(item,index) in tagList" :key="index"
+                         :color="item.flag != '0'?'#0CC893':'#5E5E5E'" plain class="tagStyle" @click="changeTag(item)">
+                    {{item.text}}
+                </van-tag>
             </div>
             <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
             <van-cell-group>
                 <van-field
-                        v-model="message"
+                        v-model="appraise.remark"
                         rows="4"
                         autosize
                         type="textarea"
@@ -99,7 +84,8 @@
                 />
             </van-cell-group>
             <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
-            <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;margin-bottom: 10px">发布评论
+            <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;margin-bottom: 10px"
+                        @click="pushAppraise">发布评论
             </van-button>
         </div>
 
@@ -109,7 +95,9 @@
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Divider, Button, Rate, Tag, Field, CellGroup} from 'vant';
+    import {Row, Col, Divider, Button, Rate, Tag, Field, CellGroup,Toast} from 'vant';
+
+    import request from '../../utils/request'
 
     export default {
         name: "carOwnerAppraise",
@@ -122,18 +110,136 @@
             [Rate.name]: Rate,
             [Tag.name]: Tag,
             [Field.name]: Field,
-            [CellGroup.name]: CellGroup
+            [CellGroup.name]: CellGroup,
+            [Toast.name]:Toast
         },
         data() {
             return {
                 title: "车主详情",
-                rateVal: 3,
-                message: ""
+                appraise: {
+                    driverId: "",
+                    level: 3,
+                    remark: "",
+                    templateContext: "",
+                    tripId: "",
+                    userId: ""
+                },
+                tagList: [
+                    {
+                        id: "1",
+                        flag: '0',
+                        text: "车辆准时"
+                    },
+                    {
+                        id: "2",
+                        flag: '0',
+                        text: "司机健谈"
+                    },
+                    {
+                        id: "3",
+                        flag: '0',
+                        text: "危险驾驶"
+                    },
+                    {
+                        id: "4",
+                        flag: '0',
+                        text: "司机迟到"
+                    },
+                    {
+                        id: "5",
+                        flag: '0',
+                        text: "态度好有礼貌"
+                    },
+                    {
+                        id: "6",
+                        flag: '0',
+                        text: "车内吸烟"
+                    },
+                    {
+                        id: "7",
+                        flag: '0',
+                        text: "车内有异味"
+                    },
+                    {
+                        id: "8",
+                        flag: '0',
+                        text: "态度恶劣"
+                    },
+                    {
+                        id: "9",
+                        flag: '0',
+                        text: "车辆宽敞整洁"
+                    },
+                    {
+                        id: "10",
+                        flag: '0',
+                        text: "驾驶平稳"
+                    }
+                ]
             }
         },
+        mounted() {
+            this.initData();
+        },
+
         methods: {
+            initData() {
+                // let tripId = this.$route.query.tripId;
+                let tripId = "20191215142813071";
+                this.appraise.tripId = tripId;
+                request.sendPost({
+                    url: "/sharecar/pass/evaluate/" + tripId,
+                    params: {}
+                }).then(res => {
+                    console.log(res);
+                })
+            },
+
             onClickLeft() {
 
+            },
+
+            changeTag(val) {
+                let flag = "0";
+                if(val.flag == '0'){
+                    flag = "1";
+                }
+                this.tagList.forEach(e => {
+                    if (e.id == val.id) {
+                        e.flag = flag;
+                    }
+                })
+            },
+
+            //发布评论
+            pushAppraise() {
+                let arr = [];
+                this.tagList.forEach(e =>{
+                    if(e.flag == '1'){
+                       arr.push(e.text);
+                    }
+                })
+                this.appraise.templateContext = arr.join(",");
+
+                if(!this.appraise.remark){
+                    Toast.fail("评论不能为空");
+                    return false;
+                }
+
+                this.appraise.driverId = "1";
+                this.appraise.userId = "";
+
+                request.sendPost({
+                    url:"/sharecar/pass/doevaluate/"+this.appraise.tripId,
+                    params: this.appraise
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        Toast.success("发布成功");
+                        this.$router.push({path:"/myStroke"});
+                    }else {
+                        Toast.fail("发布失败");
+                    }
+                })
             }
         }
     }
