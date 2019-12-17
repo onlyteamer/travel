@@ -80,7 +80,9 @@
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 10px 0px;" >
                 <van-col span="24">
-                    <van-checkbox v-model="checked" checked-color="#07c160" shape="square">阅读并同意《免责协议和条款》和《平台支付条款></van-checkbox>
+                    <van-checkbox v-model="checked" checked-color="#07c160" shape="square">阅读并同意<span
+                            @click="goAgreement">《免责协议和条款》</span>和<span @click="goAgreement">《平台支付条款》</span>
+                    </van-checkbox>
                 </van-col>
             </van-row>
 
@@ -200,8 +202,8 @@
             }
         },
         mounted(){
-            this.getStrokeDetails();
             this.initData();
+            this.getStrokeDetails();
         },
 
         methods:{
@@ -222,9 +224,6 @@
                         console.log(carKey);
                         this.stroke.carInfo = carinfo[carKey[0]];
 
-                        this.stroke.startPlace = lineinfo.startName;
-                        this.stroke.endPlace = lineinfo.endIdName;
-
                         this.stroke.seatCount = tripinfo.totalSeat;
                         this.stroke.tripPrice =  tripinfo.tripPrice;
                         this.stroke.tripDateTime = tripinfo.tripDateTime;
@@ -233,13 +232,26 @@
 
                         this.stroke.directLine = lineinfo.lineName;
                         this.stroke.directLineid = lineinfo.lineId;
-                        this.stroke.point = "";
+                        this.stroke.route = lineinfo.tripLine;
+                        // this.stroke.point = ;
+                        this.stroke.direction = tripinfo.direction;
+                        this.stroke.startPlace = lineinfo.startName;
+                        this.stroke.endPlace = lineinfo.endIdName;
 
                         //初始化方向
                         this.pointData2 = [];
                         console.log(this.pointData);
                         for (let i in this.pointData) {
                             if (this.pointData[i].lineId == lineinfo.lineId) {
+                                //方向
+                                if(this.pointData[i].endId == tripinfo.direction){
+                                    this.stroke.point  = this.pointData[i].endIdName;
+                                }
+
+                                if(this.pointData[i].startId == tripinfo.direction){
+                                    this.stroke.point  = this.pointData[i].startName;
+                                }
+
                                 let point1 = {
                                     "pointId": this.pointData[i].endId,
                                     "pointName": this.pointData[i].endIdName,
@@ -254,8 +266,6 @@
                                 this.pointData2.push(point2);
                             }
                         }
-                        console.log(this.pointData2)
-
                     }
                 })
             },
@@ -270,10 +280,10 @@
                     Toast.fail("始发时间不能为空");
                     return;
                 }
-                if (!this.stroke.route) {
-                    Toast.fail("行驶路线不能为空");
-                    return;
-                }
+                // if (!this.stroke.route) {
+                //     Toast.fail("行驶路线不能为空");
+                //     return;
+                // }
                 if (!this.stroke.totalSeat) {
                     Toast.fail("座位数不能为空");
                     return;

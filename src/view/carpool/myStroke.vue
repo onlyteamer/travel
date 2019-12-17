@@ -179,7 +179,7 @@
                     <van-row v-if="item.tripState == '1'" style="margin: 10px 0">
                         <van-col span="6" offset="18">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini">乘客
+                                        size="mini" @click="goPassengerList(item.tripId)">乘客
                             </van-button>
                         </van-col>
                     </van-row>
@@ -422,25 +422,32 @@
 
 
             onClickLeft() {
-
                 this.$router.back(-1)
             },
             goCarFate(val) {
+                sessionStorage.setItem("strokeType","0");
                 this.$router.push({path: '/carFate',query:{tripId:val}});
             },
             goPassengerList(val) {
+                sessionStorage.setItem("strokeType","1");
                 this.$router.push({path: '/passengerList',query:{tripId:val}});
             },
             linkCarPosition() {
+                sessionStorage.setItem("strokeType","0");
                 this.$router.push({path: '/carOwnPosition'});
             },
+
+            //行车评价
             linkCarAppraise() {
+                sessionStorage.setItem("strokeType","0");
                 this.$router.push({path: '/carOwnerAppraise'});
             },
             linkOpt(val){
+                sessionStorage.setItem("strokeType","0");
                 this.$router.push({path:'/otherOpt',query:{tripId:val.tripId}})
             },
             linkUpdateStroke(val){
+                sessionStorage.setItem("strokeType","1");
                 this.$router.push({path:'/updateStroke',query:{tripId:val}})
             },
 
