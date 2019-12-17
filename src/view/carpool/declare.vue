@@ -14,17 +14,8 @@
         <div class="fate">
             <div style="font-size: 16px;font-weight: bold">同车缘分</div>
             <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" />
-            <van-row style="padding: 10px 0;border-bottom: 1px solid #ECECEC;">
-                <van-col span="12">
-                    <div class="left">
-                        <img src="../../static/images/userAvatar.png" style="height: 44px;width: 44px">
-                        <div>
-                            <p style="font-size: 12px;margin: 5px 0"><span>【乘客】</span><span>加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px"></p>
-                            <p style="color:#9E9E9E;font-size: 12px;margin: 5px 5px 0 ">同城过1次</p>
-                        </div>
-                    </div>
-                </van-col>
-                <van-col span="12">
+            <van-row style="padding: 10px 0;border-bottom: 1px solid #ECECEC;" v-if="upFateList.length>0">
+                <van-col span="12" v-for="(item,index) in upFateList" :key="index">
                     <div class="left">
                         <img src="../../static/images/userAvatar.png" style="height: 44px;width: 44px">
                         <div>
@@ -36,16 +27,7 @@
             </van-row>
 
             <van-row style="padding: 10px 0">
-                <van-col span="12">
-                    <div class="left">
-                        <img src="../../static/images/userAvatar.png" style="height: 44px;width: 44px">
-                        <div>
-                            <p style="font-size: 12px;margin: 5px 0"><span>【乘客】</span><span>加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px"></p>
-                            <p style="color:#9E9E9E;font-size: 12px;margin: 5px 5px 0 ">同城过1次</p>
-                        </div>
-                    </div>
-                </van-col>
-                <van-col span="12">
+                <van-col span="12" v-for="(item,index) in upFateList" :key="index">
                     <div class="left">
                         <img src="../../static/images/userAvatar.png" style="height: 44px;width: 44px">
                         <div>
@@ -85,6 +67,8 @@
     import greenBar from './../../static/images/green.png'
     import redBar from './../../static/images/red.png'
 
+    import request from '../../utils/request'
+
     export default {
         name: "declare",
         components:{
@@ -106,15 +90,9 @@
                 greenBar:greenBar,
                 checked:true,
                 title:"车辆预约",
-                stroke:{
-                    startDate:"2019年12月2日 06:55",
-                    point:"北京",
-                    route:"上河湾出发，李哥庄，绿地，果园，少年宫，万象城",
-                    seatCount:3,
-                    price:23,
-                    carInfo:"大众速腾（京A***356）",
-                    remark:"车上不能抽烟，不能长时间打电话"
-                }
+                carFateList:[],
+                upFateList:[],
+                downFateList:[]
             }
         },
         methods:{
@@ -126,11 +104,28 @@
             },
             goReserve(){
                 this.$router.push({path:'/reserve',query:{id:this.id}});
+            },
+
+            initCarFate(){
+                request.sendGet({
+                    url:"/sharecar/pass/samecar/"+this.id,
+                    params:{}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        if(res.data.rows.length>4){
+                            this.carFateList = res.data.rows.slice(0,4);
+                        }else {
+                            this.carFateList = res.data.rows;
+                        }
+                    }
+                })
             }
         },
         created(){
             this.id = this.$route.query.id;
 
+            //同车缘分
+            this.initCarFate();
         },
     }
 </script>

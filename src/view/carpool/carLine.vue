@@ -34,6 +34,7 @@
             >
                 <div v-for="(item,index) in dataMain.data" :key="item.id">
                     <div class="carBar">
+                        <div @click="linkStrokeDetails(item.tripId)">
                         <van-row>
                             <van-col span="6">
                                 <div style="display: flex;align-items: center;"><i
@@ -82,7 +83,7 @@
                                 <div>{{item.totalSeats-item.bookSeats}}</div>
                             </van-col>
                         </van-row>
-
+                        </div>
                         <van-row style="color: #202020;font-weight: bold;font-size: 14px;margin: 10px 0">
                             <van-col span="8">
                                 <van-button type="default" color="#0CC893"
@@ -152,6 +153,12 @@
         },
 
         methods: {
+
+            //跳转详情页
+            linkStrokeDetails(tripId){
+                this.$router.push({path:"/lineDetails",query:{tripId:tripId}})
+            },
+
             onClickLeft() {
                 this.$router.back(-1);
             },

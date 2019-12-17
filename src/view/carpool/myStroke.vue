@@ -79,7 +79,7 @@
                         </van-col>
                     </van-row>
 
-                    <van-row style="margin: 10px 0" v-if="item.tripState != '已完成'">
+                    <van-row style="margin: 10px 0" v-if="item.tripState == '已完成'">
                         <van-col span="6">
 
                         </van-col>

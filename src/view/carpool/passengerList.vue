@@ -100,7 +100,7 @@
                 request.sendPost({
                     url:'/sharecar/trip/confirm',
                     params:{
-                        bookId:"1",
+                        bookId:item.bookId,
                         state:flag,
                         tripId:item.tripId
                     }

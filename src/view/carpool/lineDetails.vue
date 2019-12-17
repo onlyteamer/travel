@@ -30,42 +30,42 @@
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
                 <van-col span="6">线路</van-col>
-                <van-col span="18">北京←→密云</van-col>
+                <van-col span="18">{{tripDetails.lineName}}</van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
                 <van-col span="6">发车时间</van-col>
-                <van-col span="18">2019年12月2日 06:55</van-col>
+                <van-col span="18">{{tripDetails.tripDateTime}}</van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
                 <van-col span="6">出发地</van-col>
-                <van-col span="18">上河湾</van-col>
+                <van-col span="18">{{tripDetails.startName}}</van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
                 <van-col span="6">目的地</van-col>
-                <van-col span="18">东直门</van-col>
+                <van-col span="18">{{tripDetails.endIdName}}</van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px;display: flex;align-items: center">
                 <van-col span="6">路线</van-col>
-                <van-col span="18">上河湾出发，李哥庄，绿地，果园，少年宫，万象城</van-col>
+                <van-col span="18">{{tripDetails.tripLine}}</van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
                 <van-col span="6">座位数</van-col>
-                <van-col span="18">4位</van-col>
+                <van-col span="18">{{tripDetails.totalSeat}}位</van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
                 <van-col span="6">价格</van-col>
-                <van-col span="18">22元</van-col>
+                <van-col span="18">{{tripDetails.tripPrice}}元</van-col>
             </van-row>
 
             <van-row style="padding: 12px 2px">
                 <van-col span="6">备注</van-col>
-                <van-col span="18">车上不能抽烟，不能长时间打电话</van-col>
+                <van-col span="18">{{tripDetails.remark}}</van-col>
             </van-row>
         </div>
 
@@ -74,13 +74,13 @@
                 <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini">分享</van-button>
             </van-col>
             <van-col span="6">
-                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini">关注</van-button>
+                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini" @click="followUser">关注</van-button>
             </van-col>
             <van-col span="6">
-                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini">电话</van-button>
+                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini" @click="contactCar">电话</van-button>
             </van-col>
             <van-col span="6">
-                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini">预约</van-button>
+                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini" @click="reserveCar">预约</van-button>
             </van-col>
         </van-row>
     </div>
@@ -88,7 +88,9 @@
 
 <script>
     import Title from './../../components/header'
-    import { Cell, CellGroup,DatetimePicker,Popup,Row, Col,Icon,Picker ,Checkbox, CheckboxGroup ,Button  } from 'vant';
+    import { Cell, CellGroup,DatetimePicker,Popup,Row, Col,Icon,Picker ,Checkbox, CheckboxGroup ,Button,Toast ,Dialog } from 'vant';
+
+    import request from '../../utils/request'
 
     export default {
         name: "lineDetails",
@@ -104,14 +106,78 @@
             [Picker.name]:Picker,
             [Checkbox.name]:Checkbox,
             [CheckboxGroup.name]:CheckboxGroup,
-            [Button.name]:Button
+            [Button.name]:Button,
+            [Toast.name]:Toast,
+            [Dialog.name]: Dialog,
         },
         data(){
             return{
-                title:"行车信息"
+                title:"行车信息",
+                tripDetails:{
+                    startName:""
+                },
+                tripId:""
             }
         },
+        mounted(){
+            this.initData();
+        },
+
         methods:{
+            initData(){
+                this.tripId = this.$route.query.tripId;
+
+                request.sendGet({
+                    url:"/sharecar/trip/select/" + this.tripId,
+                    params:{}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        console.log(res.data)
+                        this.tripDetails.startName = res.data.data.lineinfo.startName;
+                        this.tripDetails.endIdName = res.data.data.lineinfo.endIdName;
+                        this.tripDetails.lineName = res.data.data.lineinfo.lineName;
+                        this.tripDetails.tripDateTime = res.data.data.tripinfo.tripDateTime;
+                        this.tripDetails.tripLine = res.data.data.tripinfo.tripLine;
+                        this.tripDetails.totalSeat = res.data.data.tripinfo.totalSeat;
+                        this.tripDetails.tripPrice = res.data.data.tripinfo.tripPrice;
+                        this.tripDetails.remark = res.data.data.tripinfo.remark;
+                        console.log(this.tripDetails)
+                    }
+                })
+
+            },
+
+            followUser(){
+                request.sendPost({
+                    url:"/user/center/follow",
+                    params: {
+                        followerId:"1"
+                    }
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        Toast.success("关注用户");
+                    }else {
+                        Toast.fail(res.data.msg);
+                    }
+                })
+            },
+
+            reserveCar(){
+                this.$router.push({path: '/declare',query:{id:this.tripId}});
+            },
+
+            contactCar(){
+                let mobile = "";
+                // if(val){
+                //     mobile = val;
+                // }
+
+                Dialog.alert({
+                    message: '手机号:'+mobile
+                }).then(() => {
+                    // on close
+                });
+            },
             onClickLeft(){
 
             }

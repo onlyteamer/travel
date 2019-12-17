@@ -12,27 +12,27 @@
             >
             <div class="black" v-for="(item,index) in dataMain.data" :key="item.id">
                 <van-row style="display: flex;align-items: center">
-                    <van-col span="12" >
+                    <van-col span="12" @click="goPassengerDetails(item)">
                         <div style="display: flex;align-items: center">
-                            <img src="../../static/images/userAvatar.png" style="height: 50px;width: 50px;margin-right: 10px">
+                            <img :src="item.headimgurl?item.headimgurl:userAvatar" style="height: 50px;width: 50px;margin-right: 10px;border-radius: 50%">
                             <div>
-                                <p style="margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px"> </p>
+                                <p style="margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">{{item.nickname}}</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="item.sex == '1'"><img src="./../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px" v-else /> </p>
                                 <p style="margin: 5px 0">
-                                    <img src="./../../static/images/xin.png" style="width: 14px;height: 14px;margin-right: 5px"/><span>231</span>
-                                    <img src="./../../static/images/unhapply.png" style="width: 14px;height: 14px;margin: 0 5px 0 20px" /> <span>3</span>
+                                    <img src="./../../static/images/xin.png" style="width: 14px;height: 14px;margin-right: 5px"/><span>{{item.goodCount}}</span>
+                                    <img src="./../../static/images/unhapply.png" style="width: 14px;height: 14px;margin: 0 5px 0 20px" /> <span>{{item.badCount}}</span>
                                 </p>
                                 <p style="margin: 5px 0">
-                                    <span style="color: #5E5E5E">乘坐2次</span>
+                                    <span style="color: #5E5E5E">乘坐{{item.passCount}}次</span>
                                 </p>
                             </div>
                         </div>
                     </van-col>
                     <van-col span="12" align="right">
                         <div>
-                            <div class="userType" v-if="index%2 != '0'" >车主</div>
+                            <div class="userType" v-if="item.tag == '2'" >车主</div>
                             <div v-else class="passer" >乘客</div>
                         </div>
-                        <div><div class="removeTag" @click="del(index)">移出黑名单</div></div>
+                        <div><div class="removeTag" @click="del(item.id)">移出黑名单</div></div>
                     </van-col>
                 </van-row>
 
@@ -46,18 +46,21 @@
 
 <script>
     import Title from './../../components/header'
-    import { Row, Col,List} from 'vant';
+    import { Row, Col,List,Toast} from 'vant';
     import  request from '../../utils/request'
+    import avatar from '../../static/images/userAvatar.png'
 
     export default {
         components:{
             Title,
             [Row.name]:Row,
             [Col.name]:Col,
-            [List.name]: List
+            [List.name]: List,
+            [Toast.name]: Toast,
         },
         data(){
             return{
+                userAvatar:avatar,
                 title:"黑名单",
                 isOneHttp: true,
                 loading: false,
@@ -74,26 +77,27 @@
             onClickLeft(){
                 this.$router.back(-1);
             },
-            del(index){
-                let data = this.dataMain.data[index];
+            del(recordId){
                 request.sendPost({
-                    url:'/user/center/blackdelete/'+data.id,
+                    url:'/user/center/blackdelete/'+recordId,
                     params:{}
                 }).then((res)=>{
-                    this.dataMain.data.splice(index);
+                    if(res.data.code == '0'){
+                        this.dataMain.pageNum = 1;
+                        this.dataMain.data = [];
+                        this.initData();
+                        Toast.success("操作成功")
+                    }else {
+                        Toast.fail("操作失败")
+                    }
                 })
             },
             goPassengerDetails(val){
-                if(val){
-                    if(val%2 != 0){
-                        this.$router.push({path:'/carOwnerDetails'});
-                    }else {
-                        this.$router.push({path:'/passengerDetails'});
-                    }
+                if(val.tag == '1'){
+                    this.$router.push({path:'/passengerDetails',query:{userId:val.blackUserId}});
                 }else {
-                    this.$router.push({path:'/passengerDetails'});
+                    this.$router.push({path:'/carOwnerDetails',query:{userId:val.blackUserId}});
                 }
-
             },
             initData() {
                 request.sendGet({
