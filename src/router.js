@@ -289,7 +289,7 @@ const routes = [
     },
     {
         name: 'buyTicket',
-        component: () => import('./view/bus/buyTicket.vue'),
+        component: () => import('./view/busTrip/buyTicket.vue'),
         meta: {
             title: '购票'
         }
@@ -299,6 +299,41 @@ const routes = [
         component: () => import('./view/busTrip/ticketPayment.vue'),
         meta: {
             title: '购票支付'
+        }
+    },
+    {
+        name: 'busIndex',
+        component: () => import('./view/busTrip/busIndex.vue'),
+        meta: {
+            title: '首页'
+        }
+    },
+    {
+        name: 'busList',
+        component: () => import('./view/busTrip/busList.vue'),
+        meta: {
+            title: '班车列表'
+        }
+    },
+    {
+        name: 'resultList',
+        component: () => import('./view/busTrip/resultList.vue'),
+        meta: {
+            title: '查询结果'
+        }
+    },
+    {
+        name: 'busDetail',
+        component: () => import('./view/busTrip/busDetail.vue'),
+        meta: {
+            title: '班车详情'
+        }
+    },
+    {
+        name: 'ticketList',
+        component: () => import('./view/busTrip/ticketList.vue'),
+        meta: {
+            title: '乘车验票待乘车'
         }
     }
 ];
