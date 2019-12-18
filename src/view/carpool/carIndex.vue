@@ -157,7 +157,7 @@
                     show-toolbar
                     title=""
                     :columns="columns"
-                    @cancel="showLinePop = true"
+                    @cancel="showLinePop = false"
                     @confirm="changeDefaultLine"
             />
         </van-popup>
@@ -238,6 +238,7 @@
             this.initListData();
         },
         methods: {
+
             //常用线路
             changeDefaultLine(val){
                 console.log(val);
@@ -254,17 +255,16 @@
             openDefaultLine(){
                 if(this.lineList.length == 0){
                     request.sendGet({
-                        url:"/sharecar/trip/defaultinfo",
+                        url:"/user/center/linelist",
                         params:{}
                     }).then(res =>{
                         if(res.data.code == '0'){
                             //处理数据
-                            let lineInfo = res.data.data.lineinfo;
-                            for (let key in lineInfo){
-                                let obj = lineInfo[key];
-                                this.columns.push(obj.lineName);
-                                this.lineList.push(obj);
-                            }
+                           this.lineList = res.data.rows;
+                           this.columns = [];
+                           this.lineList.forEach(e =>{
+                               this.columns.push(e.lineName);
+                           });
                         }
                     });
                 }

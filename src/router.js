@@ -281,6 +281,13 @@ const routes = [
         }
     },
     {
+        name: 'passengerOrders',
+        component: () => import('./view/busTrip/passengerOrders.vue'),
+        meta: {
+            title: '乘客订单'
+        }
+    },
+    {
         name: 'buyTicket',
         component: () => import('./view/bus/buyTicket.vue'),
         meta: {
