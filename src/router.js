@@ -281,10 +281,10 @@ const routes = [
         }
     },
     {
-        name: 'passengerOrders',
-        component: () => import('./view/busTrip/passengerOrders.vue'),
+        name: 'checkTicket',
+        component: () => import('./view/busTrip/checkTicket.vue'),
         meta: {
-            title: '乘客订单'
+            title: '验票'
         }
     },
     {
