@@ -130,9 +130,9 @@
 
         <div class="footer">
             <van-tabbar v-model="active" active-color="#FF0200" inactive-color="#FFFFFF">
-                <van-tabbar-item :icon="car" to="">预定班车</van-tabbar-item>
-                <van-tabbar-item :icon="scan" to="">乘车验票</van-tabbar-item>
-                <van-tabbar-item :icon="user" to="">个人中心</van-tabbar-item>
+                <van-tabbar-item :icon="car" to="/busList">预定班车</van-tabbar-item>
+                <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
+                <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
             </van-tabbar>
         </div>
     </div>
