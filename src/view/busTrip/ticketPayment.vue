@@ -53,7 +53,7 @@
         </div>
 
         <div class="footer">
-            <van-button type="primary"  color="#0CC893" style="width: 100%">确认支付</van-button>
+            <van-button type="primary"  color="#0CC893" style="width: 100%" @click="submitOrder">确认支付</van-button>
         </div>
     </div>
 </template>
@@ -87,8 +87,11 @@
             }
         },
         methods: {
+            submitOrder(){
+                this.$router.push({path:'/ticketList'});
+            },
             onClickLeft() {
-
+                this.$router.back(-1);
             }
         }
     }

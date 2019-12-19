@@ -12,25 +12,25 @@
                 @load="onLoad"
                 :immediate-check="false"
         >
-            <div v-for="item in 10" :key="item">
+            <div v-for="item in dataMain.data" :key="item.id">
                 <div class="card">
                     <div style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;height: 45px;justify-content: space-between">
-                        <span class="line">昌坤出行3线：上河湾 →  西坝河</span>
-                        <span class="list-price">￥20</span>
+                        <span class="line">{{item.linename}}：{{item.startname}} →  {{item.endname}}</span>
+                        <span class="list-price">￥{{item.ticketPrice}}</span>
                     </div>
                     <div style="display: flex;align-items: center;justify-content: space-between;height: 72px">
                         <div>
                             <div style="display: flex;height:35px;line-height: 35px">
-                                <div><img :src="blueTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">5:20</span></div>
-                                <div><img :src="blueTime" width="13px" height="13px"><span  style="margin-left: 7px;">上河湾</span></div>
+                                <div><img :src="blueTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">{{item.starttime}}</span></div>
+                                <div><img :src="blueTime" width="13px" height="13px"><span  style="margin-left: 7px;">{{item.startname}}</span></div>
                             </div>
                             <div style="display: flex;height:35px;line-height: 35px">
-                                <div><img :src="redTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">5:20</span></div>
-                                <div><img :src="redTime" width="13px" height="13px"><span style="margin-left: 7px;">西坝河</span></div>
+                                <div><img :src="redTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">{{item.endtime}}</span></div>
+                                <div><img :src="redTime" width="13px" height="13px"><span style="margin-left: 7px;">{{item.endname}}</span></div>
                             </div>
                         </div>
                         <div>
-                            <van-button @click="" color="#0CC893" style="width: 66px;height: 37px;line-height: 37px;padding: 0">去抢票</van-button>
+                            <van-button @click="gobuyTicket(item)" color="#0CC893" style="width: 66px;height: 37px;line-height: 37px;padding: 0">去抢票</van-button>
                         </div>
                     </div>
                 </div>
@@ -71,6 +71,9 @@
             }
         },
         methods: {
+            gobuyTicket(item){
+                this.$router.push({path:'/buyTicket',query:{'busid':item.busid,'lineid':item.lineid}});
+            },
             initData() {
                 request.sendGet({
                     url: '/bus/list',
