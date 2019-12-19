@@ -11,17 +11,17 @@
                               @load="onConsumeDataLoad">
                         <div style="padding: 0 15px;background-color: white">
                             <van-row v-for="item in consumeData.data" :key="item.id" class="item">
-                                <van-col span="8" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.year}}
+                                <van-col span="8" class="item-text" style="text-align: left">
+                                    {{item.dealDate}}
                                 </van-col>
-                                <van-col span="4" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.time}}
+                                <van-col span="4" class="item-text">
+                                    {{item.dealTime}}
                                 </van-col>
-                                <van-col span="8" style="color:#202020;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.name}}
+                                <van-col span="8" class="item-text" style="color:#202020;">
+                                    {{item.dealTitle}}
                                 </van-col>
-                                <van-col span="4" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.value}}
+                                <van-col span="4" class="item-text" style="text-align: right">
+                                    -{{item.dealNumber}}
                                 </van-col>
                             </van-row>
                         </div>
@@ -32,17 +32,17 @@
                               @load="onIncomeDataLoad">
                         <div style="padding: 0 15px;background-color: white">
                             <van-row v-for="item in incomeData.data" :key="item.id" class="item">
-                                <van-col span="8" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.year}}
+                                <van-col span="8" class="item-text" style="text-align: left">
+                                    {{item.dealDate}}
                                 </van-col>
-                                <van-col span="4" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.time}}
+                                <van-col span="4" class="item-text">
+                                    {{item.dealTime}}
                                 </van-col>
-                                <van-col span="8" style="color:#202020;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.name}}
+                                <van-col span="8" class="item-text" style="color:#202020;">
+                                    {{item.dealTitle}}
                                 </van-col>
-                                <van-col span="4" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.value}}
+                                <van-col span="4" class="item-text" style="text-align: right">
+                                    +{{item.dealNumber}}
                                 </van-col>
                             </van-row>
                         </div>
@@ -53,17 +53,17 @@
                               @load="onRechargeDataLoad">
                         <div style="padding: 0 15px;background-color: white">
                             <van-row v-for="item in rechargeData.data" :key="item.id" class="item">
-                                <van-col span="8" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.year}}
+                                <van-col span="8" class="item-text" style="text-align: left">
+                                    {{item.dealDate}}
                                 </van-col>
-                                <van-col span="4" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.time}}
+                                <van-col span="4" class="item-text">
+                                    {{item.dealTime}}
                                 </van-col>
-                                <van-col span="8" style="color:#202020;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.name}}
+                                <van-col span="8" class="item-text"style="color:#202020;">
+                                    {{item.dealTitle}}
                                 </van-col>
-                                <van-col span="4" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.value}}
+                                <van-col span="4" class="item-text" style="color: #FF0200;text-align: right">
+                                    +{{item.dealNumber}}
                                 </van-col>
                             </van-row>
                         </div>
@@ -74,17 +74,17 @@
                               @load="onCashoutDataLoad">
                         <div style="padding: 0 15px;background-color: white">
                             <van-row v-for="item in cashoutData.data" :key="item.id" class="item">
-                                <van-col span="8" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.year}}
+                                <van-col span="8" class="item-text" style="text-align: left">
+                                    {{item.dealDate}}
                                 </van-col>
-                                <van-col span="4" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.time}}
+                                <van-col span="4" class="item-text">
+                                    {{item.dealTime}}
                                 </van-col>
-                                <van-col span="8" style="color:#202020;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.name}}
+                                <van-col span="8" class="item-text" style="color:#202020;">
+                                    {{item.dealTitle}}
                                 </van-col>
-                                <van-col span="4" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
-                                    {{item.value}}
+                                <van-col span="4" class="item-text" style="text-align: right">
+                                    -{{item.dealNumber}}
                                 </van-col>
                             </van-row>
                         </div>
@@ -317,6 +317,14 @@
 </script>
 
 <style scoped>
+    .item-text {
+        text-align: center;
+        color: #5E5E5E;
+        font-size: 14px;
+        height: 50px;
+        line-height: 50px
+    }
+
     /deep/ .van-tabs__nav--card {
         margin-left: 0;
         margin-right: 0;

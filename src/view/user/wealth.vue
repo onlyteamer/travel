@@ -70,12 +70,12 @@
                 </div>
                 <div class="func-wrap">
                     <div class="func-title">
-                        <van-field v-model="czje1" type="number" :border=false
+                        <van-field v-model="txje" type="number" :border=false
                                    placeholder="最低提现金额100" label="余额提现"/>
                         <span style="color: #5E5E5E;font-size: 17px">元</span>
                     </div>
                     <div class="func-content">
-                        <van-button style="width: 100%;height:40px" color="#5083ED" type="default">
+                        <van-button style="width: 100%;height:40px" color="#5083ED" type="default" @click="cashOut">
                             立即提现
                         </van-button>
                     </div>
@@ -102,8 +102,9 @@
 </template>
 <!--个人中心-充值提现-->
 <script>
-    import {NavBar, Row, Col, Field, Button} from 'vant';
+    import {NavBar, Row, Col, Field, Button, Toast} from 'vant';
     import request from "../../utils/request"
+    import wx from 'weixin-js-sdk';
 
     export default {
         components: {
@@ -112,26 +113,58 @@
             [Col.name]: Col,
             [Button.name]: Button,
             [Field.name]: Field,
+            [Toast.name]: Toast
         },
         data() {
             return {
-                dataMain:{
+                dataMain: {
                     balance: 0,
                     recharge: 0,
                     income: 0,
                     cashout: 0,
                     consume: 0,
                 },
-                czje:'',
-                czje1:''
+                czje: '',
+                txje: ''
             }
         },
         methods: {
+            cashOut() {
+                if (!this.txje || this.txje < 100) {
+                    Toast("提现金额不能低于一百");
+                    return;
+                }
+                if(this.txje>this.balance){
+                    Toast("提现金额不能大于总资产");
+                    return;
+                }
+                //提现
+                request.sendPost({
+                    url: '/user/center/cashout',
+                    params: {
+                        number: this.txje
+                    }
+                }).then((res)=>{
+                    Toast(res.data.msg);
+                })
+            },
             onClickLeft() {
                 this.$router.back(-1);
             },
             goDetail(e) {
                 this.$router.push({path: '/wealthDetail', query: {activeIndex: e}});
+            },
+            recharge() {
+                // {payfor}
+                //1、用户充值 2、拼车充值 3、班车充值 4、商城充值
+                request.sendPost({
+                    url: '/user/center/recharge/1',
+                    params: {
+                        number: this.czje
+                    }
+                }).then((res) => {
+
+                })
             },
             initData() {
                 request.sendGet({
@@ -145,7 +178,16 @@
             },
         },
         created() {
-            this.initData()
+            this.initData();
+            wx.config({
+                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: '', // 必填，公众号的唯一标识
+                timestamp: "", // 必填，生成签名的时间戳
+                nonceStr: '', // 必填，生成签名的随机串
+                signature: '',// 必填，签名，见附录1
+                jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+
         },
     }
 </script>
