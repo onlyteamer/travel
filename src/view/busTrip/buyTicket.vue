@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <van-nav-bar :fixed="true" title="昌坤出行3线" left-arrow @click-left="onClickLeft"/>
+            <van-nav-bar :fixed="true" :title="busInfo.linename" left-arrow @click-left="onClickLeft"/>
         </div>
         <div class="content">
             <div class="line-info-wrap">
@@ -9,8 +9,8 @@
                     <div>
                         <div>
                             <van-icon name="location" color="#0CC893"/>
-                            <span style="font-size: 16px">上河湾</span></div>
-                        <div style="text-align: center;font-size: 14px">6:40</div>
+                            <span style="font-size: 16px">{{busInfo.startname}}</span></div>
+                        <div style="text-align: center;font-size: 14px">{{busInfo.starttime}}</div>
                     </div>
                     <div>
                         <img src="../../static/images/right.png" width="51px" height="30px">
@@ -18,8 +18,8 @@
                     <div>
                         <div>
                             <van-icon name="location" color="#FF0200"/>
-                            <span style="font-size: 16px">西坝河</span></div>
-                        <div style="text-align: center;font-size: 14px">6:40</div>
+                            <span style="font-size: 16px">{{busInfo.endname}}</span></div>
+                        <div style="text-align: center;font-size: 14px">{{busInfo.endtime}}</div>
                     </div>
                 </div>
             </div>
@@ -69,6 +69,20 @@
         },
         data() {
             return {
+                busid:'',
+                lineid:'',
+                busInfo:{
+                    busnumber: "",
+                    endid: "",
+                    endname: "",
+                    endtime: "",
+                    lineid: "",
+                    linename: "",
+                    startid: "",
+                    startname: "",
+                    starttime: "",
+                    ticketPrice: ""
+                },
                 ticketData: {},
                 dateTitle: moment().format('YYYY月MM日'),
                 week: ["日", "一", "二", "三", "四", "五", "六"]
@@ -79,7 +93,31 @@
                 this.$router.back(-1);
             },
             buy() {
+                this.$router.push({path:'/ticketPayment'});
+            },
+            queryBus(){
+              request.sendPost({
+                  url: '/bus/selectLineInfo/'+this.busid,
+                  params: {}
+              }).then((res)=>{
+                  if(res.data.code===0){
+                      this.busInfo = res.data.data;
+                  }
 
+              })
+            },
+            initData(){
+                request.sendPost({
+                    url:'/bus/ticketlist',
+                    params:{
+                        month:moment().format("YYYY-MM-DD"),
+                        busid:this.busid,
+                        lineid:this.lineid
+                    }
+                }).then((res)=>{
+                    console.log(res.data);
+                    this.initKalendar();
+                })
             },
             initKalendar() {
                 let continuous = false;
@@ -97,7 +135,10 @@
             }
         },
         created() {
-            this.initKalendar();
+            this.busid = this.$route.query.busid;
+            this.lineid = this.$route.query.lineid;
+            this.initData();
+            this.queryBus();
         }
     }
 </script>
