@@ -16,8 +16,9 @@
                         background="#FFFFFF"
                         :left-icon="laba"
                         :scrollable="true"
+                        :text="notice"
                 >
-                    昌坤出行新版本与大家见面了！公告滚动循环！超出才会滚动
+
                 </van-notice-bar>
             </div>
         </div>
@@ -141,7 +142,7 @@
         },
         data(){
             return{
-                title:"验票",
+                notice:"",
                 blueTime: blueTime,
                 redTime: redTime,
                 down:down,
@@ -164,7 +165,29 @@
             }
         },
 
+        mounted(){
+            this.initNotice();
+            this.initData();
+        },
+
         methods: {
+            //通知
+            initNotice(){
+                request.sendGet({
+                    url:"/common/notice/list",
+                    params:{}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        let list = res.data.data;
+                        list.forEach(e =>{
+                            this.notice += e.title+"       ";
+
+                        });
+                    }
+                })
+
+            },
+
             onClickLeft() {
                 this.$router.back(-1);
             },

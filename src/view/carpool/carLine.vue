@@ -16,8 +16,8 @@
             <div class="placeTab">
                 <van-tabs type="card" color="#0CC893" title-active-color="#FFFFFF" title-inactive-color="#0CC893">
                     <van-tab title="全部"></van-tab>
-                    <van-tab title="去北京"></van-tab>
-                    <van-tab title="去密云"></van-tab>
+                    <van-tab :title="'去'+startPlace"></van-tab>
+                    <van-tab :title="'去'+endPlace"></van-tab>
                 </van-tabs>
             </div>
         </div>
@@ -136,6 +136,8 @@
                 isOneHttp: true,
                 loading: false,
                 finished: false,
+                startPlace:"",
+                endPlace:"",
                 dataMain: {
                     data: [],
                     pageSize: 6,
@@ -147,7 +149,11 @@
         mounted() {
             let info = JSON.parse(sessionStorage.getItem("queryStroke"));
 
-            this.title = "线路：" + info.startPlace + "←→" + info.endPlace;
+            this.title = "线路："+ info.lineName;
+
+            this.startPlace = info.startPlace;
+            this.endPlace = info.endPlace;
+
 
             this.active = Number(info.week)
         },
