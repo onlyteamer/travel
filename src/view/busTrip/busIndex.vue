@@ -1,30 +1,30 @@
 <template>
     <div class="contain">
         <div class="header">
-            <van-nav-bar
-                    title="绿色班车"
-                    left-text=""
-                    right-text=""
-                    left-arrow
-                    @click-left="onClickLeft"
-            />
-            <van-row type="flex" justify="center" gutter="30">
-                <van-col span="6">
-                    <div class="logo">
-                        <van-image
-                                width="60"
-                                height="60"
-                                :src="logo"
-                        />
-                    </div>
-                </van-col>
-                <van-col span="15">
-                    <div class="tag">
-                        <h3>昌坤出行</h3>
-                        <p>让你省心、安心、放心！</p>
-                    </div>
-                </van-col>
-            </van-row>
+            <Title :title="title" @onClickLeft="onClickLeft"></Title>
+            <!--<van-row type="flex" justify="center" gutter="30">-->
+                <!--<van-col span="6">-->
+                    <!--<div class="logo">-->
+                        <!--<van-image-->
+                                <!--width="60"-->
+                                <!--height="60"-->
+                                <!--:src="logo"-->
+                        <!--/>-->
+                    <!--</div>-->
+                <!--</van-col>-->
+                <!--<van-col span="15">-->
+                    <!--<div class="tag">-->
+                        <!--<h3>昌坤出行</h3>-->
+                        <!--<p>让你省心、安心、放心！</p>-->
+                    <!--</div>-->
+                <!--</van-col>-->
+            <!--</van-row>-->
+            <van-swipe :autoplay="3000" style="height: 200px">
+                <van-swipe-item v-for="(image, index) in images" :key="index">
+                    <!--<img :src="image" width="100px" height="100px"/>-->
+                    <div :style="{width: '100%',height: '100%',backgroundImage:'url('+image+')'}"></div>
+                </van-swipe-item>
+            </van-swipe>
         </div>
         <div class="notice">
             <van-notice-bar
@@ -32,8 +32,9 @@
                     background="#FFFFFF"
                     :left-icon="laba"
                     :scrollable="false"
+                    :text="notice"
             >
-                昌坤出行新版本与大家见面了！公告滚动循环！
+
             </van-notice-bar>
         </div>
         <div class="travel">
@@ -155,7 +156,9 @@
         TabbarItem,
         Toast,
         NoticeBar,
-        List
+        List,
+        Swipe,
+        SwipeItem
     } from 'vant';
     import logo from './../../static/images/logo.png'
     import laba from './../../static/images/laba.png'
@@ -167,11 +170,18 @@
     import user from './../../static/images/busTrip/user.png'
     import blueTime from './../../static/images/busTrip/blue_time.png'
     import redTime from './../../static/images/busTrip/red_time.png'
+
+    import backOne from './../../static/images/backOne.jpg'
+    import backTwo from './../../static/images/backTwo.jpg'
+
     import request from '../../utils/request'
     import moment from 'moment'
 
+    import Title from './../../components/header'
+
     export default {
         components: {
+            Title,
             [NavBar.name]: NavBar,
             [Row.name]: Row,
             [NoticeBar.name]: NoticeBar,
@@ -188,9 +198,17 @@
             [List.name]: List,
             [Tab.name]: Tab,
             [Tabs.name]: Tabs,
+            [Swipe.name]:Swipe,
+            [SwipeItem.name]:SwipeItem
         },
         data() {
             return {
+                notice:"",
+                images: [
+                    backOne,
+                    backTwo
+                ],
+                title:"绿色班车",
                 header_active: 0,
                 error: false,
                 loading: false,
@@ -216,8 +234,42 @@
         mounted() {
             //初始化列表
             this.initListData();
+
+            this.initNotice();
+
+            this.initAdvList();
         },
         methods: {
+            //广告位
+            initAdvList(){
+                //1-拼车 2-班车 3-班车验票
+                let positionId = 2;
+                request.sendGet({
+                    url:"/common/advertlist/"+ positionId,
+                    params:{}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        this.images = res.data.rows;
+                    }
+                })
+            },
+
+            //通知
+            initNotice(){
+                request.sendGet({
+                    url:"/common/notice/list",
+                    params:{}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        let list = res.data.data;
+                        list.forEach(e =>{
+                            this.notice += e.title+"       ";
+
+                        });
+                    }
+                })
+            },
+
             //列表
             initListData() {
 
@@ -322,8 +374,8 @@
     }
 
     .header {
-        background-image: linear-gradient(49deg, #05CF8A, #5C77FE);
-        opacity: 1;
+        /*background-image: linear-gradient(49deg, #05CF8A, #5C77FE);*/
+        /*opacity: 1;*/
     }
 
     .tag {
