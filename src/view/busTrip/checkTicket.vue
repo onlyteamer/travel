@@ -2,7 +2,7 @@
     <div class="contain">
         <Title :title="title" @onClickLeft="onClickLeft"></Title>
 
-        <van-swipe :autoplay="3000" style="height: 200px">
+        <van-swipe :autoplay="3000" style="height: 200px;margin-top: 46px">
             <van-swipe-item v-for="(image, index) in images" :key="index">
                 <!--<img :src="image" width="100px" height="100px"/>-->
                 <div :style="{width: '100%',height: '100%',backgroundImage:'url('+image+')'}"></div>
@@ -142,6 +142,7 @@
         },
         data(){
             return{
+                title:"验票",
                 notice:"",
                 blueTime: blueTime,
                 redTime: redTime,
@@ -168,9 +169,25 @@
         mounted(){
             this.initNotice();
             this.initData();
+
+            this.initAdvList();
         },
 
         methods: {
+
+            initAdvList(){
+                //1-拼车 2-班车 3-班车验票
+                let positionId = 3;
+                request.sendGet({
+                    url:"/common/advertlist/"+ positionId,
+                    params:{}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        this.images = res.data.rows;
+                    }
+                })
+            },
+
             //通知
             initNotice(){
                 request.sendGet({

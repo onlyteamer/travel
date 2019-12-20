@@ -19,7 +19,7 @@
                     <!--</div>-->
                 <!--</van-col>-->
             <!--</van-row>-->
-            <van-swipe :autoplay="3000" style="height: 200px">
+            <van-swipe :autoplay="3000" style="height: 200px;margin-top: 46px">
                 <van-swipe-item v-for="(image, index) in images" :key="index">
                     <!--<img :src="image" width="100px" height="100px"/>-->
                     <div :style="{width: '100%',height: '100%',backgroundImage:'url('+image+')'}"></div>
@@ -282,7 +282,7 @@
 
             this.initNotice();
 
-
+            this.initAdvList();
         },
         methods: {
             //通知
@@ -302,6 +302,19 @@
 
             },
 
+            //广告位
+            initAdvList(){
+                //1-拼车 2-班车 3-班车验票
+                let positionId = 1;
+                request.sendGet({
+                    url:"/common/advertlist/"+ positionId,
+                    params:{}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        this.images = res.data.rows;
+                    }
+                })
+            },
 
             //常用线路
             changeDefaultLine(val){
