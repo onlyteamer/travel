@@ -29,22 +29,22 @@
                     <span v-for="item in week" :key="item">{{item}}</span>
                 </div>
                 <div v-for="val in ticketData" class="date-li">
-                    <div v-for="item in val" class="date-item">
+                    <div v-for="item in val" :class="getItemClass(item)" ref="item" @click="addBuyTicket(item)">
                         <div>{{item?item.date:'&nbsp;&nbsp;&nbsp;&nbsp;'}}</div>
-                        <div class="" style="font-size: 12px;color: #202020">{{item?item.state:'&nbsp;&nbsp;&nbsp;&nbsp;'}}</div>
+                        <div :class="generateClassName(item)" style="font-size: 12px;">{{item?item.statename:'&nbsp;&nbsp;&nbsp;&nbsp;'}}</div>
                     </div>
                 </div>
             </div>
             <div class="tick-wrap">
                 <span style="color: #202020;font-size: 16px;">张数</span>
                 <span>
-                    <span style="color: #0CC893;font-size: 22px;">3</span>
+                    <span style="color: #0CC893;font-size: 22px;">{{num}}</span>
                     <span style="color: #202020;font-size: 16px;">张</span>
                 </span>
             </div>
             <div class="tick-wrap">
                 <span style="color: #202020;font-size: 16px;">票价</span>
-                <span style="color: #FF0200;font-size: 22px;">￥30</span>
+                <span style="color: #FF0200;font-size: 22px;">￥{{amount}}</span>
             </div>
             <div class="btn-wrap">
                 <van-button @click="buy" style="width: 100%;height:44px" color="#0CC893" type="default">
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-    import {NavBar, Button, Icon} from 'vant';
+    import {NavBar, Button, Icon, Toast} from 'vant';
     import Kalendar from 'kalendar';
     import request from '../../utils/request';
     import moment from 'moment';
@@ -66,12 +66,16 @@
             [NavBar.name]: NavBar,
             [Button.name]: Button,
             [Icon.name]: Icon,
+            [Toast.name]: Toast
         },
         data() {
             return {
-                busid:'',
-                lineid:'',
-                busInfo:{
+                num: 0,//购票张数
+                amount: 0,
+                chooseDate: [],
+                busid: '',
+                lineid: '',
+                busInfo: {
                     busnumber: "",
                     endid: "",
                     endname: "",
@@ -84,47 +88,122 @@
                     ticketPrice: ""
                 },
                 ticketData: {},
+                data: [],
                 dateTitle: moment().format('YYYY月MM日'),
                 week: ["日", "一", "二", "三", "四", "五", "六"]
             }
         },
         methods: {
+            getItemClass(item) {
+                if (item) {
+                    switch (item.state) {
+                        case 2:
+                            return 'date-item date-item-bought';
+                        case  5:
+                            return 'date-item date-item-sellOut';
+                        default:
+                            return 'date-item date-item-default';
+                    }
+                }
+                return 'date-item date-item-default';
+            },
+            generateClassName(item) {
+                if (item) {
+                    switch (item.state) {
+                        case 0:
+                            return '';
+                        case 1:
+                            return 'haveTicket';
+                        case 2:
+                            return 'bought';
+                        case 3:
+                            return 'rest';
+                        case 4:
+                            return 'saleStop';
+                        case 5:
+                            return 'sellOut';
+                    }
+                }
+            },
             onClickLeft() {
                 this.$router.back(-1);
             },
-            buy() {
-                this.$router.push({path:'/ticketPayment'});
-            },
-            queryBus(){
-              request.sendPost({
-                  url: '/bus/selectLineInfo/'+this.busid,
-                  params: {}
-              }).then((res)=>{
-                  if(res.data.code===0){
-                      this.busInfo = res.data.data;
-                  }
+            addBuyTicket(item) {
 
-              })
+                if (item && item.state === 1) {
+                    let index = this.chooseDate.indexOf(item.dateText);
+                    if(index ===-1){
+                        this.chooseDate.push(item.dateText);
+                        let el = this.$refs.item[item.date-1];
+                        el.style.backgroundColor='#0CC893';
+                        el.style.color='#fff';
+                        this.num +=1;
+                    }else{
+                        this.chooseDate.splice(index,1);
+                        let el = this.$refs.item[item.date-1];
+                        el.style.backgroundColor='#fff';
+                        el.style.color='#202020';
+                        this.num -=1;
+                    }
+                    this.amount = this.num * this.busInfo.ticketPrice;
+                }
             },
-            initData(){
+            buy() {
                 request.sendPost({
-                    url:'/bus/ticketlist',
-                    params:{
-                        month:moment().format("YYYY-MM-DD"),
-                        busid:this.busid,
-                        lineid:this.lineid
+                    url: '/bus/buyTicket',
+                    params: {
+                        busid: this.busid,
+                        dateStr: this.chooseDate,
+                        lineid: this.lineid,
                     }
                 }).then((res)=>{
                     console.log(res.data);
+                    this.$router.push({path: '/ticketPayment'});
+                });
+
+            },
+            queryBus() {
+                request.sendPost({
+                    url: '/bus/selectLineInfo/' + this.busid,
+                    params: {}
+                }).then((res) => {
+                    if (res.data.code === 0) {
+                        this.busInfo = res.data.data;
+                    }
+                })
+            },
+            initData() {
+                request.sendPost({
+                    url: '/bus/ticketlist',
+                    params: {
+                        month: moment().format("YYYY-MM"),
+                        busid: this.busid,
+                        lineid: this.lineid
+                    }
+                }).then((res) => {
+                    if (res.data.code === 0) {
+                        this.data = res.data.rows;
+                    } else {
+                        Toast(res.data.msg);
+                    }
                     this.initKalendar();
                 })
             },
             initKalendar() {
+                let arr = {};
+                if (this.data && this.data.length > 0) {
+                    for (let i = 0, len = this.data.length; i < len; i++) {
+                        let k = this.data[i].date;
+                        let v1 = this.data[i].statename;
+                        let v2 = this.data[i].state;
+                        arr[k] = {'statename': v1, 'state': v2};
+                    }
+                }
                 let continuous = false;
                 let date = new Date();
-                let mount = {};
+                let mount = arr;
                 let unifiedMount = {
-                    state: '售票'
+                    // state: '售票'
                 };
                 this.ticketData = Kalendar.monthly({
                     date: date,
@@ -132,6 +211,7 @@
                     unifiedMount: unifiedMount,
                     continuous: continuous
                 });
+                console.log(this.ticketData);
             }
         },
         created() {
@@ -144,6 +224,53 @@
 </script>
 
 <style scoped>
+    /*-----------日历模块样式start--------------*/
+    .saleStop {
+        color: #0CC893;
+    }
+
+    .haveTicket {
+        /*color: #202020;*/
+    }
+
+    .rest {
+        color: #FF0200;
+    }
+
+    .sellOut {
+        color: #5E5E5E;
+    }
+
+    .bought {
+        color: #fff;
+    }
+
+    .date-item-sellOut {
+        background-color: #CFCFCF;
+        color: #5E5E5E;
+    }
+
+    .date-item-default {
+        background-color: white;
+        color: #202020;
+    }
+
+    .date-item-bought {
+        background-color: #5083ED;
+        color: white;
+    }
+
+    .date-item {
+        border-right: 1px solid #ECECEC;
+        flex: 1;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    /*-----------日历模块样式end--------------*/
     .tick-wrap {
         height: 48px;
         background-color: white;
@@ -168,16 +295,6 @@
         border-bottom: 1px solid #ECECEC;
     }
 
-    .date-item {
-        background-color: white;
-        border-right: 1px solid #ECECEC;
-        flex: 1;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        justify-content: center;
-    }
 
     .date-title {
         height: 48px;
