@@ -25,23 +25,23 @@
 
         <div style="height: 10px;background: #FFFFFF;margin: 8px 0"></div>
 
-        <div class="dateTime">2019年12月01日</div>
+        <div class="dateTime">{{ticketInfo.dateStr}}</div>
 
-        <div class="btnStyle">马到成功</div>
+        <div class="btnStyle">{{ticketInfo.showcode}}</div>
 
         <div class="lineInfo">
             <van-row style="margin: 0 0 10px">
                 <van-col span="6" style="font-weight: bold">线路：</van-col>
-                <van-col span="18" style="color: #202020">昌坤出行3线</van-col>
+                <van-col span="18" style="color: #202020">{{ticketInfo.linename}}</van-col>
             </van-row>
 
             <van-row style="margin: 10px 0">
                 <van-col span="6" style="font-weight: bold">方向：</van-col>
-                <van-col span="18" style="color: #202020">上河湾 → 西坝河</van-col>
+                <van-col span="18" style="color: #202020">{{ticketInfo.startname}} → {{ticketInfo.endname}}</van-col>
             </van-row>
             <van-row style="margin: 10px 0">
                 <van-col span="6" style="font-weight: bold">票号：</van-col>
-                <van-col span="18" style="color: #202020">20191201030101</van-col>
+                <van-col span="18" style="color: #202020">{{ticketInfo.ticketid}}</van-col>
             </van-row>
             <van-row style="margin: 10px 0">
                 <van-col span="6" style="font-weight: bold">验证码：</van-col>
@@ -56,7 +56,7 @@
         <div class="lineTree">
             <van-row>
                 <van-col span="24" style="color: #5083ED">
-                    昌坤出行3线：上河湾 → 西坝河
+                    {{ticketInfo.linename}}：{{ticketInfo.startname}} → {{ticketInfo.endname}}
                 </van-col>
             </van-row>
             <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
@@ -64,43 +64,46 @@
                 <div>
                     <div style="display: flex;height:35px;line-height: 35px">
                         <div  style="margin-left: 45px"><img :src="blueTime" width="13px" height="13px"><span
-                                class="place" style="margin-left: 7px;margin-right: 13px">5:20</span></div>
+                                class="place" style="margin-left: 7px;margin-right: 13px">{{ticketInfo.starttime}}</span></div>
                         <div  style="margin-left: 35px"><img :src="blueTime" width="13px" height="13px"><span class="place"
-                                                                                   style="margin-left: 7px;">上河湾</span>
+                                                                                   style="margin-left: 7px;">{{ticketInfo.startname}}</span>
                         </div>
                     </div>
                     <div style="display: flex;height:35px;line-height: 35px">
                         <div style="margin-left: 45px"><img :src="redTime" width="13px" height="13px"><span class="place"
-                                                                                  style="margin-left: 7px;margin-right: 13px">5:20</span>
+                                                                                  style="margin-left: 7px;margin-right: 13px">{{ticketInfo.endtime}}</span>
                         </div>
                         <div style="margin-left: 35px"><img :src="redTime" width="13px" height="13px"><span class="place"
-                                                                                  style="margin-left: 7px;">西坝河</span>
+                                                                                  style="margin-left: 7px;">{{ticketInfo.endname}}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="item">
-                <div class="tag-wrap">
-                    <img :src="upTag">
-                    <img :src="downTag">
-                </div>
+
                 <div class="list-wrap">
-                    <van-list
-                            :offset="10"
-                            v-model="loading"
-                            :finished="finished"
-                            finished-text=""
-                            @load="onLoad"
-                            :immediate-check="false">
-                        <div v-for="(item,index) in 20" :key="item.id"
-                             :class='index==19?"item-li last-station":"item-li"'>
+                    <!--<div class="tag-wrap">-->
+                        <!--<img :src="upTag" style="position: absolute;top: 0px;width: 20px;height: 23px">-->
+                        <!--<img :src="downTag" style="position: absolute;bottom: 0px">-->
+                    <!--</div>-->
+                    <!--<van-list-->
+                            <!--:offset="10"-->
+                            <!--v-model="loading"-->
+                            <!--:finished="finished"-->
+                            <!--finished-text=""-->
+                            <!--@load="onLoad"-->
+                            <!--:immediate-check="false">-->
+                        <div v-for="(item,index) in lineDetailsList" :key="index"
+                             :class='index==(listSize-1)?"item-li last-station":"item-li"'>
+                            <img :src="upTag" style="position: absolute;top: 0px;width: 20px;height: 23px" v-if="index == '0'">
+                            <img :src="downTag" style="position: absolute;top: 0px;width: 20px;height: 23px" v-if="index == (listSize-1)">
                             <div class="station-item">
-                                <div class="name"><span style="margin-left: 5px">卧龙坡</span></div>
-                                <span class="time">06:54</span>
+                                <div class="name"><span style="margin-left: 5px">{{item.stationname}}</span></div>
+                                <span class="time">{{item.starttime}}</span>
                             </div>
                         </div>
-                    </van-list>
+                    <!--</van-list>-->
                 </div>
             </div>
             <div style="height: 42px; display: flex;align-items: center;justify-content: center">
@@ -156,12 +159,16 @@
                     backOne,
                     backTwo
                 ],
+                lineDetailsList:[],
+                listSize:"",
                 dataMain: {
                     data: [],
                     pageSize: 6,
                     pageNum: 1,
                     total: 0
                 },
+
+                ticketInfo:{},
                 isOneHttp: true,
             }
         },
@@ -171,6 +178,7 @@
             this.initData();
 
             this.initAdvList();
+
         },
 
         methods: {
@@ -209,34 +217,48 @@
                 this.$router.back(-1);
             },
             onLoad() {
-                if (this.dataMain.total > this.dataMain.data.length) {
-                    this.dataMain.pageNum += 1;
-                    this.initData();
-                }
+
             },
             initData() {
-                request.sendGet({
-                    url: '/sharecar/pass/list',
-                    params: {
-                        pageSize: this.dataMain.pageSize,
-                        pageNum: this.dataMain.pageNum,
+                let id = 1;
+                request.sendPost({
+                    url:"/bus/selectTicketInfo/"+ id,
+                    params:{
+                        id:id
                     }
-                }).then((res) => {
-                    this.dataMain.total = res.data.total;
-                    //判断是否是第一次请求数据
-                    if (this.isOneHttp) {
-                        this.dataMain.data = res.data.rows;
-                        this.isOneHttp = false;
-                    } else {
-                        this.dataMain.data = this.dataMain.data.concat(res.data.rows);
-                    }
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        this.ticketInfo = res.data.data;
+                        if(this.ticketInfo.date){
+                            let date = this.ticketInfo.date.slice(0,11);
+                            let arr = date.split("-");
+                            let str = "";
+                            arr.forEach((e,index) =>{
+                                str += e + (index =='0'?'年':(index == '1'?'月':'日'));
+                            });
+                            this.ticketInfo.dateStr = str;
+                        }
 
-                    if (this.dataMain.total === this.dataMain.data.length) {
-                        this.finished = true;
+                        this.queryLineDetailsList(this.ticketInfo.busid);
                     }
-                    this.loading = false;
-                });
+                })
             },
+
+            queryLineDetailsList(busid){
+                if(busid){
+                    request.sendGet({
+                        url:"/bus/lineDetailList",
+                        params:{
+                            id:busid
+                        }
+                    }).then(res =>{
+                        if(res.data.code == '0'){
+                            this.lineDetailsList = res.data.rows;
+                            this.listSize = res.data.total;
+                        }
+                    })
+                }
+            }
         }
     }
 </script>
@@ -305,7 +327,7 @@
 
     .tag-wrap {
         width: 20px;
-        height: 100%;
+        /*height: 100%;*/
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -320,6 +342,7 @@
         height: 100%;
         width: 100%;
         overflow-x:hidden;
+        position: relative;
     }
 
 
@@ -329,6 +352,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        margin-left: 20px;
     }
 
     .item-li:after {
@@ -338,12 +362,14 @@
         position: absolute;
         border-right: 1px solid #0CC893;
         height: 10px;
+        margin-left: 20px;
     }
 
     .item-li {
         position: relative;
         margin-bottom: 10px;
         margin-right: 5%;
+        margin-left: 20px;
     }
 
     .last-station:after {

@@ -31,7 +31,7 @@
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px;display: flex;align-items: center">
                 <van-col span="8">行驶路线</van-col>
                 <van-col span="16" class="valStyle">
-                    <van-field v-model="stroke.route" type="textarea" autosize placeholder="上河湾出发，李哥庄，绿地，果园，少年宫，万象城"/>
+                    <van-field v-model="stroke.tripLine" type="textarea" autosize placeholder="上河湾出发，李哥庄，绿地，果园，少年宫，万象城"/>
                 </van-col>
             </van-row>
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
@@ -216,6 +216,7 @@
                     params:{}
                 }).then(res =>{
                     if(res.data.code == '0'){
+
                         let carinfo = res.data.data.carinfo;
 
                         let lineinfo = res.data.data.lineinfo;
@@ -223,6 +224,8 @@
                         let carKey = Object.keys(carinfo);
                         console.log(carKey);
                         this.stroke.carInfo = carinfo[carKey[0]];
+                        this.stroke.tripId = tripId;
+                        this.stroke.carId = carKey;
 
                         this.stroke.seatCount = tripinfo.totalSeat;
                         this.stroke.tripPrice =  tripinfo.tripPrice;
@@ -232,7 +235,7 @@
 
                         this.stroke.directLine = lineinfo.lineName;
                         this.stroke.directLineid = lineinfo.lineId;
-                        this.stroke.route = lineinfo.tripLine;
+                        this.stroke.tripLine = tripinfo.tripLine;
                         // this.stroke.point = ;
                         this.stroke.direction = tripinfo.direction;
                         this.stroke.startPlace = lineinfo.startName;
@@ -292,8 +295,9 @@
                     Toast.fail("价格不能为空");
                     return;
                 }
+                console.log(this.stroke)
                 request.sendPost({
-                    url: '/sharecar/trip/updatet',
+                    url: '/sharecar/trip/update',
                     params: this.stroke
                 }).then((res) => {
                     if (res.data.code == 0) {

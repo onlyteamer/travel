@@ -32,7 +32,7 @@
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px;display: flex;align-items: center">
                 <van-col span="8">行驶路线</van-col>
                 <van-col span="16" class="valStyle">
-                    <van-field v-model="stroke.route" type="textarea" autosize placeholder="上河湾出发，李哥庄，绿地，果园，少年宫，万象城"/>
+                    <van-field v-model="stroke.tripLine" type="textarea" autosize placeholder="上河湾出发，李哥庄，绿地，果园，少年宫，万象城"/>
                 </van-col>
             </van-row>
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
@@ -266,7 +266,7 @@
                     Toast.fail("始发时间不能为空");
                     return;
                 }
-                if (!this.stroke.route) {
+                if (!this.stroke.tripLine) {
                     Toast.fail("行驶路线不能为空");
                     return;
                 }

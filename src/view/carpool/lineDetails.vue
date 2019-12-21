@@ -6,21 +6,21 @@
             <van-row style="display: flex;align-items: center">
                 <van-col span="12" >
                     <div style="display: flex;align-items: center">
-                        <img src="../../static/images/userAvatar.png" style="height: 44px;width: 44px;margin-right: 10px">
+                        <img :src="driverInfo.headImageurl" style="height: 44px;width: 44px;margin-right: 10px;border-radius: 50%">
                         <div>
-                            <p style="font-size: 14px;margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px"> </p>
+                            <p style="font-size: 14px;margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">{{driverInfo.nickName}}</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="driverInfo.sex == '1'"> <img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px"  v-else></p>
                             <p style="font-size: 14px;margin: 5px 0">
-                                <span style="color: #FFFFFF;border-radius: 2px;padding: 0px 5px;background-color: #5083ED;">京A***99</span>
+                                <span style="color: #FFFFFF;border-radius: 2px;padding: 0px 5px;background-color: #5083ED;">{{driverInfo.carNumber}}</span>
                             </p>
                         </div>
                     </div>
                 </van-col>
                 <van-col span="12">
                     <div style="padding: 3px 0">
-                        <img src="./../../static/images/tel.png" style="width: 14px" /><span style="font-size: 14px;color: #5E5E5E">13884997727</span>
+                        <img src="./../../static/images/tel.png" style="width: 14px" /><span style="font-size: 14px;color: #5E5E5E">{{driverInfo.phone}}</span>
                     </div>
                     <div style="padding: 0px 5px;border-radius: 3px;border: 1px solid #CFCFCF;font-size: 14px;width: fit-content">
-                        <span style="color: #CFCFCF;margin-right: 5px">好评数</span><img src="./../../static/images/xin.png" style="width: 14px"><span style="margin-left: 5px;color: #5E5E5E">231</span>
+                        <span style="color: #CFCFCF;margin-right: 5px">好评数</span><img src="./../../static/images/xin.png" style="width: 14px"><span style="margin-left: 5px;color: #5E5E5E">{{driverInfo.goodCount}}</span>
                     </div>
                 </van-col>
             </van-row>
@@ -116,6 +116,16 @@
                 tripDetails:{
                     startName:""
                 },
+                driverInfo:{
+                    carNumber: "",
+                    badCount: "",
+                    phone: "",
+                    goodCount: "",
+                    carName: "",
+                    nickName: "",
+                    headImageurl: "",
+                    sex: ""
+                },
                 tripId:""
             }
         },
@@ -126,6 +136,16 @@
         methods:{
             initData(){
                 this.tripId = this.$route.query.tripId;
+                request.sendGet({
+                    url:"/sharecar/pass/tripdetail/"+this.tripId,
+                    params: {}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        let driverinfo = res.data.data.driverinfo;
+                        this.driverInfo = driverinfo;
+                    }
+                })
+
 
                 request.sendGet({
                     url:"/sharecar/trip/select/" + this.tripId,

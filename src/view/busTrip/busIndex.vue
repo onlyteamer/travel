@@ -103,21 +103,21 @@
                     :offset="10"
                     :immediate-check="false"
             >
-                <div v-for="item in 10">
+                <div v-for="(item,index) in busTripList" :key="index">
                     <div class="card">
                         <div style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;height: 45px;justify-content: space-between">
-                            <span class="line">昌坤出行3线：上河湾 →  西坝河</span>
-                            <span class="list-price">￥20</span>
+                            <span class="line">{{item.linename}}：{{item.startname}} →  {{item.endname}}</span>
+                            <span class="list-price">￥{{item.ticketPrice}}</span>
                         </div>
                         <div style="display: flex;align-items: center;justify-content: space-between;height: 72px">
                             <div>
                                 <div style="display: flex;height:35px;line-height: 35px">
-                                    <div><img :src="blueTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">5:20</span></div>
-                                    <div><img :src="blueTime" width="13px" height="13px"><span  style="margin-left: 7px;">上河湾</span></div>
+                                    <div><img :src="blueTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">{{item.starttime}}</span></div>
+                                    <div><img :src="blueTime" width="13px" height="13px"><span  style="margin-left: 7px;">{{item.startname}}</span></div>
                                 </div>
                                 <div style="display: flex;height:35px;line-height: 35px">
-                                    <div><img :src="redTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">5:20</span></div>
-                                    <div><img :src="redTime" width="13px" height="13px"><span style="margin-left: 7px;">西坝河</span></div>
+                                    <div><img :src="redTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">{{item.endtime}}</span></div>
+                                    <div><img :src="redTime" width="13px" height="13px"><span style="margin-left: 7px;">{{item.endname}}</span></div>
                                 </div>
                             </div>
                             <div>
@@ -228,7 +228,8 @@
                     endPlace: "",
                     driveTime: "",
                     week: ""
-                }
+                },
+                busTripList:[]
             }
         },
         mounted() {
@@ -272,7 +273,19 @@
 
             //列表
             initListData() {
-
+                request.sendGet({
+                    url:"/bus/list",
+                    params:{
+                        pageNum:"1",
+                        pageSize:"10",
+                        //1-通勤 2-旅游
+                        type:"1"
+                    }
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        this.busTripList = this.busTripList.concat(res.data.rows);
+                    }
+                })
             },
 
             cancel() {

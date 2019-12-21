@@ -94,7 +94,7 @@
                             <van-col span="8">
                                 <van-button type="default" color="#0CC893"
                                             style="font-size: 14px;width: 95%;height: 34px"
-                                            size="mini">电话
+                                            size="mini" @click="showMobile(item.driverPhone)">电话
                                 </van-button>
                             </van-col>
                             <van-col span="8">
@@ -114,7 +114,7 @@
 
 <script>
     import Title from './../../components/header'
-    import {Tab, Tabs, Divider, Row, Col, Button,List} from 'vant';
+    import {Tab, Tabs, Divider, Row, Col, Button,List,Dialog} from 'vant';
     import request from "../../utils/request";
 
     export default {
@@ -127,7 +127,8 @@
             [Row.name]: Row,
             [Col.name]: Col,
             [Button.name]: Button,
-            [List.name]:List
+            [List.name]:List,
+            [Dialog.name]:Dialog
         },
         data() {
             return {
@@ -144,21 +145,38 @@
                     pageNum: 1,
                     total: 0
                 },
+
+                lineInfo:{
+
+                }
             }
         },
         mounted() {
             let info = JSON.parse(sessionStorage.getItem("queryStroke"));
-
+            this.lineInfo = info;
             this.title = "线路："+ info.lineName;
-
             this.startPlace = info.startPlace;
             this.endPlace = info.endPlace;
+            this.active = Number(info.week);
 
-
-            this.active = Number(info.week)
+            this.initData();
         },
 
         methods: {
+
+            //手机号
+            showMobile(val){
+                let mobile = "";
+                if(val){
+                    mobile = val;
+                }
+
+                Dialog.alert({
+                    message: '手机号:'+mobile
+                }).then(() => {
+                    // on close
+                });
+            },
 
             //跳转详情页
             linkStrokeDetails(tripId){
@@ -179,13 +197,20 @@
                 }
             },
             initData() {
-                //TODO 这里接口不正确,暂时使用的是行程列表接口
                 request.sendGet({
-                    url: '/sharecar/trip/list',
+                    url:"/sharecar/pass/select/"+ this.lineInfo.lineId,
                     params: {
-                        pageSize: this.dataMain.pageSize,
-                        pageNum: this.dataMain.pageNum,
+                        startDate:this.lineInfo.startDate,
+                        endDate:this.lineInfo.endDate,
+                        lineId:this.lineInfo.lineId,
+                        pageNum:"1",
+                        pageSize:"100"
                     }
+                    // url: '/sharecar/trip/list',
+                    // params: {
+                    //     pageSize: this.dataMain.pageSize,
+                    //     pageNum: this.dataMain.pageNum,
+                    // }
                 }).then((res) => {
                     this.dataMain.total = res.data.total;
                     //判断是否是第一次请求数据
@@ -204,7 +229,7 @@
             },
         },
         created() {
-            this.initData();
+
         }
     }
 </script>
@@ -227,7 +252,7 @@
         top: 48px;
         width: 100%;
         position: fixed;
-        z-index: 9999;
+        z-index: 999;
         background-color: #F6F6F6;
     }
 
