@@ -18,7 +18,6 @@
                         :scrollable="true"
                         :text="notice"
                 >
-
                 </van-notice-bar>
             </div>
         </div>
@@ -27,7 +26,7 @@
 
         <div class="dateTime">{{ticketInfo.dateStr}}</div>
 
-        <div class="btnStyle">{{ticketInfo.showcode}}</div>
+        <div class="btnStyle" @click="checkTicket">{{ticketInfo.showcode}}</div>
 
         <div class="lineInfo">
             <van-row style="margin: 0 0 10px">
@@ -117,7 +116,7 @@
 
 <script>
     import Title from './../../components/header'
-    import { Row, Col,Tag, Divider,Swipe, SwipeItem ,NoticeBar,List } from 'vant'
+    import { Row, Col,Tag, Divider,Swipe, SwipeItem ,NoticeBar,List,Toast } from 'vant'
     import backOne from './../../static/images/backOne.jpg'
     import backTwo from './../../static/images/backTwo.jpg'
     import laba from './../../static/images/laba.png'
@@ -141,7 +140,8 @@
             [Swipe.name]:Swipe,
             [SwipeItem.name]:SwipeItem,
             [NoticeBar.name]:NoticeBar,
-            [List.name]:List
+            [List.name]:List,
+            [Toast.name]:Toast
         },
         data(){
             return{
@@ -216,6 +216,24 @@
             onClickLeft() {
                 this.$router.back(-1);
             },
+
+            //验票
+            checkTicket(){
+                request.sendPost({
+                    url:"/bus/driverChecking",
+                    params:{
+                        isdriver:0,
+                        ticketid:this.ticketInfo.ticketid
+                    }
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        Toast.success("验票成功")
+                    }else {
+                        Toast.fail(res.data.msg)
+                    }
+                })
+            },
+
             onLoad() {
 
             },
@@ -234,7 +252,7 @@
                             let arr = date.split("-");
                             let str = "";
                             arr.forEach((e,index) =>{
-                                str += e + (index =='0'?'年':(index == '1'?'月':'日'));
+                                str += e.trim() + (index =='0'?'年':(index == '1'?'月':'日'));
                             });
                             this.ticketInfo.dateStr = str;
                         }
