@@ -12,7 +12,7 @@
                     @load="onLoad"
                     :immediate-check="false"
             >
-                <div v-for="item in 10" :key="item">
+                <div v-for="item in 10" :key="item" @click="linkBusDetail(item.busid)">
                     <div class="card">
                         <div style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;height: 45px;justify-content: space-between">
                             <span class="line">昌坤出行3线：上河湾 →  西坝河</span>
@@ -92,6 +92,10 @@
                     this.loading = false;
                 });
             },
+            linkBusDetail(val){
+                this.$router.push({path:"/busDetail",query:{busid:val}})
+            },
+
             onClickLeft() {
                 this.$router.back(-1);
             },

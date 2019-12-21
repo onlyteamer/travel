@@ -6,48 +6,47 @@
         </div>
         <div class="content">
             <div class="info-wrap">
-                <div>
+                <div style="width: 80%">
                     <div style="display: flex;height:35px;line-height: 35px">
-                        <div><img :src="blueTime" width="13px" height="13px"><span
-                                class="place" style="margin-left: 7px;margin-right: 13px">5:20</span></div>
-                        <div><img :src="blueTime" width="13px" height="13px"><span class="place"
-                                                                                   style="margin-left: 7px;">上河湾</span>
+                        <div style="width: 37%"><img :src="blueTime" width="13px" height="13px"><span
+                                class="place" style="margin-left: 7px;margin-right: 13px">{{lineDetails.starttime}}</span></div>
+                        <div><img :src="blueTime" width="13px" height="13px"><span class="place" style="margin-left: 7px;">{{lineDetails.startname}}</span>
                         </div>
                     </div>
                     <div style="display: flex;height:35px;line-height: 35px">
-                        <div><img :src="redTime" width="13px" height="13px"><span class="place"
-                                                                                  style="margin-left: 7px;margin-right: 13px">5:20</span>
+                        <div style="width: 37%"><img :src="redTime" width="13px" height="13px"><span class="place" style="margin-left: 7px;margin-right: 13px">{{lineDetails.endtime}}</span>
                         </div>
-                        <div><img :src="redTime" width="13px" height="13px"><span class="place"
-                                                                                  style="margin-left: 7px;">西坝河</span>
+                        <div><img :src="redTime" width="13px" height="13px"><span class="place" style="margin-left: 7px;">{{lineDetails.endname}}</span>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <span class="list-price">￥20</span>
+                    <span class="list-price">￥{{lineDetails.ticketPrice}}</span>
                 </div>
             </div>
             <div class="item">
-                <div class="tag-wrap">
-                    <img :src="upTag">
-                    <img :src="downTag">
-                </div>
+                <!--<div class="tag-wrap">-->
+                    <!--<img :src="upTag">-->
+                    <!--<img :src="downTag">-->
+                <!--</div>-->
                 <div class="list-wrap">
-                    <van-list
-                            :offset="10"
-                            v-model="loading"
-                            :finished="finished"
-                            finished-text=""
-                            @load="onLoad"
-                            :immediate-check="false">
-                        <div v-for="(item,index) in 20" :key="item.id"
-                             :class='index==19?"item-li last-station":"item-li"'>
+                    <!--<van-list-->
+                            <!--:offset="10"-->
+                            <!--v-model="loading"-->
+                            <!--:finished="finished"-->
+                            <!--finished-text=""-->
+                            <!--@load="onLoad"-->
+                            <!--:immediate-check="false">-->
+                        <div v-for="(item,index) in lineDetailsList" :key="item.id"
+                             :class='index==(listSize-1)?"item-li last-station":"item-li"'>
+                            <img :src="upTag" style="position: absolute;top: 0px;width: 20px;height: 23px" v-if="index == '0'">
+                            <img :src="downTag" style="position: absolute;top: 0px;width: 20px;height: 23px" v-if="index == (listSize-1)">
                             <div class="station-item">
                                 <div class="name"><span style="margin-left: 5px">卧龙坡</span></div>
                                 <span class="time">06:54</span>
                             </div>
                         </div>
-                    </van-list>
+                    <!--</van-list>-->
                 </div>
             </div>
             <div style="height: 42px; display: flex;align-items: center;justify-content: center">
@@ -102,12 +101,11 @@
                     lat: "39.865042",
                     lon: "116.379028"
                 },
-                dataMain: {
-                    data: [],
-                    pageSize: 6,
-                    pageNum: 1,
-                    total: 0
+                lineDetails:{
+
                 },
+                lineDetailsList:[],
+                listSize:""
             }
         },
         methods: {
@@ -115,37 +113,37 @@
 
             },
             initData() {
-                request.sendGet({
-                    url: '/sharecar/pass/list',
-                    params: {
-                        pageSize: this.dataMain.pageSize,
-                        pageNum: this.dataMain.pageNum,
-                    }
-                }).then((res) => {
-                    this.dataMain.total = res.data.total;
-                    //判断是否是第一次请求数据
-                    if (this.isOneHttp) {
-                        this.dataMain.data = res.data.rows;
-                        this.isOneHttp = false;
-                    } else {
-                        this.dataMain.data = this.dataMain.data.concat(res.data.rows);
-                    }
+                let busid = this.$route.query.busid;
+                request.sendPost({
+                    url:"/bus/selectLineInfo/"+ busid,
+                    params:{}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        this.lineDetails = res.data.data;
 
-                    if (this.dataMain.total === this.dataMain.data.length) {
-                        this.finished = true;
+                        this.queryLineDetailsList(busid);
                     }
-                    this.loading = false;
-                });
+                })
             },
-            onClickLeft() {
-                this.$router.back(-1);
-            },
-            onLoad() {
-                if (this.dataMain.total > this.dataMain.data.length) {
-                    this.dataMain.pageNum += 1;
-                    this.initData();
+            queryLineDetailsList(busid){
+                if(busid){
+                    request.sendGet({
+                        url:"/bus/lineDetailList",
+                        params:{
+                            id:busid
+                        }
+                    }).then(res =>{
+                        if(res.data.code == '0'){
+                            this.lineDetailsList = res.data.rows;
+                            this.listSize = res.data.total;
+                        }
+                    })
                 }
             },
+
+            onClickLeft() {
+                this.$router.back(-1);
+            }
         },
         created() {
             this.initData();
@@ -218,6 +216,7 @@
         height: 100%;
         width: 100%;
         overflow-x:hidden;
+        position: relative;
     }
 
     /deep/ .van-list {
@@ -233,6 +232,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        margin-left: 20px;
     }
 
     .item-li:after {
@@ -242,6 +242,7 @@
         position: absolute;
         border-right: 1px solid #0CC893;
         height: 10px;
+        margin-left: 20px;
     }
 
     .item-li {

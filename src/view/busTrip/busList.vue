@@ -12,7 +12,7 @@
                 @load="onLoad"
                 :immediate-check="false"
         >
-            <div v-for="item in dataMain.data" :key="item.id">
+            <div v-for="item in dataMain.data" :key="item.id" @click="linkBusDetail(item.busid)">
                 <div class="card">
                     <div style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;height: 45px;justify-content: space-between">
                         <span class="line">{{item.linename}}：{{item.startname}} →  {{item.endname}}</span>
@@ -98,6 +98,11 @@
                     this.loading = false;
                 });
             },
+            linkBusDetail(val){
+                this.$router.push({path:"/busDetail",query:{busid:val}})
+            },
+
+
             onClickLeft() {
                 this.$router.back(-1);
             },

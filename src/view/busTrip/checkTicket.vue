@@ -60,19 +60,19 @@
             </van-row>
             <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
             <div class="info-wrap">
-                <div>
+                <div style="width: 90%">
                     <div style="display: flex;height:35px;line-height: 35px">
-                        <div  style="margin-left: 45px"><img :src="blueTime" width="13px" height="13px"><span
+                        <div  style="margin-left: 45px;width: 25%"><img :src="blueTime" width="13px" height="13px"><span
                                 class="place" style="margin-left: 7px;margin-right: 13px">{{ticketInfo.starttime}}</span></div>
-                        <div  style="margin-left: 35px"><img :src="blueTime" width="13px" height="13px"><span class="place"
+                        <div  style="margin-left: 10px"><img :src="blueTime" width="13px" height="13px"><span class="place"
                                                                                    style="margin-left: 7px;">{{ticketInfo.startname}}</span>
                         </div>
                     </div>
                     <div style="display: flex;height:35px;line-height: 35px">
-                        <div style="margin-left: 45px"><img :src="redTime" width="13px" height="13px"><span class="place"
+                        <div style="margin-left: 45px;width: 25%"><img :src="redTime" width="13px" height="13px"><span class="place"
                                                                                   style="margin-left: 7px;margin-right: 13px">{{ticketInfo.endtime}}</span>
                         </div>
-                        <div style="margin-left: 35px"><img :src="redTime" width="13px" height="13px"><span class="place"
+                        <div style="margin-left: 10px"><img :src="redTime" width="13px" height="13px"><span class="place"
                                                                                   style="margin-left: 7px;">{{ticketInfo.endname}}</span>
                         </div>
                     </div>
