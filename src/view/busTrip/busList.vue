@@ -56,6 +56,7 @@
         },
         data() {
             return {
+
                 isOneHttp: true,
                 loading: false,
                 finished: false,
@@ -115,6 +116,7 @@
         },
         created() {
             this.initData();
+
         }
     }
 </script>

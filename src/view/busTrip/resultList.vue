@@ -12,27 +12,39 @@
                     @load="onLoad"
                     :immediate-check="false"
             >
-                <div v-for="item in 10" :key="item" @click="linkBusDetail(item.busid)">
+                <div v-for="item in dataMain.data" :key="item.id">
                     <div class="card">
                         <div style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;height: 45px;justify-content: space-between">
-                            <span class="line">昌坤出行3线：上河湾 →  西坝河</span>
-                            <span class="list-price">￥20</span>
+                            <span class="line">{{item.linename}}：{{item.startname}} →  {{item.endname}}</span>
+                            <span class="list-price">￥{{item.ticketPrice}}</span>
                         </div>
-                        <div style="display: flex;align-items: center;justify-content: space-between;height: 72px">
-                            <div>
-                                <div style="display: flex;height:35px;line-height: 35px">
-                                    <div><img :src="blueTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">5:20</span></div>
-                                    <div><img :src="blueTime" width="13px" height="13px"><span  style="margin-left: 7px;">上河湾</span></div>
-                                </div>
-                                <div style="display: flex;height:35px;line-height: 35px">
-                                    <div><img :src="redTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">5:20</span></div>
-                                    <div><img :src="redTime" width="13px" height="13px"><span style="margin-left: 7px;">西坝河</span></div>
-                                </div>
-                            </div>
-                            <div>
-                                <van-button @click="" color="#0CC893" style="width: 66px;height: 37px;line-height: 37px;padding: 0">去抢票</van-button>
-                            </div>
-                        </div>
+                       <div style="display: flex;align-items: center;justify-content: space-between">
+                           <div @click="linkBusDetail(item.busid)"
+                                style="display: flex;align-items: center;justify-content: space-between;height: 72px">
+                               <div>
+                                   <div style="display: flex;height:35px;line-height: 35px">
+                                       <div><img :src="blueTime" width="13px" height="13px"><span
+                                               style="margin-left: 7px;margin-right: 13px">{{item.starttime}}</span>
+                                       </div>
+                                       <div><img :src="blueTime" width="13px" height="13px"><span
+                                               style="margin-left: 7px;">{{item.startname}}</span></div>
+                                   </div>
+                                   <div style="display: flex;height:35px;line-height: 35px">
+                                       <div><img :src="redTime" width="13px" height="13px"><span
+                                               style="margin-left: 7px;margin-right: 13px">{{item.endtime}}</span>
+                                       </div>
+                                       <div><img :src="redTime" width="13px" height="13px"><span
+                                               style="margin-left: 7px;">{{item.endname}}</span></div>
+                                   </div>
+                               </div>
+                           </div>
+                           <div>
+                               <van-button @click="gobuyTicket(item)" color="#0CC893"
+                                           style="width: 66px;height: 37px;line-height: 37px;padding: 0">去抢票
+                               </van-button>
+                           </div>
+                       </div>
+
                     </div>
                 </div>
             </van-list>
@@ -41,20 +53,24 @@
 </template>
 
 <script>
-    import {NavBar, Toast, List,Image, Button} from 'vant';
+    import {NavBar, Toast, List, Image, Button} from 'vant';
     import request from "../../utils/request";
     import blueTime from './../../static/images/busTrip/blue_time.png'
     import redTime from './../../static/images/busTrip/red_time.png'
+
     export default {
         components: {
-            [NavBar.name]:NavBar,
-            [Image.name]:Image,
-            [Toast.name]:Toast,
-            [List.name]:List,
+            [NavBar.name]: NavBar,
+            [Image.name]: Image,
+            [Toast.name]: Toast,
+            [List.name]: List,
             [Button.name]: Button,
         },
         data() {
             return {
+                end: '',
+                start: '',
+                type: '',
                 isOneHttp: true,
                 loading: false,
                 finished: false,
@@ -71,10 +87,13 @@
         methods: {
             initData() {
                 request.sendGet({
-                    url: '',
+                    url: '/bus/list',
                     params: {
+                        end: this.end,
+                        start: this.start,
                         pageSize: this.dataMain.pageSize,
                         pageNum: this.dataMain.pageNum,
+                        type: this.type,
                     }
                 }).then((res) => {
                     this.dataMain.total = res.data.total;
@@ -83,7 +102,7 @@
                         this.dataMain.data = res.data.rows;
                         this.isOneHttp = false;
                     } else {
-                        this.dataMain.data=this.dataMain.data.concat(res.data.rows);
+                        this.dataMain.data = this.dataMain.data.concat(res.data.rows);
                     }
 
                     if (this.dataMain.total === this.dataMain.data.length) {
@@ -92,8 +111,11 @@
                     this.loading = false;
                 });
             },
-            linkBusDetail(val){
-                this.$router.push({path:"/busDetail",query:{busid:val}})
+            gobuyTicket(item) {
+                this.$router.push({path: '/buyTicket', query: {'busid': item.busid, 'lineid': item.lineid}});
+            },
+            linkBusDetail(val) {
+                this.$router.push({path: "/busDetail", query: {busid: val}})
             },
 
             onClickLeft() {
@@ -107,7 +129,10 @@
             },
         },
         created() {
-            // this.initData();
+            this.start = this.$route.query.startPlace;
+            this.end = this.$route.query.endPlace;
+            this.type = this.$route.query.type === 0 ? '1' : '2';
+            this.initData();
         }
     }
 </script>
@@ -116,16 +141,19 @@
     /deep/ .van-nav-bar .van-icon {
         color: #5E5E5E
     }
+
     .content {
         padding: 15px;
         margin-top: 46px;
     }
+
     .card {
         font-size: 14px;
         padding: 0 5px;
         margin-bottom: 10px;
         background: #fff;
     }
+
     .line {
         color: #5083ED;
         font-size: 14px;

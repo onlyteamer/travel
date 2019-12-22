@@ -28,13 +28,15 @@
                                         <div>
                                             <div style="display: flex;height:35px;line-height: 35px">
                                                 <div><img :src="blueTime" width="13px" height="13px"><span
-                                                        style="margin-left: 7px;margin-right: 13px">{{item.starttime}}</span></div>
+                                                        style="margin-left: 7px;margin-right: 13px">{{item.starttime}}</span>
+                                                </div>
                                                 <div><img :src="blueTime" width="13px" height="13px"><span
                                                         style="margin-left: 7px;">{{item.startname}}</span></div>
                                             </div>
                                             <div style="display: flex;height:35px;line-height: 35px">
                                                 <div><img :src="redTime" width="13px" height="13px"><span
-                                                        style="margin-left: 7px;margin-right: 13px">{{item.endtime}}</span></div>
+                                                        style="margin-left: 7px;margin-right: 13px">{{item.endtime}}</span>
+                                                </div>
                                                 <div><img :src="redTime" width="13px" height="13px"><span
                                                         style="margin-left: 7px;">{{item.endname}}</span></div>
                                             </div>
@@ -64,7 +66,9 @@
                                                    v-for="(item,index) in tripAllList.dateList" :key="index">
                                     <van-row v-for="(line,indexNum) in tripAllList.data" :key="line.id"
                                              style="margin-bottom: 10px;color: #5083ED">
-                                        <van-col span="14" style="color: #5083ED;font-size: 14px;font-weight: bold">{{line.linename}}：{{line.startname}}->{{line.endname}}</van-col>
+                                        <van-col span="14" style="color: #5083ED;font-size: 14px;font-weight: bold">
+                                            {{line.linename}}：{{line.startname}}->{{line.endname}}
+                                        </van-col>
                                         <van-col span="10" style="color: #0CC893;text-align: right;font-size: 14px;">
                                             <div style="display: inline-block">
                                                 <van-button type="default" size="small" @click="checkTicket(line.id)"
@@ -110,7 +114,8 @@
                                                    v-for="(item,index) in refund.dateList" :key="index">
                                     <van-row v-for="(line,indexNum) in refund.data" :key="line.id"
                                              style="margin-bottom: 10px;color: #202020;font-weight: bold">
-                                        <van-col span="18" style="color: #5083ED;font-size: 14px;font-weight: bold">{{line.linename}}：{{line.startname}}->{{line.endname}}
+                                        <van-col span="18" style="color: #5083ED;font-size: 14px;font-weight: bold">
+                                            {{line.linename}}：{{line.startname}}->{{line.endname}}
                                         </van-col>
                                         <van-col span="6" style="color: #5E5E5E;text-align: right">{{line.flag ==
                                             '3'?'已退款':''}}
@@ -149,10 +154,13 @@
         data() {
             return {
                 tripName: '',
+                tripName2: '',
                 showAll: true,
                 refundNum: '',
+                refundNum2: '',
                 activeName: '',
-                currentDate: moment().format("YYYY年MM月"),
+                activeName2: '',
+                currentDate: moment().format("YYYY年MM月DD日"),
                 header_active: 0,
                 active: 0,
                 blueTime: blueTime,
@@ -194,23 +202,24 @@
             }
         },
         methods: {
-            checkTicket(id){
-              this.$router.push({path:'/checkTicket',query:{'id':id}});
+            checkTicket(id) {
+                this.$router.push({path: '/checkTicket', query: {'id': id}});
             },
-            refundTicket(id){
+            refundTicket(id) {
                 request.sendPost({
-                    url:'/bus/refundTicket',
-                    params:{
-                        ticketid:id
+                    url: '/bus/refundTicket',
+                    params: {
+                        ticketid: id
                     }
-                }).then((res)=>{
-                    if(res.data.code===0){
+                }).then((res) => {
+                    if (res.data.code === 0) {
 
-                    }else{
+                    } else {
                         Toast(res.data.msg);
                     }
                 })
             },
+
             onClick() {
                 switch (this.active) {
                     case 0:
@@ -257,15 +266,16 @@
             },
 
             initTripAllList() {
+                this.tripName2 = this.tripName?this.tripName:this.tripName2;
                 request.sendPost({
                     url: '/bus/checklist',
                     params: {
                         ischeck: 0,
                         isrefund: 0,
-                        dateStr:this.tripName
+                        dateStr: this.tripName?this.tripName:this.tripName2
                     }
                 }).then((res) => {
-                        this.tripAllList.data = res.data.rows;
+                    this.tripAllList.data = res.data.rows;
                 })
             },
             initTripAllDateList() {
@@ -291,6 +301,11 @@
                         this.tripAllList.finished = true;
                     }
                     this.tripAllList.loading = false;
+                    if (this.tripAllList.dateList && this.tripAllList.dateList.length > 0) {
+                        this.tripName = this.tripAllList.dateList[0].date;
+                        this.tripName2 = this.tripAllList.dateList[0].date;
+                        this.initTripAllList();
+                    }
                 })
             },
             onTorideLoadAll() {
@@ -306,7 +321,7 @@
                 this.tripAllList.loading = false;
                 this.tripAllList.finished = false;
                 this.tripAllList.data = [];
-                this.tripAllList.dateList=[];
+                this.tripAllList.dateList = [];
                 this.tripAllList.pageNum = 1;
                 this.tripAllList.total = 0;
                 this.initTripAllDateList();
@@ -321,10 +336,11 @@
                 }
             },
             initRefundData() {
+                this.refundNum2 = this.refundNum ? this.refundNum : this.refundNum2;
                 request.sendPost({
                     url: '/bus/refundlist',
                     params: {
-                        dateStr: this.refundNum
+                        dateStr: this.refundNum ? this.refundNum : this.refundNum2
                     }
                 }).then((res) => {
                     this.refund.data = res.data.rows;
@@ -351,6 +367,11 @@
                         this.refund.finished = true;
                     }
                     this.refund.loading = false;
+                    if (this.refund.dateList && this.refund.dateList.length > 0) {
+                        this.refundNum = this.refund.dateList[0].date;
+                        this.refundNum2 = this.refund.dateList[0].date;
+                        this.initRefundData();
+                    }
                 })
             },
             onAllOrderLoad() {
@@ -360,10 +381,12 @@
                 }
             },
             changeAllOrder() {
+                this.activeName2 = this.activeName?this.activeName:this.activeName2;
+                console.log(this.activeName?this.activeName:this.activeName2);
                 request.sendPost({
                     url: '/bus/checklist',
                     params: {
-                        dateStr: this.activeName,
+                        dateStr: this.activeName?this.activeName:this.activeName2
                     }
                 }).then((res) => {
                     this.allOrder.data = res.data.rows;
@@ -392,6 +415,7 @@
                     this.allOrder.loading = false;
                     if (this.allOrder.dateList && this.allOrder.dateList.length > 0) {
                         this.activeName = this.allOrder.dateList[0].date;
+                        this.activeName2 = this.allOrder.dateList[0].date;
                         this.changeAllOrder();
                     }
                 })
@@ -405,7 +429,7 @@
                         isrefund: 0,
                     }
                 }).then((res) => {
-                        this.toride.data = res.data.rows;
+                    this.toride.data = res.data.rows;
                 })
             },
             linkBusDetail(val) {

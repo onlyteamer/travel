@@ -305,23 +305,20 @@
                 this.$router.back(-1);
             },
             goCarList() {
-                // console.log(this.strokeInfo)
-                // if (!this.strokeInfo.startPlace) {
-                //     Toast.fail("请填写出发地点");
-                //     return;
-                // }
-                // if (!this.strokeInfo.endPlace) {
-                //     Toast.fail("请填写目的地点");
-                //     return;
-                // }
-                // if (!this.strokeInfo.driveTime) {
-                //     Toast.fail("请填写乘车时间");
-                //     return;
-                // }
-                // sessionStorage.removeItem("queryStroke");
-                // sessionStorage.setItem("queryStroke", JSON.stringify(this.strokeInfo));
-                // this.$router.push({path: '/carLine'});
-            }
+                if (!this.strokeInfo.startPlace) {
+                    Toast.fail("请填写出发地点");
+                    return;
+                }
+                if (!this.strokeInfo.endPlace) {
+                    Toast.fail("请填写目的地点");
+                    return;
+                }
+                this.$router.push({path: '/resultList',query:{
+                        startPlace:this.strokeInfo.startPlace,
+                        endPlace:this.strokeInfo.endPlace,
+                        type:this.header_active
+                    }});
+            },
         },
         created() {
         },
