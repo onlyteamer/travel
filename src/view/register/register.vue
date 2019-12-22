@@ -34,6 +34,8 @@
 <script>
     import {Field, Button, Checkbox, Image, Toast} from 'vant';
     import request from '../../utils/request';
+    import axios from 'axios';
+    import qs from 'querystring'
 
     export default {
         components: {
@@ -61,21 +63,18 @@
                 content.style.height = height + 'px';
             },
             checkPhone(phone) {
-                if(!(/^1[3456789]\d{9}$/.test(phone))){
+                if (!(/^1[3456789]\d{9}$/.test(phone))) {
                     return false;
                 }
                 return true;
             },
             async sendCode() {
-                if (this.definition.phone&&this.checkPhone(this.definition.phone)) {
+                if (this.definition.phone && this.checkPhone(this.definition.phone)) {
                     this.countDown(60);
-                    request.sendGet({
-                        url: 'getcode',
-                        params: {
-                            phone: this.definition.phone
-                        }
-                    }).then((res) => {
-                    })
+                    axios.get("http://gstpapi.huntauto.com.cn/wx/getcode?" + qs.stringify({phone: this.definition.phone}))
+                        .then((res) => {
+
+                        })
                 } else {
                     Toast('请输入正确的手机号');
                 }
@@ -98,48 +97,44 @@
             },
             // 登录
             login() {
-                if(!(this.definition.phone&&this.checkPhone(this.definition.phone))){
+                if (!(this.definition.phone && this.checkPhone(this.definition.phone))) {
                     Toast('请输入正确的手机号');
                     return;
                 }
-                if(!this.definition.code){
+                if (!this.definition.code) {
                     Toast('请输入验证码');
                     return;
                 }
-                if(!this.definition.checked){
+                if (!this.definition.checked) {
                     return;
                 }
-                request.sendPost({
-                    url:'/bindphone',
-                    params:{
-                        openid:localStorage.getItem('openid'),
-                        code:this.definition.code,
-                        phone:this.definition.phone,
-                    }
-                }).then((res)=>{
-                    if(res.data.code==0){
-                        request.sendPost({
-                            url:'/wx/login',
-                            params: {
-                                openid:localStorage.getItem('openid'),
-                            }
-                        }).then((res)=>{
-                            if(res.data.data.isLogin==="1"){
+                axios.post(
+                    'http://gstpapi.huntauto.com.cn/bindphone', qs.stringify(
+                        {
+                            openid: localStorage.getItem('openid'),
+                            code: this.definition.code,
+                            phone: this.definition.phone,
+                        })
+                ).then((res) => {
+                    if (res.data.code == 0) {
+                        axios.post(
+                            'http://gstpapi.huntauto.com.cn/wx/login', qs.stringify({openid: localStorage.getItem('openid')})).then((res) => {
+                            if (res.data.data.isLogin === "1") {
                                 //登陆成功
-                                localStorage.setItem("isLogin","1");
+                                localStorage.setItem("isLogin", "1");
                                 this.$router.push({path: '/carIndex'});
-                            }else{
+                            } else {
                                 Toast(res.data.msg);
                             }
                         })
-                    }else{
+                    } else {
                         Toast(res.data.msg);
                     }
                 })
             },
-            goAgreement(){
+            goAgreement() {
                 //协议页面
-                this.$router.push({path:'/agreement',query:{name:'绿色出行用户协议'}})
+                this.$router.push({path: '/agreement', query: {name: '绿色出行用户协议'}})
             }
         },
         mounted: function () {
