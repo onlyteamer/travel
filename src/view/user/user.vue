@@ -44,7 +44,7 @@
                 <div class="func-wrap">
                     <div class="func-title"><span>我的行程</span></div>
                     <div class="func-content">
-                        <div class="func-content-item"><img src="../../static/images/user/bc.png"/><span>班车</span></div>
+                        <div class="func-content-item" @click="goTicketList"><img src="../../static/images/user/bc.png"/><span>班车</span></div>
                         <div class="func-content-item" @click="goMyStroke"><img src="../../static/images/user/pc.png"/><span>拼车</span></div>
                     </div>
                 </div>
@@ -185,12 +185,46 @@
             goMyLike(){
                 //我的关注
                 this.$router.push({path: '/myLike'});
+            },
+            goTicketList(){
+                //班车
+                this.$router.push({path: '/ticketList'});
             }
         },
-        created() {
-            // localStorage.setItem("openid", "abcdefghigklmm");
-            // this.login();
-        }
+        created(){
+            let url = location.href;
+            if(url.indexOf("?")!=-1 && !localStorage.getItem("openid")){
+                let str = url.substr(url.indexOf("?")+1);
+                let strs = str.split("&");
+                let code = strs[0].split("=")[1];
+                let state = strs[1].split("=")[1];
+                request.sendGet({
+                    url:'/wx/getopenid',
+                    params:{
+                        code:code
+                    }
+                }).then((res)=>{
+                    if(res.data.code===0){
+                        let openid = res.data.data.openid;
+                        localStorage.setItem("openid",openid);
+                        request.sendPost({
+                            url:'/wx/login',
+                            params: {
+                                openid:openid
+                            }
+                        }).then((res)=>{
+                            //TODO 判断登录状态
+                            if(res.data.data.isLogin==="1"){
+                                //登陆成功
+                                localStorage.setItem("isLogin","1");
+                            }else{
+                                this.$router.push({path:'/register'})
+                            }
+                        })
+                    }
+                })
+            }
+        },
 
     }
 </script>
