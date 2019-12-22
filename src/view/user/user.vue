@@ -200,20 +200,14 @@
                 let strs = str.split("&");
                 let code = strs[0].split("=")[1];
                 let state = strs[1].split("=")[1];
-                console.log(code);
                 axios.get("http://gstpapi.huntauto.com.cn/wx/getopenid?"+ qs.stringify({code:code}))
                     //成功返回
                     .then(res => {
                         if(res.data.code===0){
                             let openid = res.data.data.openid;
                             localStorage.setItem("openid",openid);
-                            request.sendPost({
-                                url:'/wx/login',
-                                params: {
-                                    openid:openid
-                                }
-                            }).then((res)=>{
-                                //TODO 判断登录状态
+                            axios.post(
+                                'http://gstpapi.huntauto.com.cn/wx/login', qs.stringify({openid:openid})).then((res)=>{
                                 if(res.data.data.isLogin==="1"){
                                     //登陆成功
                                     localStorage.setItem("isLogin","1");
