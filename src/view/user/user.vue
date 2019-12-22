@@ -113,6 +113,7 @@
     import listImg from "./../../static/images/listImg.png";
     import request from '../../utils/request'
     import axios from 'axios';
+    import qs from 'querystring'
 
     export default {
         components: {
@@ -200,7 +201,7 @@
                 let code = strs[0].split("=")[1];
                 let state = strs[1].split("=")[1];
                 console.log(code);
-                axios.get("http://gstpapi.huntauto.com.cn/wx/getopenid", { params: {code:code} })
+                axios.get("http://gstpapi.huntauto.com.cn/wx/getopenid?"+ qs.stringify({code:code}))
                     //成功返回
                     .then(res => {
                         if(res.data.code===0){
