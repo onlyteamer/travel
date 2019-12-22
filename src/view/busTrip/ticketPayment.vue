@@ -3,20 +3,20 @@
         <Title :title="title" @onClickLeft="onClickLeft"></Title>
         <div style="margin-top: 55px;font-size: 14px">
             <div class="card">
-                <div style="color: #5083ED;font-weight: bold">线路：昌坤出行3线</div>
+                <div style="color: #5083ED;font-weight: bold">线路：{{busInfo.linename}}</div>
                 <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
 
                 <van-row style="display: flex;align-items: center;justify-content: center">
                     <van-col span="8" align="center" >
-                        <div style="font-size: 16px;font-weight: bold;margin-bottom: 10px"><img src="./../../static/images/greenTag.png" style="width: 14px;height: 14px;display: inline-block"/>上河湾</div>
-                        <div style="font-weight: bold">06:40</div>
+                        <div style="font-size: 16px;font-weight: bold;margin-bottom: 10px"><img src="./../../static/images/greenTag.png" style="width: 14px;height: 14px;display: inline-block"/>{{busInfo.startname}}</div>
+                        <div style="font-weight: bold">{{busInfo.starttime}}</div>
                     </van-col>
                     <van-col span="8" style="text-align: center;">
                         <img src="./../../static/images/busTrip/rightArrow.png" width="51px" height="25px">
                     </van-col>
                     <van-col span="8" align="center">
-                        <div style="font-size: 16px;font-weight: bold;margin-bottom: 10px"><img src="./../../static/images/redTag.png" style="width: 14px;height: 14px;display: inline-block"> 西坝河</div>
-                        <div style="font-weight: bold">06:40</div>
+                        <div style="font-size: 16px;font-weight: bold;margin-bottom: 10px"><img src="./../../static/images/redTag.png" style="width: 14px;height: 14px;display: inline-block"> {{busInfo.endname}}</div>
+                        <div style="font-weight: bold">{{busInfo.endtime}}</div>
                     </van-col>
                 </van-row>
             </div>
@@ -27,11 +27,11 @@
 
                 <van-row style="display: flex;align-items: center;justify-content: center">
                     <van-col span="12" style="margin-left: 28px">张数</van-col>
-                    <van-col span="12" align="right"><div style="font-weight: bold;font-size: 22px;color: #0CC893;">3<span style="font-weight: bold;font-size: 14px;color: #202020;margin-left: 5px">张</span></div></van-col>
+                    <van-col span="12" align="right"><div style="font-weight: bold;font-size: 22px;color: #0CC893;">{{num}}<span style="font-weight: bold;font-size: 14px;color: #202020;margin-left: 5px">张</span></div></van-col>
                 </van-row>
                 <van-row style="display: flex;align-items: center;justify-content: center;margin-top: 15px">
                     <van-col span="12" style="margin-left: 28px">票价</van-col>
-                    <van-col span="12" align="right"><div style="font-weight: bold;font-size: 22px;color: #FF0200;"><span style="font-weight: bold;font-size: 14px;">￥</span>30</div></van-col>
+                    <van-col span="12" align="right"><div style="font-weight: bold;font-size: 22px;color: #FF0200;"><span style="font-weight: bold;font-size: 14px;">￥</span>{{amount}}</div></van-col>
                 </van-row>
             </div>
 
@@ -63,6 +63,7 @@
     import {Row, Col, Icon, Checkbox, CheckboxGroup, Button, Tag, Field, Toast, Divider,RadioGroup, Radio,Cell, CellGroup } from 'vant';
     import wxChar from './../../static/images/busTrip/wxchar.png'
     import zhifubao from './../../static/images/busTrip/zhifubao.png'
+    import request from "../../utils/request";
 
     export default {
         name: "ticketPayment",
@@ -82,18 +83,65 @@
             return {
                 title: "支付",
                 radio:'1',
+                num: 0,
+                amount: 0,
+                busid: '',
+                lineid: '',
+                dateStr: [],
+                busInfo: {
+                    busnumber: "",
+                    endid: "",
+                    endname: "",
+                    endtime: "",
+                    lineid: "",
+                    linename: "",
+                    startid: "",
+                    startname: "",
+                    starttime: "",
+                    ticketPrice: ""
+                },
                 wxChar:wxChar,
                 zhifubao:zhifubao
             }
         },
         methods: {
+            queryBus() {
+                request.sendPost({
+                    url: '/bus/selectLineInfo/' + this.busid,
+                    params: {}
+                }).then((res) => {
+                    if (res.data.code === 0) {
+                        this.busInfo = res.data.data;
+                    }
+                })
+            },
             submitOrder(){
+                request.sendPost({
+                    url: '/bus/buyTicket',
+                    params: {
+                        busid: this.busid,
+                        dateStr: this.chooseDate,
+                        lineid: this.lineid,
+                    }
+                }).then((res)=>{
+                    console.log(res.data);
+                    this.$router.push({path: '/ticketPayment'});
+                });
+
                 this.$router.push({path:'/ticketList'});
             },
             onClickLeft() {
                 this.$router.back(-1);
             }
-        }
+        },
+        created(){
+            this.num = this.$route.query.num;
+            this.amount = this.$route.query.amount;
+            this.busid = this.$route.query.busid;
+            this.lineid = this.$route.query.lineid;
+            this.chooseDate = this.$route.query.dateStr;
+            this.queryBus();
+        },
     }
 </script>
 

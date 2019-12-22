@@ -151,6 +151,7 @@
         },
         data(){
             return{
+                id:'',
                 title:"验票",
                 notice:"",
                 blueTime: blueTime,
@@ -244,7 +245,7 @@
 
             },
             initData() {
-                let id = 51;
+                let id = this.id;
                 request.sendPost({
                     url:"/bus/selectTicketInfo/"+ id,
                     params:{
@@ -283,19 +284,14 @@
                     })
                 }
             }
+        },
+        created(){
+            this.id=this.$route.query.id;
         }
     }
 </script>
 
 <style scoped>
-
-    /*#showTitleBox{ animation: change 1s  ease-in  infinite ; font-size: 36px; color:#FFFFFF; font-weight: bold}*/
-    /*@keyframes change {*/
-        /*0%{ text-shadow: 0 0 4px #FFFFFF}*/
-        /*50%{ text-shadow: 0 0 40px #FFFFFF}*/
-        /*100%{ text-shadow: 0 0 4px #FFFFFF}*/
-    /*}*/
-
     .notice{
         background: #FFFFFF;
     }
@@ -341,7 +337,7 @@
     .btnStyle{
         text-align: center;
         font-size: 34px;
-        color: #41B3FF;
+        color: #FFFFFF;
         font-weight: bold;
         width: 88%;
         margin: 0 auto;

@@ -129,38 +129,35 @@
                 this.$router.back(-1);
             },
             addBuyTicket(item) {
-
-                if (item && item.state === 1) {
+                if (item && (item.state === 1 || item.state === 2)) {
                     let index = this.chooseDate.indexOf(item.dateText);
-                    if(index ===-1){
+                    if (index === -1) {
                         this.chooseDate.push(item.dateText);
-                        let el = this.$refs.item[item.date-1];
-                        el.style.backgroundColor='#0CC893';
-                        el.style.color='#fff';
-                        this.num +=1;
-                    }else{
-                        this.chooseDate.splice(index,1);
-                        let el = this.$refs.item[item.date-1];
-                        el.style.backgroundColor='#fff';
-                        el.style.color='#202020';
-                        this.num -=1;
+                        let el = this.$refs.item[item.date - 1];
+                        el.style.backgroundColor = '#0CC893';
+                        el.style.color = '#fff';
+                        this.num += 1;
+                    } else {
+                        this.chooseDate.splice(index, 1);
+                        let el = this.$refs.item[item.date - 1];
+                        el.style.backgroundColor = '#fff';
+                        el.style.color = '#202020';
+                        this.num -= 1;
                     }
                     this.amount = this.num * this.busInfo.ticketPrice;
                 }
             },
             buy() {
-                request.sendPost({
-                    url: '/bus/buyTicket',
-                    params: {
-                        busid: this.busid,
-                        dateStr: this.chooseDate,
-                        lineid: this.lineid,
+                this.$router.push({
+                    path: '/ticketPayment',
+                    query: {
+                        'num': this.num,
+                        'amount': this.amount,
+                        'busid': this.busid,
+                        'lineid': this.lineid,
+                        'dateStr': this.chooseDate
                     }
-                }).then((res)=>{
-                    console.log(res.data);
-                    this.$router.push({path: '/ticketPayment'});
                 });
-
             },
             queryBus() {
                 request.sendPost({
