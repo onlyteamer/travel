@@ -18,14 +18,14 @@
                     <van-tab title="待乘车">
                         <div class="currentDate" v-if="showAll">{{currentDate}}</div>
                         <van-list v-if="showAll">
-                            <div v-for="item in toride.data" :key="item.id" @click="linkBusDetail(item.busid)">
+                            <div v-for="item in toride.data" :key="item.id" >
                                 <div class="card">
                                     <div style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;height: 45px;justify-content: space-between">
                                         <span class="line">{{item.linename}}：{{item.startname}}->{{item.endname}}</span>
                                         <span class="list-price">￥{{item.ticketPrice}}</span>
                                     </div>
                                     <div style="display: flex;align-items: center;justify-content: space-between;height: 85px">
-                                        <div>
+                                        <div @click="linkBusDetail(item.busid)">
                                             <div style="display: flex;height:35px;line-height: 35px">
                                                 <div><img :src="blueTime" width="13px" height="13px"><span
                                                         style="margin-left: 7px;margin-right: 13px">{{item.starttime}}</span>
@@ -46,7 +46,7 @@
                                                         style="width:66px;height:28px;line-height:28px;background: #0CC893;color: #FFFFFF;border-radius: 5px">
                                                 验票
                                             </van-button>
-                                            <van-button type="default" @click="refundTicket(item.id)"
+                                            <van-button type="default" @click="refundTicket(item.ticketid)"
                                                         style="width:66px;height:28px;line-height:28px;background: #9E9E9E;color: #FFFFFF;border-radius: 5px">
                                                 退票
                                             </van-button>
@@ -75,7 +75,7 @@
                                                             style="background: #0CC893;color: #FFFFFF;border-radius: 5px">
                                                     验票
                                                 </van-button>
-                                                <van-button type="default" size="small" @click="refundTicket(line.id)"
+                                                <van-button type="default" size="small" @click="refundTicket(line.ticketid)"
                                                             style="margin-left: 5px;background: #9E9E9E;color: #FFFFFF;border-radius: 5px">
                                                     退票
                                                 </van-button>
@@ -98,8 +98,7 @@
                                             {{line.linename}}：{{line.startname}}->{{line.endname}}
                                         </van-col>
                                         <van-col span="6" style="color: #0CC893;text-align: right;font-size: 14px">
-                                            {{line.flag ==
-                                            '0'?'待乘车':'已完成'}}
+                                            {{line.state }}
                                         </van-col>
                                     </van-row>
                                 </van-collapse-item>
@@ -117,8 +116,7 @@
                                         <van-col span="18" style="color: #5083ED;font-size: 14px;font-weight: bold">
                                             {{line.linename}}：{{line.startname}}->{{line.endname}}
                                         </van-col>
-                                        <van-col span="6" style="color: #5E5E5E;text-align: right">{{line.flag ==
-                                            '3'?'已退款':''}}
+                                        <van-col span="6" style="color: #5E5E5E;text-align: right">{{line.state}}
                                         </van-col>
                                     </van-row>
                                 </van-collapse-item>
@@ -211,7 +209,9 @@
                     }
                 }).then((res) => {
                     if (res.data.code === 0) {
-
+                        Toast(res.data.msg);
+                        this.active = 2;
+                        this.onClick();
                     } else {
                         Toast(res.data.msg);
                     }
