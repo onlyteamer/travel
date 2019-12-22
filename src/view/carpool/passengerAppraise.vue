@@ -6,27 +6,27 @@
             <van-row style="display: flex;align-items: center;font-size: 14px">
                 <van-col span="24">
                     <div style="display: flex;align-items: center">
-                        <img src="../../static/images/userAvatar.png"
-                             style="height: 52px;width: 52px;margin-right: 10px">
+                        <img :src="userInfo.headimageurl"
+                             style="height: 52px;width: 52px;margin-right: 10px;border-radius: 50%">
                         <div>
                             <p style="margin: 5px 0">
-                                <span style="color: #5E5E5E;font-weight: bold">加菲猫</span><img
-                                    src="../../static/images/sexTag.png"
-                                    style="width: 12px;height: 12px;margin-left: 5px">
+                                <span style="color: #5E5E5E;font-weight: bold">{{userInfo.nickName}}</span>
+                                <img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="userInfo.sex == '1'">
+                                <img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px" v-else>
 
                                 <img src="./../../static/images/xin.png"
-                                     style="width: 14px;height: 14px;margin-right: 5px;margin-left: 20px"/><span>231</span>
+                                     style="width: 14px;height: 14px;margin-right: 5px;margin-left: 20px"/><span>{{userInfo.goodCount?userInfo.goodCount:'0'}}</span>
                                 <img src="./../../static/images/unhapply.png"
-                                     style="width: 14px;height: 14px;margin: 0 5px 0 20px"/> <span>3</span>
+                                     style="width: 14px;height: 14px;margin: 0 5px 0 20px"/> <span>{{userInfo.badCount?userInfo.badCount:'0'}}</span>
                             </p>
                             <p style="margin: 5px 0;display: flex;align-items: center">
                                 <img src="../../static/images/userInfo.png"
                                      style="width: 14px;height: 16px;margin-right: 5px"/><span
-                                    style="font-size: 14px;color: #5E5E5E">张**</span>
+                                    style="font-size: 14px;color: #5E5E5E">{{userInfo.realName}}</span>
                             </p>
                             <p style="margin: 5px 0">
                                 <img src="./../../static/images/tel.png" style="width: 14px"/><span
-                                    style="font-size: 14px;color: #5E5E5E">13884997727</span>
+                                    style="font-size: 14px;color: #5E5E5E">{{userInfo.phone}}</span>
                             </p>
                         </div>
                     </div>
@@ -64,6 +64,7 @@
 <script>
     import Title from './../../components/header'
     import {Row, Col, Divider, Button, Rate, Tag, Field, CellGroup} from 'vant';
+    import request from '../../utils/request'
 
     export default {
         name: "passengerAppraise",
@@ -81,6 +82,7 @@
         },
         data() {
             return {
+                userInfo:{},
                 title: "乘客详情",
                 appraise: {
                     driverId: "",
@@ -139,7 +141,25 @@
                 ]
             }
         },
+        mounted(){
+            this.initUserInfo();
+        },
+
         methods: {
+            initUserInfo(){
+                let userId = this.$route.query.userId;
+                request.sendGet({
+                    url:"/sharecar/pass/passenger/"+userId,
+                    params: {}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        this.userInfo = res.data.data;
+                    }
+                })
+
+            },
+
+
             pushAppraise(){
                 let arr = [];
                 this.tagList.forEach(e =>{
@@ -153,9 +173,8 @@
                     Toast.fail("评论不能为空");
                     return false;
                 }
-
-                this.appraise.driverId = "1";
-                this.appraise.userId = "";
+                let userId = this.$route.query.userId;
+                this.appraise.userId = userId;
 
                 request.sendPost({
                     url:"/sharecar/pass/doevaluate/"+this.appraise.tripId,

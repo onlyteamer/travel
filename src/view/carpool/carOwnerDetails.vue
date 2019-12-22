@@ -6,23 +6,25 @@
             <van-row style="display: flex;align-items: center;font-size: 14px">
                 <van-col span="24" >
                     <div style="display: flex;align-items: center">
-                        <img src="../../static/images/userAvatar.png" style="height: 52px;width: 52px;margin-right: 10px">
+                        <img :src="userInfo.headimageurl" style="height: 52px;width: 52px;margin-right: 10px">
                         <div>
                             <p style="margin: 5px 0">
-                                <span style="color: #5E5E5E;font-weight: bold">加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px">
+                                <span style="color: #5E5E5E;font-weight: bold">{{userInfo.nickName}}</span>
+                                <img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="userInfo.sex == '1'">
+                                <img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px" v-else>
 
-                                <img src="./../../static/images/xin.png" style="width: 14px;height: 14px;margin-right: 5px;margin-left: 20px"/><span>231</span>
-                                <img src="./../../static/images/unhapply.png" style="width: 14px;height: 14px;margin: 0 5px 0 20px" /> <span>3</span>
+                                <img src="./../../static/images/xin.png" style="width: 14px;height: 14px;margin-right: 5px;margin-left: 20px"/><span>{{userInfo.goodCount?userInfo.goodCount:'0'}}</span>
+                                <img src="./../../static/images/unhapply.png" style="width: 14px;height: 14px;margin: 0 5px 0 20px" /> <span>{{userInfo.badCount?userInfo.badCount:'0'}}</span>
                             </p>
                             <p style="margin: 5px 0;display: flex;align-items: center">
-                                <img src="../../static/images/userInfo.png" style="width: 14px;height: 16px;margin-right: 5px" /><span style="font-size: 14px;color: #5E5E5E">张**</span>
+                                <img src="../../static/images/userInfo.png" style="width: 14px;height: 16px;margin-right: 5px" /><span style="font-size: 14px;color: #5E5E5E">{{userInfo.realName}}</span>
                             </p>
                             <p style="margin: 5px 0">
-                                <img src="./../../static/images/tel.png" style="width: 14px" /><span style="font-size: 14px;color: #5E5E5E">13884997727</span>
+                                <img src="./../../static/images/tel.png" style="width: 14px" /><span style="font-size: 14px;color: #5E5E5E">{{userInfo.phone}}</span>
                             </p>
 
                             <p style="margin: 5px 0;display: flex;align-items:center">
-                                <span style="color: #FFFFFF;border-radius: 2px;padding: 0px 5px;background-color: #5083ED;margin-right: 10px">京A***99</span><img src="./../../static/images/car.png" style="width: 18px;height: 18px" /><span style="font-size: 14px;color: #5E5E5E">大众15款速腾</span>
+                                <span style="color: #FFFFFF;border-radius: 2px;padding: 0px 5px;background-color: #5083ED;margin-right: 10px">{{userInfo.carNumber}}</span><img src="./../../static/images/car.png" style="width: 18px;height: 18px" /><span style="font-size: 14px;color: #5E5E5E">{{userInfo.carName}}</span>
                             </p>
                         </div>
                     </div>
@@ -31,20 +33,20 @@
         </div>
 
         <div class="assess">
-            <div><span style="font-size: 16px;font-weight: bold;margin-right: 10px">乘客评价:</span><span>（517）</span></div>
+            <div><span style="font-size: 16px;font-weight: bold;margin-right: 10px">乘客评价:</span><span>（{{appraiseTotal}}）</span></div>
             <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false" />
 
             <div v-for="index in 6">
                 <div class="card">
                     <van-row style="display: flex;align-items: center">
-                        <van-col span="16" style="display: flex;align-items: center">
-                            <img src="./../../static/images/avatar.png"  style="width: 34px;height: 34px;border-radius: 50%;margin-right: 15px;"/>
-                            <span>大海</span>
+                        <van-col span="10" style="display: flex;align-items: center">
+                            <img :src="item.headImageurl" style="width: 34px;height: 34px;border-radius: 50%;margin-right: 15px;"/>
+                            <span>{{item.nickName}}</span>
                         </van-col>
-                        <van-col span="8">2019-12-01</van-col>
+                        <van-col span="14">{{item.commentDate}}</van-col>
                     </van-row>
                     <div style="margin-top: 10px">
-                        准时到达，很有礼貌的车主。
+                        {{item.commentDetail}}
                     </div>
                 </div>
 
@@ -59,6 +61,7 @@
 <script>
     import Title from './../../components/header'
     import { Row, Col,Divider,Button} from 'vant';
+    import request from '../../utils/request'
 
     export default {
         name: "carOwnerDetails",
@@ -71,10 +74,50 @@
         },
         data(){
             return{
-                title:"车主详情"
+                title:"车主详情",
+                userInfo:{},
+                appraiseList:{
+                    data:[],
+
+                },
+                appraiseTotal:""
             }
         },
+
+        mounted(){
+            this.initData();
+
+            this.initAppraiseList();
+        },
         methods:{
+
+            initAppraiseList(){
+                let userId = this.$route.query.userId;
+                request.sendGet({
+                    url: "/user/center/evaluate/list/"+userId,
+                    params: {
+                        pageNum:"1",
+                        pageSize:"10"
+                    }
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        this.appraiseList.data = res.data.rows;
+                        this.appraiseTotal = res.data.total;
+                    }
+                })
+            },
+
+
+            initData(){
+                let userId = this.$route.query.userId;
+                request.sendGet({
+                    url:"/sharecar/pass/passenger/"+ userId,
+                    params:{}
+                }).then(res =>{
+                    this.userInfo = res.data.data;
+                })
+            },
+
             onClickLeft(){
 
             }

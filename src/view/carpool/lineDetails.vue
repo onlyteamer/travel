@@ -71,7 +71,7 @@
 
         <van-row style="position: fixed;bottom: 0;width: 100%;">
             <van-col span="6">
-                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini">分享</van-button>
+                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini" @click="wxShare">分享</van-button>
             </van-col>
             <van-col span="6">
                 <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini" @click="followUser">关注</van-button>
@@ -199,6 +199,67 @@
                 });
             },
             onClickLeft(){
+
+            },
+            wxShare(){
+                var url = 'http://gstpapi.huntauto.com.cn//wx/redirect/wxfe42689b9e435f72/signature?url=http://gstpapi.huntauto.com.cn/wx/travel/demo.html';
+                request.sendGet({
+                    url:url,
+                    params:{
+
+                    }
+                }).then(res =>{
+                    var data = res.data.data;
+                    wx.config({
+                        beta: true,// 必须这么写，否则在微信插件有些jsapi会有问题
+                        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: data.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
+                        timestamp: parseInt(data.timestamp,10), // 必填，生成签名的时间戳
+                        nonceStr: data.nonceStr, // 必填，生成签名的随机串
+                        signature: data.signature,// 必填，签名，见附录1
+                        jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage','onMenuShareQQ','onMenuShareQZone','hideOptionMenu'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                    });
+                    var ShareLink = "http://gstpapi.huntauto.com.cn/wx/travel/demo.html"; //默认分享链接
+                    var ShareImgUrl = "http://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
+                    var ShareTitle = "申坤出行"; // 分享标题
+                    var ShareDesc = "申坤出行!"; // 分享描述
+                    wx.ready(function(){
+                        // 获取"分享到朋友圈"按钮点击状态及自定义分享内容接口
+                        wx.onMenuShareTimeline({
+                            title: ShareTitle, // 分享标题
+                            link:ShareLink,
+                            desc: ShareDesc,
+                            imgUrl:ShareImgUrl // 分享图标
+                        });
+
+                        // 获取"分享给朋友"按钮点击状态及自定义分享内容接口
+                        wx.onMenuShareAppMessage({
+                            title: ShareTitle, // 分享标题
+                            desc: ShareDesc, // 分享描述
+                            link:ShareLink,
+                            imgUrl:ShareImgUrl // 分享图标
+                        });
+                        // 分享到QQ
+                        wx.onMenuShareQQ({
+                            title: ShareTitle, // 分享标题
+                            desc: ShareDesc, // 分享描述
+                            link:ShareLink,
+                            imgUrl:ShareImgUrl // 分享图标
+                        });
+                        // 分享到QQ空间
+                        wx.onMenuShareQZone({
+                            title: ShareTitle, // 分享标题
+                            desc: ShareDesc, // 分享描述
+                            link:ShareLink,
+                            imgUrl:ShareImgUrl // 分享图标
+                        });
+                        // wx.hideOptionMenu();  // 用户中心 隐藏微信菜单
+                    });
+                    wx.error(function(res){
+                        console.log(res);
+                    });
+                })
+
 
             }
         }

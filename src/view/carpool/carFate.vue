@@ -4,7 +4,7 @@
 
         <div style="margin-top: 46px">
             <div class="black" v-for="(item,index) in carFateList">
-                <van-row  @click="goPassengerDetails(index)">
+                <van-row  @click="goPassengerDetails(item)">
                     <van-col span="16" >
                         <div style="display: flex;align-items: center">
                             <img :src="item.headimgurl" style="height: 50px;width: 50px;margin-right: 10px">
@@ -77,13 +77,13 @@
             },
             goPassengerDetails(val){
                 if(val){
-                    if(val%2 != 0){
-                        this.$router.push({path:'/carOwnerDetails'});
+                    if(val.tag == '1'){
+                        this.$router.push({path:'/passengerDetails',query:{userId:val.userId}});
                     }else {
-                        this.$router.push({path:'/passengerDetails'});
+                        this.$router.push({path:'/carOwnerDetails',query:{userId:val.userId}});
                     }
                 }else {
-                    this.$router.push({path:'/passengerDetails'});
+                    this.$router.push({path:'/passengerDetails',query:{userId:val.userId}});
                 }
 
             }

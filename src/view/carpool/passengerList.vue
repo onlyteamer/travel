@@ -3,7 +3,7 @@
         <Title :title="title" @onClickLeft="onClickLeft"></Title>
         <div style="margin-top: 46px">
             <div class="black" v-for="(item,index) in passList" :key="index">
-                <div @click="goPassengerDetails">
+                <div @click="goPassengerDetails(item.userId)">
                     <van-row style="display: flex;align-items: center">
                         <van-col span="14" >
                             <div style="display: flex;align-items: center">
@@ -75,8 +75,8 @@
             onClickLeft(){
                 this.$router.back(-1);
             },
-            goPassengerDetails(){
-                this.$router.push({path:'/passengerDetails'});
+            goPassengerDetails(val){
+                this.$router.push({path:'/passengerDetails',query:{userId:val}});
             },
             initPassList(){
                 //获取行程id
