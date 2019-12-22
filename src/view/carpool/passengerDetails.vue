@@ -56,6 +56,8 @@
     import Title from './../../components/header'
     import { Row, Col,Divider,Button} from 'vant';
 
+    import request from '../../utils/request'
+
     export default {
         name: "passengerDetails",
         components:{
@@ -70,7 +72,15 @@
                 title:"乘客详情"
             }
         },
+        mounted(){
+            this.initData();
+        },
+
         methods:{
+            initDate(){
+                
+            },
+
             onClickLeft(){
                 this.$router.back(-1);
             }

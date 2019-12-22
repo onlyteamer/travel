@@ -60,7 +60,7 @@
                 request.sendPost({
                     url:"/user/center/complain",
                     params:{
-                        context:this.context,
+                        context:this.content,
                         tripId:tripId,
                         type:this.userType,
                         userId:userId
