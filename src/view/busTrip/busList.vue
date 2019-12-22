@@ -56,13 +56,11 @@
         },
         data() {
             return {
-
                 isOneHttp: true,
                 loading: false,
                 finished: false,
                 blueTime: blueTime,
                 redTime: redTime,
-                type:'1',//通勤班车 2旅游班车
                 dataMain: {
                     data: [],
                     pageSize: 6,
@@ -77,11 +75,10 @@
             },
             initData() {
                 request.sendGet({
-                    url: '/bus/list',
+                    url: '/bus/getAllBusList',
                     params: {
                         pageSize: this.dataMain.pageSize,
                         pageNum: this.dataMain.pageNum,
-                        type:this.type,
                     }
                 }).then((res) => {
                     this.dataMain.total = res.data.total;
