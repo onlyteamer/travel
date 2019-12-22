@@ -43,7 +43,7 @@
 
                             </van-col>
                             <van-col span="12">
-                                <div style="text-align: center;color: #FF0200">12月04日 05:20</div>
+                                <div style="text-align: center;color: #FF0200">{{item.tripDateTime}}</div>
                             </van-col>
                             <van-col span="6">
                                 <div style="align-items: center;text-align: right"><i
@@ -59,14 +59,14 @@
                                     <div>
                                         <p style="font-size: 14px;margin: 5px 0"><span
                                                 style="color: #5083ED;font-weight: bold">【车主】</span><span
-                                                style="color: #5E5E5E">加菲猫</span><img
-                                                src="../../static/images/sexTag.png"
-                                                style="width: 12px;height: 12px;margin-left: 5px">
+                                                style="color: #5E5E5E">{{item.nickname}}</span>
+                                            <img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="item.sex == '1'">
+                                            <img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-else>
                                             <span class="collect"><img src="./../../static/images/xin.png"
-                                                                       style="width: 14px">231</span></p>
+                                                                       style="width: 14px">{{item.goodCount}}</span></p>
                                         <p style="font-size: 14px;margin: 5px 0"><span
                                                 style="color: #202020;font-weight: bold">【车型】</span><span
-                                                style="color: #5E5E5E">大众速腾</span></p>
+                                                style="color: #5E5E5E">{{item.carName}}</span></p>
                                     </div>
                                 </div>
                             </van-col>

@@ -31,7 +31,7 @@
                         />
                     </div>
                 </van-col>
-                <van-col span="11">
+                <van-col span="11" v-if="stroke.startPlace">
                     <van-button size="small">上次行程上车地点
                         <van-icon name="location" color="#0CC893"/>
                     </van-button>
@@ -50,7 +50,7 @@
                         />
                     </div>
                 </van-col>
-                <van-col span="11">
+                <van-col span="11" v-if="stroke.endPlace">
                     <van-button size="small">上次行程下车地点
                         <van-icon name="location" color="#FF0200"/>
                     </van-button>

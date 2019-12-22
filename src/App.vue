@@ -6,7 +6,7 @@
 
     <remote-js src="http://webapi.amap.com/maps?v=1.4.5&key=4b5f2cf2cba25200cc6b68c398468899&&plugin=AMap.ToolBar,AMap.Driving,AMap.Autocomplete,AMap.PlaceSearch"></remote-js>
     <!--<remote-js src="https://cache.amap.com/lbs/static/addToolbar.js"></remote-js>-->
-
+    <remote-js src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></remote-js>
   </div>
 </template>
 

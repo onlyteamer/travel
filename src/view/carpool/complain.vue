@@ -1,12 +1,12 @@
 <template>
     <div>
         <div>
-            <van-nav-bar title="取消行程" :fixed="true" left-arrow @click-left="onClickLeft"/>
+            <van-nav-bar title="投诉" :fixed="true" left-arrow @click-left="onClickLeft"/>
         </div>
         <div class="content">
             <div class="radio-wrap">
                 <div class="radio-wrap-title">投诉对象</div>
-                <van-radio-group v-model="radio" class="radio-wrap-content">
+                <van-radio-group v-model="userType" class="radio-wrap-content">
                     <van-radio name="1" checked-color="#07BD06">车主</van-radio>
                     <van-radio name="2" checked-color="#07BD06">乘客</van-radio>
                 </van-radio-group>
@@ -16,7 +16,7 @@
                     请根据事实反映真实情况
                 </div>
                <div style="border-bottom: 1px solid #ECECEC">
-                   <van-field v-model="value" type="textarea" :autosize="true" placeholder="未及时到达" />
+                   <van-field v-model="content" type="textarea" :autosize="true" placeholder="请输入" />
                </div>
             </div>
             <van-button @click="submit" style="margin-top:15px;width: 100%;height:44px" color="#0CC893" type="default">
@@ -27,19 +27,22 @@
 </template>
 
 <script>
-    import {NavBar, Button, RadioGroup, Radio,Field } from 'vant';
+    import {NavBar, Button, RadioGroup, Radio,Field ,Toast} from 'vant';
+    import request from '../../utils/request'
+
     export default {
         components: {
             [NavBar.name]: NavBar,
             [Button.name]: Button,
             [RadioGroup.name]: RadioGroup,
             [Radio.name]: Radio,
-            [Field .name]:Field
+            [Field .name]:Field,
+            [Toast.name]:Toast
         },
         data() {
             return {
-                radio: '1',
-                value:''
+                userType: '1',
+                content:''
             }
         },
         methods: {
@@ -47,7 +50,29 @@
                 this.$router.back(-1);
             },
             submit(){
+                if(!this.content){
+                    Toast.fail("请填写内容");
+                    return;
+                }
 
+                let userId = this.$route.query.userId;
+                let tripId = this.$route.query.tripId;
+                request.sendPost({
+                    url:"/user/center/complain",
+                    params:{
+                        context:this.context,
+                        tripId:tripId,
+                        type:this.userType,
+                        userId:userId
+                    }
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        Toast.success("操作成功");
+                        this.$router.back(-1);
+                    }else {
+                        Toast.fail("操作失败")
+                    }
+                })
             }
         }
     }

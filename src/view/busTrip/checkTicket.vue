@@ -26,7 +26,13 @@
 
         <div class="dateTime">{{ticketInfo.dateStr}}</div>
 
-        <div class="btnStyle" @click="checkTicket">{{ticketInfo.showcode}}</div>
+        <!--<div class="btnStyle" @click="checkTicket" id="showTitleBox">{{ticketInfo.showcode}}</div>-->
+        <div class="btnStyle" @click="checkTicket" id="showTitleBox">
+            <span>马</span>
+            <span>到</span>
+            <span>成</span>
+            <span>功</span>
+        </div>
 
         <div class="lineInfo">
             <van-row style="margin: 0 0 10px">
@@ -44,11 +50,11 @@
             </van-row>
             <van-row style="margin: 10px 0">
                 <van-col span="6" style="font-weight: bold">验证码：</van-col>
-                <van-col span="18" style="color: #202020">2345</van-col>
+                <van-col span="18" style="color: #202020">{{ticketInfo.checkcode}}</van-col>
             </van-row>
             <van-row style="margin: 10px 0 0">
                 <van-col span="6" style="font-weight: bold">手机号：</van-col>
-                <van-col span="18" style="color: #202020">13884997788</van-col>
+                <van-col span="18" style="color: #202020">{{ticketInfo.userphone}}</van-col>
             </van-row>
         </div>
 
@@ -223,7 +229,7 @@
                     url:"/bus/driverChecking",
                     params:{
                         isdriver:0,
-                        ticketid:this.ticketInfo.ticketid
+                        checkcode:this.ticketInfo.checkcode
                     }
                 }).then(res =>{
                     if(res.data.code == '0'){
@@ -238,7 +244,7 @@
 
             },
             initData() {
-                let id = 1;
+                let id = 51;
                 request.sendPost({
                     url:"/bus/selectTicketInfo/"+ id,
                     params:{
@@ -282,6 +288,14 @@
 </script>
 
 <style scoped>
+
+    /*#showTitleBox{ animation: change 1s  ease-in  infinite ; font-size: 36px; color:#FFFFFF; font-weight: bold}*/
+    /*@keyframes change {*/
+        /*0%{ text-shadow: 0 0 4px #FFFFFF}*/
+        /*50%{ text-shadow: 0 0 40px #FFFFFF}*/
+        /*100%{ text-shadow: 0 0 4px #FFFFFF}*/
+    /*}*/
+
     .notice{
         background: #FFFFFF;
     }
@@ -296,10 +310,38 @@
         border-radius: 5px;
     }
 
+    @keyframes blink {
+        33% {
+            color: #41B3FF;
+        }
+        33% {
+            color: #50EDE2;
+        }
+        33%{
+            color: #0CC893;
+        }
+    }
+
+    #showTitleBox span:nth-child(1){
+        animation: blink 2s steps(1, start) 0.33s infinite;
+    }
+
+    #showTitleBox span:nth-child(2) {
+        animation: blink 2s steps(1, start) 0.66s infinite;
+    }
+
+    #showTitleBox span:nth-child(3) {
+        animation: blink 2s steps(1, start) 0.33s infinite;
+    }
+
+    #showTitleBox span:nth-child(4) {
+        animation: blink 2s steps(1, start) 0.66s infinite;
+    }
+
     .btnStyle{
         text-align: center;
         font-size: 34px;
-        color: #FFFFFF;
+        color: #41B3FF;
         font-weight: bold;
         width: 88%;
         margin: 0 auto;

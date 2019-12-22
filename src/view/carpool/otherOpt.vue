@@ -87,7 +87,7 @@
             </van-button>
             <van-button type="default" color="#0CC893"
                         style="font-size: 14px;margin-bottom: 10px;height: 28px;width: 72px;border-radius: 5px"
-                        size="mini" @click="linkComplain">投诉
+                        size="mini" @click="linkComplain(item)">投诉
             </van-button>
         </div>
 
@@ -120,12 +120,13 @@
                 title: "其他操作",
                 isFollow: "0",
                 tag:'2',
+                tripDetails:{}
             }
         },
         methods: {
             //跳转投诉页面
-            linkComplain(){
-                this.$router.push({path:"complain-passenger"});
+            linkComplain(val){
+                this.$router.push({path:"complain-passenger",query:{userId:val.userId,tripId:val.tripId}});
             },
 
             onClickLeft() {
@@ -147,6 +148,28 @@
                     }
                 })
             },
+            //详情
+            initData(){
+                let tripId = this.$route.query.tripId;
+                request.sendGet({
+                    url:"/sharecar/pass/tripdetail/"+tripId,
+                    params:{}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        this.tripDetails = res.data.data.driverinfo;
+
+                        let tripInfo = res.data.data.tripInfo;
+                        this.tripDetails.tripDate = tripInfo.tripDate;
+                        this.tripDetails.tripLine = tripInfo.tripLine;
+                        this.tripDetails.startPlace = tripInfo.startPlace;
+                        this.tripDetails.endPlace = tripInfo.endPlace;
+                        this.tripDetails.tripPrice = tripInfo.tripPrice;
+
+
+                    }
+                })
+            },
+
             followUser() {
                 if (this.isFollow == '0') {
                     //关注
@@ -171,6 +194,7 @@
             }
         },
         created(){
+            this.initData()
             // this.tag = this.$route.query.tag;
         }
     }

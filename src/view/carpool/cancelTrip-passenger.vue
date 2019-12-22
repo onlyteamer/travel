@@ -57,11 +57,12 @@
             },
             submit() {
                 let tripId = this.$route.query.tripId;
+                let bookid = this.$route.query.bookid;
                 let reasonId = this.reasonId;
 
                 //无偿
                 request.sendPost({
-                    url: "/sharecar/pass/cancel/" + tripId + "/" + reasonId,
+                    url: "/sharecar/pass/cancel/" + bookid + "/" + reasonId,
                     params: {}
                 }).then(res => {
                     if (res.data.code == '0') {
