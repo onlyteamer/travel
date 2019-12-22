@@ -11,20 +11,20 @@
             <div class="info-wrap">
                 <van-row>
                     <van-col span="8" style="height: 52px;line-height: 52px;text-align: center">
-                        <span style="font-size: 14px;color: #202020;">座位：3/ 4个</span>
+                        <span style="font-size: 14px;color: #202020;">座位：{{tripInfo.confirm}}/ {{tripInfo.seat}}个</span>
                     </van-col>
                     <van-col span="8" style="height: 52px;line-height: 52px;text-align: center">
-                        <span style="font-size: 14px;color: #202020;">待确认：0 人</span>
+                        <span style="font-size: 14px;color: #202020;">待确认：{{tripInfo.unconfig}} 人</span>
                     </van-col>
                     <van-col span="8" style="height: 52px;line-height: 52px;text-align: center">
-                        <span style="font-size: 14px;color: #202020;">已确认：2 人</span>
+                        <span style="font-size: 14px;color: #202020;">已确认：{{tripInfo.confirm}} 人</span>
                     </van-col>
                 </van-row>
             </div>
             <div class="radio-wrap">
                 <div style="height: 38px;line-height:38px;border-bottom: 1px solid #ECECEC">
                     <span class="tips" v-if="state">尚无已确认订单，无需赔偿</span>
-                    <span class="tips" v-else>存在已确认订单，需赔偿乘客10元/人。</span>
+                    <span class="tips" v-else>存在已确认订单，需赔偿乘客{{tripInfo.price}}元/人。</span>
                 </div>
                 <div class="radio-wrap-title">取消行程原因：</div>
                 <van-radio-group v-model="reasonId" class="radio-wrap-content">
@@ -60,12 +60,29 @@
                 reasonId: 1,
                 imageURL: imageURL,
                 state:true,
+                tripInfo:{
+
+                },
                 reasonList:[]
             }
         },
 
         mounted(){
             this.initReasonList();
+
+            let tripId = this.$route.query.tripId;
+            let seat = this.$route.query.seat;
+            let confirm = this.$route.query.confirm;
+            let unconfig = this.$route.query.unconfig;
+            let price = this.$route.query.price;
+
+            this.tripInfo.tripId = tripId;
+            this.tripInfo.seat = seat;
+            this.tripInfo.confirm = confirm;
+            this.tripInfo.unconfig = unconfig;
+            this.tripInfo.price = price;
+
+            this.state = this.tripInfo.confirm == '0'
         },
         methods: {
             //初始化理由列表

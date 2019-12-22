@@ -61,7 +61,7 @@
                                                 style="color: #5083ED;font-weight: bold">【车主】</span><span
                                                 style="color: #5E5E5E">{{item.nickname}}</span>
                                             <img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="item.sex == '1'">
-                                            <img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-else>
+                                            <img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px" v-else>
                                             <span class="collect"><img src="./../../static/images/xin.png"
                                                                        style="width: 14px">{{item.goodCount}}</span></p>
                                         <p style="font-size: 14px;margin: 5px 0"><span

@@ -12,28 +12,28 @@
                                 <img src="../../static/images/tsrq.png"/>
                             </div>
                             <div>投诉日期：</div>
-                            <div style="flex: 1">2019年10月12日</div>
+                            <div style="flex: 1">{{item.complainDate}}</div>
                         </div>
                         <div class="item-li">
                             <div style="width: 20px;margin-right: 8px;">
                                 <img src="../../static/images/tsdx.png" width="19px"/>
                             </div>
                             <div>投诉对象：</div>
-                            <div style="flex: 1">乘客</div>
+                            <div style="flex: 1">{{item.type == '1'?'乘客':'车主'}}</div>
                         </div>
                         <div class="item-li">
                             <div style="width: 20px;margin-right: 8px;">
                                 <img src="../../static/images/tsnr.png"/>
                             </div>
                             <div>投诉内容：</div>
-                            <div style="flex: 1">不给钱</div>
+                            <div style="flex: 1">{{item.context}}</div>
                         </div>
                         <div class="item-li">
                             <div style="width: 20px;margin-right: 8px;">
                                 <img src="../../static/images/cljg.png"/>
                             </div>
                             <div>处理结果：</div>
-                            <div style="flex:1">给钱给钱给钱给钱给钱给钱给钱给钱给钱给钱给钱给钱</div>
+                            <div style="flex:1">{{item.dealResult}}</div>
                         </div>
                     </div>
                 </div>
@@ -44,6 +44,7 @@
 
 <script>
     import {NavBar, List} from 'vant';
+    import request from '../../utils/request'
 
     export default {
         components: {
@@ -61,7 +62,27 @@
                 ],
             }
         },
+        mounted(){
+            this.initData();
+        },
         methods: {
+            initDate(){
+                request.sendGet({
+                    url:"/user/center/complain/list",
+                    params:{
+                        pageNum:"1",
+                        pageSize:"20"
+                    }
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        this.list = res.data.rows;
+                    }
+                })
+
+
+            },
+
+
             onClickLeft() {
                 this.$router.back(-1);
             },

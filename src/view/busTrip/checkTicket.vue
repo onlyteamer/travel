@@ -342,7 +342,7 @@
     .btnStyle{
         text-align: center;
         font-size: 34px;
-        color: #50EDE2;
+        color: #FFFFFF;
         font-weight: bold;
         width: 88%;
         margin: 0 auto;

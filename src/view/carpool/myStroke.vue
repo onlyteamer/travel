@@ -79,7 +79,7 @@
                         </van-col>
                     </van-row>
 
-                    <van-row style="margin: 10px 0" v-if="item.tripState != '已完成'">
+                    <van-row style="margin: 10px 0" v-if="item.tripState == '已完成'">
                         <van-col span="6">
 
                         </van-col>
@@ -133,12 +133,12 @@
                     <van-row style="margin: 10px 0" v-if="item.tripState != '1'">
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini">分享
+                                        size="mini" @click="wxShare">分享
                             </van-button>
                         </van-col>
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini">已发车
+                                        size="mini" @click="startCar(item.tripId)">已发车
                             </van-button>
                         </van-col>
                         <van-col span="6">
@@ -373,14 +373,37 @@
                     }
                 })
             },
+            //已发车
+            startCar(val){
+                Dialog.confirm({
+                    title: '',
+                    message: '是否确认已发车'
+                }).then(() => {
+                    // 确定
+                    request.sendPost({
+                        url: "/sharecar/trip/tripstart/" + val,
+                        params: {}
+                    }).then(res => {
+                        if (res.data.code == '0') {
+                            Toast.success("操作成功")
+                        } else {
+                            Toast.fail("操作失败")
+                        }
+                    })
+                }).catch(() => {
+                    //取消
+
+                });
+
+            },
 
             //已到达
             changeArrive(val) {
                if(this.strokeType == '0'){
                    //乘客
                    Dialog.confirm({
-                       title: '',
-                       message: '是否确认已到达'
+                       title: '已到达',
+                       message: '通知车主，已到达指定地点等候'
                    }).then(() => {
                        // 确定
                        request.sendPost({
@@ -458,8 +481,9 @@
                     sessionStorage.setItem("strokeType","0");
                     this.$router.push({path: '/cancelTrip-passenger', query: {tripId: val.tripId,bookid:val.bookId}})
                 } else {
+                    console.log(val);
                     sessionStorage.setItem("strokeType","1");
-                    this.$router.push({path: '/cancelTrip-driver', query: {tripId:val.tripId,seat:val.seatNum,confirm:val.confirmNum,unconfig:val.unconfirm}})
+                    this.$router.push({path: '/cancelTrip-driver', query: {tripId:val.tripId,seat:val.totalSeats,confirm:val.confirmSeats,unconfig:val.unconfirmSeats,price:val.tripPrice}})
                 }
             },
 

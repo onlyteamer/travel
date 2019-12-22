@@ -5,52 +5,53 @@
         <div style="margin-top: 46px;padding: 15px 0px;position: relative;">
             <div class="userInfo">
                 <van-row>
-                    <van-col span="16">2019年12月04日 05:20</van-col>
+                    <van-col span="16">{{tripDetails.tripDate}}</van-col>
                     <van-col span="8" align="right">已完成</van-col>
                 </van-row>
                 <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
                 <van-row style="display: flex;align-items: center;font-size: 14px">
                     <van-col span="24">
                         <div style="display: flex;align-items: center">
-                            <img src="../../static/images/userAvatar.png"
-                                 style="height: 52px;width: 52px;margin-right: 10px">
+                            <img :src="tripDetails.headimgurl"
+                                 style="height: 52px;width: 52px;margin-right: 10px;border-radius: 50%">
                             <div style="width: 100%">
                                 <p style="margin: 5px 0">
-                                    <span style="color: #5E5E5E;font-weight: bold">加菲猫</span><img
-                                        src="../../static/images/sexTag.png"
-                                        style="width: 12px;height: 12px;margin-left: 5px">
+                                    <span style="color: #5E5E5E;font-weight: bold">{{tripDetails.nickName}}</span>
+
+                                    <img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="tripDetails.sex == '1'">
+                                    <img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px" v-else>
                                 </p>
                                 <p style="margin: 5px 0;">
                                     <van-row>
                                         <van-col span="12" style="display: flex;align-items: center">
                                             <img src="../../static/images/userInfo.png"
                                                  style="width: 14px;height: 16px;margin-right: 5px"/><span
-                                                style="font-size: 14px;color: #5E5E5E">张**</span>
+                                                style="font-size: 14px;color: #5E5E5E">{{tripDetails.nickName}}</span>
                                         </van-col>
                                         <van-col span="12">
                                             <img src="./../../static/images/tel.png" style="width: 14px"/><span
-                                                style="font-size: 14px;color: #5E5E5E">13884997727</span>
+                                                style="font-size: 14px;color: #5E5E5E">{{tripDetails.phone}}</span>
                                         </van-col>
                                     </van-row>
                                 </p>
                                 <p style="margin: 5px 0">
                                     <van-row>
                                         <van-col span="12">
-                                            <span style="color: #FFFFFF;border-radius: 2px;padding: 0px 5px;background-color: #5083ED;margin-right: 10px">京A***99</span>
+                                            <span style="color: #FFFFFF;border-radius: 2px;padding: 0px 5px;background-color: #5083ED;margin-right: 10px">{{tripDetails.carNumber}}</span>
                                         </van-col>
                                         <van-col span="12" style="display: flex;align-items: center"><img
                                                 src="./../../static/images/car.png"
                                                 style="width: 18px;height: 18px"/><span
-                                                style="font-size: 14px;color: #5E5E5E">大众15款速腾</span></van-col>
+                                                style="font-size: 14px;color: #5E5E5E">{{tripDetails.carName}}</span></van-col>
                                     </van-row>
                                 </p>
                                 <p style="margin: 5px 0;">
                                     <van-row>
                                         <van-col span="12">
-                                            <div><i class="startTag"></i>发车地点:上河湾</div>
+                                            <div><i class="startTag"></i>发车地点:{{tripDetails.startPlace}}</div>
                                         </van-col>
                                         <van-col span="12" style="display: flex;align-items: center">
-                                            <div><i class="endTag"></i>目的地:安贞门</div>
+                                            <div><i class="endTag"></i>目的地:{{tripDetails.endPlace}}</div>
                                         </van-col>
                                     </van-row>
                                 </p>
@@ -61,11 +62,11 @@
                 <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
 
                 <div>
-                    <div style="margin-bottom: 10px"><span style="font-weight: bold">路线：</span><span>上河湾出发，李各庄，康居，果园，少年宫，万象汇，京城高速，芍药居，西坝河，东直门重点。</span>
+                    <div style="margin-bottom: 10px"><span style="font-weight: bold">路线：</span><span>{{tripDetails.tripLine}}</span>
                     </div>
-                    <div style="margin-bottom: 10px"><span style="font-weight: bold">座位数：</span><span>1位（23元）</span>
+                    <div style="margin-bottom: 10px"><span style="font-weight: bold">座位数：</span><span>1位（{{tripDetails.tripPrice}}元）</span>
                     </div>
-                    <div style="margin-bottom: 10px"><span style="font-weight: bold">乘车人：</span><span>李国思</span></div>
+                    <div style="margin-bottom: 10px" v-for="(pass,index) in passList" :key="index"><span style="font-weight: bold">乘车人：</span><span>{{pass.nickname}}</span></div>
                     <div style="margin-bottom: 10px"><span style="font-weight: bold">乘车人：</span><span>暂无</span></div>
                 </div>
                 <!--<van-row>-->
@@ -87,7 +88,7 @@
             </van-button>
             <van-button type="default" color="#0CC893"
                         style="font-size: 14px;margin-bottom: 10px;height: 28px;width: 72px;border-radius: 5px"
-                        size="mini" @click="linkComplain(item)">投诉
+                        size="mini" @click="linkComplain">投诉
             </van-button>
         </div>
 
@@ -120,13 +121,15 @@
                 title: "其他操作",
                 isFollow: "0",
                 tag:'2',
-                tripDetails:{}
+                tripDetails:{},
+                passList:[]
             }
         },
         methods: {
             //跳转投诉页面
-            linkComplain(val){
-                this.$router.push({path:"complain-passenger",query:{userId:val.userId,tripId:val.tripId}});
+            linkComplain(){
+                let tripId = this.$route.query.tripId;
+                this.$router.push({path:"complain-passenger",query:{userId:this.tripDetails.driverId,tripId:tripId}});
             },
 
             onClickLeft() {
@@ -137,7 +140,7 @@
                 request.sendPost({
                     url: '/user/center/blackadd',
                     params: {
-                        blackuserId:'',
+                        blackuserId:this.tripDetails.driverId,
                         tag:this.tag,//用户标签：1 乘客 2 车主
                     }
                 }).then((res)=>{
@@ -165,9 +168,25 @@
                         this.tripDetails.endPlace = tripInfo.endPlace;
                         this.tripDetails.tripPrice = tripInfo.tripPrice;
 
+                        //乘车人
+
+                    }
+                });
+
+                request.sendGet({
+                    url:"/sharecar/trip/passlist/"+tripId,
+                    params: {}
+                }).then(res =>{
+                    if(res.data.code==0){
+                        this.passList = res.data.rows;
+
+                        console.log(this.passList)
+                    }else{
+                        //接口错误
 
                     }
                 })
+
             },
 
             followUser() {
@@ -176,7 +195,7 @@
                     request.sendPost({
                         url: "/user/center/follow",
                         params: {
-                            followerId: "1"
+                            followerId: this.tripDetails.driverId
                         }
                     }).then(res => {
                         if (res.data.code == '0') {

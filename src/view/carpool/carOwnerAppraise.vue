@@ -5,52 +5,52 @@
         <div style="margin-top: 46px;padding: 15px 0px;position: relative;">
             <div class="userInfo">
                 <van-row>
-                    <van-col span="16">2019年12月04日 05:20</van-col>
+                    <van-col span="16">{{carOwnerInfo.tripDateTime}}</van-col>
                     <van-col span="8" align="right">已完成</van-col>
                 </van-row>
                 <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
                 <van-row style="display: flex;align-items: center;font-size: 14px">
                     <van-col span="24">
                         <div style="display: flex;align-items: center">
-                            <img src="../../static/images/userAvatar.png"
-                                 style="height: 52px;width: 52px;margin-right: 10px">
+                            <img :src="carOwnerInfo.headimgurl"
+                                 style="height: 52px;width: 52px;margin-right: 10px;border-radius: 50%">
                             <div style="width: 100%">
                                 <p style="margin: 5px 0">
-                                    <span style="color: #5E5E5E;font-weight: bold">加菲猫</span><img
-                                        src="../../static/images/sexTag.png"
-                                        style="width: 12px;height: 12px;margin-left: 5px">
+                                    <span style="color: #5E5E5E;font-weight: bold">{{carOwnerInfo.nickname}}</span>
+                                    <img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="carOwnerInfo.sex == '1'">
+                                    <img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px" v-else>
                                 </p>
                                 <p style="margin: 5px 0;">
                                     <van-row>
                                         <van-col span="12" style="display: flex;align-items: center">
                                             <img src="../../static/images/userInfo.png"
                                                  style="width: 14px;height: 16px;margin-right: 5px"/><span
-                                                style="font-size: 14px;color: #5E5E5E">张**</span>
+                                                style="font-size: 14px;color: #5E5E5E">{{carOwnerInfo.realName}}</span>
                                         </van-col>
                                         <van-col span="12">
                                             <img src="./../../static/images/tel.png" style="width: 14px"/><span
-                                                style="font-size: 14px;color: #5E5E5E">13884997727</span>
+                                                style="font-size: 14px;color: #5E5E5E">{{carOwnerInfo.phone}}</span>
                                         </van-col>
                                     </van-row>
                                 </p>
                                 <p style="margin: 5px 0">
                                     <van-row>
                                         <van-col span="12">
-                                            <span style="color: #FFFFFF;border-radius: 2px;padding: 0px 5px;background-color: #5083ED;margin-right: 10px">京A***99</span>
+                                            <span style="color: #FFFFFF;border-radius: 2px;padding: 0px 5px;background-color: #5083ED;margin-right: 10px">{{carOwnerInfo.carNumber}}</span>
                                         </van-col>
                                         <van-col span="12" style="display: flex;align-items: center"><img
                                                 src="./../../static/images/car.png"
                                                 style="width: 18px;height: 18px"/><span
-                                                style="font-size: 14px;color: #5E5E5E">大众15款速腾</span></van-col>
+                                                style="font-size: 14px;color: #5E5E5E">{{carOwnerInfo.carName}}</span></van-col>
                                     </van-row>
                                 </p>
                                 <p style="margin: 5px 0;">
                                     <van-row>
                                         <van-col span="12">
-                                            <div><i class="startTag"></i>发车地点:上河湾</div>
+                                            <div><i class="startTag"></i>发车地点:{{carOwnerInfo.startPlace}}</div>
                                         </van-col>
                                         <van-col span="12" style="display: flex;align-items: center">
-                                            <div><i class="endTag"></i>目的地:安贞门</div>
+                                            <div><i class="endTag"></i>目的地:{{carOwnerInfo.endPlace}}</div>
                                         </van-col>
                                     </van-row>
                                 </p>
@@ -124,6 +124,9 @@
                     tripId: "",
                     userId: ""
                 },
+                carOwnerInfo:{
+
+                },
                 tagList: [
                     {
                         id: "1",
@@ -184,14 +187,15 @@
 
         methods: {
             initData() {
-                // let tripId = this.$route.query.tripId;
-                let tripId = "20191215142813071";
+                let tripId = this.$route.query.tripId;
                 this.appraise.tripId = tripId;
                 request.sendPost({
                     url: "/sharecar/pass/evaluate/" + tripId,
                     params: {}
                 }).then(res => {
-                    console.log(res);
+                    if(res.data.code =='0'){
+                        this.carOwnerInfo = res.data.data;
+                    }
                 })
             },
 
@@ -226,7 +230,7 @@
                     return false;
                 }
 
-                this.appraise.driverId = "1";
+                this.appraise.driverId = this.carOwnerInfo.driverId;
                 this.appraise.userId = "";
 
                 request.sendPost({
