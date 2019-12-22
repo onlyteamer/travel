@@ -100,7 +100,8 @@
             </van-row>
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 10px 0px;">
                 <van-col span="24">
-                    <van-checkbox v-model="checked" checked-color="#07c160" shape="square">阅读并同意《免责协议和条款》和《平台支付条款》
+                    <van-checkbox v-model="checked" checked-color="#07c160" shape="square">阅读并同意<span
+                            @click="goAgreement('1')">《免责协议和条款》</span>和<span @click="goAgreement('2')">《平台支付条款》</span>
                     </van-checkbox>
                 </van-col>
             </van-row>
@@ -193,6 +194,10 @@
                 this.stroke.riderIds = picker.id;
                 this.stroke.phone = picker.passPhone;
                 this.showPassenger = false;
+            },
+
+            goAgreement(val) {
+                this.$router.push({path: '/agreement', query: {name: '绿色出行用户协议',id:val}})
             },
             goPassenger() {
                 this.showPassenger = true;
