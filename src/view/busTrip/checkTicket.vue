@@ -145,6 +145,7 @@
         },
         data(){
             return{
+                id:'',
                 title:"验票",
                 notice:"",
                 blueTime: blueTime,
@@ -238,7 +239,7 @@
 
             },
             initData() {
-                let id = 1;
+                let id = this.id;
                 request.sendPost({
                     url:"/bus/selectTicketInfo/"+ id,
                     params:{
@@ -277,6 +278,9 @@
                     })
                 }
             }
+        },
+        created(){
+            this.id=this.$route.query.id;
         }
     }
 </script>

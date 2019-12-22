@@ -17,35 +17,34 @@
                           title-inactive-color="#0CC893" color="#0CC893">
                     <van-tab title="待乘车">
                         <div class="currentDate" v-if="showAll">{{currentDate}}</div>
-                        <van-list v-model="toride.loading" :finished="toride.finished" finished-text="没有更多了"
-                                  @load="onTorideLoad" v-if="showAll">
+                        <van-list v-if="showAll">
                             <div v-for="item in toride.data" :key="item.id" @click="linkBusDetail(item.busid)">
                                 <div class="card">
                                     <div style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;height: 45px;justify-content: space-between">
-                                        <span class="line">昌坤出行3线：上河湾 →  西坝河</span>
-                                        <span class="list-price">￥20</span>
+                                        <span class="line">{{item.linename}}：{{item.startname}}->{{item.endname}}</span>
+                                        <span class="list-price">￥{{item.ticketPrice}}</span>
                                     </div>
                                     <div style="display: flex;align-items: center;justify-content: space-between;height: 85px">
                                         <div>
                                             <div style="display: flex;height:35px;line-height: 35px">
                                                 <div><img :src="blueTime" width="13px" height="13px"><span
-                                                        style="margin-left: 7px;margin-right: 13px">5:20</span></div>
+                                                        style="margin-left: 7px;margin-right: 13px">{{item.starttime}}</span></div>
                                                 <div><img :src="blueTime" width="13px" height="13px"><span
-                                                        style="margin-left: 7px;">上河湾</span></div>
+                                                        style="margin-left: 7px;">{{item.startname}}</span></div>
                                             </div>
                                             <div style="display: flex;height:35px;line-height: 35px">
                                                 <div><img :src="redTime" width="13px" height="13px"><span
-                                                        style="margin-left: 7px;margin-right: 13px">5:20</span></div>
+                                                        style="margin-left: 7px;margin-right: 13px">{{item.endtime}}</span></div>
                                                 <div><img :src="redTime" width="13px" height="13px"><span
-                                                        style="margin-left: 7px;">西坝河</span></div>
+                                                        style="margin-left: 7px;">{{item.endname}}</span></div>
                                             </div>
                                         </div>
                                         <div style="display: flex;flex-direction: column;justify-content:space-around;height: 100%">
-                                            <van-button type="default"
+                                            <van-button type="default" @click="checkTicket(item.id)"
                                                         style="width:66px;height:28px;line-height:28px;background: #0CC893;color: #FFFFFF;border-radius: 5px">
                                                 验票
                                             </van-button>
-                                            <van-button type="default"
+                                            <van-button type="default" @click="refundTicket(item.id)"
                                                         style="width:66px;height:28px;line-height:28px;background: #9E9E9E;color: #FFFFFF;border-radius: 5px">
                                                 退票
                                             </van-button>
@@ -58,21 +57,21 @@
                                     plain color="#0CC893" type="default" v-if="showAll">
                             查看全部
                         </van-button>
-                        <van-list v-model="toride.loading" :finished="toride.finished" finished-text="没有更多了"
+                        <van-list v-model="tripAllList.loading" :finished="tripAllList.finished" finished-text="没有更多了"
                                   @load="onTorideLoadAll" style="margin-top: 15px" v-if="!showAll">
-                            <van-collapse v-model="tripName" accordion>
-                                <van-collapse-item :title="item.dateTime" :name="item.orderId"
-                                                   v-for="(item,index) in tripAllList.data" :key="index">
-                                    <van-row v-for="(line,indexNum) in item.strokeList" :key="indexNum"
+                            <van-collapse v-model="tripName" accordion @change="initTripAllList">
+                                <van-collapse-item :title="item.date" :name="item.date"
+                                                   v-for="(item,index) in tripAllList.dateList" :key="index">
+                                    <van-row v-for="(line,indexNum) in tripAllList.data" :key="line.id"
                                              style="margin-bottom: 10px;color: #5083ED">
-                                        <van-col span="14">{{line.lineName}}</van-col>
-                                        <van-col span="10" style="color: #0CC893;text-align: right">
+                                        <van-col span="14" style="color: #5083ED;font-size: 14px;font-weight: bold">{{line.linename}}：{{line.startname}}->{{line.endname}}</van-col>
+                                        <van-col span="10" style="color: #0CC893;text-align: right;font-size: 14px;">
                                             <div style="display: inline-block">
-                                                <van-button type="default" size="small"
+                                                <van-button type="default" size="small" @click="checkTicket(line.id)"
                                                             style="background: #0CC893;color: #FFFFFF;border-radius: 5px">
                                                     验票
                                                 </van-button>
-                                                <van-button type="default" size="small"
+                                                <van-button type="default" size="small" @click="refundTicket(line.id)"
                                                             style="margin-left: 5px;background: #9E9E9E;color: #FFFFFF;border-radius: 5px">
                                                     退票
                                                 </van-button>
@@ -86,13 +85,16 @@
                     <van-tab title="全部订单">
                         <van-list v-model="allOrder.loading" :finished="allOrder.finished" finished-text="没有更多了"
                                   @load="onAllOrderLoad" style="margin-top: 15px">
-                            <van-collapse v-model="activeName" accordion>
-                                <van-collapse-item :title="item.dateTime" :name="item.orderId"
-                                                   v-for="(item,index) in allOrder.data" :key="index">
-                                    <van-row v-for="(line,indexNum) in item.strokeList" :key="indexNum"
+                            <van-collapse v-model="activeName" accordion @change="changeAllOrder">
+                                <van-collapse-item :title="item.date" :name="item.date"
+                                                   v-for="(item,index) in allOrder.dateList" :key="index">
+                                    <van-row v-for="(line,indexNum) in allOrder.data" :key="line.id"
                                              style="margin-bottom: 10px;color: #5083ED">
-                                        <van-col span="18">{{line.lineName}}</van-col>
-                                        <van-col span="6" style="color: #0CC893;text-align: right">{{line.flag ==
+                                        <van-col span="18" style="color: #5083ED;font-size: 14px;font-weight: bold">
+                                            {{line.linename}}：{{line.startname}}->{{line.endname}}
+                                        </van-col>
+                                        <van-col span="6" style="color: #0CC893;text-align: right;font-size: 14px">
+                                            {{line.flag ==
                                             '0'?'待乘车':'已完成'}}
                                         </van-col>
                                     </van-row>
@@ -103,12 +105,13 @@
                     <van-tab title="退款订单">
                         <van-list v-model="refund.loading" :finished="refund.finished" finished-text="没有更多了"
                                   @load="onRefundLoad" style="margin-top: 15px">
-                            <van-collapse v-model="refundNum" accordion>
-                                <van-collapse-item :title="item.dateTime" :name="item.orderId"
-                                                   v-for="(item,index) in refund.data" :key="index">
-                                    <van-row v-for="(line,indexNum) in item.strokeList" :key="indexNum"
+                            <van-collapse v-model="refundNum" accordion @change="initRefundData">
+                                <van-collapse-item :title="item.date" :name="item.date"
+                                                   v-for="(item,index) in refund.dateList" :key="index">
+                                    <van-row v-for="(line,indexNum) in refund.data" :key="line.id"
                                              style="margin-bottom: 10px;color: #202020;font-weight: bold">
-                                        <van-col span="18">{{line.lineName}}</van-col>
+                                        <van-col span="18" style="color: #5083ED;font-size: 14px;font-weight: bold">{{line.linename}}：{{line.startname}}->{{line.endname}}
+                                        </van-col>
                                         <van-col span="6" style="color: #5E5E5E;text-align: right">{{line.flag ==
                                             '3'?'已退款':''}}
                                         </van-col>
@@ -145,10 +148,10 @@
         },
         data() {
             return {
-                tripName: 1,
+                tripName: '',
                 showAll: true,
-                refundNum: 1,
-                activeName: 1,
+                refundNum: '',
+                activeName: '',
                 currentDate: moment().format("YYYY年MM月"),
                 header_active: 0,
                 active: 0,
@@ -159,7 +162,8 @@
                     loading: false,
                     finished: false,
                     data: [],
-                    pageSize: 6,
+                    dateList: [],
+                    pageSize: 20,
                     pageNum: 1,
                     total: 0
                 },
@@ -167,8 +171,9 @@
                     isOneHttp: true,
                     loading: false,
                     finished: false,
+                    dateList: [],
                     data: [],
-                    pageSize: 6,
+                    pageSize: 20,
                     pageNum: 1,
                     total: 0
                 },
@@ -176,27 +181,40 @@
                     isOneHttp: true,
                     loading: false,
                     finished: false,
+                    dateList: [],
                     data: [],
-                    pageSize: 6,
+                    pageSize: 20,
                     pageNum: 1,
                     total: 0
                 },
                 toride: {
-                    isOneHttp: true,
-                    loading: false,
-                    finished: false,
                     data: [],
-                    pageSize: 6,
-                    pageNum: 1,
-                    total: 0
-                }
+                },
+
             }
         },
         methods: {
+            checkTicket(id){
+              this.$router.push({path:'/checkTicket',query:{'id':id}});
+            },
+            refundTicket(id){
+                request.sendPost({
+                    url:'/bus/refundTicket',
+                    params:{
+                        ticketid:id
+                    }
+                }).then((res)=>{
+                    if(res.data.code===0){
+
+                    }else{
+                        Toast(res.data.msg);
+                    }
+                })
+            },
             onClick() {
                 switch (this.active) {
                     case 0:
-                        if(this.showAll){
+                        if (this.showAll) {
                             this.toride.isOneHttp = true;
                             this.toride.loading = false;
                             this.toride.finished = false;
@@ -204,14 +222,15 @@
                             this.toride.pageNum = 1;
                             this.toride.total = 0;
                             this.initTorideData();
-                        }else{
+                        } else {
                             this.tripAllList.isOneHttp = true;
                             this.tripAllList.loading = false;
                             this.tripAllList.finished = false;
                             this.tripAllList.data = [];
+                            this.tripAllList.dateList = [];
                             this.tripAllList.pageNum = 1;
                             this.tripAllList.total = 0;
-                            this.initTripAllList();
+                            this.initTripAllDateList();
                         }
                         break;
                     case 1:
@@ -219,25 +238,39 @@
                         this.allOrder.loading = false;
                         this.allOrder.finished = false;
                         this.allOrder.data = [];
+                        this.allOrder.dateList = [];
                         this.allOrder.pageNum = 1;
                         this.allOrder.total = 0;
-                        this.initAllOrderData();
+                        this.initAllOrderDateList();
                         break;
                     case 2:
                         this.refund.isOneHttp = true;
                         this.refund.loading = false;
                         this.refund.finished = false;
                         this.refund.data = [];
+                        this.refund.dateList = [];
                         this.refund.pageNum = 1;
                         this.refund.total = 0;
-                        this.initRefundData();
+                        this.initRefundDateList();
                         break;
                 }
             },
 
-            initTripAllList(){
+            initTripAllList() {
                 request.sendPost({
                     url: '/bus/checklist',
+                    params: {
+                        ischeck: 0,
+                        isrefund: 0,
+                        dateStr:this.tripName
+                    }
+                }).then((res) => {
+                        this.tripAllList.data = res.data.rows;
+                })
+            },
+            initTripAllDateList() {
+                request.sendPost({
+                    url: '/bus/orderDateList',
                     params: {
                         ischeck: 0,
                         isrefund: 0,
@@ -248,13 +281,13 @@
                     this.tripAllList.total = res.data.total;
                     //判断是否是第一次请求数据
                     if (this.tripAllList.isOneHttp) {
-                        this.tripAllList.data = res.data.rows;
+                        this.tripAllList.dateList = res.data.rows;
                         this.tripAllList.isOneHttp = false;
                     } else {
-                        this.tripAllList.data = this.tripAllList.data.concat(res.data.rows);
+                        this.tripAllList.dateList = this.tripAllList.dateList.concat(res.data.rows);
                     }
 
-                    if (this.tripAllList.total === this.tripAllList.data.length) {
+                    if (this.tripAllList.total === this.tripAllList.dateList.length) {
                         this.tripAllList.finished = true;
                     }
                     this.tripAllList.loading = false;
@@ -263,7 +296,7 @@
             onTorideLoadAll() {
                 if (this.tripAllList.total > this.tripAllList.data.length) {
                     this.tripAllList.pageNum += 1;
-                    this.initTripAllList();
+                    this.initTripAllDateList();
                 }
             },
 
@@ -273,22 +306,33 @@
                 this.tripAllList.loading = false;
                 this.tripAllList.finished = false;
                 this.tripAllList.data = [];
+                this.tripAllList.dateList=[];
                 this.tripAllList.pageNum = 1;
                 this.tripAllList.total = 0;
-                this.initTripAllList();
+                this.initTripAllDateList();
             },
             onClickLeft() {
                 this.$router.back(-1);
             },
             onRefundLoad() {
-                if (this.refund.total > this.refund.data.length) {
+                if (this.refund.total > this.refund.dateList.length) {
                     this.refund.pageNum += 1;
-                    this.initRefundData();
+                    this.initRefundDateList();
                 }
             },
             initRefundData() {
                 request.sendPost({
                     url: '/bus/refundlist',
+                    params: {
+                        dateStr: this.refundNum
+                    }
+                }).then((res) => {
+                    this.refund.data = res.data.rows;
+                })
+            },
+            initRefundDateList() {
+                request.sendPost({
+                    url: '/bus/refundDateList',
                     params: {
                         pageNum: this.refund.pageNum,
                         pageSize: this.refund.pageSize,
@@ -297,53 +341,60 @@
                     this.refund.total = res.data.total;
                     //判断是否是第一次请求数据
                     if (this.refund.isOneHttp) {
-                        this.refund.data = res.data.rows;
+                        this.refund.dateList = res.data.rows;
                         this.refund.isOneHttp = false;
                     } else {
-                        this.refund.data = this.refund.data.concat(res.data.rows);
+                        this.refund.dateList = this.refund.dateList.concat(res.data.rows);
                     }
 
-                    if (this.refund.total === this.refund.data.length) {
+                    if (this.refund.total === this.refund.dateList.length) {
                         this.refund.finished = true;
                     }
                     this.refund.loading = false;
                 })
             },
             onAllOrderLoad() {
-                if (this.allOrder.total > this.allOrder.data.length) {
+                if (this.allOrder.total > this.allOrder.dateList.length) {
                     this.allOrder.pageNum += 1;
-                    this.initAllOrderData();
+                    this.initAllOrderDateList();
                 }
             },
-            initAllOrderData(){
+            changeAllOrder() {
                 request.sendPost({
                     url: '/bus/checklist',
+                    params: {
+                        dateStr: this.activeName,
+                    }
+                }).then((res) => {
+                    this.allOrder.data = res.data.rows;
+                });
+            },
+            initAllOrderDateList() {
+                request.sendPost({
+                    url: '/bus/orderDateList',
                     params: {
                         pageNum: this.allOrder.pageNum,
                         pageSize: this.allOrder.pageSize,
                     }
-                }).then((res)=>{
+                }).then((res) => {
                     this.allOrder.total = res.data.total;
                     //判断是否是第一次请求数据
                     if (this.allOrder.isOneHttp) {
-                        this.allOrder.data = res.data.rows;
+                        this.allOrder.dateList = res.data.rows;
                         this.allOrder.isOneHttp = false;
                     } else {
-                        this.allOrder.data = this.allOrder.data.concat(res.data.rows);
+                        this.allOrder.dateList = this.allOrder.data.concat(res.data.rows);
                     }
 
-                    if (this.allOrder.total === this.allOrder.data.length) {
+                    if (this.allOrder.total === this.allOrder.dateList.length) {
                         this.allOrder.finished = true;
                     }
                     this.allOrder.loading = false;
+                    if (this.allOrder.dateList && this.allOrder.dateList.length > 0) {
+                        this.activeName = this.allOrder.dateList[0].date;
+                        this.changeAllOrder();
+                    }
                 })
-
-            },
-            onTorideLoad() {
-                if (this.toride.total > this.toride.data.length) {
-                    this.toride.pageNum += 1;
-                    this.initTorideData();
-                }
             },
             initTorideData() {
                 request.sendPost({
@@ -352,27 +403,13 @@
                         dateStr: moment().format("YYYY-MM-DD"),
                         ischeck: 0,
                         isrefund: 0,
-                        pageNum: this.toride.pageNum,
-                        pageSize: this.toride.pageSize,
                     }
                 }).then((res) => {
-                    this.toride.total = res.data.total;
-                    //判断是否是第一次请求数据
-                    if (this.toride.isOneHttp) {
                         this.toride.data = res.data.rows;
-                        this.toride.isOneHttp = false;
-                    } else {
-                        this.toride.data = this.toride.data.concat(res.data.rows);
-                    }
-
-                    if (this.toride.total === this.toride.data.length) {
-                        this.toride.finished = true;
-                    }
-                    this.toride.loading = false;
                 })
             },
-            linkBusDetail(val){
-                this.$router.push({path:"/busDetail",query:{busid:val}})
+            linkBusDetail(val) {
+                this.$router.push({path: "/busDetail", query: {busid: val}})
             },
         },
         created() {
