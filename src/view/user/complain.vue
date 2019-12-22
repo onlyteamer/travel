@@ -55,18 +55,14 @@
             return {
                 loading: false,
                 finished: false,
-                list: [{id: '1', time: '8:30', year: '2019年12月30日', name: '拼车出行收益', value: '20', type: '1'},
-                    {id: '2', time: '8:30', year: '2019年12月30日', name: '拼车出行收益', value: '100', type: '-1'},
-                    {id: '3', time: '8:30', year: '2019年12月30日', name: '拼车出行收益', value: '80', type: '-1'},
-                    {id: '4', time: '8:30', year: '2019年12月30日', name: '拼车出行收益', value: '120', type: '1'},
-                ],
+                list: [],
             }
         },
         mounted(){
             this.initData();
         },
         methods: {
-            initDate(){
+            initData(){
                 request.sendGet({
                     url:"/user/center/complain/list",
                     params:{

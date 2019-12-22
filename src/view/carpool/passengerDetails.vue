@@ -77,8 +77,8 @@
         },
 
         methods:{
-            initDate(){
-                
+            initData(){
+
             },
 
             onClickLeft(){
