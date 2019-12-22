@@ -3,7 +3,7 @@
         <div style="position: fixed;top: 0;height: 46px;width: 100%">
             <van-nav-bar :fixed="true" left-arrow @click-left="onClickLeft"/>
             <div style="position: fixed;top:0;width: 92%;z-index: 9999;left: 8%">
-                <van-tabs v-model="header_active">
+                <van-tabs v-model="header_active" @click="onClick">
                     <van-tab title="通勤班车">
                     </van-tab>
                     <van-tab title="旅游班车">
@@ -197,7 +197,6 @@
             }
         },
         methods: {
-
             checkTicket(id) {
                 this.$router.push({path: '/checkTicket', query: {'id': id}});
             },
@@ -269,6 +268,7 @@
                     params: {
                         ischeck: 0,
                         isrefund: 0,
+                        type:this.header_active===0?'1':'2',
                         dateStr: e
                     }
                 }).then((res) => {
@@ -281,6 +281,7 @@
                     params: {
                         ischeck: 0,
                         isrefund: 0,
+                        type:this.header_active===0?'1':'2',
                         pageNum: this.tripAllList.pageNum,
                         pageSize: this.tripAllList.pageSize,
                     }
@@ -331,6 +332,7 @@
                 request.sendPost({
                     url: '/bus/refundlist',
                     params: {
+                        type:this.header_active===0?'1':'2',
                         dateStr: e
                     }
                 }).then((res) => {
@@ -341,6 +343,7 @@
                 request.sendPost({
                     url: '/bus/refundDateList',
                     params: {
+                        type:this.header_active===0?'1':'2',
                         pageNum: this.refund.pageNum,
                         pageSize: this.refund.pageSize,
                     }
@@ -371,6 +374,7 @@
                 request.sendPost({
                     url: '/bus/checklist',
                     params: {
+                        type:this.header_active===0?'1':'2',
                         dateStr: e
                     }
                 }).then((res) => {
@@ -381,6 +385,7 @@
                 request.sendPost({
                     url: '/bus/orderDateList',
                     params: {
+                        type:this.header_active===0?'1':'2',
                         pageNum: this.allOrder.pageNum,
                         pageSize: this.allOrder.pageSize,
                     }
@@ -404,6 +409,7 @@
                 request.sendPost({
                     url: '/bus/checklist',
                     params: {
+                        type:this.header_active===0?'1':'2',
                         dateStr: moment().format("YYYY-MM-DD"),
                         ischeck: 0,
                         isrefund: 0,
