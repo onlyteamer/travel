@@ -3,7 +3,7 @@ import qs from 'querystring'
 
 let server = {};
 
-const ajaxUrl = 'https://gstpapi.huntauto.com.cn';
+const ajaxUrl = 'http://gstpapi.huntauto.com.cn';
 
 server.axios = axios.create({
     baseURL: ajaxUrl,
@@ -58,6 +58,7 @@ baas.interceptors.request.use(function (config) {
             .then(function (response) {
                     //获取到验证URL,给微信发送请求
                     let authURL = response.data.data.url;
+                    console.log(authURL);
                     window.location.href = authURL;
                 }
             ).catch(function (error) {
