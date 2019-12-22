@@ -3,7 +3,7 @@ import qs from 'querystring'
 
 let server = {};
 
-const ajaxUrl = 'http://gstpapi.huntauto.com.cn';
+const ajaxUrl = 'https://gstpapi.huntauto.com.cn';
 
 server.axios = axios.create({
     baseURL: ajaxUrl,
