@@ -61,7 +61,7 @@
                         </van-button>
                         <van-list v-model="tripAllList.loading" :finished="tripAllList.finished" finished-text="没有更多了"
                                   @load="onTorideLoadAll" style="margin-top: 15px" v-if="!showAll">
-                            <van-collapse v-model="tripName" accordion @change="initTripAllList">
+                            <van-collapse v-model="tripName" accordion @change="initTripAllList($event)">
                                 <van-collapse-item :title="item.date" :name="item.date"
                                                    v-for="(item,index) in tripAllList.dateList" :key="index">
                                     <van-row v-for="(line,indexNum) in tripAllList.data" :key="line.id"
@@ -89,7 +89,7 @@
                     <van-tab title="全部订单">
                         <van-list v-model="allOrder.loading" :finished="allOrder.finished" finished-text="没有更多了"
                                   @load="onAllOrderLoad" style="margin-top: 15px">
-                            <van-collapse v-model="activeName" accordion @change="changeAllOrder">
+                            <van-collapse v-model="activeName" accordion @change="changeAllOrder($event)">
                                 <van-collapse-item :title="item.date" :name="item.date"
                                                    v-for="(item,index) in allOrder.dateList" :key="index">
                                     <van-row v-for="(line,indexNum) in allOrder.data" :key="line.id"
@@ -109,7 +109,7 @@
                     <van-tab title="退款订单">
                         <van-list v-model="refund.loading" :finished="refund.finished" finished-text="没有更多了"
                                   @load="onRefundLoad" style="margin-top: 15px">
-                            <van-collapse v-model="refundNum" accordion @change="initRefundData">
+                            <van-collapse v-model="refundNum" accordion @change="initRefundData($event)">
                                 <van-collapse-item :title="item.date" :name="item.date"
                                                    v-for="(item,index) in refund.dateList" :key="index">
                                     <van-row v-for="(line,indexNum) in refund.data" :key="line.id"
@@ -154,12 +154,9 @@
         data() {
             return {
                 tripName: '',
-                tripName2: '',
                 showAll: true,
                 refundNum: '',
-                refundNum2: '',
                 activeName: '',
-                activeName2: '',
                 currentDate: moment().format("YYYY年MM月DD日"),
                 header_active: 0,
                 active: 0,
@@ -202,6 +199,7 @@
             }
         },
         methods: {
+
             checkTicket(id) {
                 this.$router.push({path: '/checkTicket', query: {'id': id}});
             },
@@ -265,14 +263,13 @@
                 }
             },
 
-            initTripAllList() {
-                this.tripName2 = this.tripName?this.tripName:this.tripName2;
+            initTripAllList(e) {
                 request.sendPost({
                     url: '/bus/checklist',
                     params: {
                         ischeck: 0,
                         isrefund: 0,
-                        dateStr: this.tripName?this.tripName:this.tripName2
+                        dateStr: e
                     }
                 }).then((res) => {
                     this.tripAllList.data = res.data.rows;
@@ -301,11 +298,6 @@
                         this.tripAllList.finished = true;
                     }
                     this.tripAllList.loading = false;
-                    if (this.tripAllList.dateList && this.tripAllList.dateList.length > 0) {
-                        this.tripName = this.tripAllList.dateList[0].date;
-                        this.tripName2 = this.tripAllList.dateList[0].date;
-                        this.initTripAllList();
-                    }
                 })
             },
             onTorideLoadAll() {
@@ -335,12 +327,11 @@
                     this.initRefundDateList();
                 }
             },
-            initRefundData() {
-                this.refundNum2 = this.refundNum ? this.refundNum : this.refundNum2;
+            initRefundData(e) {
                 request.sendPost({
                     url: '/bus/refundlist',
                     params: {
-                        dateStr: this.refundNum ? this.refundNum : this.refundNum2
+                        dateStr: e
                     }
                 }).then((res) => {
                     this.refund.data = res.data.rows;
@@ -367,11 +358,7 @@
                         this.refund.finished = true;
                     }
                     this.refund.loading = false;
-                    if (this.refund.dateList && this.refund.dateList.length > 0) {
-                        this.refundNum = this.refund.dateList[0].date;
-                        this.refundNum2 = this.refund.dateList[0].date;
-                        this.initRefundData();
-                    }
+
                 })
             },
             onAllOrderLoad() {
@@ -380,13 +367,11 @@
                     this.initAllOrderDateList();
                 }
             },
-            changeAllOrder() {
-                this.activeName2 = this.activeName?this.activeName:this.activeName2;
-                console.log(this.activeName?this.activeName:this.activeName2);
+            changeAllOrder(e) {
                 request.sendPost({
                     url: '/bus/checklist',
                     params: {
-                        dateStr: this.activeName?this.activeName:this.activeName2
+                        dateStr: e
                     }
                 }).then((res) => {
                     this.allOrder.data = res.data.rows;
@@ -413,11 +398,6 @@
                         this.allOrder.finished = true;
                     }
                     this.allOrder.loading = false;
-                    if (this.allOrder.dateList && this.allOrder.dateList.length > 0) {
-                        this.activeName = this.allOrder.dateList[0].date;
-                        this.activeName2 = this.allOrder.dateList[0].date;
-                        this.changeAllOrder();
-                    }
                 })
             },
             initTorideData() {
