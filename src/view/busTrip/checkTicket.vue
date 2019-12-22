@@ -28,10 +28,7 @@
 
         <!--<div class="btnStyle" @click="checkTicket" id="showTitleBox">{{ticketInfo.showcode}}</div>-->
         <div class="btnStyle" @click="checkTicket" id="showTitleBox">
-            <span>马</span>
-            <span>到</span>
-            <span>成</span>
-            <span>功</span>
+            <span v-for="(item,index) in charList" :key="index">{{item}}</span>
         </div>
 
         <div class="lineInfo">
@@ -174,7 +171,7 @@
                     pageNum: 1,
                     total: 0
                 },
-
+                charList:[],
                 ticketInfo:{},
                 isOneHttp: true,
             }
@@ -245,7 +242,7 @@
 
             },
             initData() {
-                let id = this.id;
+                let id = this.id||51;
                 request.sendPost({
                     url:"/bus/selectTicketInfo/"+ id,
                     params:{
@@ -263,6 +260,14 @@
                             });
                             this.ticketInfo.dateStr = str;
                         }
+                        if(this.ticketInfo.showcode){
+                            let size = this.ticketInfo.showcode.length;
+                            for(let i = 0;i<size;i++){
+                                this.charList.push(this.ticketInfo.showcode.charAt(i));
+                            }
+                        }
+
+
 
                         this.queryLineDetailsList(this.ticketInfo.busid);
                     }
@@ -337,7 +342,7 @@
     .btnStyle{
         text-align: center;
         font-size: 34px;
-        color: #FFFFFF;
+        color: #50EDE2;
         font-weight: bold;
         width: 88%;
         margin: 0 auto;
