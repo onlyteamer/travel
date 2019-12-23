@@ -114,6 +114,7 @@
     import request from '../../utils/request'
     import axios from 'axios';
     import qs from 'querystring'
+    import context from "../../utils/context";
 
     export default {
         components: {
@@ -200,14 +201,13 @@
                 let strs = str.split("&");
                 let code = strs[0].split("=")[1];
                 let state = strs[1].split("=")[1];
-                axios.get("http://gstpapi.huntauto.com.cn/wx/getopenid?"+ qs.stringify({code:code}))
-                    //成功返回
-                    .then(res => {
+                let url2 = context.baseUrl+"/wx/getopenid?"+ qs.stringify({code:code});
+                axios.get(url2).then(res => {
                         if(res.data.code===0){
                             let openid = res.data.data.openid;
                             localStorage.setItem("openid",openid);
                             axios.post(
-                                'http://gstpapi.huntauto.com.cn/wx/login', qs.stringify({openid:openid})).then((res)=>{
+                                context.baseUrl+'/wx/login', qs.stringify({openid:openid})).then((res)=>{
                                 if(res.data.data.isLogin==="1"){
                                     //登陆成功
                                     localStorage.setItem("isLogin","1");

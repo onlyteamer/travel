@@ -104,7 +104,8 @@
 <script>
     import {NavBar, Row, Col, Field, Button, Toast} from 'vant';
     import request from "../../utils/request"
-    import wx from 'weixin-js-sdk';
+    import context from "../../utils/context";
+
 
     export default {
         components: {
@@ -166,6 +167,25 @@
 
                 })
             },
+            wxPay(){
+                var url = context.wxGetConfigUrl;
+                request.sendGet({
+                    url:url,
+                    params:{}
+                }).then(res =>{
+                    var data = res.data.data;
+                    wx.config({
+                        beta: true,// 必须这么写，否则在微信插件有些jsapi会有问题
+                        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: data.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
+                        timestamp: parseInt(data.timestamp,10), // 必填，生成签名的时间戳
+                        nonceStr: data.nonceStr, // 必填，生成签名的随机串
+                        signature: data.signature,// 必填，签名，见附录1
+                        jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage','onMenuShareQQ','onMenuShareQZone','hideOptionMenu'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                    });
+
+                })
+            },
             initData() {
                 request.sendGet({
                     url: '/user/center/finance',
@@ -179,15 +199,7 @@
         },
         created() {
             this.initData();
-            wx.config({
-                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: '', // 必填，公众号的唯一标识
-                timestamp: "", // 必填，生成签名的时间戳
-                nonceStr: '', // 必填，生成签名的随机串
-                signature: '',// 必填，签名，见附录1
-                jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-            });
-
+            this.wxPay();
         },
     }
 </script>
