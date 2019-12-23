@@ -210,8 +210,8 @@
 <script>
     import Title from './../../components/header'
     import {Tab, Tabs, Divider, Row, Col, Button, Popup, Dialog, Toast,Field } from 'vant';
-
     import request from '../../utils/request'
+    import context from "../../utils/context";
 
     export default {
         name: "myStroke",
@@ -488,7 +488,7 @@
             },
 
             wxShare(){
-                var url = 'http://gstpapi.huntauto.com.cn//wx/redirect/wxfe42689b9e435f72/signature?url=http://gstpapi.huntauto.com.cn/wx/travel/demo.html';
+                var url = context.wxGetConfigUrl;
                 request.sendGet({
                     url:url,
                     params:{
@@ -505,8 +505,8 @@
                         signature: data.signature,// 必填，签名，见附录1
                         jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage','onMenuShareQQ','onMenuShareQZone','hideOptionMenu'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                     });
-                    var ShareLink = "http://gstpapi.huntauto.com.cn/wx/travel/demo.html"; //默认分享链接
-                    var ShareImgUrl = "http://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
+                    var ShareLink = context.baseUrl+"/wx/travel/demo.html"; //默认分享链接
+                    var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
                     var ShareTitle = "申坤出行"; // 分享标题
                     var ShareDesc = "申坤出行!"; // 分享描述
                     wx.ready(function(){

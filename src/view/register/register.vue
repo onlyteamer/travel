@@ -36,6 +36,7 @@
     import request from '../../utils/request';
     import axios from 'axios';
     import qs from 'querystring'
+    import context from "../../utils/context";
 
     export default {
         components: {
@@ -71,7 +72,8 @@
             async sendCode() {
                 if (this.definition.phone && this.checkPhone(this.definition.phone)) {
                     this.countDown(60);
-                    axios.get("http://gstpapi.huntauto.com.cn/wx/getcode?" + qs.stringify({phone: this.definition.phone}))
+                    let baseUrl = context.baseUrl;
+                    axios.get(baseUrl+"/wx/getcode?" + qs.stringify({phone: this.definition.phone}))
                         .then((res) => {
 
                         })
@@ -108,8 +110,9 @@
                 if (!this.definition.checked) {
                     return;
                 }
+                let baseUrl = context.baseUrl;
                 axios.post(
-                    'http://gstpapi.huntauto.com.cn/bindphone', qs.stringify(
+                    baseUrl+'/bindphone', qs.stringify(
                         {
                             openid: localStorage.getItem('openid'),
                             code: this.definition.code,
@@ -118,7 +121,7 @@
                 ).then((res) => {
                     if (res.data.code == 0) {
                         axios.post(
-                            'http://gstpapi.huntauto.com.cn/wx/login', qs.stringify({openid: localStorage.getItem('openid')})).then((res) => {
+                            baseUrl+'/wx/login', qs.stringify({openid: localStorage.getItem('openid')})).then((res) => {
                             if (res.data.data.isLogin === "1") {
                                 //登陆成功
                                 localStorage.setItem("isLogin", "1");

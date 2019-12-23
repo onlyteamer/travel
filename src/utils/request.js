@@ -1,9 +1,10 @@
 import axios from 'axios';
 import qs from 'querystring'
+import context from "./context";
 
 let server = {};
 
-const ajaxUrl = 'https://gstpapi.huntauto.com.cn';
+const ajaxUrl = context.baseUrl;
 
 server.axios = axios.create({
     baseURL: ajaxUrl,
@@ -54,16 +55,18 @@ baas.interceptors.request.use(function (config) {
         let openid = localStorage.getItem('openid');
         config.headers['openid'] = openid;
     } else {
-        axios.get(ajaxUrl + '/wx/authorize')
-            .then(function (response) {
-                    //获取到验证URL,给微信发送请求
-                    let authURL = response.data.data.url;
-                    // console.log(authURL);
-                    window.location.href = authURL;
-                }
-            ).catch(function (error) {
-            console.log(error);
-        });
+        localStorage.setItem("openid","abcdefghigklmm");
+        localStorage.setItem("isLogin",'1');
+        // axios.get(ajaxUrl + '/wx/authorize')
+        //     .then(function (response) {
+        //             //获取到验证URL,给微信发送请求
+        //             let authURL = response.data.data.url;
+        //             console.log(authURL);
+        //             window.location.href = authURL;
+        //         }
+        //     ).catch(function (error) {
+        //     console.log(error);
+        // });
     }
     return config;
 });
