@@ -1,8 +1,8 @@
 {
-  "name": "vant-demo",
+  "name": "green-travel",
   "version": "1.0.0",
-  "description": "Collection of vant demos.",
-  "author": "neverland <chenjiahan@neverl.com>",
+  "description": "gree-travel",
+  "author": "",
   "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve",
