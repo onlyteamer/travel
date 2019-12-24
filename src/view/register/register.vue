@@ -72,8 +72,7 @@
             async sendCode() {
                 if (this.definition.phone && this.checkPhone(this.definition.phone)) {
                     this.countDown(60);
-                    let baseUrl = context.baseUrl;
-                    axios.get(baseUrl+"/wx/getcode?" + qs.stringify({phone: this.definition.phone}))
+                    request.axios.get( "/api/wx/getcode?" + qs.stringify({phone: this.definition.phone}))
                         .then((res) => {
 
                         })
@@ -110,9 +109,8 @@
                 if (!this.definition.checked) {
                     return;
                 }
-                let baseUrl = context.baseUrl;
-                axios.post(
-                    baseUrl+'/bindphone', qs.stringify(
+
+                request.axios.post('/api/wx/bindphone', qs.stringify(
                         {
                             openid: localStorage.getItem('openid'),
                             code: this.definition.code,
@@ -120,20 +118,25 @@
                         })
                 ).then((res) => {
                     if (res.data.code == 0) {
-                        axios.post(
-                            baseUrl+'/wx/login', qs.stringify({openid: localStorage.getItem('openid')})).then((res) => {
-                            if (res.data.data.isLogin === "1") {
-                                //登陆成功
-                                localStorage.setItem("isLogin", "1");
-                                this.$router.push({path: '/carIndex'});
-                            } else {
+                        request.axios.post(
+                            '/api/wx/login', qs.stringify({openid:localStorage.getItem('openid')})).then((res)=>{
+                            if(res.data.code===0){
+                                if(res.data.data.isLogin==="1"){
+                                    //登陆成功
+                                    localStorage.setItem("isLogin","1");
+                                    this.$router.push({path:'/user'})
+                                }else{
+                                    this.$router.push({path:'/register'})
+                                }
+                            }else{
                                 Toast(res.data.msg);
                             }
                         })
-                    } else {
+                    }else{
                         Toast(res.data.msg);
                     }
                 })
+
             },
             goAgreement() {
                 //协议页面

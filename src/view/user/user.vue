@@ -44,8 +44,10 @@
                 <div class="func-wrap">
                     <div class="func-title"><span>我的行程</span></div>
                     <div class="func-content">
-                        <div class="func-content-item" @click="goTicketList"><img src="../../static/images/user/bc.png"/><span>班车</span></div>
-                        <div class="func-content-item" @click="goMyStroke"><img src="../../static/images/user/pc.png"/><span>拼车</span></div>
+                        <div class="func-content-item" @click="goTicketList"><img
+                                src="../../static/images/user/bc.png"/><span>班车</span></div>
+                        <div class="func-content-item" @click="goMyStroke"><img
+                                src="../../static/images/user/pc.png"/><span>拼车</span></div>
                     </div>
                 </div>
                 <div class="func-wrap">
@@ -77,7 +79,8 @@
                         <div class="func-content-item" @click="goPassenger"><img
                                 src="../../static/images/user/ccr.png"/><span>乘车人</span>
                         </div>
-                        <div class="func-content-item" @click="goMyLike"><img src="../../static/images/user/wdgz.png"/><span>我的关注</span>
+                        <div class="func-content-item" @click="goMyLike"><img
+                                src="../../static/images/user/wdgz.png"/><span>我的关注</span>
                         </div>
                     </div>
                 </div>
@@ -89,7 +92,8 @@
                         <div class="func-content-item" @click="goVehicleManagement"><img
                                 src="../../static/images/user/clgl.png"/><span>车辆管理</span>
                         </div>
-                        <div class="func-content-item" @click="goMyFans"><img src="../../static/images/user/wdfs.png"/><span>我的粉丝</span>
+                        <div class="func-content-item" @click="goMyFans"><img
+                                src="../../static/images/user/wdfs.png"/><span>我的粉丝</span>
                         </div>
                     </div>
                 </div>
@@ -109,7 +113,7 @@
 </template>
 
 <script>
-    import {Row, Col, Image} from 'vant';
+    import {Row, Col, Image, Toast} from 'vant';
     import listImg from "./../../static/images/listImg.png";
     import request from '../../utils/request'
     import axios from 'axios';
@@ -121,6 +125,7 @@
             [Row.name]: Row,
             [Col.name]: Col,
             [Image.name]: Image,
+            [Toast.name]: Toast,
         },
         data() {
             return {
@@ -128,8 +133,8 @@
             }
         },
         methods: {
-            goMyStroke(){
-              //拼车
+            goMyStroke() {
+                //拼车
                 this.$router.push({path: '/myStroke'});
             },
             goBlackList() {
@@ -181,42 +186,48 @@
                 //我的积分
                 this.$router.push({path: '/integral'});
             },
-            goMyFans(){
+            goMyFans() {
                 //我的粉丝
                 this.$router.push({path: '/myFans'});
             },
-            goMyLike(){
+            goMyLike() {
                 //我的关注
                 this.$router.push({path: '/myLike'});
             },
-            goTicketList(){
+            goTicketList() {
                 //班车
                 this.$router.push({path: '/ticketList'});
             }
         },
-        created(){
+        created() {
             let url = location.href;
-            if(url.indexOf("?")!=-1 && !localStorage.getItem("openid")){
-                let str = url.substr(url.indexOf("?")+1);
+            console.log(url);
+            if (url.indexOf("?") != -1) {
+                console.log("jin");
+                let str = url.substr(url.indexOf("?") + 1);
                 let strs = str.split("&");
                 let code = strs[0].split("=")[1];
                 let state = strs[1].split("=")[1];
-                let url2 = context.baseUrl+"/wx/getopenid?"+ qs.stringify({code:code});
-                axios.get(url2).then(res => {
-                        if(res.data.code===0){
-                            let openid = res.data.data.openid;
-                            localStorage.setItem("openid",openid);
-                            axios.post(
-                                context.baseUrl+'/wx/login', qs.stringify({openid:openid})).then((res)=>{
-                                if(res.data.data.isLogin==="1"){
+                let url2 = "/api/wx/getopenid?" + qs.stringify({code: code});
+                request.axios.get(url2).then(res => {
+                    if (res.data.code === 0) {
+                        let openid = res.data.data.openid;
+                        localStorage.setItem("openid", openid);
+                        request.axios.post(
+                            '/api/wx/login', qs.stringify({openid: openid})).then((res) => {
+                            if (res.data.code === 0) {
+                                if (res.data.data.isLogin === "1") {
                                     //登陆成功
-                                    localStorage.setItem("isLogin","1");
-                                }else{
-                                    this.$router.push({path:'/register'})
+                                    localStorage.setItem("isLogin", "1");
+                                } else {
+                                    window.location.href = url.split("?")[0] + "#/register";
                                 }
-                            })
-                        }
-                    })
+                            } else {
+                                Toast(res.data.msg);
+                            }
+                        })
+                    }
+                })
                     //失败返回
                     .catch(error => {
                         console.log(error);

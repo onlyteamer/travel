@@ -4,26 +4,23 @@ import context from "./context";
 
 let server = {};
 
-const ajaxUrl = context.baseUrl;
 
-server.axios = axios.create({
-    baseURL: ajaxUrl,
+const config = {
     timeout: 30000,
-    withCredentials: true,
-});
+    withCredentials: true,// 访问线上api时axios发送跨域请求时需要设置这个参数
+};
 
+if(location.hostname ==='gstp.huntauto.com.cn'){
+    config.baseURL  = context.baseUrl;
+}else{
 
-let baas = axios.create({
-    baseURL: ajaxUrl,
-    timeout: 30000,
-    withCredentials: true
-});
+}
 
-let fileBaas = axios.create({
-    baseURL: ajaxUrl,
-    timeout: 30000,
-    withCredentials: true
-});
+server.axios = axios.create(config);
+
+let baas = axios.create(config);
+
+let fileBaas = axios.create(config);
 
 //添加请求拦截器(后台验证Token先找头部信息是否包含)
 fileBaas.interceptors.request.use(function (config) {
@@ -33,7 +30,7 @@ fileBaas.interceptors.request.use(function (config) {
         let openid = localStorage.getItem('openid');
         config.headers['openid'] = openid;
     } else {
-        axios.get(ajaxUrl + '/wx/authorize')
+        server.axios.get('/api/wx/authorize')
             .then(function (response) {
                     //获取到验证URL,给微信发送请求
                     let authURL = response.data.data.url;
@@ -55,28 +52,35 @@ baas.interceptors.request.use(function (config) {
         let openid = localStorage.getItem('openid');
         config.headers['openid'] = openid;
     } else {
-        localStorage.setItem("openid","abcdefghigklmm");
-        axios.post(
-            ajaxUrl+ '/wx/login', qs.stringify({openid:localStorage.getItem("openid")})).then((res)=>{
-                console.log(res);
-            if(res.data.data.isLogin==="1"){
-                //登陆成功
-                localStorage.setItem("isLogin","1");
-            }else{
-                this.$router.push({path:'/register'})
-            }
-        })
+        // localStorage.setItem("openid","abcdefghigklmm");
+        // axios.post(
+        //     ajaxUrl+ '/wx/login', qs.stringify({openid:localStorage.getItem("openid")})).then((res)=>{
+        //         console.log(res);
+        //     if(res.data.data.isLogin==="1"){
+        //         //登陆成功
+        //         localStorage.setItem("isLogin","1");
+        //     }else{
+        //         var url = document.location.toString();
+        //         var arrUrl = url.split("#");
+        //         // console.log();
+        //         window.location.href = arrUrl[0]+"/#/register";
+        //         // this.$router.push({path:'/register'})
+        //     }
+        // })
         // localStorage.setItem("isLogin",'1');
-        // axios.get(ajaxUrl + '/wx/authorize')
-        //     .then(function (response) {
-        //             //获取到验证URL,给微信发送请求
-        //             let authURL = response.data.data.url;
-        //             console.log(authURL);
-        //             window.location.href = authURL;
-        //         }
-        //     ).catch(function (error) {
-        //     console.log(error);
-        // });
+
+        server.axios.get('/api/wx/authorize')
+            .then(function (response) {
+                    //获取到验证URL,给微信发送请求
+                    let authURL = response.data.data.url;
+                    // console.log(authURL);
+                // authURL =  authURL.replace('gstp','gstpapi');
+                // console.log(authURL);
+                    window.location.href = authURL;
+                }
+            ).catch(function (error) {
+            console.log(error);
+        });
     }
     return config;
 });
@@ -102,7 +106,7 @@ baas.interceptors.response.use(function (response) {
 
 server.sendPost = function (options) {
     return new window.Promise((resolve) => {
-        baas.post(options.url, qs.stringify(options.params) || {}).then((response) => {
+        baas.post('/api'+options.url, qs.stringify(options.params) || {}).then((response) => {
             resolve(response);
         }).catch((error) => {
 
@@ -111,7 +115,7 @@ server.sendPost = function (options) {
 };
 server.sendGet = function (options) {
     return new window.Promise((resolve) => {
-        baas.get(options.url + '?' + qs.stringify(options.params)).then((response) => {
+        baas.get('/api'+options.url + '?' + qs.stringify(options.params)).then((response) => {
             resolve(response);
         }).catch((error) => {
 
@@ -120,7 +124,7 @@ server.sendGet = function (options) {
 };
 server.uploadFile = function (options) {
     return new window.Promise((resolve) => {
-        baas.post(options.url, options.params).then((response) => {
+        baas.post('/api'+options.url, options.params).then((response) => {
             resolve(response);
         }).catch((error) => {
 
