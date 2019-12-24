@@ -43,7 +43,7 @@
                         </van-col>
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini" @click="linkCarPosition">车主位置
+                                        size="mini" @click="linkCarPosition(item.tripId)">车主位置
                             </van-button>
                         </van-col>
                         <van-col span="6">
@@ -455,9 +455,9 @@
                 sessionStorage.setItem("strokeType","1");
                 this.$router.push({path: '/passengerList',query:{tripId:val}});
             },
-            linkCarPosition() {
+            linkCarPosition(val) {
                 sessionStorage.setItem("strokeType","0");
-                this.$router.push({path: '/carOwnPosition'});
+                this.$router.push({path: '/carOwnPosition',query:{tripId:val}});
             },
 
             //行车评价
