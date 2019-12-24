@@ -56,7 +56,17 @@ baas.interceptors.request.use(function (config) {
         config.headers['openid'] = openid;
     } else {
         localStorage.setItem("openid","abcdefghigklmm");
-        localStorage.setItem("isLogin",'1');
+        axios.post(
+            ajaxUrl+ '/wx/login', qs.stringify({openid:localStorage.getItem("openid")})).then((res)=>{
+                console.log(res);
+            if(res.data.data.isLogin==="1"){
+                //登陆成功
+                localStorage.setItem("isLogin","1");
+            }else{
+                this.$router.push({path:'/register'})
+            }
+        })
+        // localStorage.setItem("isLogin",'1');
         // axios.get(ajaxUrl + '/wx/authorize')
         //     .then(function (response) {
         //             //获取到验证URL,给微信发送请求
