@@ -7,12 +7,15 @@
     <!--</div>-->
     <!-- <Input :id="inputId" placeholder="点击下面地图可选择地址" type="text"></Input> -->
     <!--<div style="margin-top:20px;"></div>-->
+    <div style="margin-top: 46px;text-align: center;padding: 10px;background: #FFFFFF;border-top: 1px solid #ECECEC">{{carPosition.updateTime}}</div>
     <div :id="id" :style="{'width':width,'height':height}"></div>
   </div>
 </template>
 
 <script>
   var placeSearch = '';
+  import request from '../utils/request';
+  import moment from 'moment'
 
   export default {
     name: "Amap",
@@ -44,6 +47,9 @@
       lat:{
         default:'39.865042'
       },
+      tripId:{
+          default:""
+      }
 
     },
 
@@ -52,8 +58,16 @@
         address:'',
         isInit:true,
         marker:"",
-        map:""
+        map:"",
+        carPosition:{
+            updateTime:"",
+            latitude:"",
+            longitude:""
+        }
       };
+    },
+    created(){
+        this.initCarOwnerPosition();
     },
 
     mounted() {
@@ -63,9 +77,27 @@
       }
     },
     methods: {
+        //初始化车主位置
+        initCarOwnerPosition(){
+            let tripId = this.tripId;
+            request.sendGet({
+                url:"/sharecar/pass/driver/"+ tripId,
+                params:{}
+            }).then(res =>{
+                if(res.data.code == '0'){
+                    this.carPosition.latitude = res.data.data.latitude;
+                    this.carPosition.updateTime = res.data.data.updateTime;
+                    this.carPosition.longitude = res.data.data.longitude;
+
+                   let timer =  new Date(this.carPosition.updateTime);
+                   this.carPosition.updateTime = moment(timer).format("YYYY年MM月DD日 HH:mm分");
+                }
+            })
+        },
+
       initMap() {
           //基本地图加载
-          var center = [116.379028,39.865042];
+          var center = [this.lon,this.lat];
           let _this = this;
           var roadNetLayer = new AMap.TileLayer.RoadNet(); //定义一个路网图层
           var map = new AMap.Map(this.id, {
@@ -88,7 +120,7 @@
           });
 
           // 根据起终点经纬度规划驾车导航路线
-          driving.search(new AMap.LngLat(116.379028, 39.865042), new AMap.LngLat(116.397281,39.883719), function(status, result) {
+          driving.search(new AMap.LngLat(this.lon, this.lat), new AMap.LngLat(res.data.data.longitude,this.carPosition.latitude), function(status, result) {
               // result 即是对应的驾车导航信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_DrivingResult
               if (status === 'complete') {
                   // log.success('绘制驾车路线完成')

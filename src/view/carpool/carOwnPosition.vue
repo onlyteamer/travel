@@ -1,13 +1,13 @@
 <template>
     <div class="contain">
         <Title :title="title" @onClickLeft="onClickLeft"></Title>
-        <div style="margin-top: 46px;text-align: center;padding: 10px;background: #FFFFFF;border-top: 1px solid #ECECEC">2019年12月01日 20:30分</div>
         <aMap
-                ref="hotelMap" id="hotelContainer"
+                ref="carMap" id="hotelContainer"
                 @select="getPosition"
                 @getAddress="getAddress"
                 :lon="carInfo.lon"
                 :lat="carInfo.lat"
+                :tripId="tripId"
                 placeholder="请输入酒店地址或点击下面地图" height="450px" width="375px">
         </aMap>
 
@@ -22,7 +22,11 @@
 <script>
     import Title from './../../components/header'
     import aMap from './../../components/amap_point'
-    import { Row, Col,Divider,Button,Rate,Tag ,Field,CellGroup,Icon } from 'vant';
+    import { Row, Col,Divider,Button,Rate,Tag ,Field,CellGroup,Icon ,Toast} from 'vant';
+
+    import context from '../../utils/context'
+    import request from '../../utils/request';
+
 
     export default {
         name: "carOwnPosition",
@@ -37,7 +41,8 @@
             [Tag.name]:Tag,
             [Field.name]:Field,
             [CellGroup.name]:CellGroup,
-            [Icon.name]:Icon
+            [Icon.name]:Icon,
+            [Toast.name]:Toast
         },
         data(){
             return{
@@ -45,16 +50,63 @@
                 carInfo:{
                     lat:"39.865042",
                     lon:"116.379028"
-                }
+                },
+                tripId:""
             }
         },
-
         created(){
+            this.tripId = this.$route.query.tripId;
+        },
 
-
+        mounted(){
+            this.getOwnerPosition();
 
         },
         methods:{
+
+            //自身位置
+            getOwnerPosition(){
+                let url = context.wxGetPosition;
+                request.sendGet({
+                    url: url,
+                    params: {}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        var data = res.data.data;
+                        wx.config({
+                            beta: true,// 必须这么写，否则在微信插件有些jsapi会有问题
+                            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                            appId: data.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
+                            timestamp: parseInt(data.timestamp,10), // 必填，生成签名的时间戳
+                            nonceStr: data.nonceStr, // 必填，生成签名的随机串
+                            signature: data.signature,// 必填，签名，见附录1
+                            jsApiList: ['getLocation','openLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                        });
+                        wx.ready(function(){
+                            var isCheck=false;
+                            wx.checkJsApi({
+                                jsApiList: [
+                                    'getLocation'
+                                ]
+                            });
+                            wx.getLocation({
+                                success: function (res) {
+                                    this.carInfo.lat = res.latitude;
+                                    this.carInfo.lon = res.longitude;
+                                },
+                                fail: function(error) {
+                                    Toast.fail("获取地理位置失败，请确保开启GPS且允许微信获取您的地理位置！");
+                                }
+                            });
+                        });
+                        wx.error(function(res){
+                            console.log(res);
+                        });
+                    }
+                })
+
+            },
+
             onClickLeft(){
 
             },
