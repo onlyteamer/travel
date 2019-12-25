@@ -1,7 +1,7 @@
 <template>
     <div class="contain">
         <div class="header">
-            <Title :title="title" @onClickLeft="onClickLeft"></Title>
+            <!--<Title :title="title" @onClickLeft="onClickLeft"></Title>-->
             <!--<van-row type="flex" justify="center" gutter="30">-->
                 <!--<van-col span="6">-->
                     <!--<div class="logo">-->
@@ -19,7 +19,7 @@
                     <!--</div>-->
                 <!--</van-col>-->
             <!--</van-row>-->
-            <van-swipe :autoplay="3000" style="height: 200px;margin-top: 46px">
+            <van-swipe :autoplay="3000" style="height: 200px;margin-top: 0px">
                 <van-swipe-item v-for="(image, index) in images" :key="index">
                     <!--<img :src="image" width="100px" height="100px"/>-->
                     <div :style="{width: '100%',height: '100%',backgroundImage:'url('+image+')'}"></div>
@@ -150,11 +150,11 @@
 
 
         <div class="footer">
-            <van-tabbar v-model="active" active-color="#FF0200" inactive-color="#FFFFFF">
-                <van-tabbar-item :icon="chengK" to="/carLine">我是乘客</van-tabbar-item>
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
                 <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
                 <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
-                <van-tabbar-item :icon="person" to="/user">个人中心</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
             </van-tabbar>
         </div>
 

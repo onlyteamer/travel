@@ -1,14 +1,14 @@
 <template>
     <div>
         <div class="info-wrap">
-            <van-row>
-                <van-col span="8">
-                    <div @click="onClickLeft"><img src="../../static/images/left.png" style="width: 11px;height: 18px"/>
-                    </div>
-                </van-col>
-                <van-col span="8" style="text-align: center"><span style="color: white;font-size: 16px;">个人中心</span>
-                </van-col>
-            </van-row>
+            <!--<van-row>-->
+                <!--<van-col span="8">-->
+                    <!--<div @click="onClickLeft"><img src="../../static/images/left.png" style="width: 11px;height: 18px"/>-->
+                    <!--</div>-->
+                <!--</van-col>-->
+                <!--<van-col span="8" style="text-align: center"><span style="color: white;font-size: 16px;">个人中心</span>-->
+                <!--</van-col>-->
+            <!--</van-row>-->
             <div style="display: flex;align-items: center;justify-content: space-between;margin-top: 20px">
                 <van-image round width="61px" height="61px" :src="listImg"/>
                 <div>
@@ -109,12 +109,39 @@
             </div>
 
         </div>
+
+        <div class="footer" v-if="flag == '0'">
+            <van-tabbar v-model="footerActive" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+                <van-tabbar-item :icon="car" to="/busIndex">预定班车</van-tabbar-item>
+                <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
+                <van-tabbar-item :icon="user" to="/user?flag=0">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
+
+        <div class="footer" v-else>
+            <van-tabbar v-model="carActive" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
     </div>
 </template>
 
 <script>
-    import {Row, Col, Image, Toast} from 'vant';
+    import {Row, Col, Image, Toast,Tabbar,TabbarItem} from 'vant';
     import listImg from "./../../static/images/listImg.png";
+
+    import car from './../../static/images/busTrip/car.png'
+    import scan from './../../static/images/busTrip/scan.png'
+    import user from './../../static/images/busTrip/user.png'
+
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
+
     import request from '../../utils/request'
     import axios from 'axios';
     import qs from 'querystring'
@@ -126,10 +153,22 @@
             [Col.name]: Col,
             [Image.name]: Image,
             [Toast.name]: Toast,
+            [Tabbar.name]:Tabbar,
+            [TabbarItem.name]:TabbarItem
         },
         data() {
             return {
                 listImg: listImg,
+                footerActive:2,
+                carActive:3,
+                car: car,
+                scan: scan,
+                user: user,
+                flag:0,
+                chengK:chengK,
+                xingC:xingC,
+                push:push,
+                person:person,
             }
         },
         methods: {
@@ -200,6 +239,10 @@
             }
         },
         created() {
+            let flag = this.$route.query.flag;
+            if(flag){
+                this.flag = flag;
+            }
             let url = location.href;
             console.log(url);
             if (url.indexOf("?") != -1) {
@@ -339,5 +382,12 @@
         line-height: 20px;
         border: white 1px solid;
         border-radius: 3px;
+    }
+    .footer {
+        width: 100%;
+    }
+
+    .van-tabbar {
+        background: #5083ED;
     }
 </style>

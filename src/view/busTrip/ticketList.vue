@@ -1,7 +1,7 @@
 <template>
     <div>
         <div style="position: fixed;top: 0;height: 46px;width: 100%">
-            <van-nav-bar :fixed="true" left-arrow @click-left="onClickLeft"/>
+            <van-nav-bar :fixed="true" />
             <div style="position: fixed;top:0;width: 92%;z-index: 9999;left: 8%">
                 <van-tabs v-model="header_active" @click="onClick">
                     <van-tab title="通勤班车">
@@ -126,15 +126,27 @@
                 </van-tabs>
             </div>
         </div>
+
+        <div class="footer">
+            <van-tabbar v-model="footerActive" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+                <van-tabbar-item :icon="car" to="/busIndex">预定班车</van-tabbar-item>
+                <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
+                <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
     </div>
 </template>
 
 <script>
-    import {NavBar, Button, Tabs, Tab, Toast, List, Collapse, CollapseItem, Row, Col} from 'vant';
+    import {NavBar, Button, Tabs, Tab, Toast, List, Collapse, CollapseItem, Row, Col,Tabbar,TabbarItem,Image} from 'vant';
     import request from '../../utils/request'
     import moment from 'moment'
     import blueTime from './../../static/images/busTrip/blue_time.png'
     import redTime from './../../static/images/busTrip/red_time.png'
+
+    import car from './../../static/images/busTrip/car.png'
+    import scan from './../../static/images/busTrip/scan.png'
+    import user from './../../static/images/busTrip/user.png'
 
     export default {
         components: {
@@ -147,10 +159,16 @@
             [Collapse.name]: Collapse,
             [CollapseItem.name]: CollapseItem,
             [Row.name]: Row,
-            [Col.name]: Col
+            [Col.name]: Col,
+            [Tabbar.name]:Tabbar,
+            [TabbarItem.name]:TabbarItem,
+            [Image.name]:Image
         },
         data() {
             return {
+                car: car,
+                scan: scan,
+                user: user,
                 tripName: '',
                 showAll: true,
                 refundNum: '',
@@ -158,6 +176,7 @@
                 currentDate: moment().format("YYYY年MM月DD日"),
                 header_active: 0,
                 active: 0,
+                footerActive:1,
                 blueTime: blueTime,
                 redTime: redTime,
                 refund: {
@@ -484,7 +503,9 @@
         color: #FF0200;
     }
 
-
+    .footer {
+        width: 100%;
+    }
 </style>
 
 <style>
@@ -494,5 +515,9 @@
 
     .van-cell {
         padding: 10px;
+    }
+
+    .van-tabbar {
+        background: #5083ED;
     }
 </style>

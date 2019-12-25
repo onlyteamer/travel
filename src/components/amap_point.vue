@@ -120,7 +120,7 @@
           });
 
           // 根据起终点经纬度规划驾车导航路线
-          driving.search(new AMap.LngLat(this.lon, this.lat), new AMap.LngLat(res.data.data.longitude,this.carPosition.latitude), function(status, result) {
+          driving.search(new AMap.LngLat(this.lon, this.lat), new AMap.LngLat(this.carPosition.longitude,this.carPosition.latitude), function(status, result) {
               // result 即是对应的驾车导航信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_DrivingResult
               if (status === 'complete') {
                   // log.success('绘制驾车路线完成')

@@ -1,6 +1,6 @@
 <template>
     <div class="contain">
-        <Title :title="title" @onClickLeft="onClickLeft"></Title>
+        <!--<Title :title="title" @onClickLeft="onClickLeft"></Title>-->
         <div class="content">
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
                 <van-col span="8">始发时间</van-col>
@@ -104,6 +104,15 @@
             </van-row>
         </div>
 
+        <div class="footer">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
+
         <van-popup v-model="showLine" position="bottom" :style="{height:'30%'}">
             <van-picker :columns="lineData" value-key="lineName" show-toolbar @cancel="showLine = false"
                         :visible-item-count="3"
@@ -149,10 +158,17 @@
         CheckboxGroup,
         Button,
         Toast,
-        Field
+        Field,
+        Tabbar,
+        TabbarItem
     } from 'vant';
     import request from '../../utils/request'
     import moment from 'moment'
+
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
 
     export default {
         name: "pushStroke",
@@ -170,10 +186,17 @@
             [CheckboxGroup.name]: CheckboxGroup,
             [Button.name]: Button,
             [Toast.name]: Toast,
-            [Field.name]: Field
+            [Field.name]: Field,
+            [Tabbar.name]:Tabbar,
+            [TabbarItem.name]:TabbarItem
         },
         data() {
             return {
+                chengK:chengK,
+                xingC:xingC,
+                push:push,
+                person:person,
+                active:2,
                 checked: true,
                 title: "发布行程",
                 minDate: new Date(),
@@ -375,13 +398,21 @@
     .contain .content {
         border-top: 1px solid #ECECEC;
         width: 90%;
-        margin: 46px auto 0;
+        margin: 0px auto 45px;
         color: #202020;
     }
 
     .contain .content .valStyle {
         color: #9E9E9E;
         font-size: 14px;
+    }
+
+    .footer{
+        width: 100%;
+    }
+
+    .van-tabbar{
+        background: #5083ED;
     }
 
 </style>

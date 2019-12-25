@@ -1,7 +1,7 @@
 <template>
     <div class="contain">
         <div class="header">
-            <Title :title="title" @onClickLeft="onClickLeft"></Title>
+            <!--<Title :title="title" @onClickLeft="onClickLeft"></Title>-->
             <!--<van-row type="flex" justify="center" gutter="30">-->
                 <!--<van-col span="6">-->
                     <!--<div class="logo">-->
@@ -130,8 +130,8 @@
         </div>
 
         <div class="footer">
-            <van-tabbar v-model="active" active-color="#FF0200" inactive-color="#FFFFFF">
-                <van-tabbar-item :icon="car" to="/busList">预定班车</van-tabbar-item>
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+                <van-tabbar-item :icon="car" to="/busIndex">预定班车</van-tabbar-item>
                 <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
                 <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
             </van-tabbar>

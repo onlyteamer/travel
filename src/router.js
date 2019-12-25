@@ -305,7 +305,7 @@ const routes = [
         name: 'busIndex',
         component: () => import('./view/busTrip/busIndex.vue'),
         meta: {
-            title: '首页'
+            title: '绿色班车'
         }
     },
     {

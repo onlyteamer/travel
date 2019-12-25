@@ -1,6 +1,6 @@
 <template>
     <div class="contain">
-        <Title :title="title" @onClickLeft="onClickLeft"></Title>
+        <!--<Title :title="title" @onClickLeft="onClickLeft"></Title>-->
         <div class="tab">
             <van-tabs v-model="strokeType" @change="changeTab" color="#5083ED" title-active-color="#5083ED" title-inactive-color="#202020">
                 <van-tab title="乘客行程"></van-tab>
@@ -190,6 +190,15 @@
             </div>
         </div>
 
+        <div class="footer">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
+
         <van-dialog
                 v-model="showSeatDialog"
                 title="座位调整"
@@ -209,9 +218,14 @@
 
 <script>
     import Title from './../../components/header'
-    import {Tab, Tabs, Divider, Row, Col, Button, Popup, Dialog, Toast,Field } from 'vant';
+    import {Tab, Tabs, Divider, Row, Col, Button, Popup, Dialog, Toast,Field,Tabbar,TabbarItem } from 'vant';
     import request from '../../utils/request'
     import context from "../../utils/context";
+
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
 
     export default {
         name: "myStroke",
@@ -227,10 +241,13 @@
             [Dialog.name]: Dialog,
             [Toast.name]: Toast,
             [Field.name]:Field,
-            [Dialog.Component.name]:Dialog.Component
+            [Dialog.Component.name]:Dialog.Component,
+            [Tabbar.name]:Tabbar,
+            [TabbarItem.name]:TabbarItem,
         },
         data() {
             return {
+                active:1,
                 showSeatDialog:false,
                 changeSeatInfo:{
                     tripId:"",
@@ -239,7 +256,11 @@
                 title: "我的行程",
                 strokeType: "0",
                 passTripList: [],
-                carOwnerTripList: []
+                carOwnerTripList: [],
+                chengK:chengK,
+                xingC:xingC,
+                push:push,
+                person:person,
             }
         },
         mounted() {
@@ -563,7 +584,7 @@
 
     .tab {
         border-top: 1px solid #ECECEC;
-        margin-top: 46px;
+        /*margin-top: 46px;*/
         position: fixed;
         top: 0;
         width: 100%;
@@ -594,5 +615,13 @@
         margin-top: 10px;
         background: #FFFFFF;
         padding: 5px 10px;
+    }
+
+    .footer{
+        width: 100%;
+    }
+
+    .van-tabbar{
+        background: #5083ED;
     }
 </style>
