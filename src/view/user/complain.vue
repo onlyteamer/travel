@@ -5,7 +5,7 @@
         </div>
         <div class="content">
             <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-                <div v-for="item in list" :key="item.id">
+                <div v-for="item in complain.data" :key="item.id">
                     <div class="item">
                         <div class="item-li">
                             <div style="width: 20px;margin-right: 8px;">
@@ -55,7 +55,13 @@
             return {
                 loading: false,
                 finished: false,
-                list: [],
+
+                complain:{
+                    data: [],
+                    pageSize: 10,
+                    pageNum: 1,
+                    total: 0
+                }
             }
         },
         mounted(){
@@ -66,12 +72,15 @@
                 request.sendGet({
                     url:"/user/center/complain/list",
                     params:{
-                        pageNum:"1",
-                        pageSize:"20"
+                        pageNum:this.complain.pageNum,
+                        pageSize:this.complain.pageSize
                     }
                 }).then(res =>{
                     if(res.data.code == '0'){
-                        this.list = res.data.rows;
+                        this.complain.total = res.data.total;
+                        if(res.data.rows.length>0){
+                            this.complain.data=this.complain.data.concat(res.data.rows);
+                        }
                     }
                 })
 
@@ -83,7 +92,10 @@
                 this.$router.back(-1);
             },
             onLoad() {
-
+                if (this.complain.total > this.complain.data.length) {
+                    this.complain.pageNum += 1;
+                    this.initData();
+                }
             }
         }
     }

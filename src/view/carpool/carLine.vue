@@ -210,8 +210,8 @@
                         startDate:this.lineInfo.startDate,
                         endDate:this.lineInfo.endDate,
                         lineId:this.lineInfo.lineId,
-                        pageNum:"1",
-                        pageSize:"100"
+                        pageNum:this.dataMain.pageNum,
+                        pageSize:this.dataMain.pageSize
                     }
                     // url: '/sharecar/trip/list',
                     // params: {
