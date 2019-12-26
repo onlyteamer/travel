@@ -7,8 +7,16 @@
                 <van-tab title="车主行程"></van-tab>
             </van-tabs>
         </div>
-        <div style="margin-top: 105px">
-            <div v-for="(item,index) in passTripList" :key="index" v-if="strokeType == '0'">
+        <div style="margin-top: 59px">
+            <van-list
+                    :offset="10"
+                    v-model="loading"
+                    :finished="finished"
+                    finished-text="没有更多了"
+                    @load="onLoad"
+                    :immediate-check="false"
+            >
+            <div v-for="(item,index) in passTrip.data" :key="index" v-if="strokeType == '0'">
                 <div class="listInfo">
                     <van-row style="border-bottom: 1px solid #ECECEC;padding: 10px 2px">
                         <van-col span="14">
@@ -102,8 +110,7 @@
 
                 </div>
             </div>
-
-            <div v-for="(item,index) in carOwnerTripList" v-if="strokeType != '0'">
+            <div v-for="(item,index) in carOwnerTrip.data" v-if="strokeType != '0'">
                 <div class="listInfo">
                     <van-row style="border-bottom: 1px solid #ECECEC;padding: 10px 2px">
                         <van-col span="14">
@@ -161,7 +168,7 @@
                         </van-col>
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
-                                        size="mini" @click="fullSeat(item.tripId)">设为车满
+                                        size="mini" @click="fullSeat(item)">设为车满
                             </van-button>
                         </van-col>
                         <van-col span="6">
@@ -188,6 +195,7 @@
                 </div>
 
             </div>
+            </van-list>
         </div>
 
         <div class="footer">
@@ -218,7 +226,7 @@
 
 <script>
     import Title from './../../components/header'
-    import {Tab, Tabs, Divider, Row, Col, Button, Popup, Dialog, Toast,Field,Tabbar,TabbarItem } from 'vant';
+    import {Tab, Tabs, Divider, Row, Col, Button, Popup, Dialog, Toast,Field,Tabbar,TabbarItem,List } from 'vant';
     import request from '../../utils/request'
     import context from "../../utils/context";
 
@@ -244,9 +252,12 @@
             [Dialog.Component.name]:Dialog.Component,
             [Tabbar.name]:Tabbar,
             [TabbarItem.name]:TabbarItem,
+            [List.name]: List
         },
         data() {
             return {
+                loading: false,
+                finished: false,
                 active:1,
                 showSeatDialog:false,
                 changeSeatInfo:{
@@ -255,8 +266,18 @@
                 },
                 title: "我的行程",
                 strokeType: "0",
-                passTripList: [],
-                carOwnerTripList: [],
+                passTrip: {
+                    data: [],
+                    pageSize: 10,
+                    pageNum: 1,
+                    total: 0
+                },
+                carOwnerTrip:{
+                    data: [],
+                    pageSize: 10,
+                    pageNum: 1,
+                    total: 0
+                },
                 chengK:chengK,
                 xingC:xingC,
                 push:push,
@@ -272,6 +293,20 @@
         },
 
         methods: {
+            onLoad() {
+                if(this.strokeType == '0'){
+                    if (this.passTrip.total > this.passTrip.data.length) {
+                        this.passTrip.pageNum += 1;
+                        this.initPassTripList();
+                    }
+                }else {
+                    if (this.carOwnerTrip.total > this.carOwnerTrip.data.length) {
+                        this.carOwnerTrip.pageNum += 1;
+                        this.initCarOwnerTripList();
+                    }
+                }
+            },
+
 
             contactCar(val){
                 let mobile = "";
@@ -280,7 +315,8 @@
                 }
 
                 Dialog.alert({
-                    message: '手机号:'+mobile
+                    title:"联系车主",
+                    message: mobile
                 }).then(() => {
                     // on close
                 });
@@ -289,9 +325,13 @@
             changeTab(val){
                if(val == '0'){
                    //乘客
+                   this.passTrip.data = [];
+                   this.passTrip.pageNum = 1;
                     this.initPassTripList();
                }else {
                    //车主
+                   this.carOwnerTrip.data = [];
+                   this.carOwnerTrip.pageNum = 1;
                     this.initCarOwnerTripList();
                }
             },
@@ -323,12 +363,12 @@
             },
             fullSeat(val){
                 Dialog.confirm({
-                    title: '',
-                    message: '是否确认设置车满'
+                    title: '设置车满',
+                    message:  val.unconfirmSeats + '人待确定，'+ val.confirmSeats + '人已确定，剩余'+(val.totalSeats-val.confirmSeats-val.unconfirmSeats)+'个座位  是否设置为车满'
                 }).then(() => {
                     // 确定
                     request.sendPost({
-                        url: "/sharecar/trip/full/" + val,
+                        url: "/sharecar/trip/full/" + val.tripId,
                         params: {}
                     }).then(res => {
                         if (res.data.code == '0') {
@@ -343,8 +383,8 @@
             //上车支付
             passengerPayment(val){
                 Dialog.confirm({
-                    title: '',
-                    message: '是否确认上车支付'
+                    title: '上车支付',
+                    message: '确认已经上车,支付给车主该行程费用'+ val.tripPrice+'元'
                 }).then(() => {
                     // 确定
                     request.sendPost({
@@ -365,15 +405,15 @@
                 request.sendGet({
                     url: "/sharecar/trip/list",
                     params: {
-                        pageNum:1,
-                        pageSize:10
+                        pageNum:this.carOwnerTrip.pageNum,
+                        pageSize:this.carOwnerTrip.pageSize
                     }
                 }).then(res => {
                     if (res.data.code == 0) {
-                        this.carOwnerTripList = res.data.rows;
-                    } else {
-                        //接口错误
-
+                        this.carOwnerTrip.total = res.data.total;
+                        if(res.data.rows.length>0){
+                            this.carOwnerTrip.data=this.carOwnerTrip.data.concat(res.data.rows);
+                        }
                     }
                 })
             },
@@ -382,23 +422,23 @@
                 request.sendGet({
                     url: "/sharecar/pass/triplist",
                     params: {
-                        pageNum:1,
-                        pageSize:10
+                        pageNum:this.passTrip.pageNum,
+                        pageSize:this.passTrip.pageSize
                     }
                 }).then(res => {
                     if (res.data.code == 0) {
-                        this.passTripList = res.data.rows;
-                    } else {
-                        //接口错误
-
+                        this.passTrip.total = res.data.total;
+                        if(res.data.rows.length>0){
+                            this.passTrip.data=this.passTrip.data.concat(res.data.rows);
+                        }
                     }
                 })
             },
             //已发车
             startCar(val){
                 Dialog.confirm({
-                    title: '',
-                    message: '是否确认已发车'
+                    title: '已发车',
+                    message: '是否开始行程？确认后将通知乘客！'
                 }).then(() => {
                     // 确定
                     request.sendPost({
@@ -443,8 +483,8 @@
                    });
                }else {
                    Dialog.confirm({
-                       title: '',
-                       message: '是否确认已到达'
+                       title: '已到达',
+                       message: '车主已到达发车地点，通知乘客乘车地点等候'
                    }).then(() => {
                        // 确定
                        request.sendPost({

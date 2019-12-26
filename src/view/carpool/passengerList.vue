@@ -44,7 +44,7 @@
 
 <script>
     import Title from './../../components/header'
-    import { Row, Col,Divider,Button} from 'vant';
+    import { Row, Col,Divider,Button,Dialog} from 'vant';
 
     import avatar from "../../static/images/userAvatar.png"
 
@@ -57,7 +57,8 @@
             [Row.name]:Row,
             [Col.name]:Col,
             [Divider.name]:Divider,
-            [Button.name]:Button
+            [Button.name]:Button,
+            [Dialog.name]: Dialog,
         },
         data(){
             return{
@@ -88,30 +89,59 @@
                 }).then(res =>{
                     if(res.data.code==0){
                         this.passList = res.data.rows;
-                    }else{
-                        //接口错误
-
                     }
                 })
             },
 
             confirmTrip(val,flag){
                 //1-确认 2-拒绝
-                request.sendPost({
-                    url:'/sharecar/trip/confirm',
-                    params:{
-                        bookId:item.bookId,
-                        state:flag,
-                        tripId:item.tripId
-                    }
-                }).then(res =>{
-                    //刷新列表
-                    if(res.data.code == '0'){
-                        this.initPassList();
-                    }
-                })
+                if(flag == '1'){
+                    Dialog.confirm({
+                        title: '预约确定',
+                        message: '同意该乘客预约！'
+                    }).then(() => {
+                        // 确定
+                        request.sendPost({
+                            url:'/sharecar/trip/confirm',
+                            params:{
+                                bookId:item.bookId,
+                                state:flag,
+                                tripId:item.tripId
+                            }
+                        }).then(res =>{
+                            //刷新列表
+                            if(res.data.code == '0'){
+                                this.initPassList();
+                            }
+                        })
+                    }).catch(() => {
+                        //取消
 
+                    });
+                }else {
+                    Dialog.confirm({
+                        title: '拒绝确定',
+                        message: '是否拒绝该乘客乘车？'
+                    }).then(() => {
+                        // 确定
+                        request.sendPost({
+                            url:'/sharecar/trip/confirm',
+                            params:{
+                                bookId:item.bookId,
+                                state:flag,
+                                tripId:item.tripId
+                            }
+                        }).then(res =>{
+                            //刷新列表
+                            if(res.data.code == '0'){
+                                this.initPassList();
+                            }
+                        })
+                    }).catch(() => {
+                        //取消
 
+                    });
+                }
             }
         }
     }

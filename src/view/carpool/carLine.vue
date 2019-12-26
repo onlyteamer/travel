@@ -55,7 +55,7 @@
                         <van-row style="display: flex;align-items: center;">
                             <van-col span="20">
                                 <div style="display: flex;align-items: center">
-                                    <img src="../../static/images/userAvatar.png" style="height: 44px;width: 44px">
+                                    <img :src="item.headimgurl" style="height: 44px;width: 44px;border-radius: 50%" @click="linkUserDetails(item)">
                                     <div>
                                         <p style="font-size: 14px;margin: 5px 0"><span
                                                 style="color: #5083ED;font-weight: bold">【车主】</span><span
@@ -164,6 +164,12 @@
 
         methods: {
 
+            linkUserDetails(val){
+                if(val.userId){
+                    this.$router.push({path:'/carOwnerDetails',query:{userId:val.userId}});
+                }
+            },
+
             //手机号
             showMobile(val){
                 let mobile = "";
@@ -172,7 +178,8 @@
                 }
 
                 Dialog.alert({
-                    message: '手机号:'+mobile
+                    title:"联系电话",
+                    message: mobile
                 }).then(() => {
                     // on close
                 });

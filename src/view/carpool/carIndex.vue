@@ -101,33 +101,33 @@
         </div>
 
         <div class="listInfo">
-            <van-list
-                    v-model="loading"
-                    :error.sync="error"
-                    error-text="请求失败，点击重新加载"
-                    @load="onLoad"
-                    :offset="10"
-                    :immediate-check="false"
-            >
+            <!--<van-list-->
+                    <!--v-model="loading"-->
+                    <!--:error.sync="error"-->
+                    <!--error-text="请求失败，点击重新加载"-->
+                    <!--@load="onLoad"-->
+                    <!--:offset="10"-->
+                    <!--:immediate-check="false"-->
+            <!--&gt;-->
 
-            <div v-for="(item,index) in newTripList">
-                <div class="card">
+            <div v-for="(item,index) in newTripList" :key="index">
+                <div class="card" @click="linkLineDetails(item.tripId)">
                     <van-row style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;padding: 8px 2px;">
                         <van-col span="16">
-                            <span class="datetime">2019年12月04日 05:20</span>
+                            <span class="datetime">{{item.tripDate}}</span>
                         </van-col>
                         <van-col span="8" style="text-align: right">
                             <span>座位:</span>
-                            <span class="seatNum">3个</span>
+                            <span class="seatNum">{{item.totalSeats}}个</span>
                         </van-col>
                     </van-row>
                     <van-row style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;">
                         <van-col span="16">
-                            <p class="datetime"><i class="greenBar"></i>上河湾</p>
-                            <p class="datetime"><i class="redBar"></i>安贞门</p>
+                            <p class="datetime"><i class="greenBar"></i>{{item.startPlace}}</p>
+                            <p class="datetime"><i class="redBar"></i>{{item.endPlace}}</p>
                         </van-col>
                         <van-col span="8" style="text-align: right">
-                            <div class="price">￥20</div>
+                            <div class="price">￥{{item.tripPrice}}</div>
                         </van-col>
                     </van-row>
                     <van-row style="padding: 0px 2px;display: flex;align-items: center;">
@@ -139,13 +139,13 @@
                             />
                         </van-col>
                         <van-col span="10">
-                            <p style="display: flex;align-items: center"><span style="color: #5083ED">【车主】</span> 加菲猫 <img src="../../static/images/sexTag.png" style="width: 13px;height: 13px;display: inline-block;margin-left: 5px"></p>
-                            <p><span>【车型】</span> 大众速腾</p>
+                            <p style="display: flex;align-items: center"><span style="color: #5083ED">【车主】</span> {{item.nickname}} <img src="../../static/images/sexTag.png" style="width: 13px;height: 13px;display: inline-block;margin-left: 5px" v-if="item.sex == '1'"><img src="../../static/images/man.png" style="width: 13px;height: 13px;display: inline-block;margin-left: 5px" v-else></p>
+                            <p><span>【车型】</span>{{item.carNumber}}</p>
                         </van-col>
                     </van-row>
                 </div>
             </div>
-            </van-list>
+            <!--</van-list>-->
         </div>
 
 
@@ -285,6 +285,11 @@
             this.initAdvList();
         },
         methods: {
+            //详情
+            linkLineDetails(val){
+                this.$router.push({path:"/lineDetails",query:{tripId:val}})
+            },
+
             //通知
             initNotice(){
                 request.sendGet({

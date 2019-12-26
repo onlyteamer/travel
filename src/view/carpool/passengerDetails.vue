@@ -31,7 +31,14 @@
         <div class="assess">
             <div><span style="font-size: 16px;font-weight: bold;margin-right: 10px">车主评价:</span><span>（{{appraiseTotal}}）</span></div>
             <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false" />
-
+            <van-list
+                    :offset="10"
+                    v-model="loading"
+                    :finished="finished"
+                    finished-text="没有更多了"
+                    @load="onLoad"
+                    :immediate-check="false"
+            >
             <div v-for="(item,index) in appraiseList.data" :key="index">
                 <div class="card">
                     <van-row style="display: flex;align-items: center">
@@ -47,7 +54,7 @@
                 </div>
 
             </div>
-
+            </van-list>
         </div>
 
 
@@ -56,7 +63,7 @@
 
 <script>
     import Title from './../../components/header'
-    import { Row, Col,Divider,Button} from 'vant';
+    import { Row, Col,Divider,Button,List} from 'vant';
 
     import request from '../../utils/request'
 
@@ -67,16 +74,21 @@
             [Row.name]:Row,
             [Col.name]:Col,
             [Divider.name]:Divider,
-            [Button.name]:Button
+            [Button.name]:Button,
+            [List.name]: List
         },
         data(){
             return{
                 title:"乘客详情",
                 userInfo:{},
                 appraiseList:{
-                    data:[],
-
+                    data: [],
+                    pageSize: 10,
+                    pageNum: 1,
+                    total: 0
                 },
+                loading: false,
+                finished: false,
                 appraiseTotal:""
             }
         },
@@ -87,18 +99,29 @@
         },
 
         methods:{
+            onLoad() {
+                if (this.appraiseList.total > this.appraiseList.data.length) {
+                    this.appraiseList.pageNum += 1;
+                    this.initAppraiseList();
+                }
+
+            },
+
 
             initAppraiseList(){
                 let userId = this.$route.query.userId;
                 request.sendGet({
                     url: "/user/center/evaluate/list/"+userId,
                     params: {
-                        pageNum:"1",
-                        pageSize:"10"
+                        pageNum: this.appraiseList.pageNum,
+                        pageSize: this.appraiseList.pageSize
                     }
                 }).then(res =>{
                     if(res.data.code == '0'){
-                        this.appraiseList.data = res.data.rows;
+                        this.appraiseList.total = res.data.total;
+                        if(res.data.rows.length>0){
+                            this.appraiseList.data=this.appraiseList.data.concat(res.data.rows);
+                        }
                         this.appraiseTotal = res.data.total;
                     }
                 })
