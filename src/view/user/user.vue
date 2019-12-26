@@ -183,16 +183,6 @@
             onClickLeft() {
                 this.$router.back(-1);
             },
-            login() {
-                request.sendPost({
-                    url: '/wxlogin',
-                    params: {
-                        openid: localStorage.getItem("openid"),
-                    },
-                }).then((res) => {
-                    console.log(res);
-                });
-            },
             goVehicleManagement() {
                 //车辆管理
                 this.$router.push({path: '/vehicleManagement'});
@@ -244,24 +234,22 @@
                 this.flag = flag;
             }
             let url = location.href;
-            console.log(url);
-            if (url.indexOf("?") != -1) {
-                console.log("jin");
+            if (url.indexOf("code") != -1) {
                 let str = url.substr(url.indexOf("?") + 1);
                 let strs = str.split("&");
                 let code = strs[0].split("=")[1];
-                let state = strs[1].split("=")[1];
-                let url2 = "/api/wx/getopenid?" + qs.stringify({code: code});
+                let url2 = "/wx/getopenid?" + qs.stringify({code: code});
                 request.axios.get(url2).then(res => {
                     if (res.data.code === 0) {
                         let openid = res.data.data.openid;
                         localStorage.setItem("openid", openid);
                         request.axios.post(
-                            '/api/wx/login', qs.stringify({openid: openid})).then((res) => {
+                            '/wx/login', qs.stringify({openid: openid})).then((res) => {
                             if (res.data.code === 0) {
                                 if (res.data.data.isLogin === "1") {
                                     //登陆成功
                                     localStorage.setItem("isLogin", "1");
+                                    window.location.href = url.split("?")[0] + "#/user";
                                 } else {
                                     window.location.href = url.split("?")[0] + "#/register";
                                 }
@@ -270,9 +258,7 @@
                             }
                         })
                     }
-                })
-                    //失败返回
-                    .catch(error => {
+                }).catch(error => {
                         console.log(error);
                     });
             }

@@ -72,7 +72,7 @@
             async sendCode() {
                 if (this.definition.phone && this.checkPhone(this.definition.phone)) {
                     this.countDown(60);
-                    request.axios.get( "/api/wx/getcode?" + qs.stringify({phone: this.definition.phone}))
+                    request.axios.get( "/wx/getcode?" + qs.stringify({phone: this.definition.phone}))
                         .then((res) => {
 
                         })
@@ -110,7 +110,7 @@
                     return;
                 }
 
-                request.axios.post('/api/wx/bindphone', qs.stringify(
+                request.axios.post('/wx/bindphone', qs.stringify(
                         {
                             openid: localStorage.getItem('openid'),
                             code: this.definition.code,
@@ -119,7 +119,7 @@
                 ).then((res) => {
                     if (res.data.code == 0) {
                         request.axios.post(
-                            '/api/wx/login', qs.stringify({openid:localStorage.getItem('openid')})).then((res)=>{
+                            '/wx/login', qs.stringify({openid:localStorage.getItem('openid')})).then((res)=>{
                             if(res.data.code===0){
                                 if(res.data.data.isLogin==="1"){
                                     //登陆成功
