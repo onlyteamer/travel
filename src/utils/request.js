@@ -94,9 +94,9 @@ baas.interceptors.response.use(function (response) {
                 if(res.data.data.isLogin==="1"){
                     //登陆成功
                     localStorage.setItem("isLogin","1");
-                }'02'
+                }
             }else if(res.data.code===2){
-                window.location.href = location.protocol+"://"+location.hostname + "/#/register";
+                window.location.href = location.protocol+"//"+location.hostname + "/#/register";
             }else{
                 console.log(res.data.msg);
             }
