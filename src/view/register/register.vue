@@ -119,16 +119,16 @@
                 ).then((res) => {
                     if (res.data.code == 0) {
                         request.axios.post(
-                            '/wx/login', qs.stringify({openid:localStorage.getItem('openid')})).then((res)=>{
-                            if(res.data.code===0){
-                                if(res.data.data.isLogin==="1"){
+                            '/wx/login', qs.stringify({openid:localStorage.getItem('openid')})).then((res)=> {
+                            if (res.data.code === 0) {
+                                if (res.data.data.isLogin === "1") {
                                     //登陆成功
-                                    localStorage.setItem("isLogin","1");
-                                    this.$router.push({path:'/user'})
-                                }else{
-                                    this.$router.push({path:'/register'})
+                                    localStorage.setItem("isLogin", "1");
+                                    this.$router.push({path: '/user'})
                                 }
-                            }else{
+                            }if(res.data.code === 2){
+                                this.$router.push({path: '/register'})
+                        }else{
                                 Toast(res.data.msg);
                             }
                         })

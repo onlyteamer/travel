@@ -249,14 +249,18 @@
                                 if (res.data.data.isLogin === "1") {
                                     //登陆成功
                                     localStorage.setItem("isLogin", "1");
-                                    window.location.href = url.split("?")[0] + "#/user";
-                                } else {
-                                    window.location.href = url.split("?")[0] + "#/register";
+                                    window.location.href = "https://"+location.hostname + "/#/user";
                                 }
-                            } else {
+                            } else if(res.data.code === 2){
+                                window.location.href = "https://"+location.hostname + "/#/register";
+                            }else{
                                 Toast(res.data.msg);
                             }
                         })
+                    }else if(res.data.code === 2){
+                        window.location.href = "https://"+location.hostname + "/#/register";
+                    }else{
+                        Toast(res.data.msg);
                     }
                 }).catch(error => {
                         console.log(error);
