@@ -95,7 +95,7 @@ baas.interceptors.response.use(function (response) {
                     window.location.href = url.split("?")[0] + "#/register";
                 }
             }else{
-                Toast(res.data.msg);
+                console.log(res.data.msg);
             }
         })
     }
