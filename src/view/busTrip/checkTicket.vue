@@ -47,9 +47,9 @@
                     <van-col span="6" style="font-weight: bold">票号：</van-col>
                     <van-col span="18" style="color: #202020">{{ticketInfo.ticketid}}</van-col>
                 </van-row>
-                <van-row style="margin: 10px 0">
+                <van-row style="margin: 10px 0;display: flex;align-items: center;">
                     <van-col span="6" style="font-weight: bold">验证码：</van-col>
-                    <van-col span="18" style="color: #202020">{{ticketInfo.checkcode}}</van-col>
+                    <van-col span="18" style="color: #ee0a24;font-size: 22px">{{ticketInfo.checkcode}}</van-col>
                 </van-row>
                 <van-row style="margin: 10px 0 0">
                     <van-col span="6" style="font-weight: bold">手机号：</van-col>
@@ -69,23 +69,14 @@
                 <div class="info-wrap">
                     <div style="width: 90%">
                         <div style="display: flex;height:35px;line-height: 35px">
-                            <div style="margin-left: 45px;width: 25%"><img :src="blueTime" width="13px"
-                                                                           height="13px"><span
-                                    class="place"
-                                    style="margin-left: 7px;margin-right: 13px">{{ticketInfo.starttime}}</span></div>
-                            <div style="margin-left: 10px"><img :src="blueTime" width="13px" height="13px"><span
-                                    class="place"
-                                    style="margin-left: 7px;">{{ticketInfo.startname}}</span>
+                            <div style="margin-left: 45px;width: 25%"><img :src="blueTime" width="13px" height="13px"><span class="place" style="margin-left: 7px;margin-right: 13px">{{ticketInfo.starttime}}</span></div>
+                            <div style="margin-left: 10px"><img :src="placeUp" width="13px" height="13px"><span class="place" style="margin-left: 7px;">{{ticketInfo.startname}}</span>
                             </div>
                         </div>
                         <div style="display: flex;height:35px;line-height: 35px">
-                            <div style="margin-left: 45px;width: 25%"><img :src="redTime" width="13px"
-                                                                           height="13px"><span class="place"
-                                                                                               style="margin-left: 7px;margin-right: 13px">{{ticketInfo.endtime}}</span>
+                            <div style="margin-left: 45px;width: 25%"><img :src="redTime" width="13px" height="13px"><span class="place" style="margin-left: 7px;margin-right: 13px">{{ticketInfo.endtime}}</span>
                             </div>
-                            <div style="margin-left: 10px"><img :src="redTime" width="13px" height="13px"><span
-                                    class="place"
-                                    style="margin-left: 7px;">{{ticketInfo.endname}}</span>
+                            <div style="margin-left: 10px"><img :src="placeDown" width="13px" height="13px"><span class="place" style="margin-left: 7px;">{{ticketInfo.endname}}</span>
                             </div>
                         </div>
                     </div>
@@ -107,9 +98,9 @@
                         <!--:immediate-check="false">-->
                         <div v-for="(item,index) in lineDetailsList" :key="index"
                              :class='index==(listSize-1)?"item-li last-station":"item-li"'>
-                            <img :src="upTag" style="position: absolute;top: 0px;width: 20px;height: 23px"
+                            <img :src="lineUp" style="position: absolute;top: 0px;width: 20px;height: 23px"
                                  v-if="index == '0'">
-                            <img :src="downTag" style="position: absolute;top: 0px;width: 20px;height: 23px"
+                            <img :src="lineDown" style="position: absolute;top: 0px;width: 20px;height: 23px"
                                  v-if="index == (listSize-1)">
                             <div class="station-item">
                                 <div class="name"><span style="margin-left: 5px">{{item.stationname}}</span></div>
@@ -132,7 +123,7 @@
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Tag, Divider, Swipe, SwipeItem, NoticeBar, List, Toast} from 'vant'
+    import {Row, Col, Tag, Divider, Swipe, SwipeItem, NoticeBar, List, Toast,Dialog} from 'vant'
     import backOne from './../../static/images/backOne.jpg'
     import backTwo from './../../static/images/backTwo.jpg'
     import laba from './../../static/images/laba.png'
@@ -140,10 +131,16 @@
     import blueTime from './../../static/images/busTrip/blue_time.png'
     import redTime from './../../static/images/busTrip/red_time.png'
 
+    import lineDown from './../../static/images/busTrip/lineDown.png'
+    import lineUp from './../../static/images/busTrip/lineUp.png'
+    import placeDown from './../../static/images/busTrip/placeDown.png'
+    import placeUp from './../../static/images/busTrip/placeUp.png'
+
     import downTag from '../../static/images/busTrip/down-tag.png'
     import upTag from '../../static/images/busTrip/up-tag.png'
 
     import request from '../../utils/request'
+    import moment from 'moment'
 
     export default {
         name: "checkTicket",
@@ -157,10 +154,15 @@
             [SwipeItem.name]: SwipeItem,
             [NoticeBar.name]: NoticeBar,
             [List.name]: List,
-            [Toast.name]: Toast
+            [Toast.name]: Toast,
+            [Dialog.name]: Dialog,
         },
         data() {
             return {
+                lineDown:lineDown,
+                lineUp:lineUp,
+                placeDown:placeDown,
+                placeUp:placeUp,
                 id: '',
                 title: "验票",
                 notice: "",
@@ -236,19 +238,32 @@
 
             //验票
             checkTicket() {
-                request.sendPost({
-                    url: "/bus/driverChecking",
-                    params: {
-                        isdriver: 0,
-                        checkcode: this.ticketInfo.checkcode
-                    }
-                }).then(res => {
-                    if (res.data.code == '0') {
-                        Toast.success("验票成功")
-                    } else {
-                        Toast.fail(res.data.msg)
-                    }
-                })
+                let endTime =  new Date(this.ticketInfo.date);
+                let startTime = new Date();
+                let days = moment(endTime).diff(moment(startTime), 'days');
+                if(days == '0'){
+                    Dialog.confirm({
+                        title: '验票',
+                        message:  '验票后不可退票,确认进行验票么？'
+                    }).then(() => {
+                        // 确定
+                        request.sendPost({
+                            url: "/bus/driverChecking",
+                            params: {
+                                isdriver: 0,
+                                checkcode: this.ticketInfo.checkcode
+                            }
+                        }).then(res => {
+                            if (res.data.code == '0') {
+                                Toast.success("验票成功")
+                            } else {
+                                Toast.fail(res.data.msg)
+                            }
+                        })
+                    }).catch(res =>{
+
+                    })
+                }
             },
 
             onLoad() {
@@ -318,7 +333,7 @@
         margin: 0 auto;
         background: #FFFFFF;
         text-align: center;
-        font-size: 18px;
+        font-size: 24px;
         font-weight: bold;
         padding: 10px;
         border-radius: 5px;
@@ -354,9 +369,9 @@
 
     .btnStyle {
         text-align: center;
-        font-size: 34px;
+        font-size: 36px;
         color: #FFFFFF;
-        font-weight: bold;
+        font-weight: 900;
         width: 88%;
         margin: 0 auto;
         background-image: linear-gradient(135deg, #41B3FF, #50EDE2, #0CC893);

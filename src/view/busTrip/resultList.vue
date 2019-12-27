@@ -21,19 +21,19 @@
                        <div style="display: flex;align-items: center;justify-content: space-between">
                            <div @click="linkBusDetail(item.busid)"
                                 style="display: flex;align-items: center;justify-content: space-between;height: 72px">
-                               <div>
+                               <div style="width: 70%">
                                    <div style="display: flex;height:35px;line-height: 35px">
-                                       <div><img :src="blueTime" width="13px" height="13px"><span
+                                       <div style="width:37%"><img :src="blueTime" width="13px" height="13px"><span
                                                style="margin-left: 7px;margin-right: 13px">{{item.starttime}}</span>
                                        </div>
-                                       <div><img :src="blueTime" width="13px" height="13px"><span
+                                       <div><img :src="placeUp" width="13px" height="13px"><span
                                                style="margin-left: 7px;">{{item.startname}}</span></div>
                                    </div>
                                    <div style="display: flex;height:35px;line-height: 35px">
-                                       <div><img :src="redTime" width="13px" height="13px"><span
+                                       <div style="width: 37%"><img :src="redTime" width="13px" height="13px"><span
                                                style="margin-left: 7px;margin-right: 13px">{{item.endtime}}</span>
                                        </div>
-                                       <div><img :src="redTime" width="13px" height="13px"><span
+                                       <div><img :src="placeDown" width="13px" height="13px"><span
                                                style="margin-left: 7px;">{{item.endname}}</span></div>
                                    </div>
                                </div>
@@ -58,6 +58,9 @@
     import blueTime from './../../static/images/busTrip/blue_time.png'
     import redTime from './../../static/images/busTrip/red_time.png'
 
+    import placeDown from './../../static/images/busTrip/placeDown.png'
+    import placeUp from './../../static/images/busTrip/placeUp.png'
+
     export default {
         components: {
             [NavBar.name]: NavBar,
@@ -68,6 +71,8 @@
         },
         data() {
             return {
+                placeDown:placeDown,
+                placeUp:placeUp,
                 end: '',
                 start: '',
                 type: '',

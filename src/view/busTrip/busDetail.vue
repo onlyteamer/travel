@@ -10,13 +10,13 @@
                     <div style="display: flex;height:35px;line-height: 35px">
                         <div style="width: 37%"><img :src="blueTime" width="13px" height="13px"><span
                                 class="place" style="margin-left: 7px;margin-right: 13px">{{lineDetails.starttime}}</span></div>
-                        <div><img :src="blueTime" width="13px" height="13px"><span class="place" style="margin-left: 7px;">{{lineDetails.startname}}</span>
+                        <div><img :src="placeUp" width="13px" height="13px"><span class="place" style="margin-left: 7px;">{{lineDetails.startname}}</span>
                         </div>
                     </div>
                     <div style="display: flex;height:35px;line-height: 35px">
                         <div style="width: 37%"><img :src="redTime" width="13px" height="13px"><span class="place" style="margin-left: 7px;margin-right: 13px">{{lineDetails.endtime}}</span>
                         </div>
-                        <div><img :src="redTime" width="13px" height="13px"><span class="place" style="margin-left: 7px;">{{lineDetails.endname}}</span>
+                        <div><img :src="placeDown" width="13px" height="13px"><span class="place" style="margin-left: 7px;">{{lineDetails.endname}}</span>
                         </div>
                     </div>
                 </div>
@@ -39,11 +39,11 @@
                             <!--:immediate-check="false">-->
                         <div v-for="(item,index) in lineDetailsList" :key="item.id"
                              :class='index==(listSize-1)?"item-li last-station":"item-li"'>
-                            <img :src="upTag" style="position: absolute;top: 0px;width: 20px;height: 23px" v-if="index == '0'">
-                            <img :src="downTag" style="position: absolute;top: 0px;width: 20px;height: 23px" v-if="index == (listSize-1)">
+                            <img :src="lineUp" style="position: absolute;top: 0px;width: 20px;height: 23px" v-if="index == '0'">
+                            <img :src="lineDown" style="position: absolute;top: 0px;width: 20px;height: 23px" v-if="index == (listSize-1)">
                             <div class="station-item">
-                                <div class="name"><span style="margin-left: 5px">卧龙坡</span></div>
-                                <span class="time">06:54</span>
+                                <div class="name"><span style="margin-left: 5px">{{item.stationname}}</span></div>
+                                <span class="time">{{item.starttime}}</span>
                             </div>
                         </div>
                     <!--</van-list>-->
@@ -74,6 +74,11 @@
     import upTag from '../../static/images/busTrip/up-tag.png'
     import aMap from './../../components/map_currentPosition'
 
+    import lineDown from './../../static/images/busTrip/lineDown.png'
+    import lineUp from './../../static/images/busTrip/lineUp.png'
+    import placeDown from './../../static/images/busTrip/placeDown.png'
+    import placeUp from './../../static/images/busTrip/placeUp.png'
+
     export default {
         components: {
             aMap,
@@ -88,6 +93,10 @@
             return {
                 mapHeight: '',
                 offset: 0,
+                lineDown:lineDown,
+                lineUp:lineUp,
+                placeDown:placeDown,
+                placeUp:placeUp,
                 downTag: downTag,
                 upTag: upTag,
                 blueTime: blueTime,

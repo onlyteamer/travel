@@ -25,19 +25,19 @@
                                         <span class="list-price">￥{{item.ticketPrice}}</span>
                                     </div>
                                     <div style="display: flex;align-items: center;justify-content: space-between;height: 85px">
-                                        <div @click="linkBusDetail(item.busid)">
+                                        <div @click="linkBusDetail(item.busid)" style="width: 70%">
                                             <div style="display: flex;height:35px;line-height: 35px">
-                                                <div><img :src="blueTime" width="13px" height="13px"><span
+                                                <div style="width: 37%"><img :src="blueTime" width="13px" height="13px"><span
                                                         style="margin-left: 7px;margin-right: 13px">{{item.starttime}}</span>
                                                 </div>
-                                                <div><img :src="blueTime" width="13px" height="13px"><span
+                                                <div><img :src="placeUp" width="13px" height="13px"><span
                                                         style="margin-left: 7px;">{{item.startname}}</span></div>
                                             </div>
                                             <div style="display: flex;height:35px;line-height: 35px">
-                                                <div><img :src="redTime" width="13px" height="13px"><span
+                                                <div style="width: 37%"><img :src="redTime" width="13px" height="13px"><span
                                                         style="margin-left: 7px;margin-right: 13px">{{item.endtime}}</span>
                                                 </div>
-                                                <div><img :src="redTime" width="13px" height="13px"><span
+                                                <div><img :src="placeDown" width="13px" height="13px"><span
                                                         style="margin-left: 7px;">{{item.endname}}</span></div>
                                             </div>
                                         </div>
@@ -65,9 +65,10 @@
                                 <van-collapse-item :title="item.date" :name="item.date"
                                                    v-for="(item,index) in tripAllList.dateList" :key="index">
                                     <van-row v-for="(line,indexNum) in tripAllList.data" :key="line.id"
-                                             style="margin-bottom: 10px;color: #5083ED">
+                                             style="margin-bottom: 10px;color: #5083ED;display: flex;align-items: center;">
                                         <van-col span="14" style="color: #5083ED;font-size: 14px;font-weight: bold">
-                                            {{line.linename}}：{{line.startname}}->{{line.endname}}
+                                            <div>{{line.linename}}</div>
+                                            <div>{{line.startname}} -> {{line.endname}}</div>
                                         </van-col>
                                         <van-col span="10" style="color: #0CC893;text-align: right;font-size: 14px;">
                                             <div style="display: inline-block">
@@ -138,11 +139,14 @@
 </template>
 
 <script>
-    import {NavBar, Button, Tabs, Tab, Toast, List, Collapse, CollapseItem, Row, Col,Tabbar,TabbarItem,Image} from 'vant';
+    import {NavBar, Button, Tabs, Tab, Toast, List, Collapse, CollapseItem, Row, Col,Tabbar,TabbarItem,Image,Dialog} from 'vant';
     import request from '../../utils/request'
     import moment from 'moment'
     import blueTime from './../../static/images/busTrip/blue_time.png'
     import redTime from './../../static/images/busTrip/red_time.png'
+
+    import placeDown from './../../static/images/busTrip/placeDown.png'
+    import placeUp from './../../static/images/busTrip/placeUp.png'
 
     import car from './../../static/images/busTrip/car.png'
     import scan from './../../static/images/busTrip/scan.png'
@@ -162,10 +166,13 @@
             [Col.name]: Col,
             [Tabbar.name]:Tabbar,
             [TabbarItem.name]:TabbarItem,
-            [Image.name]:Image
+            [Image.name]:Image,
+            [Dialog.name]: Dialog,
         },
         data() {
             return {
+                placeDown:placeDown,
+                placeUp:placeUp,
                 car: car,
                 scan: scan,
                 user: user,
@@ -220,20 +227,28 @@
                 this.$router.push({path: '/checkTicket', query: {'id': id}});
             },
             refundTicket(id) {
-                request.sendPost({
-                    url: '/bus/refundTicket',
-                    params: {
-                        ticketid: id
-                    }
-                }).then((res) => {
-                    if (res.data.code === 0) {
-                        Toast(res.data.msg);
-                        this.active = 2;
-                        this.onClick();
-                    } else {
-                        Toast(res.data.msg);
-                    }
-                })
+                Dialog.confirm({
+                    title: '退票',
+                    message:  '是否确认退票？'
+                }).then(() => {
+                    // 确定
+                    request.sendPost({
+                        url: '/bus/refundTicket',
+                        params: {
+                            ticketid: id
+                        }
+                    }).then((res) => {
+                        if (res.data.code === 0) {
+                            Toast(res.data.msg);
+                            this.active = 2;
+                            this.onClick();
+                        } else {
+                            Toast(res.data.msg);
+                        }
+                    })
+                }).catch(res =>{
+
+                });
             },
 
             onClick() {

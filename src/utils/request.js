@@ -1,6 +1,10 @@
 import axios from 'axios';
 import qs from 'querystring'
 import context from "./context";
+import Vue from 'vue';
+import { Toast } from 'vant';
+
+Vue.use(Toast);
 
 let server = {};
 

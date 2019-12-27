@@ -94,7 +94,7 @@
         </div>
 
         <div class="listInfo">
-            <div class="list-title">热门线路</div>
+            <div class="list-title">热门线路<span style="float: right;" @click="queryMore">查看更多</span></div>
             <van-list
                     v-model="loading"
                     :error.sync="error"
@@ -110,14 +110,14 @@
                             <span class="list-price">￥{{item.ticketPrice}}</span>
                         </div>
                         <div style="display: flex;align-items: center;justify-content: space-between;height: 72px">
-                            <div  @click="linkBusDetail(item.busid)">
-                                <div style="display: flex;height:35px;line-height: 35px">
-                                    <div><img :src="blueTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">{{item.starttime}}</span></div>
-                                    <div><img :src="blueTime" width="13px" height="13px"><span  style="margin-left: 7px;">{{item.startname}}</span></div>
+                            <div  @click="linkBusDetail(item.busid)" style="width: 70%">
+                                <div style="display: flex;height:35px;line-height: 35px;">
+                                    <div style="width: 37%"><img :src="blueTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">{{item.starttime}}</span></div>
+                                    <div><img :src="placeUp" width="13px" height="13px"><span  style="margin-left: 7px;">{{item.startname}}</span></div>
                                 </div>
                                 <div style="display: flex;height:35px;line-height: 35px">
-                                    <div><img :src="redTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">{{item.endtime}}</span></div>
-                                    <div><img :src="redTime" width="13px" height="13px"><span style="margin-left: 7px;">{{item.endname}}</span></div>
+                                    <div style="width: 37%"><img :src="redTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">{{item.endtime}}</span></div>
+                                    <div><img :src="placeDown" width="13px" height="13px"><span style="margin-left: 7px;">{{item.endname}}</span></div>
                                 </div>
                             </div>
                             <div>
@@ -171,6 +171,9 @@
     import blueTime from './../../static/images/busTrip/blue_time.png'
     import redTime from './../../static/images/busTrip/red_time.png'
 
+    import placeDown from './../../static/images/busTrip/placeDown.png'
+    import placeUp from './../../static/images/busTrip/placeUp.png'
+
     import backOne from './../../static/images/backOne.jpg'
     import backTwo from './../../static/images/backTwo.jpg'
 
@@ -203,6 +206,8 @@
         },
         data() {
             return {
+                placeDown:placeDown,
+                placeUp:placeUp,
                 notice:"",
                 images: [
                     backOne,
@@ -241,6 +246,11 @@
             this.initAdvList();
         },
         methods: {
+            queryMore(){
+                //跳转到更多页面
+                this.$router.push({path:'/busList'})
+            },
+
             gobuyTicket(item){
                 this.$router.push({path:'/buyTicket',query:{'busid':item.busid,'lineid':item.lineid}});
             },
