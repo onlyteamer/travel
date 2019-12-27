@@ -84,19 +84,19 @@ server.addToken = function (url) {
 
 //添加响应拦截器
 baas.interceptors.response.use(function (response) {
-    // console.log(response);
     // 对响应数据做些事
-    if (response && response.data && response.data.code === '1') {
+    if (response && response.data && response.data.code === 1) {
         let url = location.href;
         server.axios.post(
             '/wx/login', qs.stringify({openid:localStorage.getItem('openid')})).then((res)=>{
+                console.log(res);
             if(res.data.code===0){
                 if(res.data.data.isLogin==="1"){
                     //登陆成功
                     localStorage.setItem("isLogin","1");
-                }
+                }'02'
             }else if(res.data.code===2){
-                window.location.href = "https://"+location.hostname + "/#/register";
+                window.location.href = location.protocol+"://"+location.hostname + "/#/register";
             }else{
                 console.log(res.data.msg);
             }
