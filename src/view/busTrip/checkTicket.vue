@@ -1,8 +1,8 @@
 <template>
     <div class="contain">
-        <Title :title="title" @onClickLeft="onClickLeft"></Title>
+        <!--<Title :title="title" @onClickLeft="onClickLeft"></Title>-->
 
-        <van-swipe :autoplay="3000" style="height: 200px;margin-top: 46px">
+        <van-swipe :autoplay="3000" style="height: 200px;margin-top: 0px">
             <van-swipe-item v-for="(image, index) in images" :key="index">
                 <!--<img :src="image" width="100px" height="100px"/>-->
                 <div :style="{width: '100%',height: '100%',backgroundImage:'url('+image+')'}"></div>
@@ -49,7 +49,7 @@
                 </van-row>
                 <van-row style="margin: 10px 0;display: flex;align-items: center;">
                     <van-col span="6" style="font-weight: bold">验证码：</van-col>
-                    <van-col span="18" style="color: #ee0a24;font-size: 22px">{{ticketInfo.checkcode}}</van-col>
+                    <van-col span="18">11{{ticketInfo.checkcode}}</van-col>
                 </van-row>
                 <van-row style="margin: 10px 0 0">
                     <van-col span="6" style="font-weight: bold">手机号：</van-col>
@@ -238,32 +238,32 @@
 
             //验票
             checkTicket() {
-                let endTime =  new Date(this.ticketInfo.date);
-                let startTime = new Date();
-                let days = moment(endTime).diff(moment(startTime), 'days');
-                if(days == '0'){
-                    Dialog.confirm({
-                        title: '验票',
-                        message:  '验票后不可退票,确认进行验票么？'
-                    }).then(() => {
-                        // 确定
-                        request.sendPost({
-                            url: "/bus/driverChecking",
-                            params: {
-                                isdriver: 0,
-                                checkcode: this.ticketInfo.checkcode
-                            }
-                        }).then(res => {
-                            if (res.data.code == '0') {
-                                Toast.success("验票成功")
-                            } else {
-                                Toast.fail(res.data.msg)
-                            }
-                        })
-                    }).catch(res =>{
-
-                    })
-                }
+                // let endTime =  new Date(this.ticketInfo.date);
+                // let startTime = new Date();
+                // let days = moment(endTime).diff(moment(startTime), 'days');
+                // if(days == '0'){
+                //     Dialog.confirm({
+                //         title: '验票',
+                //         message:  '验票后不可退票,确认进行验票么？'
+                //     }).then(() => {
+                //         // 确定
+                //         request.sendPost({
+                //             url: "/bus/driverChecking",
+                //             params: {
+                //                 isdriver: 0,
+                //                 checkcode: this.ticketInfo.checkcode
+                //             }
+                //         }).then(res => {
+                //             if (res.data.code == '0') {
+                //                 Toast.success("验票成功")
+                //             } else {
+                //                 Toast.fail(res.data.msg)
+                //             }
+                //         })
+                //     }).catch(res =>{
+                //
+                //     })
+                // }
             },
 
             onLoad() {
@@ -374,7 +374,9 @@
         font-weight: 900;
         width: 88%;
         margin: 0 auto;
-        background-image: linear-gradient(135deg, #41B3FF, #50EDE2, #0CC893);
+        /*background-image: linear-gradient(135deg, #41B3FF, #50EDE2, #0CC893);*/
+        background-image: linear-gradient(135deg, #ee0a24, #ed7e50, #ee0a24);
+
         padding: 10px;
         margin-top: 10px;
     }

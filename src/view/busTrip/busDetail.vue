@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <van-nav-bar :fixed="true" :title="title" left-arrow @click-left="onClickLeft" right-text="加入群聊"
+            <van-nav-bar :fixed="true" :title="title"  right-text="加入群聊"
                          @click-right="joinGroupChat"/>
         </div>
         <div class="content">
@@ -55,12 +55,17 @@
                 <img :src="down" width="11px" height="21px">
             </div>
         </div>
-        <aMap
-                id="userPosition"
-                :lon="carInfo.lon"
-                :lat="carInfo.lat"
-                :height="mapHeight" width="100%">
-        </aMap>
+        <div style="position: relative">
+            <aMap
+                    id="userPosition"
+                    :lon="carInfo.lon"
+                    :lat="carInfo.lat"
+                    :height="mapHeight" width="100%">
+            </aMap>
+
+            <div class="passCar" @click="linkBuyTicket">乘车</div>
+        </div>
+
     </div>
 </template>
 
@@ -121,6 +126,11 @@
             joinGroupChat() {
 
             },
+            linkBuyTicket(){
+                let busid = this.$route.query.busid;
+                this.$router.push({path:"/buyTicket",query:{busid:busid,lineid:this.lineDetails.lineid}})
+            },
+
             initData() {
                 let busid = this.$route.query.busid;
                 request.sendPost({
@@ -289,5 +299,19 @@
     .station-item .time {
         color: #202020;
         font-size: 12px;
+    }
+
+    .passCar{
+        position: absolute;
+        bottom: 15px;
+        z-index: 999;
+        width: 88%;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        background: #0CC893;
+        padding: 12px 10px;
+        color: #FFFFFF;
+        font-size: 18px;
     }
 </style>

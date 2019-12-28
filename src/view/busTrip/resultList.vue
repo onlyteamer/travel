@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <van-nav-bar :fixed="true" title="查询结果" left-arrow @click-left="onClickLeft"/>
+            <!--<van-nav-bar :fixed="true" title="查询结果" left-arrow @click-left="onClickLeft"/>-->
         </div>
         <div class="content">
             <van-list
@@ -149,7 +149,7 @@
 
     .content {
         padding: 15px;
-        margin-top: 46px;
+        /*margin-top: 46px;*/
     }
 
     .card {

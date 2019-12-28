@@ -1,7 +1,7 @@
 <template>
     <div>
-        <Title :title="title" @onClickLeft="onClickLeft"></Title>
-        <div style="margin-top: 55px;font-size: 14px">
+        <!--<Title :title="title" @onClickLeft="onClickLeft"></Title>-->
+        <div style="margin-top: 0px;font-size: 14px">
             <div class="card">
                 <div style="color: #5083ED;font-weight: bold">线路：{{busInfo.linename}}</div>
                 <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>

@@ -5,21 +5,26 @@
         </div>
         <div class="content">
             <div class="item">
-                <van-field label-class="item-label" label="司机姓名"></van-field>
+                <van-field label-class="item-label" v-model="driverInfo.driverName" label="司机姓名"></van-field>
             </div>
             <div class="item">
-                <van-field label-class="item-label" label="驾龄"></van-field>
+                <van-field label-class="item-label" v-model="driverInfo.driverAge" label="驾龄"></van-field>
             </div>
             <div class="item">
-                <van-field label-class="item-label" label="身份证号"></van-field>
+                <van-field label-class="item-label" v-model="driverInfo.cardId" label="身份证号"></van-field>
             </div>
             <div class="item">
-                <van-field label-class="item-label" label="驾驶证编号"></van-field>
+                <van-field label-class="item-label" v-model="driverInfo.driverCardId" label="驾驶证编号"></van-field>
             </div>
             <div class="upload-item">
                 <span class="item-label">上传驾驶证</span>
                 <div class="upload-wrap">
-                    <van-uploader :max-count=1 v-model="imgURL" @after-read="uploadCallback()" preview-size="">
+                    <div style="position: relative;width: 100%" v-if="driverInfo.driverCardimage">
+                        <van-image :src="baseImgUrl+driverInfo.driverCardimage"  fit="cover" width="100%" height="110px" />
+                        <van-icon name="close" @click="delImg3" style="font-size: 20px;position: absolute;top:-10px;right: -10px"/>
+                    </div>
+
+                    <van-uploader :max-count=1  v-if="!driverInfo.driverCardimage" :after-read="uploadCallback"   :preview-image="false">
                         <van-image round width="54px" height="54px" :src="uploadIcon"/>
                         <div style="color: #9E9E9E;font-size: 14px">选择文件</div>
                     </van-uploader>
@@ -56,8 +61,11 @@
 </template>
 <!--车主认证-->
 <script>
-    import {NavBar, Field, Button, Uploader, Image, Checkbox} from 'vant';
+    import {NavBar, Field, Button, Uploader, Image, Checkbox,Toast,Icon} from 'vant';
     import uploadIcon from '../../static/images/upload.png';
+
+    import request from '../../utils/request';
+    import context from "../../utils/context";
 
     export default {
         components: {
@@ -66,13 +74,23 @@
             [Button.name]: Button,
             [Uploader.name]: Uploader,
             [Image.name]: Image,
-            [Checkbox.name]: Checkbox
+            [Checkbox.name]: Checkbox,
+            [Toast.name]: Toast,
+            [Icon.name]:Icon
         },
         data() {
             return {
                 definition: {
                     checked: false
                 },
+                driverInfo:{
+                    driverName:"",
+                    cardId:"",
+                    driverAge:"",
+                    driverCardId:"",
+                    driverCardimage:""
+                },
+                baseImgUrl:context.imageServer,
                 imgURL: [],
                 uploadIcon: uploadIcon
             }
@@ -81,16 +99,79 @@
             onClickLeft() {
                 this.$router.back(-1);
             },
-            uploadCallback() {
-
+            uploadCallback(uploadFile) {
+                let param = new FormData();
+                param.append('file', uploadFile.file);//通过append向form对象添加数据
+                request.uploadFile({
+                    url: '/image/oss/upload',
+                    params: param
+                }).then((res) => {
+                    if (res.data.code === 0) {
+                        let arr = res.data.data.url.split('/');
+                        if (arr && arr.length > 1) {
+                            this.driverInfo.driverCardimage = arr[arr.length - 1];
+                        }
+                    }
+                })
             },
+            //删除照片
+            delImg3() {
+                request.sendPost({
+                    url: "/image/oss/delete",
+                    params: {
+                        imageName: this.driverInfo.driverCardimage
+                    }
+                }).then((res) => {
+                    if (res.data.code === 0) {
+                        this.driverInfo.driverCardimage = '';
+                    }
+                })
+            },
+
             setHeight() {
                 let content = document.getElementsByClassName('content')[0];
                 let height = window.innerHeight;
                 content.style.height = height + 'px';
             },
             submit() {
-                this.$router.push({path:'/ownerCertificationRemind'});
+                if(!this.definition.checked){
+                    Toast.fail("请同意条款再操作");
+                    return false;
+                }
+
+                if(!this.driverInfo.driverName){
+                    Toast.fail("司机姓名不能为空");
+                    return false;
+                }
+                if(!this.driverInfo.cardId){
+                    Toast.fail("司机身份证号不能为空");
+                    return false;
+                }
+                if(!this.driverInfo.driverCardId){
+                    Toast.fail("驾驶证编号不能为空");
+                    return false;
+                }
+                if(!this.driverInfo.driverAge){
+                    Toast.fail("驾龄不能为空");
+                    return false;
+                }
+                if(!this.driverInfo.driverCardimage){
+                    Toast.fail("请上传驾驶证图片");
+                    return false;
+                }
+
+                request.sendPost({
+                    url:"/user/center/driver/update",
+                    params:this.driverInfo
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        Toast.success("操作成功");
+                        this.$router.push({path:'/ownerCertificationRemind'});
+                    }else {
+                        Toast.fail(res.data.msg)
+                    }
+                })
+
             }
         },
         mounted: function () {

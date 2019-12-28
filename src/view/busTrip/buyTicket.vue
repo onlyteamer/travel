@@ -1,7 +1,8 @@
 <template>
     <div>
         <div>
-            <van-nav-bar :fixed="true" :title="busInfo.linename" left-arrow @click-left="onClickLeft"/>
+            <!--<van-nav-bar :fixed="true" :title="busInfo.linename" left-arrow @click-left="onClickLeft"/>-->
+            <van-nav-bar :fixed="true" :title="busInfo.linename" />
         </div>
         <div class="content">
             <div class="line-info-wrap">

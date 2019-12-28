@@ -42,7 +42,7 @@
                                             </div>
                                         </div>
                                         <div style="display: flex;flex-direction: column;justify-content:space-around;height: 100%">
-                                            <van-button type="default" @click="checkTicket(item.id)"
+                                            <van-button  :disabled="compareDate(item.starttime)" type="default" @click="checkTicket(item.id,item.checkcode)"
                                                         style="width:66px;height:28px;line-height:28px;background: #0CC893;color: #FFFFFF;border-radius: 5px">
                                                 验票
                                             </van-button>
@@ -72,7 +72,7 @@
                                         </van-col>
                                         <van-col span="10" style="color: #0CC893;text-align: right;font-size: 14px;">
                                             <div style="display: inline-block">
-                                                <van-button type="default" size="small" @click="checkTicket(line.id)"
+                                                <van-button :disabled="compareDate(item.date)" type="default" size="small" @click="checkTicket(line.id,line.checkcode)"
                                                             style="background: #0CC893;color: #FFFFFF;border-radius: 5px">
                                                     验票
                                                 </van-button>
@@ -223,8 +223,42 @@
             }
         },
         methods: {
-            checkTicket(id) {
-                this.$router.push({path: '/checkTicket', query: {'id': id}});
+
+            //当天才能验票
+            compareDate(date){
+                let endTime =  new Date(date);
+                let startTime = new Date();
+                let days = moment(endTime).diff(moment(startTime), 'days');
+                if(days == '0'){
+                    return false;
+                }else {
+                    return true;
+                }
+            },
+
+            checkTicket(id,checkcode) {
+                Dialog.confirm({
+                    title: '验票',
+                    message:  '验票后不可退票,确认进行验票么？'
+                }).then(() => {
+                    // 确定
+                    request.sendPost({
+                        url: "/bus/driverChecking",
+                        params: {
+                            isdriver: 0,
+                            checkcode:checkcode
+                        }
+                    }).then(res => {
+                        if (res.data.code == '0') {
+                            Toast.success("验票成功");
+                            this.$router.push({path: '/checkTicket', query: {'id': id}});
+                        } else {
+                            Toast.fail(res.data.msg)
+                        }
+                    })
+                }).catch(res =>{
+
+                })
             },
             refundTicket(id) {
                 Dialog.confirm({
