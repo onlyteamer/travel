@@ -5,7 +5,8 @@
                 <van-col span="6" >当前路线：</van-col>
                 <van-col span="18">
                     <div style="color: #5083ED;">
-                        昌坤出行3线：上河湾 → 西坝河
+                        <!--昌坤出行3线：上河湾 → 西坝河-->
+                        {{lineName}}
                     </div>
                 </van-col>
             </van-row>
@@ -14,7 +15,7 @@
         <div style="margin: 10px 0px 15px;width: 95%">
             <div>其他路线：</div>
 
-            <div class="lineList" v-for="index in 3" @click="changeLine(index)">北京←→怀柔</div>
+            <div class="lineList" v-for="(item,index) in lineList" :key="index" @click="changeLine(item)">{{lineName}}</div>
         </div>
     </div>
 </template>
@@ -35,26 +36,43 @@
 
         data(){
             return{
-
+                lineList:[],
+                lineName:""
             }
         },
         mounted(){
-
-
-
+            this.initLineList();
         },
 
         methods:{
+            initLineList(){
+                request.sendGet({
+                    url:"/user/center/linelist",
+                    params: {}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        //处理数据
+                        this.lineList = res.data.rows;
+
+                        this.lineList.forEach(e =>{
+                            if(e.isDefault == '1'){
+                                this.lineName = e.lineName
+                            }
+                        })
+
+                    }
+                })
+            },
+
 
             changeLine(item){
-
                     Dialog.confirm({
                         title: '切换路线',
-                        message:  '是否切换路线到北京←→怀柔？'
+                        message:  '是否切换路线到'+item.lineName+'？'
                     }).then(() => {
                         // 确定
                         request.sendPost({
-                            url: "/api/user/center/defaultline/"+item.lineid,
+                            url: "/user/center/defaultline/"+item.lineid,
                             params: {}
                         }).then(res => {
                             if (res.data.code == '0') {
