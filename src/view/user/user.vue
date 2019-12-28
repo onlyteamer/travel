@@ -9,18 +9,19 @@
                 <!--<van-col span="8" style="text-align: center"><span style="color: white;font-size: 16px;">个人中心</span>-->
                 <!--</van-col>-->
             <!--</van-row>-->
-            <div style="display: flex;align-items: center;justify-content: space-between;margin-top: 20px">
-                <van-image round width="61px" height="61px" :src="listImg"/>
-                <div>
-                    <span style="font-size: 14px;color: white;margin-right: 3px;font-weight: bold">加菲猫</span>
-                    <img style="width: 13px;height: 13px;" src="../../static/images/woman.png"/>
+            <div style="display: flex;align-items: center;justify-content: space-between;margin-top: 20px;padding: 0 15px">
+                <van-image round width="61px" height="61px" :src="userInfo.headimgurl"/>
+                <div style="display: flex;align-items: center;justify-content: center">
+                    <div style="max-width:70px;width:auto;word-wrap:break-word;word-break:break-all;font-size: 16px;color: white;margin-right: 3px;font-weight: bold">{{userInfo.nickname}}</div>
+                    <img style="width: 13px;height: 13px;" src="../../static/images/woman.png" v-if="userInfo.sex===2"/>
+                    <img style="width: 13px;height: 13px;" src="../../static/images/man-white.png" v-if="userInfo.sex===1"/>
                 </div>
-                <div>
+                <div style="display: flex;align-items: center;justify-content: center">
                     <img style="width: 20px;height: 14px;margin-right: 3px" src="../../static/images/idCard.png"/>
-                    <span class="real_name">实名认证</span>
+                    <span class="real_name">{{userInfo.realName}}</span>
                 </div>
                 <div @click="goSetting">
-                    <img style="width: 22px;height: 22px;float: right;margin-right: 7px"
+                    <img style="width: 22px;height: 22px;float: right;"
                          src="../../static/images/set.png"/>
                 </div>
             </div>
@@ -169,6 +170,9 @@
                 xingC:xingC,
                 push:push,
                 person:person,
+                userInfo:{
+
+                }
             }
         },
         methods: {
@@ -226,13 +230,26 @@
             goTicketList() {
                 //班车
                 this.$router.push({path: '/ticketList'});
-            }
+            },
+            initUserData(){
+                request.sendGet({
+                    url:'/user/center/userinfo',
+                    params:{}
+                }).then(res=>{
+                    if(res.data.code===0){
+                        this.userInfo = res.data.data;
+                    }else{
+                        Toast(res.data.msg);
+                    }
+                })
+            },
         },
         created() {
             let flag = this.$route.query.flag;
             if(flag){
                 this.flag = flag;
             }
+            this.initUserData();
             let url = location.href;
             if (url.indexOf("code") != -1) {
                 let str = url.substr(url.indexOf("?") + 1);
@@ -249,16 +266,16 @@
                                 if (res.data.data.isLogin === "1") {
                                     //登陆成功
                                     localStorage.setItem("isLogin", "1");
-                                    window.location.href = "https://"+location.hostname + "/#/user";
+                                    window.location.href = location.protocol+"//"+location.hostname + "/#/user";
                                 }
                             } else if(res.data.code === 2){
-                                window.location.href = "https://"+location.hostname + "/#/register";
+                                window.location.href = location.protocol+"//"+location.hostname + "/#/register";
                             }else{
                                 Toast(res.data.msg);
                             }
                         })
                     }else if(res.data.code === 2){
-                        window.location.href = "https://"+location.hostname + "/#/register";
+                        window.location.href = location.protocol+"//"+location.hostname + "/#/register";
                     }else{
                         Toast(res.data.msg);
                     }
@@ -367,6 +384,9 @@
     }
 
     .real_name {
+        display: block;
+        height: 20px;
+        padding: 0 5px;
         color: white;
         font-size: 14px;
         line-height: 20px;
