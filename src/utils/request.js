@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'querystring'
 import context from "./context";
 import Vue from 'vue';
-import { Toast } from 'vant';
+import {Toast} from 'vant';
 
 Vue.use(Toast);
 
@@ -63,12 +63,14 @@ baas.interceptors.request.use(function (config) {
                     if (response.data.code === 0) {
                         //获取到验证URL,给微信发送请求
                         let authURL = response.data.data.url;
+                        // console.log(authURL);
                         window.location.href = authURL;
                     }
                 }
             ).catch(function (error) {
             console.log(error);
         });
+        throw new Error("logout");
     }
     return config;
 });
@@ -88,16 +90,15 @@ baas.interceptors.response.use(function (response) {
     if (response && response.data && response.data.code === 1) {
         let url = location.href;
         server.axios.post(
-            '/wx/login', qs.stringify({openid:localStorage.getItem('openid')})).then((res)=>{
-                console.log(res);
-            if(res.data.code===0){
-                if(res.data.data.isLogin==="1"){
+            '/wx/login', qs.stringify({openid: localStorage.getItem('openid')})).then((res) => {
+            if (res.data.code === 0) {
+                if (res.data.data.isLogin === "1") {
                     //登陆成功
-                    localStorage.setItem("isLogin","1");
+                    localStorage.setItem("isLogin", "1");
                 }
-            }else if(res.data.code===2){
-                window.location.href = location.protocol+"//"+location.hostname + "/#/register";
-            }else{
+            } else if (res.data.code === 2) {
+                window.location.href = location.protocol + "//" + location.hostname + "/#/register";
+            } else {
                 console.log(res.data.msg);
             }
         })
