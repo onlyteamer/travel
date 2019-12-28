@@ -12,7 +12,7 @@
             <div style="display: flex;align-items: center;justify-content: space-between;margin-top: 20px;padding: 0 15px">
                 <van-image round width="61px" height="61px" :src="userInfo.headimgurl"/>
                 <div style="display: flex;align-items: center;justify-content: center">
-                    <div style="max-width:70px;width:auto;word-wrap:break-word;word-break:break-all;font-size: 16px;color: white;margin-right: 3px;font-weight: bold">{{userInfo.nickname}}</div>
+                    <div style="max-width:50px;width:auto;word-wrap:break-word;word-break:break-all;font-size: 16px;color: white;margin-right: 3px;font-weight: bold">{{userInfo.nickname}}</div>
                     <img style="width: 13px;height: 13px;" src="../../static/images/woman.png" v-if="userInfo.sex===2"/>
                     <img style="width: 13px;height: 13px;" src="../../static/images/man-white.png" v-if="userInfo.sex===1"/>
                 </div>
@@ -388,7 +388,7 @@
         height: 20px;
         padding: 0 5px;
         color: white;
-        font-size: 14px;
+        font-size: 4vw;
         line-height: 20px;
         border: white 1px solid;
         border-radius: 3px;
