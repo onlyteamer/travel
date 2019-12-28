@@ -335,6 +335,13 @@ const routes = [
         meta: {
             title: '乘车验票待乘车'
         }
+    },
+    {
+        name: 'lineList',
+        component: () => import('./view/user/lineList.vue'),
+        meta: {
+            title: '切换线路'
+        }
     }
 ];
 

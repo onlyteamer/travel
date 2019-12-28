@@ -58,7 +58,7 @@
                                 src="../../static/images/user/cztx.png"/><span>充值提现</span></div>
                         <div class="func-content-item" @click="goSetting"><img src="../../static/images/user/wdzl.png"/><span>我的资料</span>
                         </div>
-                        <div class="func-content-item"><img src="../../static/images/user/qhlx.png"/><span>切换路线</span>
+                        <div class="func-content-item" @click="linkLineList"><img src="../../static/images/user/qhlx.png"/><span>切换路线</span>
                         </div>
                         <div class="func-content-item" @click="goIntegral"><img
                                 src="../../static/images/user/wdjf.png"/><span>我的积分</span>
@@ -184,6 +184,10 @@
                 //黑名单
                 this.$router.push({path: '/blacklist'});
             },
+            linkLineList(){
+                this.$router.push({path:"/lineList"});
+            },
+
             onClickLeft() {
                 this.$router.back(-1);
             },
