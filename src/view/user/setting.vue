@@ -5,22 +5,23 @@
             <div class="info-wrap">
                 <div class="info">
                     <div style="display: flex;align-items: center;justify-content: space-between;">
-                        <van-image round fit="cover" width="52px" height="51px"
-                                   src="https://img.yzcdn.cn/vant/cat.jpeg"/>
+                        <van-image round fit="cover" width="52px" height="51px" :src="userInfo.headimgurl"/>
                         <div style="margin-left: 17px">
-                            <div style="line-height:26px;color: #5E5E5E;font-size: 14px;font-weight: bold">加菲猫</div>
+                            <div style="line-height:26px;color: #5E5E5E;font-size: 14px;font-weight: bold">
+                                {{userInfo.nickname}}
+                            </div>
                             <div style="line-height:26px;">
-                                <span style="color:#5E5E5E;font-size: 14px;margin-right: 3px">性别:女</span>
+                                <span style="color:#5E5E5E;font-size: 14px;margin-right: 3px">性别:{{userInfo.sex===1?'男':userInfo.sex===2?'女':'未知'}}</span>
                                 <img width="13px" height="13px" src="../../static/images/sexTag.png"/>
                             </div>
                             <div style="line-height:26px;">
                                 <van-icon name="phone" color="#30C80C"/>
-                                <span style="color:#5E5E5E;font-size: 14px">18545896523</span>
+                                <span style="color:#5E5E5E;font-size: 14px">{{userInfo.phone}}</span>
                             </div>
                         </div>
 
                     </div>
-                    <van-button @click="syncInfo" style="width: 66px;height:37px;line-height: 37px" color="#0CC893"
+                    <van-button @click="getCode" style="width: 66px;height:37px;line-height: 37px" color="#0CC893"
                                 type="default">同步
                     </van-button>
                 </div>
@@ -28,14 +29,16 @@
             <div class="info-form">
                 <div class="item" style="font-size: 16px;color: #202020;font-weight: bold">真实认证</div>
                 <div class="item">
-                    <van-field label-class="item-label" label="乘车人姓名"></van-field>
+                    <van-field label-class="item-label" label="真实姓名"></van-field>
                 </div>
                 <div class="item">
-                    <span>班车线路</span>
-                    <van-dropdown-menu style="flex: 1">
-                        <van-dropdown-item v-model="value2" :options="option2"/>
-                    </van-dropdown-menu>
-                    <van-icon name="arrow" color="#9E9E9E"/>
+                    <van-field label-class="item-label" label="性别"></van-field>
+                </div>
+                <div class="item">
+                    <van-field label-class="item-label" label="手机号"></van-field>
+                </div>
+                <div class="item">
+                    <van-field label-class="item-label" label="身份证号"></van-field>
                 </div>
                 <div style="font-size: 10px;color: #FF0200;line-height: 25px">
                     注：请填写正确身份证号，身份证号作为您出行购买商业保险的唯一证件。
@@ -76,7 +79,8 @@
                     </div>
                 </div>
                 <div class="item">
-                    <van-field label-class="item-label" :left-icon="greenDot" color="#0CC893" label="上车地点" placeholder="多个地点请用逗号隔开"/>
+                    <van-field label-class="item-label" :left-icon="greenDot" color="#0CC893" label="上车地点"
+                               placeholder="多个地点请用逗号隔开"/>
                 </div>
                 <div class="item">
                     <van-field label-class="item-label" :left-icon="redDot" label="下车地点" placeholder="多个地点请用逗号隔开"/>
@@ -93,9 +97,10 @@
 </template>
 <!--我的资料-->
 <script>
-    import {NavBar, Field, Button, Image, DropdownMenu, DropdownItem, Icon} from 'vant';
+    import {NavBar, Field, Button, Image, DropdownMenu, DropdownItem, Icon,Toast} from 'vant';
     import greenDot from "../../static/images/dot-green.png"
     import redDot from "../../static/images/dot-red.png"
+    import request from "../../utils/request";
 
     export default {
         components: {
@@ -106,21 +111,13 @@
             [Icon.name]: Icon,
             [DropdownMenu.name]: DropdownMenu,
             [DropdownItem.name]: DropdownItem,
+            [Toast.name]:Toast,
         },
         data() {
             return {
+                userInfo: {},
                 greenDot: greenDot,
                 redDot: redDot,
-                value1: '',
-                option1: [
-                    {text: '男', value: "男"},
-                    {text: '女', value: "女"},
-                ],
-                value2: '',
-                option2: [
-                    {text: '龙云港', value: "龙云港"},
-                    {text: '阿拉啦', value: "阿拉啦"},
-                ],
                 value3: '',
                 option3: [
                     {text: '上甘岭', value: "上甘岭"},
@@ -132,11 +129,61 @@
             onClickLeft() {
                 this.$router.back(-1);
             },
-            syncInfo() {
-
+            getCode() {
+                request.axios.get('/wx/authorize')
+                    .then(function (response) {
+                            if (response.data.code === 0) {
+                                //获取到验证URL,给微信发送请求
+                                let authURL = response.data.data.url;
+                                let arr1 = authURL.split("redirect_uri=");
+                                let arr2 = arr1[1].split("&response_type");
+                                let url = arr1[0] + "redirect_uri=" + encodeURIComponent(window.location.href) + "&response_type" + arr2[1];
+                                window.location.href = url;
+                            }
+                        }
+                    ).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            getInfo(code){
+                request.sendGet({
+                    url: '/api/wx/syncwxinfo',
+                    params: {
+                        code:code,
+                    }
+                }).then(res=>{
+                    if(res.data.code===0){
+                        Toast(res.data.msg);
+                        window.location.href = location.protocol+"//"+location.hostname + "/#/setting"
+                    }else{
+                        Toast(res.data.msg);
+                    }
+                })
+            },
+            initUserData() {
+                request.sendGet({
+                    url: '/user/center/userinfo',
+                    params: {}
+                }).then(res => {
+                    if (res.data.code === 0) {
+                        this.userInfo = res.data.data;
+                    } else {
+                        Toast(res.data.msg);
+                    }
+                })
+            },
+        },
+        created() {
+            this.initUserData();
+            let url = location.href;
+            if (url.indexOf("code") != -1) {
+                let str = url.substr(url.indexOf("?") + 1);
+                let strs = str.split("&");
+                let code = strs[0].split("=")[1];
+                this.getInfo(code);
             }
         }
-    }
+            }
 </script>
 
 <style scoped>
