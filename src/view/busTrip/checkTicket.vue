@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        <div style="padding: 15px;background-color: white;">
+        <div style="padding: 15px;background-color: white;margin-bottom: 50px">
             <div class="lineTree">
                 <van-row>
                     <van-col span="24" style="color: #5083ED;font-weight: bold;font-size: 14px">
@@ -104,6 +104,7 @@
                                  v-if="index == (listSize-1)">
                             <div class="station-item">
                                 <div class="name"><span style="margin-left: 5px">{{item.stationname}}</span></div>
+                                <div :style="{borderTop:'1px dashed #cacaca',height: '1px',flex:'1',margin: '0 5px'}"></div>
                                 <span class="time">{{item.starttime}}</span>
                             </div>
                         </div>
@@ -118,12 +119,19 @@
             </div>
         </div>
 
+        <div class="footer">
+            <van-tabbar  v-model="active"  active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+                <van-tabbar-item :icon="car" to="/busIndex">预定班车</van-tabbar-item>
+                <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
+                <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
     </div>
 </template>
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Tag, Divider, Swipe, SwipeItem, NoticeBar, List, Toast,Dialog} from 'vant'
+    import {Row, Col, Tag, Divider, Swipe, SwipeItem, NoticeBar, List, Toast,Dialog,Tabbar, TabbarItem} from 'vant'
     import backOne from './../../static/images/backOne.jpg'
     import backTwo from './../../static/images/backTwo.jpg'
     import laba from './../../static/images/laba.png'
@@ -142,6 +150,10 @@
     import request from '../../utils/request'
     import moment from 'moment'
 
+    import car from './../../static/images/busTrip/car.png'
+    import scan from './../../static/images/busTrip/scan.png'
+    import user from './../../static/images/busTrip/user.png'
+
     export default {
         name: "checkTicket",
         components: {
@@ -156,9 +168,12 @@
             [List.name]: List,
             [Toast.name]: Toast,
             [Dialog.name]: Dialog,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem,
         },
         data() {
             return {
+                active:"",
                 lineDown:lineDown,
                 lineUp:lineUp,
                 placeDown:placeDown,
@@ -189,6 +204,9 @@
                 charList: [],
                 ticketInfo: {},
                 isOneHttp: true,
+                user: user,
+                car: car,
+                scan: scan
             }
         },
 
@@ -493,5 +511,12 @@
     .station-item .time {
         color: #202020;
         font-size: 12px;
+    }
+
+    .footer {
+        width: 100%;
+    }
+    .van-tabbar {
+        background: #5083ED;
     }
 </style>

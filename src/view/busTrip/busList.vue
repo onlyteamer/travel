@@ -3,6 +3,12 @@
         <div>
             <!--<van-nav-bar :fixed="true" title="班车列表" left-arrow @click-left="onClickLeft"/>-->
         </div>
+        <div class="tab">
+            <van-tabs v-model="busType" @change="changeTab" color="#5083ED" title-active-color="#5083ED" title-inactive-color="#202020">
+                <van-tab title="通勤巴士"></van-tab>
+                <van-tab title="旅游巴士"></van-tab>
+            </van-tabs>
+        </div>
         <div class="content">
             <van-list
                 :offset="10"
@@ -37,28 +43,46 @@
             </div>
         </van-list>
         </div>
+
+        <div class="footer">
+            <van-tabbar  v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+                <van-tabbar-item :icon="car" to="/busIndex">预定班车</van-tabbar-item>
+                <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
+                <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
     </div>
 </template>
 
 <script>
-    import {NavBar, Toast, List,Image, Button} from 'vant';
+    import {NavBar, Toast, List,Image, Button,Tab, Tabs,Tabbar, TabbarItem} from 'vant';
     import request from "../../utils/request";
     import blueTime from './../../static/images/busTrip/blue_time.png'
     import redTime from './../../static/images/busTrip/red_time.png'
+
+    import car from './../../static/images/busTrip/car.png'
+    import scan from './../../static/images/busTrip/scan.png'
+    import user from './../../static/images/busTrip/user.png'
 
     import placeDown from './../../static/images/busTrip/placeDown.png'
     import placeUp from './../../static/images/busTrip/placeUp.png'
 
     export default {
         components: {
+            [Tab.name]: Tab,
+            [Tabs.name]: Tabs,
             [NavBar.name]:NavBar,
             [Image.name]:Image,
             [Toast.name]:Toast,
             [List.name]:List,
             [Button.name]: Button,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem,
         },
         data() {
             return {
+                active:"",
+                busType:0,
                 placeDown:placeDown,
                 placeUp:placeUp,
                 isOneHttp: true,
@@ -72,9 +96,16 @@
                     pageNum: 1,
                     total: 0
                 },
+                user: user,
+                car: car,
+                scan: scan
             }
         },
         methods: {
+            changeTab(val){
+
+            },
+
             gobuyTicket(item){
                 this.$router.push({path:'/buyTicket',query:{'busid':item.busid,'lineid':item.lineid}});
             },
@@ -129,7 +160,8 @@
     }
     .content {
         padding: 15px;
-        /*margin-top: 46px;*/
+        margin-top: 46px;
+        margin-bottom: 50px;
     }
      .card {
         font-size: 14px;
@@ -147,5 +179,20 @@
         font-weight: bold;
         font-size: 22px;
         color: #FF0200;
+    }
+    .tab {
+        border-top: 1px solid #ECECEC;
+        /*margin-top: 46px;*/
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 999;
+    }
+
+    .footer {
+        width: 100%;
+    }
+    .van-tabbar {
+        background: #5083ED;
     }
 </style>

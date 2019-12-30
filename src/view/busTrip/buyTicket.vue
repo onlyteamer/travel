@@ -53,24 +53,42 @@
                 </van-button>
             </div>
         </div>
+
+        <div class="footer">
+            <van-tabbar  v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+                <van-tabbar-item :icon="car" to="/busIndex">预定班车</van-tabbar-item>
+                <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
+                <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
     </div>
 </template>
 
 <script>
-    import {NavBar, Button, Icon, Toast} from 'vant';
+    import {NavBar, Button, Icon, Toast,Tabbar, TabbarItem} from 'vant';
     import Kalendar from 'kalendar';
     import request from '../../utils/request';
     import moment from 'moment';
+
+    import car from './../../static/images/busTrip/car.png'
+    import scan from './../../static/images/busTrip/scan.png'
+    import user from './../../static/images/busTrip/user.png'
 
     export default {
         components: {
             [NavBar.name]: NavBar,
             [Button.name]: Button,
             [Icon.name]: Icon,
-            [Toast.name]: Toast
+            [Toast.name]: Toast,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem,
         },
         data() {
             return {
+                user: user,
+                car: car,
+                scan: scan,
+                active:"",
                 num: 0,//购票张数
                 amount: 0,
                 chooseDate: [],
@@ -328,6 +346,7 @@
 
     .content {
         margin-top: 46px;
+        margin-bottom: 50px;
     }
 
     .line-info-wrap {
@@ -344,5 +363,12 @@
         background-color: white;
         font-weight: bold;
         color: #202020;
+    }
+
+    .footer {
+        width: 100%;
+    }
+    .van-tabbar {
+        background: #5083ED;
     }
 </style>
