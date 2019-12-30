@@ -55,15 +55,27 @@
         <div class="footer">
             <van-button type="primary"  color="#0CC893" style="width: 100%" @click="submitOrder">确认支付</van-button>
         </div>
+
+        <div class="footerBar">
+            <van-tabbar  v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+                <van-tabbar-item :icon="car" to="/busIndex">预定班车</van-tabbar-item>
+                <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
+                <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
     </div>
 </template>
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Icon, Checkbox, CheckboxGroup, Button, Tag, Field, Toast, Divider,RadioGroup, Radio,Cell, CellGroup } from 'vant';
+    import {Row, Col, Icon, Checkbox, CheckboxGroup, Button, Tag, Field, Toast, Divider,RadioGroup, Radio,Cell, CellGroup,Tabbar, TabbarItem } from 'vant';
     import wxChar from './../../static/images/busTrip/wxchar.png'
     import zhifubao from './../../static/images/busTrip/zhifubao.png'
     import request from "../../utils/request";
+
+    import car from './../../static/images/busTrip/car.png'
+    import scan from './../../static/images/busTrip/scan.png'
+    import user from './../../static/images/busTrip/user.png'
 
     export default {
         name: "ticketPayment",
@@ -77,10 +89,13 @@
             [RadioGroup.name]:RadioGroup,
             [Radio.name]:Radio,
             [Cell.name]:Cell,
-            [CellGroup.name]:CellGroup
+            [CellGroup.name]:CellGroup,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem,
         },
         data() {
             return {
+                active:"",
                 title: "支付",
                 radio:'1',
                 num: 0,
@@ -101,7 +116,10 @@
                     ticketPrice: ""
                 },
                 wxChar:wxChar,
-                zhifubao:zhifubao
+                zhifubao:zhifubao,
+                user: user,
+                car: car,
+                scan: scan
             }
         },
         methods: {
@@ -159,10 +177,17 @@
 
     .footer{
         position: fixed;
-        bottom: 10px;
+        bottom: 60px;
         width: 88%;
         left: 50%;
         transform: translateX(-50%);
+    }
+
+    .footerBar {
+        width: 100%;
+    }
+    .van-tabbar {
+        background: #5083ED;
     }
 </style>
 

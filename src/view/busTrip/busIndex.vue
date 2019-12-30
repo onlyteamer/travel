@@ -90,11 +90,13 @@
                     </div>
                 </van-tab>
             </van-tabs>
-
+            <div align="center" style="margin-bottom: 10px">
+                <van-button @click="queryMore" color="#0CC893" style="width: 95%" >查看全部</van-button>
+            </div>
         </div>
 
         <div class="listInfo">
-            <div class="list-title">热门线路<span style="float: right;" @click="queryMore">查看更多</span></div>
+            <div class="list-title">热门线路</div>
             <van-list
                     v-model="loading"
                     :error.sync="error"

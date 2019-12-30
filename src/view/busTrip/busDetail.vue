@@ -1,76 +1,89 @@
 <template>
     <div>
         <div>
-            <van-nav-bar :fixed="true" :title="title"  right-text="加入群聊"
-                         @click-right="joinGroupChat"/>
-        </div>
-        <div class="content">
-            <div class="info-wrap">
-                <div style="width: 80%">
-                    <div style="display: flex;height:35px;line-height: 35px">
-                        <div style="width: 37%"><img :src="blueTime" width="13px" height="13px"><span
-                                class="place" style="margin-left: 7px;margin-right: 13px">{{lineDetails.starttime}}</span></div>
-                        <div><img :src="placeUp" width="13px" height="13px"><span class="place" style="margin-left: 7px;">{{lineDetails.startname}}</span>
-                        </div>
-                    </div>
-                    <div style="display: flex;height:35px;line-height: 35px">
-                        <div style="width: 37%"><img :src="redTime" width="13px" height="13px"><span class="place" style="margin-left: 7px;margin-right: 13px">{{lineDetails.endtime}}</span>
-                        </div>
-                        <div><img :src="placeDown" width="13px" height="13px"><span class="place" style="margin-left: 7px;">{{lineDetails.endname}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <span class="list-price">￥{{lineDetails.ticketPrice}}</span>
-                </div>
+            <div>
+                <van-nav-bar :fixed="true" :title="title"  right-text="加入群聊"
+                             @click-right="joinGroupChat"/>
             </div>
-            <div class="item">
-                <!--<div class="tag-wrap">-->
+            <div class="content">
+                <div class="info-wrap">
+                    <div style="width: 80%">
+                        <div style="display: flex;height:35px;line-height: 35px">
+                            <div style="width: 37%"><img :src="blueTime" width="13px" height="13px"><span
+                                    class="place" style="margin-left: 7px;margin-right: 13px">{{lineDetails.starttime}}</span></div>
+                            <div><img :src="placeUp" width="13px" height="13px"><span class="place" style="margin-left: 7px;">{{lineDetails.startname}}</span>
+                            </div>
+                        </div>
+                        <div style="display: flex;height:35px;line-height: 35px">
+                            <div style="width: 37%"><img :src="redTime" width="13px" height="13px"><span class="place" style="margin-left: 7px;margin-right: 13px">{{lineDetails.endtime}}</span>
+                            </div>
+                            <div><img :src="placeDown" width="13px" height="13px"><span class="place" style="margin-left: 7px;">{{lineDetails.endname}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="list-price">￥{{lineDetails.ticketPrice}}</span>
+                    </div>
+                </div>
+                <div class="item">
+                    <!--<div class="tag-wrap">-->
                     <!--<img :src="upTag">-->
                     <!--<img :src="downTag">-->
-                <!--</div>-->
-                <div class="list-wrap">
-                    <!--<van-list-->
-                            <!--:offset="10"-->
-                            <!--v-model="loading"-->
-                            <!--:finished="finished"-->
-                            <!--finished-text=""-->
-                            <!--@load="onLoad"-->
-                            <!--:immediate-check="false">-->
+                    <!--</div>-->
+                    <div class="list-wrap">
+                        <!--<van-list-->
+                        <!--:offset="10"-->
+                        <!--v-model="loading"-->
+                        <!--:finished="finished"-->
+                        <!--finished-text=""-->
+                        <!--@load="onLoad"-->
+                        <!--:immediate-check="false">-->
                         <div v-for="(item,index) in lineDetailsList" :key="item.id"
                              :class='index==(listSize-1)?"item-li last-station":"item-li"'>
                             <img :src="lineUp" style="position: absolute;top: 0px;width: 20px;height: 23px" v-if="index == '0'">
                             <img :src="lineDown" style="position: absolute;top: 0px;width: 20px;height: 23px" v-if="index == (listSize-1)">
                             <div class="station-item">
-                                <div class="name"><span style="margin-left: 5px">{{item.stationname}}</span></div>
+                                <div class="name">
+                                    <span style="margin-left: 5px">{{item.stationname}}</span>
+                                </div>
+                                <div :style="{borderTop:'1px dashed #cacaca',height: '1px',flex:'1',margin: '0 5px'}"></div>
                                 <span class="time">{{item.starttime}}</span>
                             </div>
                         </div>
-                    <!--</van-list>-->
+                        <!--</van-list>-->
+                    </div>
+                </div>
+                <div style="height: 42px; display: flex;align-items: center;justify-content: center" >
+                    <img :src="down" width="11px" height="21px">
+                    <span style="color: #5E5E5E;font-size: 12px;margin: 0 14px">向下滑动查看更多站点</span>
+                    <img :src="down" width="11px" height="21px">
                 </div>
             </div>
-            <div style="height: 42px; display: flex;align-items: center;justify-content: center">
-                <img :src="down" width="11px" height="21px">
-                <span style="color: #5E5E5E;font-size: 12px;margin: 0 14px">向下滑动查看更多站点</span>
-                <img :src="down" width="11px" height="21px">
+            <div style="position: relative;margin-bottom: 50px">
+                <aMap
+                        id="userPosition"
+                        :lon="carInfo.lon"
+                        :lat="carInfo.lat"
+                        :height="mapHeight" width="100%">
+                </aMap>
+
+                <div class="passCar" @click="linkBuyTicket">乘车</div>
             </div>
         </div>
-        <div style="position: relative">
-            <aMap
-                    id="userPosition"
-                    :lon="carInfo.lon"
-                    :lat="carInfo.lat"
-                    :height="mapHeight" width="100%">
-            </aMap>
 
-            <div class="passCar" @click="linkBuyTicket">乘车</div>
+        <div class="footer">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="z-index: 999">
+                <van-tabbar-item :icon="car" to="/busIndex">预定班车</van-tabbar-item>
+                <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
+                <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
+            </van-tabbar>
         </div>
-
     </div>
+
 </template>
 
 <script>
-    import {NavBar, Button, Tabbar, Tab, Toast, List} from 'vant';
+    import {NavBar, Button, Tabbar, Tab, Toast, List,TabbarItem} from 'vant';
     import request from '../../utils/request'
     import blueTime from './../../static/images/busTrip/blue_time.png'
     import redTime from './../../static/images/busTrip/red_time.png'
@@ -84,6 +97,10 @@
     import placeDown from './../../static/images/busTrip/placeDown.png'
     import placeUp from './../../static/images/busTrip/placeUp.png'
 
+    import car from './../../static/images/busTrip/car.png'
+    import scan from './../../static/images/busTrip/scan.png'
+    import user from './../../static/images/busTrip/user.png'
+
     export default {
         components: {
             aMap,
@@ -93,9 +110,11 @@
             [Toast.name]: Toast,
             [List.name]: List,
             [Tab.name]: Tab,
+            [TabbarItem.name]: TabbarItem,
         },
         data() {
             return {
+                active:"",
                 mapHeight: '',
                 offset: 0,
                 lineDown:lineDown,
@@ -119,7 +138,10 @@
 
                 },
                 lineDetailsList:[],
-                listSize:""
+                listSize:"",
+                user: user,
+                car: car,
+                scan: scan
             }
         },
         methods: {
@@ -313,5 +335,12 @@
         padding: 12px 10px;
         color: #FFFFFF;
         font-size: 18px;
+    }
+
+    .footer {
+        width: 100%;
+    }
+    .van-tabbar {
+        background: #5083ED;
     }
 </style>

@@ -49,14 +49,25 @@
                 </div>
             </van-list>
         </div>
+        <div class="footer">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+                <van-tabbar-item :icon="car" to="/busIndex">预定班车</van-tabbar-item>
+                <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
+                <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
     </div>
 </template>
 
 <script>
-    import {NavBar, Toast, List, Image, Button} from 'vant';
+    import {NavBar, Toast, List, Image, Button,Tabbar, TabbarItem} from 'vant';
     import request from "../../utils/request";
     import blueTime from './../../static/images/busTrip/blue_time.png'
     import redTime from './../../static/images/busTrip/red_time.png'
+
+    import car from './../../static/images/busTrip/car.png'
+    import scan from './../../static/images/busTrip/scan.png'
+    import user from './../../static/images/busTrip/user.png'
 
     import placeDown from './../../static/images/busTrip/placeDown.png'
     import placeUp from './../../static/images/busTrip/placeUp.png'
@@ -68,9 +79,12 @@
             [Toast.name]: Toast,
             [List.name]: List,
             [Button.name]: Button,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem,
         },
         data() {
             return {
+                active:"",
                 placeDown:placeDown,
                 placeUp:placeUp,
                 end: '',
@@ -87,6 +101,9 @@
                     pageNum: 1,
                     total: 0
                 },
+                user: user,
+                car: car,
+                scan: scan
             }
         },
         methods: {
@@ -169,5 +186,11 @@
         font-weight: bold;
         font-size: 22px;
         color: #FF0200;
+    }
+    .footer {
+        width: 100%;
+    }
+    .van-tabbar {
+        background: #5083ED;
     }
 </style>

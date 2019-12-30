@@ -15,7 +15,7 @@
             <div>
                 <van-tabs sticky type="card" v-model="active" @click="onClick" title-active-color="#fff"
                           title-inactive-color="#0CC893" color="#0CC893">
-                    <van-tab title="待乘车">
+                    <van-tab title="今日票据">
                         <div class="currentDate" v-if="showAll">{{currentDate}}</div>
                         <van-list v-if="showAll">
                             <div v-for="item in toride.data" :key="item.id" >
@@ -55,51 +55,56 @@
                                 </div>
                             </div>
                         </van-list>
-                        <van-button @click="goAll" style="margin-top:15px;width: 100%;height:44px"
-                                    plain color="#0CC893" type="default" v-if="showAll">
-                            查看全部
-                        </van-button>
+                        <div style="text-align: center;margin: 12px 0px" v-if="toride.data&&toride.data.length <1">今日暂无可用票据</div>
+                        <!--<van-button @click="goAll" style="margin-top:15px;width: 100%;height:44px"-->
+                                    <!--plain color="#0CC893" type="default" v-if="showAll">-->
+                            <!--查看全部-->
+                        <!--</van-button>-->
+                        <!--<van-list v-model="tripAllList.loading" :finished="tripAllList.finished" finished-text="没有更多了"-->
+                                  <!--@load="onTorideLoadAll" style="margin-top: 15px" v-if="!showAll">-->
+                            <!--<van-collapse v-model="tripName" accordion @change="initTripAllList($event)">-->
+                                <!--<van-collapse-item :title="item.date" :name="item.date"-->
+                                                   <!--v-for="(item,index) in tripAllList.dateList" :key="index">-->
+                                    <!--<van-row v-for="(line,indexNum) in tripAllList.data" :key="line.id"-->
+                                             <!--style="margin-bottom: 10px;color: #5083ED;display: flex;align-items: center;">-->
+                                        <!--<van-col span="14" style="color: #5083ED;font-size: 14px;font-weight: bold">-->
+                                            <!--<div>{{line.linename}}</div>-->
+                                            <!--<div>{{line.startname}} -> {{line.endname}}</div>-->
+                                        <!--</van-col>-->
+                                        <!--<van-col span="10" style="color: #0CC893;text-align: right;font-size: 14px;">-->
+                                            <!--<div style="display: inline-block">-->
+                                                <!--<van-button :disabled="compareDate(item.date)" type="default" size="small" @click="checkTicket(line.id,line.checkcode)"-->
+                                                            <!--style="background: #0CC893;color: #FFFFFF;border-radius: 5px">-->
+                                                    <!--验票-->
+                                                <!--</van-button>-->
+                                                <!--<van-button type="default" size="small" @click="refundTicket(line.ticketid)"-->
+                                                            <!--style="margin-left: 5px;background: #9E9E9E;color: #FFFFFF;border-radius: 5px">-->
+                                                    <!--退票-->
+                                                <!--</van-button>-->
+                                            <!--</div>-->
+                                        <!--</van-col>-->
+                                    <!--</van-row>-->
+                                <!--</van-collapse-item>-->
+                            <!--</van-collapse>-->
+                        <!--</van-list>-->
+                    </van-tab>
+                    <van-tab title="待乘车">
                         <van-list v-model="tripAllList.loading" :finished="tripAllList.finished" finished-text="没有更多了"
-                                  @load="onTorideLoadAll" style="margin-top: 15px" v-if="!showAll">
+                                  @load="onTorideLoadAll" style="margin-top: 15px">
                             <van-collapse v-model="tripName" accordion @change="initTripAllList($event)">
                                 <van-collapse-item :title="item.date" :name="item.date"
                                                    v-for="(item,index) in tripAllList.dateList" :key="index">
                                     <van-row v-for="(line,indexNum) in tripAllList.data" :key="line.id"
                                              style="margin-bottom: 10px;color: #5083ED;display: flex;align-items: center;">
-                                        <van-col span="14" style="color: #5083ED;font-size: 14px;font-weight: bold">
+                                        <van-col span="16" style="color: #5083ED;font-size: 14px;font-weight: bold">
                                             <div>{{line.linename}}</div>
                                             <div>{{line.startname}} -> {{line.endname}}</div>
                                         </van-col>
-                                        <van-col span="10" style="color: #0CC893;text-align: right;font-size: 14px;">
-                                            <div style="display: inline-block">
-                                                <van-button :disabled="compareDate(item.date)" type="default" size="small" @click="checkTicket(line.id,line.checkcode)"
-                                                            style="background: #0CC893;color: #FFFFFF;border-radius: 5px">
-                                                    验票
-                                                </van-button>
-                                                <van-button type="default" size="small" @click="refundTicket(line.ticketid)"
-                                                            style="margin-left: 5px;background: #9E9E9E;color: #FFFFFF;border-radius: 5px">
-                                                    退票
-                                                </van-button>
+                                        <van-col span="8" style="color: #0CC893;text-align: right;font-size: 14px">
+                                            <div >
+                                                <span style="background: #9E9E9E;color: #FFFFFF;padding: 5px 10px;border-radius: 5px;margin-right: 10px"  @click="refundTicket(line.ticketid)">退票</span>
+                                                <span>{{line.state }}</span>
                                             </div>
-                                        </van-col>
-                                    </van-row>
-                                </van-collapse-item>
-                            </van-collapse>
-                        </van-list>
-                    </van-tab>
-                    <van-tab title="全部订单">
-                        <van-list v-model="allOrder.loading" :finished="allOrder.finished" finished-text="没有更多了"
-                                  @load="onAllOrderLoad" style="margin-top: 15px">
-                            <van-collapse v-model="activeName" accordion @change="changeAllOrder($event)">
-                                <van-collapse-item :title="item.date" :name="item.date"
-                                                   v-for="(item,index) in allOrder.dateList" :key="index">
-                                    <van-row v-for="(line,indexNum) in allOrder.data" :key="line.id"
-                                             style="margin-bottom: 10px;color: #5083ED">
-                                        <van-col span="18" style="color: #5083ED;font-size: 14px;font-weight: bold">
-                                            {{line.linename}}：{{line.startname}}->{{line.endname}}
-                                        </van-col>
-                                        <van-col span="6" style="color: #0CC893;text-align: right;font-size: 14px">
-                                            {{line.state }}
                                         </van-col>
                                     </van-row>
                                 </van-collapse-item>
@@ -288,7 +293,7 @@
             onClick() {
                 switch (this.active) {
                     case 0:
-                        if (this.showAll) {
+                        // if (this.showAll) {
                             this.toride.isOneHttp = true;
                             this.toride.loading = false;
                             this.toride.finished = false;
@@ -296,26 +301,35 @@
                             this.toride.pageNum = 1;
                             this.toride.total = 0;
                             this.initTorideData();
-                        } else {
-                            this.tripAllList.isOneHttp = true;
-                            this.tripAllList.loading = false;
-                            this.tripAllList.finished = false;
-                            this.tripAllList.data = [];
-                            this.tripAllList.dateList = [];
-                            this.tripAllList.pageNum = 1;
-                            this.tripAllList.total = 0;
-                            this.initTripAllDateList();
-                        }
+                        // }
+                        // else {
+                        //     this.tripAllList.isOneHttp = true;
+                        //     this.tripAllList.loading = false;
+                        //     this.tripAllList.finished = false;
+                        //     this.tripAllList.data = [];
+                        //     this.tripAllList.dateList = [];
+                        //     this.tripAllList.pageNum = 1;
+                        //     this.tripAllList.total = 0;
+                        //     this.initTripAllDateList();
+                        // }
                         break;
                     case 1:
-                        this.allOrder.isOneHttp = true;
-                        this.allOrder.loading = false;
-                        this.allOrder.finished = false;
-                        this.allOrder.data = [];
-                        this.allOrder.dateList = [];
-                        this.allOrder.pageNum = 1;
-                        this.allOrder.total = 0;
-                        this.initAllOrderDateList();
+                        this.tripAllList.isOneHttp = true;
+                        this.tripAllList.loading = false;
+                        this.tripAllList.finished = false;
+                        this.tripAllList.data = [];
+                        this.tripAllList.dateList = [];
+                        this.tripAllList.pageNum = 1;
+                        this.tripAllList.total = 0;
+                        this.initTripAllDateList();
+                        // this.allOrder.isOneHttp = true;
+                        // this.allOrder.loading = false;
+                        // this.allOrder.finished = false;
+                        // this.allOrder.data = [];
+                        // this.allOrder.dateList = [];
+                        // this.allOrder.pageNum = 1;
+                        // this.allOrder.total = 0;
+                        // this.initAllOrderDateList();
                         break;
                     case 2:
                         this.refund.isOneHttp = true;
