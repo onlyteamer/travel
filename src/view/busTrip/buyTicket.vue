@@ -2,7 +2,7 @@
     <div>
         <div>
             <!--<van-nav-bar :fixed="true" :title="busInfo.linename" left-arrow @click-left="onClickLeft"/>-->
-            <van-nav-bar :fixed="true" :title="busInfo.linename" />
+            <van-nav-bar :fixed="true" :title="busInfo.linename"/>
         </div>
         <div class="content">
             <div class="line-info-wrap">
@@ -141,8 +141,14 @@
                     } else {
                         this.chooseDate.splice(index, 1);
                         let el = this.$refs.item[item.date - 1];
-                        el.style.backgroundColor = '#fff';
-                        el.style.color = '#202020';
+                        if (item.state === 2) {
+                            el.style.backgroundColor = '#5083ED';
+                            el.style.color = '#fff';
+                        } else {
+                            el.style.backgroundColor = '#fff';
+                            el.style.color = '#202020';
+                        }
+
                         this.num -= 1;
                     }
                     this.amount = this.num * this.busInfo.ticketPrice;
