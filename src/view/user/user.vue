@@ -253,7 +253,6 @@
             if(flag){
                 this.flag = flag;
             }
-            this.initUserData();
             let url = location.href;
             if (url.indexOf("code") != -1) {
                 let str = url.substr(url.indexOf("?") + 1);
@@ -286,6 +285,8 @@
                 }).catch(error => {
                         console.log(error);
                     });
+            }else{
+                this.initUserData();
             }
         },
 
