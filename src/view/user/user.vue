@@ -112,7 +112,7 @@
         </div>
 
         <div class="footer" v-if="flag == '0'">
-            <van-tabbar v-model="footerActive" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+            <van-tabbar v-model="footerActive" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="background:#5083ED ">
                 <van-tabbar-item :icon="car" to="/busIndex">预定班车</van-tabbar-item>
                 <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
                 <van-tabbar-item :icon="user" to="/user?flag=0">个人中心</van-tabbar-item>
@@ -120,7 +120,7 @@
         </div>
 
         <div class="footer" v-else>
-            <van-tabbar v-model="carActive" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+            <van-tabbar v-model="carActive" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="background:#5083ED ">
                 <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
                 <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
                 <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
@@ -402,7 +402,5 @@
         width: 100%;
     }
 
-    .van-tabbar {
-        background: #5083ED;
-    }
+
 </style>

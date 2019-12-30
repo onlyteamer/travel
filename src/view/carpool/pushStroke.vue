@@ -105,7 +105,7 @@
         </div>
 
         <div class="footer">
-            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="background:#5083ED ">
                 <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
                 <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
                 <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
@@ -411,8 +411,6 @@
         width: 100%;
     }
 
-    .van-tabbar{
-        background: #5083ED;
-    }
+
 
 </style>

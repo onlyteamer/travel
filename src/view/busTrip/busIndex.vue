@@ -132,7 +132,7 @@
         </div>
 
         <div class="footer">
-            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="background:#5083ED ">
                 <van-tabbar-item :icon="car" to="/busIndex">预定班车</van-tabbar-item>
                 <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
                 <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
@@ -442,7 +442,4 @@
         width: 100%;
     }
 
-    .van-tabbar {
-        background: #5083ED;
-    }
 </style>
