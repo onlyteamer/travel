@@ -57,7 +57,7 @@
                         <van-cell title="微信付款" :icon="wxChar" clickable @click="radio = '1'" :border="false">
                             <van-radio slot="right-icon" name="1" checked-color="#07c160"/>
                         </van-cell>
-                        <van-cell title="支付宝付款" :icon="zhifubao" clickable @click="radio = '2'" :border="false">
+                        <van-cell title="余额付款" :icon="balance" clickable @click="radio = '2'" :border="false">
                             <van-radio slot="right-icon" name="2" checked-color="#07c160"/>
                         </van-cell>
                     </van-cell-group>
@@ -84,12 +84,14 @@
     import Title from './../../components/header'
     import {Row, Col, Button, Toast, Divider, RadioGroup, Radio, Cell, CellGroup, Tabbar, TabbarItem} from 'vant';
     import wxChar from './../../static/images/busTrip/wxchar.png'
-    import zhifubao from './../../static/images/busTrip/zhifubao.png'
+    import balance from './../../static/images/busTrip/balance.png'
     import request from "../../utils/request";
+    import vConsole from "vconsole"
 
     import car from './../../static/images/busTrip/car.png'
     import scan from './../../static/images/busTrip/scan.png'
     import user from './../../static/images/busTrip/user.png'
+
 
     export default {
         name: "ticketPayment",
@@ -130,7 +132,7 @@
                     ticketPrice: ""
                 },
                 wxChar: wxChar,
-                zhifubao: zhifubao,
+                balance: balance,
                 user: user,
                 car: car,
                 scan: scan,
@@ -156,7 +158,7 @@
                         dateStr: this.chooseDate,
                         lineid: this.lineid,
                         payment: this.amount,
-                        prepayId:this.wxData.prepayid,
+                        prepayId:this.wxData.prepayId,
                     }
                 }).then((res)=>{
                     if (res.data.code === 0) {
@@ -200,6 +202,7 @@
                 }
             },
             jsApiCall() {
+                let me = this;
                 WeixinJSBridge.invoke(
                     'getBrandWCPayRequest',
                     {
@@ -211,13 +214,16 @@
                         "paySign": this.wxData.paySign
                     },
                     function (res) {
-                        // console.log(res.err_code + res.err_desc + res.err_msg);
+                        alert(res.err_msg);
                         if (res.err_msg === "get_brand_wcpay_request:ok") {
-                            this.submitOrder();
+                            Toast("支付成功");
+                            me.submitOrder();
                             // 使用以上方式判断前端返回,微信团队郑重提示：
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                         } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
                             Toast("支付失败");
+                        }else if(res.err_msg === 'get_brand_wcpay_request:cancel'){
+                            Toast("取消支付");
                         }
                     }
                 );
@@ -250,6 +256,7 @@
             this.chooseDate = this.$route.query.dateStr;
             this.queryBus();
             this.getWxConfig();
+            var vConsole = new VConsole();
         },
     }
 </script>

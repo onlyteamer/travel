@@ -30,7 +30,7 @@
                     <span v-for="item in week" :key="item">{{item}}</span>
                 </div>
                 <div v-for="val in ticketData" class="date-li">
-                    <div v-for="item in val" :class="getItemClass(item)" ref="item" @click="addBuyTicket(item)">
+                    <div v-for="(item,index) in val" :class="getItemClass(item)" ref="item" @click="addBuyTicket(item,index)">
                         <div>{{item?item.date:'&nbsp;&nbsp;&nbsp;&nbsp;'}}</div>
                         <div :class="generateClassName(item)" style="font-size: 12px;">{{item?item.statename:'&nbsp;&nbsp;&nbsp;&nbsp;'}}</div>
                     </div>
@@ -147,18 +147,28 @@
             onClickLeft() {
                 this.$router.back(-1);
             },
-            addBuyTicket(item) {
+            addBuyTicket(item,index) {
                 if (item && (item.state === 1 || item.state === 2)) {
-                    let index = this.chooseDate.indexOf(item.dateText);
-                    if (index === -1) {
+                    let index2 = this.chooseDate.indexOf(item.dateText);
+                    if (index2 === -1) {
                         this.chooseDate.push(item.dateText);
-                        let el = this.$refs.item[item.date - 1];
+                        let el = '';
+                        if(item.date-1<index){
+                            el = this.$refs.item[index];
+                        }else{
+                            el = this.$refs.item[item.date - 1];
+                        }
                         el.style.backgroundColor = '#0CC893';
                         el.style.color = '#fff';
                         this.num += 1;
                     } else {
                         this.chooseDate.splice(index, 1);
-                        let el = this.$refs.item[item.date - 1];
+                        let el = '';
+                        if(item.date-1<index){
+                            el = this.$refs.item[index];
+                        }else{
+                            el = this.$refs.item[item.date - 1];
+                        }
                         if (item.state === 2) {
                             el.style.backgroundColor = '#5083ED';
                             el.style.color = '#fff';
@@ -233,7 +243,6 @@
                     unifiedMount: unifiedMount,
                     continuous: continuous
                 });
-                console.log(this.ticketData);
             }
         },
         created() {
