@@ -7,15 +7,21 @@
                 <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
 
                 <van-row style="display: flex;align-items: center;justify-content: center">
-                    <van-col span="8" align="center" >
-                        <div style="font-size: 16px;font-weight: bold;margin-bottom: 10px"><img src="./../../static/images/greenTag.png" style="width: 14px;height: 14px;display: inline-block"/>{{busInfo.startname}}</div>
+                    <van-col span="8" align="center">
+                        <div style="font-size: 16px;font-weight: bold;margin-bottom: 10px"><img
+                                src="./../../static/images/greenTag.png"
+                                style="width: 14px;height: 14px;display: inline-block"/>{{busInfo.startname}}
+                        </div>
                         <div style="font-weight: bold">{{busInfo.starttime}}</div>
                     </van-col>
                     <van-col span="8" style="text-align: center;">
                         <img src="./../../static/images/busTrip/rightArrow.png" width="51px" height="25px">
                     </van-col>
                     <van-col span="8" align="center">
-                        <div style="font-size: 16px;font-weight: bold;margin-bottom: 10px"><img src="./../../static/images/redTag.png" style="width: 14px;height: 14px;display: inline-block"> {{busInfo.endname}}</div>
+                        <div style="font-size: 16px;font-weight: bold;margin-bottom: 10px"><img
+                                src="./../../static/images/redTag.png"
+                                style="width: 14px;height: 14px;display: inline-block"> {{busInfo.endname}}
+                        </div>
                         <div style="font-weight: bold">{{busInfo.endtime}}</div>
                     </van-col>
                 </van-row>
@@ -27,11 +33,18 @@
 
                 <van-row style="display: flex;align-items: center;justify-content: center">
                     <van-col span="12" style="margin-left: 28px">张数</van-col>
-                    <van-col span="12" align="right"><div style="font-weight: bold;font-size: 22px;color: #0CC893;">{{num}}<span style="font-weight: bold;font-size: 14px;color: #202020;margin-left: 5px">张</span></div></van-col>
+                    <van-col span="12" align="right">
+                        <div style="font-weight: bold;font-size: 22px;color: #0CC893;">{{num}}<span
+                                style="font-weight: bold;font-size: 14px;color: #202020;margin-left: 5px">张</span></div>
+                    </van-col>
                 </van-row>
                 <van-row style="display: flex;align-items: center;justify-content: center;margin-top: 15px">
                     <van-col span="12" style="margin-left: 28px">票价</van-col>
-                    <van-col span="12" align="right"><div style="font-weight: bold;font-size: 22px;color: #FF0200;"><span style="font-weight: bold;font-size: 14px;">￥</span>{{amount}}</div></van-col>
+                    <van-col span="12" align="right">
+                        <div style="font-weight: bold;font-size: 22px;color: #FF0200;"><span
+                                style="font-weight: bold;font-size: 14px;">￥</span>{{amount}}
+                        </div>
+                    </van-col>
                 </van-row>
             </div>
 
@@ -44,8 +57,8 @@
                         <van-cell title="微信付款" :icon="wxChar" clickable @click="radio = '1'" :border="false">
                             <van-radio slot="right-icon" name="1" checked-color="#07c160"/>
                         </van-cell>
-                        <van-cell title="支付宝付款"  :icon="zhifubao" clickable @click="radio = '2'" :border="false">
-                            <van-radio slot="right-icon" name="2" checked-color="#07c160" />
+                        <van-cell title="支付宝付款" :icon="zhifubao" clickable @click="radio = '2'" :border="false">
+                            <van-radio slot="right-icon" name="2" checked-color="#07c160"/>
                         </van-cell>
                     </van-cell-group>
                 </van-radio-group>
@@ -53,11 +66,12 @@
         </div>
 
         <div class="footer">
-            <van-button type="primary"  color="#0CC893" style="width: 100%" @click="submitOrder">确认支付</van-button>
+            <van-button type="primary" color="#0CC893" style="width: 100%" @click="wxPay">确认支付</van-button>
         </div>
 
         <div class="footerBar">
-            <van-tabbar  v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="background:#5083ED ">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
                 <van-tabbar-item :icon="car" to="/busIndex">预定班车</van-tabbar-item>
                 <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
                 <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
@@ -68,7 +82,7 @@
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Icon, Checkbox, CheckboxGroup, Button, Tag, Field, Toast, Divider,RadioGroup, Radio,Cell, CellGroup,Tabbar, TabbarItem } from 'vant';
+    import {Row, Col, Button, Toast, Divider, RadioGroup, Radio, Cell, CellGroup, Tabbar, TabbarItem} from 'vant';
     import wxChar from './../../static/images/busTrip/wxchar.png'
     import zhifubao from './../../static/images/busTrip/zhifubao.png'
     import request from "../../utils/request";
@@ -86,18 +100,18 @@
             [Button.name]: Button,
             [Toast.name]: Toast,
             [Divider.name]: Divider,
-            [RadioGroup.name]:RadioGroup,
-            [Radio.name]:Radio,
-            [Cell.name]:Cell,
-            [CellGroup.name]:CellGroup,
+            [RadioGroup.name]: RadioGroup,
+            [Radio.name]: Radio,
+            [Cell.name]: Cell,
+            [CellGroup.name]: CellGroup,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem,
         },
         data() {
             return {
-                active:"",
+                active: "",
                 title: "支付",
-                radio:'1',
+                radio: '1',
                 num: 0,
                 amount: 0,
                 busid: '',
@@ -115,11 +129,12 @@
                     starttime: "",
                     ticketPrice: ""
                 },
-                wxChar:wxChar,
-                zhifubao:zhifubao,
+                wxChar: wxChar,
+                zhifubao: zhifubao,
                 user: user,
                 car: car,
-                scan: scan
+                scan: scan,
+                wxData:{}
             }
         },
         methods: {
@@ -140,23 +155,101 @@
                         busid: this.busid,
                         dateStr: this.chooseDate,
                         lineid: this.lineid,
+                        payment: this.amount,
+                        prepayId:this.wxData.prepayid,
                     }
                 }).then((res)=>{
-                    console.log(res.data);
+                    if (res.data.code === 0) {
+                        this.$router.push({path:'/ticketList'});
+                    } else {
+                        Toast(res.data.msg);
+                    }
                 });
-                this.$router.push({path:'/ticketList'});
+
             },
+
+            getWxConfig() {
+                request.sendGet({
+                    url: '/wx/pay/signature',
+                    params: {
+                        url: location.href
+                    }
+                }).then(res => {
+                    wx.config({
+                        beta: true,// 必须这么写，否则在微信插件有些jsapi会有问题
+                        // debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: res.data.data.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
+                        timestamp: parseInt(res.data.data.timestamp, 10), // 必填，生成签名的时间戳
+                        nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
+                        signature: res.data.data.signature,// 必填，签名，见附录1
+                        jsApiList: ['WeixinJSBridge'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                    });
+                });
+            },
+
+            callpay() {
+                if (typeof WeixinJSBridge == "undefined") {
+                    if (document.addEventListener) {
+                        document.addEventListener('WeixinJSBridgeReady', this.jsApiCall(), false);
+                    } else if (document.attachEvent) {
+                        document.attachEvent('WeixinJSBridgeReady', this.jsApiCall());
+                        document.attachEvent('onWeixinJSBridgeReady', this.jsApiCall());
+                    }
+                } else {
+                    this.jsApiCall();
+                }
+            },
+            jsApiCall() {
+                WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest',
+                    {
+                        "appId": this.wxData.appId,
+                        "timeStamp": this.wxData.timeStamp,
+                        "nonceStr": this.wxData.nonceStr,
+                        "package": this.wxData.package,
+                        "signType": this.wxData.signType,
+                        "paySign": this.wxData.paySign
+                    },
+                    function (res) {
+                        // console.log(res.err_code + res.err_desc + res.err_msg);
+                        if (res.err_msg === "get_brand_wcpay_request:ok") {
+                            this.submitOrder();
+                            // 使用以上方式判断前端返回,微信团队郑重提示：
+                            //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                        } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
+                            Toast("支付失败");
+                        }
+                    }
+                );
+            },
+            wxPay() {
+                request.sendGet({
+                    url: '/wx/pay/create/order/1',
+                    params: {
+                        paynum: this.amount,
+                    }
+                }).then((res) => {
+                    if(res.data.code===0){
+                        this.wxData = res.data.data;
+                        this.callpay();
+                    }else{
+                        Toast(res.data.msg);
+                    }
+                })
+            },
+
             onClickLeft() {
                 this.$router.back(-1);
             }
         },
-        created(){
+        created() {
             this.num = this.$route.query.num;
             this.amount = this.$route.query.amount;
             this.busid = this.$route.query.busid;
             this.lineid = this.$route.query.lineid;
             this.chooseDate = this.$route.query.dateStr;
             this.queryBus();
+            this.getWxConfig();
         },
     }
 </script>
@@ -175,7 +268,7 @@
         height: 1.6rem;
     }
 
-    .footer{
+    .footer {
         position: fixed;
         bottom: 60px;
         width: 88%;
