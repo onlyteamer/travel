@@ -56,29 +56,38 @@
                         <div class="bag-wrap-item">提现</div>
                     </van-col>
                 </van-row>
-                <div class="func-wrap">
-                    <div class="func-title">
-                        <van-field v-model="czje" type="number" :border=false
-                                   placeholder="充值金额" label="余额充值"/>
-                        <span style="color: #5E5E5E;font-size: 17px">元</span>
-                    </div>
-                    <div class="func-content">
-                        <van-button style="width: 100%;height:40px" color="#0CC893" type="default" @click="wxPay">
-                            立即充值
-                        </van-button>
-                    </div>
-                </div>
-                <div class="func-wrap">
-                    <div class="func-title">
-                        <van-field v-model="txje" type="number" :border=false
-                                   placeholder="最低提现金额100" label="余额提现"/>
-                        <span style="color: #5E5E5E;font-size: 17px">元</span>
-                    </div>
-                    <div class="func-content">
-                        <van-button style="width: 100%;height:40px" color="#5083ED" type="default" @click="cashOut">
-                            立即提现
-                        </van-button>
-                    </div>
+
+                <div style="margin-top: 10px">
+                    <van-tabs v-model="active" color="#5083ED" title-active-color="#5083ED" title-inactive-color="#202020">
+                        <van-tab title="充值">
+                            <div class="func-wrap">
+                                <div class="func-title">
+                                    <van-field v-model="czje" type="number" :border=false
+                                               placeholder="充值金额" label="余额充值"/>
+                                    <span style="color: #5E5E5E;font-size: 17px">元</span>
+                                </div>
+                                <div class="func-content">
+                                    <van-button style="width: 100%;height:40px" color="#0CC893" type="default" @click="wxPay" >
+                                        立即充值
+                                    </van-button>
+                                </div>
+                            </div>
+                        </van-tab>
+                        <van-tab title="提现">
+                            <div class="func-wrap">
+                                <div class="func-title">
+                                    <van-field v-model="txje" type="number" :border=false
+                                               placeholder="最低提现金额100" label="余额提现"/>
+                                    <span style="color: #5E5E5E;font-size: 17px">元</span>
+                                </div>
+                                <div class="func-content">
+                                    <van-button style="width: 100%;height:40px" color="#5083ED" type="default" @click="cashOut">
+                                        立即提现
+                                    </van-button>
+                                </div>
+                            </div>
+                        </van-tab>
+                    </van-tabs>
                 </div>
                 <div class="func-wrap" style="padding-top:13px">
                     <div style="display: flex;align-items: center">
@@ -102,7 +111,7 @@
 </template>
 <!--个人中心-充值提现-->
 <script>
-    import {NavBar, Row, Col, Field, Button, Toast} from 'vant';
+    import {NavBar, Row, Col, Field, Button, Toast,Tab, Tabs} from 'vant';
     import request from "../../utils/request"
     import context from "../../utils/context";
     import moment from 'moment';
@@ -115,10 +124,13 @@
             [Col.name]: Col,
             [Button.name]: Button,
             [Field.name]: Field,
-            [Toast.name]: Toast
+            [Toast.name]: Toast,
+            [Tab.name]:Tab,
+            [Tabs.name]:Tabs
         },
         data() {
             return {
+                active:"0",
                 dataMain: {
                     balance: 0,
                     recharge: 0,
@@ -340,11 +352,11 @@
 
     .func-wrap {
         background-color: white;
-        margin-top: 10px;
+        /*margin-top: 10px;*/
         min-height: 109px;
         height: auto;
         border-radius: 6px;
-        padding: 0 11px;
+        padding: 10px 11px;
     }
 
     .bag-wrap-item {
