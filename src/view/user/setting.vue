@@ -130,7 +130,7 @@
                 this.$router.back(-1);
             },
             getCode() {
-                request.axios.get('/wx/authorize')
+                request.axios.get('/wx/syncauthorize')
                     .then(function (response) {
                             if (response.data.code === 0) {
                                 //获取到验证URL,给微信发送请求
@@ -147,7 +147,7 @@
             },
             getInfo(code){
                 request.sendGet({
-                    url: '/api/wx/syncwxinfo',
+                    url: '/wx/syncwxinfo',
                     params: {
                         code:code,
                     }
