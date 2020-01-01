@@ -549,11 +549,10 @@
             },
 
             wxShare(){
-                var url = context.wxGetConfigUrl;
                 request.sendGet({
-                    url:url,
+                    url:"/wx/pay/signature",
                     params:{
-
+                        url:location.href
                     }
                 }).then(res =>{
                     var data = res.data.data;

@@ -66,10 +66,11 @@
 
             //自身位置
             getOwnerPosition(){
-                let url = context.wxGetPosition;
                 request.sendGet({
-                    url: url,
-                    params: {}
+                    url:"/wx/pay/signature",
+                    params:{
+                        url:location.href
+                    }
                 }).then(res =>{
                     if(res.data.code == '0'){
                         var data = res.data.data;
