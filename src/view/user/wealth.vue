@@ -58,7 +58,8 @@
                 </van-row>
 
                 <div style="margin-top: 10px">
-                    <van-tabs v-model="active" color="#5083ED" title-active-color="#5083ED" title-inactive-color="#202020">
+                    <van-tabs v-model="active" color="#5083ED" title-active-color="#5083ED"
+                              title-inactive-color="#202020">
                         <van-tab title="充值">
                             <div class="func-wrap">
                                 <div class="func-title">
@@ -67,7 +68,8 @@
                                     <span style="color: #5E5E5E;font-size: 17px">元</span>
                                 </div>
                                 <div class="func-content">
-                                    <van-button style="width: 100%;height:40px" color="#0CC893" type="default" @click="wxPay" >
+                                    <van-button style="width: 100%;height:40px" color="#0CC893" type="default"
+                                                @click="wxPay">
                                         立即充值
                                     </van-button>
                                 </div>
@@ -81,7 +83,8 @@
                                     <span style="color: #5E5E5E;font-size: 17px">元</span>
                                 </div>
                                 <div class="func-content">
-                                    <van-button style="width: 100%;height:40px" color="#5083ED" type="default" @click="cashOut">
+                                    <van-button style="width: 100%;height:40px" color="#5083ED" type="default"
+                                                @click="cashOut">
                                         立即提现
                                     </van-button>
                                 </div>
@@ -89,7 +92,7 @@
                         </van-tab>
                     </van-tabs>
                 </div>
-                <div class="func-wrap" style="padding-top:13px">
+                <div class="func-wrap" style="padding-top:20px">
                     <div style="display: flex;align-items: center">
                         <img style="width: 16px;height: 16px" src="../../static/images/notice.png"/>
                         <span style="font-size: 14px;color: #202020;font-weight: bold">注意：</span>
@@ -111,10 +114,9 @@
 </template>
 <!--个人中心-充值提现-->
 <script>
-    import {NavBar, Row, Col, Field, Button, Toast,Tab, Tabs} from 'vant';
+    import {NavBar, Row, Col, Field, Button, Toast, Tab, Tabs} from 'vant';
     import request from "../../utils/request"
-    import context from "../../utils/context";
-    import moment from 'moment';
+
 
 
     export default {
@@ -125,12 +127,12 @@
             [Button.name]: Button,
             [Field.name]: Field,
             [Toast.name]: Toast,
-            [Tab.name]:Tab,
-            [Tabs.name]:Tabs
+            [Tab.name]: Tab,
+            [Tabs.name]: Tabs
         },
         data() {
             return {
-                active:"0",
+                active: "0",
                 dataMain: {
                     balance: 0,
                     recharge: 0,
@@ -140,7 +142,7 @@
                 },
                 czje: '',
                 txje: '',
-                wxData:{},
+                wxData: {},
             }
         },
         methods: {
@@ -179,16 +181,16 @@
                     }
                 }).then((res) => {
                     Toast(res.data.msg);
-                    if(res.data.code===0){
+                    if (res.data.code === 0) {
                         this.initData();
                     }
                 })
             },
             getWxConfig() {
                 request.sendGet({
-                    url:'/wx/pay/signature',
-                    params:{
-                        url:location.href
+                    url: '/wx/pay/signature',
+                    params: {
+                        url: location.href
                     }
                 }).then(res => {
                     wx.config({
@@ -208,8 +210,8 @@
                     if (document.addEventListener) {
                         document.addEventListener('WeixinJSBridgeReady', this.jsApiCall(), false);
                     } else if (document.attachEvent) {
-                        document.attachEvent('WeixinJSBridgeReady',  this.jsApiCall());
-                        document.attachEvent('onWeixinJSBridgeReady',  this.jsApiCall());
+                        document.attachEvent('WeixinJSBridgeReady', this.jsApiCall());
+                        document.attachEvent('onWeixinJSBridgeReady', this.jsApiCall());
                     }
                 } else {
                     this.jsApiCall();
@@ -222,17 +224,17 @@
                         "appId": this.wxData.appId,
                         "timeStamp": this.wxData.timeStamp,
                         "nonceStr": this.wxData.nonceStr,
-                        "package":  this.wxData.package,
+                        "package": this.wxData.package,
                         "signType": this.wxData.signType,
                         "paySign": this.wxData.paySign
                     },
                     function (res) {
                         // console.log(res.err_code + res.err_desc + res.err_msg);
-                        if(res.err_msg === "get_brand_wcpay_request:ok" ){
+                        if (res.err_msg === "get_brand_wcpay_request:ok") {
                             this.recharge();
                             // 使用以上方式判断前端返回,微信团队郑重提示：
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-                        }else if(res.err_msg === 'get_brand_wcpay_request:fail'){
+                        } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
                             Toast("支付失败");
                         }
                     }
@@ -240,7 +242,7 @@
             },
 
             wxPay() {
-                if(!this.czje){
+                if (!this.czje) {
                     Toast("充值金额不能为空");
                     return;
                 }
@@ -250,10 +252,10 @@
                         paynum: this.czje,
                     }
                 }).then((res) => {
-                    if(res.data.code===0){
+                    if (res.data.code === 0) {
                         this.wxData = res.data.data;
                         this.callpay();
-                    }else{
+                    } else {
                         Toast(res.data.msg);
                     }
                 })
@@ -272,6 +274,7 @@
         created() {
             this.initData();
             this.getWxConfig();
+
         },
     }
 </script>
@@ -305,9 +308,13 @@
         border: none;
     }
 
+    /deep/ .van-field__control {
+    font-size: 18px!important;
+    }
+
     /deep/ .van-field__label {
         font-weight: bold !important;
-        font-size: 14px !important;
+        font-size: 18px !important;
         color: #202020 !important;
     }
 
