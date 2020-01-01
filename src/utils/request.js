@@ -35,11 +35,12 @@ fileBaas.interceptors.request.use(function (config) {
         let openid = localStorage.getItem('openid');
         config.headers['openid'] = openid;
     } else {
-        server.axios.get('/api/wx/authorize')
+        server.axios.get('/wx/syncauthorize')
             .then(function (response) {
                     //获取到验证URL,给微信发送请求
                     let authURL = response.data.data.url;
-                    window.location.href = authURL;
+                    console.log(authURL);
+                    // window.location.href = authURL;
                 }
             ).catch(function (error) {
             console.log(error);
@@ -58,7 +59,7 @@ baas.interceptors.request.use(function (config) {
         let openid = localStorage.getItem('openid');
         config.headers['openid'] = openid;
     } else {
-        server.axios.get('/wx/authorize')
+        server.axios.get('/wx/syncauthorize')
             .then(function (response) {
                     if (response.data.code === 0) {
                         //获取到验证URL,给微信发送请求
