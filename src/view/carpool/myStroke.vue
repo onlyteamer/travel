@@ -221,6 +221,21 @@
                     required
             />
         </van-dialog>
+        <van-popup v-model="wxpay" :style="{height: '45%',width:'90%'}" style="background-color: white;">
+            <div class="pay-title">拼车充值</div>
+            <div class="func-wrap">
+                <div class="func-title">
+                    <van-field v-model="czje" type="number" :border=false
+                               placeholder="充值金额"/>
+                    <span style="color: #5E5E5E;font-size: 17px">元</span>
+                </div>
+                <div class="func-content">
+                    <van-button style="width: 96%;height:40px;" color="#0CC893" type="default" @click="wxPay">
+                        立即充值
+                    </van-button>
+                </div>
+            </div>
+        </van-popup>
     </div>
 </template>
 
@@ -256,6 +271,9 @@
         },
         data() {
             return {
+                czje:'',
+                wxData:{},
+                wxpay: false,
                 loading: false,
                 finished: false,
                 active:1,
@@ -291,8 +309,99 @@
             }
             this.changeTab(this.strokeType);
         },
-
+        created(){
+            this.getWxConfig();
+        },
         methods: {
+            recharge() {
+                // {payfor}
+                //1、用户充值 2、拼车充值 3、班车充值 4、商城充值
+                request.sendPost({
+                    url: '/user/center/recharge/2',
+                    params: {
+                        number: this.czje
+                    }
+                }).then((res) => {
+                    if(res.data.code===0){
+                        this.wxpay = true;
+                    }
+                    Toast(res.data.msg);
+                })
+            },
+            getWxConfig() {
+                request.sendGet({
+                    url:'/wx/pay/signature',
+                    params:{
+                        url:location.href
+                    }
+                }).then(res => {
+                    wx.config({
+                        beta: true,// 必须这么写，否则在微信插件有些jsapi会有问题
+                        // debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: res.data.data.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
+                        timestamp: parseInt(res.data.data.timestamp, 10), // 必填，生成签名的时间戳
+                        nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
+                        signature: res.data.data.signature,// 必填，签名，见附录1
+                        jsApiList: ['WeixinJSBridge'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                    });
+                });
+            },
+
+            callpay() {
+                if (typeof WeixinJSBridge == "undefined") {
+                    if (document.addEventListener) {
+                        document.addEventListener('WeixinJSBridgeReady', this.jsApiCall(), false);
+                    } else if (document.attachEvent) {
+                        document.attachEvent('WeixinJSBridgeReady',  this.jsApiCall());
+                        document.attachEvent('onWeixinJSBridgeReady',  this.jsApiCall());
+                    }
+                } else {
+                    this.jsApiCall();
+                }
+            },
+            jsApiCall() {
+                WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest',
+                    {
+                        "appId": this.wxData.appId,
+                        "timeStamp": this.wxData.timeStamp,
+                        "nonceStr": this.wxData.nonceStr,
+                        "package":  this.wxData.package,
+                        "signType": this.wxData.signType,
+                        "paySign": this.wxData.paySign
+                    },
+                    function (res) {
+                        // console.log(res.err_code + res.err_desc + res.err_msg);
+                        if(res.err_msg === "get_brand_wcpay_request:ok" ){
+                            this.recharge();
+                            // 使用以上方式判断前端返回,微信团队郑重提示：
+                            //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                        }else if(res.err_msg === 'get_brand_wcpay_request:fail'){
+                            Toast("支付失败");
+                        }
+                    }
+                );
+            },
+
+            wxPay() {
+                if(!this.czje){
+                    Toast("充值金额不能为空");
+                    return;
+                }
+                request.sendGet({
+                    url: '/wx/pay/create/order/2',
+                    params: {
+                        paynum: this.czje,
+                    }
+                }).then((res) => {
+                    if(res.data.code===0){
+                        this.wxData = res.data.data;
+                        this.callpay();
+                    }else{
+                        Toast(res.data.msg);
+                    }
+                })
+            },
             onLoad() {
                 if(this.strokeType == '0'){
                     if (this.passTrip.total > this.passTrip.data.length) {
@@ -616,7 +725,48 @@
     body {
         background: #FFFFFF;
     }
+    .func-content {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        bottom: 10px;
+    }
 
+    .func-title {
+        height: 47px;
+        width: 96%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #BBBBBB;
+    }
+
+    .func-wrap {
+        background-color: white;
+        border-radius: 6px;
+        /*padding: 10px 11px;*/
+        height: 84%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+
+    .pay-title {
+        background-color: white;
+        width: 100%;
+        height: 15%;
+        font-size: 20px;
+        color: #202020;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid #CECECE
+    }
     .contain {
 
     }
