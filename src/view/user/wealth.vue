@@ -63,7 +63,7 @@
                         <span style="color: #5E5E5E;font-size: 17px">元</span>
                     </div>
                     <div class="func-content">
-                        <van-button style="width: 100%;height:40px" color="#0CC893" type="default">
+                        <van-button style="width: 100%;height:40px" color="#0CC893" type="default" @click="wxPay">
                             立即充值
                         </van-button>
                     </div>
@@ -105,6 +105,7 @@
     import {NavBar, Row, Col, Field, Button, Toast} from 'vant';
     import request from "../../utils/request"
     import context from "../../utils/context";
+    import moment from 'moment';
 
 
     export default {
@@ -126,7 +127,8 @@
                     consume: 0,
                 },
                 czje: '',
-                txje: ''
+                txje: '',
+                wxData:{},
             }
         },
         methods: {
@@ -135,7 +137,7 @@
                     Toast("提现金额不能低于一百");
                     return;
                 }
-                if(this.txje>this.balance){
+                if (this.txje > this.balance) {
                     Toast("提现金额不能大于总资产");
                     return;
                 }
@@ -145,7 +147,7 @@
                     params: {
                         number: this.txje
                     }
-                }).then((res)=>{
+                }).then((res) => {
                     Toast(res.data.msg);
                 })
             },
@@ -164,26 +166,84 @@
                         number: this.czje
                     }
                 }).then((res) => {
-
+                    Toast(res.data.msg);
+                    if(res.data.code===0){
+                        this.initData();
+                    }
                 })
             },
-            wxPay(){
-                var url = context.wxGetConfigUrl;
+            getWxConfig() {
                 request.sendGet({
-                    url:url,
-                    params:{}
-                }).then(res =>{
-                    var data = res.data.data;
+                    url:'/wx/pay/signature',
+                    params:{
+                        url:location.href
+                    }
+                }).then(res => {
                     wx.config({
                         beta: true,// 必须这么写，否则在微信插件有些jsapi会有问题
-                        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                        appId: data.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
-                        timestamp: parseInt(data.timestamp,10), // 必填，生成签名的时间戳
-                        nonceStr: data.nonceStr, // 必填，生成签名的随机串
-                        signature: data.signature,// 必填，签名，见附录1
-                        jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage','onMenuShareQQ','onMenuShareQZone','hideOptionMenu'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                        // debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: res.data.data.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
+                        timestamp: parseInt(res.data.data.timestamp, 10), // 必填，生成签名的时间戳
+                        nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
+                        signature: res.data.data.signature,// 必填，签名，见附录1
+                        jsApiList: ['WeixinJSBridge'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                     });
+                });
+            },
 
+            callpay() {
+                if (typeof WeixinJSBridge == "undefined") {
+                    if (document.addEventListener) {
+                        document.addEventListener('WeixinJSBridgeReady', this.jsApiCall(), false);
+                    } else if (document.attachEvent) {
+                        document.attachEvent('WeixinJSBridgeReady',  this.jsApiCall());
+                        document.attachEvent('onWeixinJSBridgeReady',  this.jsApiCall());
+                    }
+                } else {
+                    this.jsApiCall();
+                }
+            },
+            jsApiCall() {
+                WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest',
+                    {
+                        "appId": this.wxData.appId,
+                        "timeStamp": this.wxData.timeStamp,
+                        "nonceStr": this.wxData.nonceStr,
+                        "package":  this.wxData.package,
+                        "signType": this.wxData.signType,
+                        "paySign": this.wxData.paySign
+                    },
+                    function (res) {
+                        // console.log(res.err_code + res.err_desc + res.err_msg);
+                        if(res.err_msg === "get_brand_wcpay_request:ok" ){
+                            this.recharge();
+                            // 使用以上方式判断前端返回,微信团队郑重提示：
+                            //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                        }else if(res.err_msg === 'get_brand_wcpay_request:fail'){
+                            Toast("支付失败");
+                        }
+                    }
+                );
+            },
+
+            wxPay() {
+                if(!this.czje){
+                    Toast("充值金额不能为空");
+                    return;
+                }
+                request.sendGet({
+                    url: '/wx/pay/create/order/3',
+                    params: {
+                        paynum: this.czje,
+                    }
+                }).then((res) => {
+                    if(res.data.code===0){
+                        this.wxData = res.data.data;
+                        this.callpay();
+                    }else{
+                        Toast(res.data.msg);
+                    }
                 })
             },
             initData() {
@@ -199,7 +259,7 @@
         },
         created() {
             this.initData();
-            this.wxPay();
+            this.getWxConfig();
         },
     }
 </script>
