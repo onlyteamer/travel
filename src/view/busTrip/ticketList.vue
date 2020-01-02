@@ -231,14 +231,15 @@
 
             //当天才能验票
             compareDate(date){
-                let endTime =  new Date(date);
-                let startTime = new Date();
-                let days = moment(endTime).diff(moment(startTime), 'days');
-                if(days == '0'){
-                    return false;
-                }else {
-                    return true;
-                }
+                // let endTime =  new Date(date);
+                // let startTime = new Date();
+                // let days = moment(endTime).diff(moment(startTime), 'days');
+                // if(days == '0'){
+                //     return false;
+                // }else {
+                //     return true;
+                // }
+                return false;
             },
 
             checkTicket(id,checkcode) {
