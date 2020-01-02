@@ -86,7 +86,6 @@
     import wxChar from './../../static/images/busTrip/wxchar.png'
     import balance from './../../static/images/busTrip/balance.png'
     import request from "../../utils/request";
-    import vConsole from "vconsole"
 
     import car from './../../static/images/busTrip/car.png'
     import scan from './../../static/images/busTrip/scan.png'
@@ -214,7 +213,6 @@
                         "paySign": this.wxData.paySign
                     },
                     function (res) {
-                        alert(res.err_msg);
                         if (res.err_msg === "get_brand_wcpay_request:ok") {
                             Toast("支付成功");
                             me.submitOrder();
@@ -256,7 +254,6 @@
             this.chooseDate = this.$route.query.dateStr;
             this.queryBus();
             this.getWxConfig();
-            var vConsole = new VConsole();
         },
     }
 </script>
