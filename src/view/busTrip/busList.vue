@@ -46,7 +46,7 @@
 
         <div class="footer">
             <van-tabbar  v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="background:#5083ED ">
-                <van-tabbar-item :icon="car" to="/busIndex">预定班车</van-tabbar-item>
+                <van-tabbar-item :icon="car" to="/busIndex">预定巴士</van-tabbar-item>
                 <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
                 <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
             </van-tabbar>
@@ -83,6 +83,7 @@
             return {
                 active:"",
                 busType:0,
+                queryType:"1",
                 placeDown:placeDown,
                 placeUp:placeUp,
                 isOneHttp: true,
@@ -103,7 +104,15 @@
         },
         methods: {
             changeTab(val){
-
+                this.dataMain.pageSize = 6;
+                this.dataMain.pageNum = 1;
+                this.dataMain.data = [];
+                if(val == '0'){
+                    this.queryType = "1";
+                }else {
+                    this.queryType = "2";
+                }
+                this.initData();
             },
 
             gobuyTicket(item){
@@ -115,6 +124,7 @@
                     params: {
                         pageSize: this.dataMain.pageSize,
                         pageNum: this.dataMain.pageNum,
+                        type: this.queryType
                     }
                 }).then((res) => {
                     this.dataMain.total = res.data.total;

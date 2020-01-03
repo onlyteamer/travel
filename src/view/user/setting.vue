@@ -47,7 +47,7 @@
                     常用站点设置
                 </div>
                 <div style="height: 72px;padding-top: 10px;border-bottom: 1px solid #ECECEC;">
-                    <span style="font-size:14px;color: #0CC893;font-weight: bold">通勤班车</span>
+                    <span style="font-size:14px;color: #0CC893;font-weight: bold">通勤巴士</span>
                     <div class="item-flex">
                         <div class="item-flex" style="flex: 0.5">
                             <img :src="greenDot" width="24px" height="24px">
