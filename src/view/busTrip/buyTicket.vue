@@ -147,6 +147,16 @@
             onClickLeft() {
                 this.$router.back(-1);
             },
+            checkTicketsLeft(){
+                request.sendPost({
+                    url:'/bus/buyTicketBefore',
+                    params:{
+                        busid:'',
+                        dateStr:[],
+                        lineid:''
+                    }
+                })
+            },
             addBuyTicket(item,index) {
                 if (item && (item.state === 1 || item.state === 2)) {
                     let index2 = this.chooseDate.indexOf(item.dateText);
@@ -162,7 +172,7 @@
                         el.style.color = '#fff';
                         this.num += 1;
                     } else {
-                        this.chooseDate.splice(index, 1);
+                        this.chooseDate.splice(index2, 1);
                         let el = '';
                         if(item.date-1<index){
                             el = this.$refs.item[index];
