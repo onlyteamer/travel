@@ -4,9 +4,9 @@
             <van-nav-bar :fixed="true" />
             <div style="position: fixed;top:0;width: 92%;z-index: 9999;left: 8%">
                 <van-tabs v-model="header_active" @click="onClick">
-                    <van-tab title="通勤班车">
+                    <van-tab title="通勤巴士">
                     </van-tab>
-                    <van-tab title="旅游班车">
+                    <van-tab title="旅游巴士">
                     </van-tab>
                 </van-tabs>
             </div>
@@ -135,7 +135,7 @@
 
         <div class="footer">
             <van-tabbar v-model="footerActive" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="background:#5083ED ">
-                <van-tabbar-item :icon="car" to="/busIndex">预定班车</van-tabbar-item>
+                <van-tabbar-item :icon="car" to="/busIndex">预定巴士</van-tabbar-item>
                 <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
                 <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
             </van-tabbar>

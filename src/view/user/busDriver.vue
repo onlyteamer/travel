@@ -9,7 +9,7 @@
                 <van-field v-model="value" label="查询日期"/>
             </div>
             <div style="display: flex;align-items:center; justify-content: flex-start; border-bottom: 1px solid #ECECEC">
-                <span>班车线路</span>
+                <span>巴士线路</span>
                 <van-dropdown-menu style="flex: 1">
                     <van-dropdown-item v-model="value1" :options="option1"/>
                 </van-dropdown-menu>
