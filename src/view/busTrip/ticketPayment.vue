@@ -200,6 +200,18 @@
                     this.jsApiCall();
                 }
             },
+            cancelTicket(){
+                request.sendPost({
+                    url:'/bus/cancelTicket',
+                    params:{
+                        busid: this.busid,
+                        dateStr: this.chooseDate,
+                        lineid: this.lineid,
+                    }
+                }).then(res=>{
+                    console.log(res);
+                })
+            },
             jsApiCall() {
                 let me = this;
                 WeixinJSBridge.invoke(
@@ -220,12 +232,34 @@
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                         } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
                             Toast("支付失败");
+                            me.$router.push({path:'/buyTicket'});
+                            // me.cancelTicket();
                         }else if(res.err_msg === 'get_brand_wcpay_request:cancel'){
                             Toast("取消支付");
+                            me.$router.push({path:'/buyTicket'});
+                            // me.cancelTicket();
                         }
                     }
                 );
             },
+
+            buyTicketBefore(){
+                request.sendPost({
+                    url:'/bus/buyTicketBefore',
+                    params:{
+                        busid: this.busid,
+                        dateStr: this.chooseDate,
+                        lineid: this.lineid,
+                    }
+                }).then(res=>{
+                    if(res.data.code===0){
+
+                    }else{
+                        Toast(res.data.msg);
+                    }
+                })
+            },
+
             wxPay() {
                 request.sendGet({
                     url: '/wx/pay/create/order/1',
