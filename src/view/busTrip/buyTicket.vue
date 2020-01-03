@@ -30,7 +30,7 @@
                     <span v-for="item in week" :key="item">{{item}}</span>
                 </div>
                 <div v-for="val in ticketData" class="date-li">
-                    <div v-for="(item,index) in val" :class="getItemClass(item)" ref="item" @click="addBuyTicket(item,index)">
+                    <div v-for="(item,index) in val" :class="getItemClass(item)" ref="item" @click="addBuyTicket(item)">
                         <div>{{item?item.date:'&nbsp;&nbsp;&nbsp;&nbsp;'}}</div>
                         <div :class="generateClassName(item)" style="font-size: 12px;">{{item?item.statename:'&nbsp;&nbsp;&nbsp;&nbsp;'}}</div>
                     </div>
@@ -85,6 +85,7 @@
         },
         data() {
             return {
+                startnum:0,//日期从第几位开始
                 user: user,
                 car: car,
                 scan: scan,
@@ -157,28 +158,18 @@
                     }
                 })
             },
-            addBuyTicket(item,index) {
+            addBuyTicket(item) {
                 if (item && (item.state === 1 || item.state === 2)) {
                     let index2 = this.chooseDate.indexOf(item.dateText);
                     if (index2 === -1) {
                         this.chooseDate.push(item.dateText);
-                        let el = '';
-                        if(item.date-1<index){
-                            el = this.$refs.item[index];
-                        }else{
-                            el = this.$refs.item[item.date - 1];
-                        }
+                        let el = this.$refs.item[item.date - 1 + this.startnum];
                         el.style.backgroundColor = '#0CC893';
                         el.style.color = '#fff';
                         this.num += 1;
                     } else {
                         this.chooseDate.splice(index2, 1);
-                        let el = '';
-                        if(item.date-1<index){
-                            el = this.$refs.item[index];
-                        }else{
-                            el = this.$refs.item[item.date - 1];
-                        }
+                        let el = this.$refs.item[item.date - 1 + this.startnum];
                         if (item.state === 2) {
                             el.style.backgroundColor = '#5083ED';
                             el.style.color = '#fff';
@@ -253,6 +244,13 @@
                     unifiedMount: unifiedMount,
                     continuous: continuous
                 });
+                let num = 0;
+                for(let i=0;i<this.ticketData[0].length;i++){
+                    if(!this.ticketData[0][i]){
+                        num +=1;
+                    }
+                }
+                this.startnum = num;
             }
         },
         created() {
