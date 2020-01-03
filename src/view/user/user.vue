@@ -31,15 +31,15 @@
                 <van-row class="bag-wrap">
                     <van-col span="8" class="bag-col">
                         <div class="bag-wrap-item" style="font-size: 14px;color: #242424">余额</div>
-                        <div class="bag-wrap-item" style="font-size: 20px;color: #FF0200">50.05</div>
+                        <div class="bag-wrap-item" style="font-size: 20px;color: #FF0200">{{account.balance}}</div>
                     </van-col>
                     <van-col span="8" class="bag-col">
                         <div class="bag-wrap-item" style="font-size: 14px;color: #242424">积分</div>
-                        <div class="bag-wrap-item" style="font-size: 20px;color: #FF7E00">20000</div>
+                        <div class="bag-wrap-item" style="font-size: 20px;color: #FF7E00">{{account.coupon}}</div>
                     </van-col>
                     <van-col span="8" class="bag-col">
                         <div class="bag-wrap-item" style="font-size: 14px;color: #242424">优惠券</div>
-                        <div class="bag-wrap-item" style="font-size: 20px;color: #242424">0</div>
+                        <div class="bag-wrap-item" style="font-size: 20px;color: #242424">{{account.integral}}</div>
                     </van-col>
                 </van-row>
                 <div class="func-wrap">
@@ -159,6 +159,11 @@
         },
         data() {
             return {
+                account:{
+                    balance:"",
+                    coupon:"",
+                    integral:""
+                },
                 listImg: listImg,
                 footerActive:2,
                 carActive:3,
@@ -247,6 +252,17 @@
                     }
                 })
             },
+
+            initUserAccount(){
+                request.sendGet({
+                    url:"/user/center/account",
+                    params: {}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        this.account = res.data.data;
+                    }
+                })
+            }
         },
         created() {
             let flag = this.$route.query.flag;
@@ -288,6 +304,9 @@
             }else{
                 this.initUserData();
             }
+
+            //账户信息
+            this.initUserAccount();
         },
 
     }

@@ -25,7 +25,7 @@
                         <span class="list-price">￥{{item.ticketPrice}}</span>
                     </div>
                     <div style="display: flex;align-items: center;justify-content: space-between;height: 72px">
-                        <div style="width: 70%"  @click="linkBusDetail(item.busid)">
+                        <div style="width: 80%"  @click="linkBusDetail(item.busid)">
                             <div style="display: flex;height:35px;line-height: 35px">
                                 <div style="width:37%"><img :src="blueTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">{{item.starttime}}</span></div>
                                 <div><img :src="placeUp" width="13px" height="13px"><span  style="margin-left: 7px;">{{item.startname}}</span></div>
