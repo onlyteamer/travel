@@ -186,7 +186,7 @@
                     }).then((res) => {
                         if (res.data.code === 0) {
                             Toast(res.data.msg);
-                            this.$router.back(-1);
+                            this.$router.go(-2);
                         } else {
                             Toast(res.data.msg);
                         }
