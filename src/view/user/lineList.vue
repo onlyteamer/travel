@@ -1,21 +1,17 @@
 <template>
     <div class="content">
         <div style="width: 95%;margin: 10px 0 15px">
-            <van-row>
-                <van-col span="6" >当前路线：</van-col>
-                <van-col span="18">
+            <div style="margin: 10px 0px 15px;width: 95%;display:flex;align-items: center">
+                <div>当前路线：</div>
                     <div style="color: #5083ED;">
-                        <!--昌坤出行3线：上河湾 → 西坝河-->
-                        {{lineName}}
+                        {{lineName?lineName:'暂无'}}
                     </div>
-                </van-col>
-            </van-row>
+            </div>
         </div>
         <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
         <div style="margin: 10px 0px 15px;width: 95%">
             <div>其他路线：</div>
-
-            <div class="lineList" v-for="(item,index) in lineList" :key="index" @click="changeLine(item)">{{lineName}}</div>
+            <div class="lineList" v-for="(item,index) in lineList" :key="index" @click="changeLine(item)">{{item.lineName}}</div>
         </div>
     </div>
 </template>
@@ -46,17 +42,17 @@
 
         methods:{
             initLineList(){
+                let me = this;
                 request.sendGet({
                     url:"/user/center/linelist",
                     params: {}
                 }).then(res =>{
-                    if(res.data.code == '0'){
+                    if(res.data.code === 0){
                         //处理数据
                         this.lineList = res.data.rows;
-
                         this.lineList.forEach(e =>{
                             if(e.isDefault == '1'){
-                                this.lineName = e.lineName
+                                me.lineName = e.lineName
                             }
                         })
 
@@ -75,7 +71,7 @@
                             url: "/user/center/defaultline/"+item.lineid,
                             params: {}
                         }).then(res => {
-                            if (res.data.code == '0') {
+                            if (res.data.code === 0) {
                                 Toast.success("切换成功")
                             } else {
                                 Toast.fail(res.data.msg)
