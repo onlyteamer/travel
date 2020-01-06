@@ -66,7 +66,7 @@
         </div>
 
         <div class="footer">
-            <van-button type="primary" color="#0CC893" style="width: 100%" @click="wxPay">确认支付</van-button>
+            <van-button type="primary" color="#0CC893" style="width: 100%" @click="buyTicketBefore">确认支付</van-button>
         </div>
 
         <div class="footerBar">
@@ -135,7 +135,7 @@
                 user: user,
                 car: car,
                 scan: scan,
-                wxData:{}
+                wxData: {}
             }
         },
         methods: {
@@ -149,7 +149,7 @@
                     }
                 })
             },
-            submitOrder(){
+            submitOrder() {
                 request.sendPost({
                     url: '/bus/buyTicket',
                     params: {
@@ -157,11 +157,11 @@
                         dateStr: this.chooseDate,
                         lineid: this.lineid,
                         payment: this.amount,
-                        prepayId:this.wxData.prepayId,
+                        prepayId: this.wxData.prepayId,
                     }
-                }).then((res)=>{
+                }).then((res) => {
                     if (res.data.code === 0) {
-                        this.$router.push({path:'/ticketList'});
+                        this.$router.push({path: '/ticketList'});
                     } else {
                         Toast(res.data.msg);
                     }
@@ -200,15 +200,15 @@
                     this.jsApiCall();
                 }
             },
-            cancelTicket(){
+            cancelTicket() {
                 request.sendPost({
-                    url:'/bus/cancelTicket',
-                    params:{
+                    url: '/bus/cancelTicket',
+                    params: {
                         busid: this.busid,
                         dateStr: this.chooseDate,
                         lineid: this.lineid,
                     }
-                }).then(res=>{
+                }).then(res => {
                     console.log(res);
                 })
             },
@@ -232,29 +232,29 @@
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                         } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
                             Toast("支付失败");
-                            me.$router.push({path:'/buyTicket'});
-                            // me.cancelTicket();
-                        }else if(res.err_msg === 'get_brand_wcpay_request:cancel'){
+                            me.$router.push({path: '/buyTicket'});
+                            me.cancelTicket();
+                        } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
                             Toast("取消支付");
-                            me.$router.push({path:'/buyTicket'});
-                            // me.cancelTicket();
+                            me.$router.push({path: '/buyTicket'});
+                            me.cancelTicket();
                         }
                     }
                 );
             },
 
-            buyTicketBefore(){
+            buyTicketBefore() {
                 request.sendPost({
-                    url:'/bus/buyTicketBefore',
-                    params:{
+                    url: '/bus/buyTicketBefore',
+                    params: {
                         busid: this.busid,
                         dateStr: this.chooseDate,
                         lineid: this.lineid,
                     }
-                }).then(res=>{
-                    if(res.data.code===0){
-
-                    }else{
+                }).then(res => {
+                    if (res.data.code === 0) {
+                        this.wxPay();
+                    } else {
                         Toast(res.data.msg);
                     }
                 })
@@ -267,10 +267,10 @@
                         paynum: this.amount,
                     }
                 }).then((res) => {
-                    if(res.data.code===0){
+                    if (res.data.code === 0) {
                         this.wxData = res.data.data;
                         this.callpay();
-                    }else{
+                    } else {
                         Toast(res.data.msg);
                     }
                 })
