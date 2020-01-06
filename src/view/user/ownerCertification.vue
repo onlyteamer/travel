@@ -23,8 +23,7 @@
                         <van-image :src="baseImgUrl+driverInfo.driverCardimage"  fit="cover" width="100%" height="110px" />
                         <van-icon name="close" @click="delImg3" style="font-size: 20px;position: absolute;top:-10px;right: -10px"/>
                     </div>
-
-                    <van-uploader :max-count=1  v-if="!driverInfo.driverCardimage" :after-read="uploadCallback"   :preview-image="false">
+                    <van-uploader :max-count=1  v-if="!driverInfo.driverCardimage" :after-read="uploadCallback"  :preview-image="false">
                         <van-image round width="54px" height="54px" :src="uploadIcon"/>
                         <div style="color: #9E9E9E;font-size: 14px">选择文件</div>
                     </van-uploader>
@@ -100,6 +99,10 @@
                 this.$router.back(-1);
             },
             uploadCallback(uploadFile) {
+                if(uploadFile.file.size > 1024 * 1024){
+                    Toast("图片大小不能超过1M");
+                    return false;
+                }
                 let param = new FormData();
                 param.append('file', uploadFile.file);//通过append向form对象添加数据
                 request.uploadFile({

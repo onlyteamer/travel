@@ -232,6 +232,10 @@
             },
             //上传车辆正面照片
             uploadCallback(uploadFile) {
+                if(uploadFile.file.size > 1024 * 1024){
+                    Toast("图片大小不能超过1M");
+                    return false;
+                }
                 let param = new FormData();
                 param.append('file', uploadFile.file);//通过append向form对象添加数据
                 request.uploadFile({
@@ -261,6 +265,10 @@
             },
             //上传车辆行驶证
             uploadCallback2(uploadFile) {
+                if(uploadFile.file.size > 1024 * 1024){
+                    Toast("图片大小不能超过1M");
+                    return false;
+                }
                 let param = new FormData();
                 param.append('file', uploadFile.file);//通过append向form对象添加数据
                 request.uploadFile({
@@ -290,6 +298,10 @@
             },
             //上传车辆保险照片
             uploadCallback3(uploadFile) {
+                if(uploadFile.file.size > 1024 * 1024){
+                    Toast("图片大小不能超过1M");
+                    return false;
+                }
                 let param = new FormData();
                 param.append('file', uploadFile.file);//通过append向form对象添加数据
                 request.uploadFile({
