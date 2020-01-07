@@ -68,7 +68,7 @@
                     }).then(() => {
                         // 确定
                         request.sendPost({
-                            url: "/user/center/defaultline/"+item.lineid,
+                            url: "/user/center/defaultline/"+item.lineId,
                             params: {}
                         }).then(res => {
                             if (res.data.code === 0) {
