@@ -21,7 +21,7 @@
                             <div v-for="item in toride.data" :key="item.id">
                                 <div class="card">
                                     <div style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;height: 45px;justify-content: space-between">
-                                        <span class="line">{{item.linename}}：{{item.startname}}->{{item.endname}}</span>
+                                        <span class="line">{{item.linename}}：{{item.startname}} → {{item.endname}}</span>
                                         <span class="list-price">￥{{item.ticketPrice}}</span>
                                     </div>
                                     <div style="display: flex;align-items: center;justify-content: space-between;height: 85px">
@@ -72,7 +72,7 @@
                                              style="margin-bottom: 10px;color: #5083ED;display: flex;align-items: center;">
                                         <van-col span="16" style="color: #5083ED;font-size: 14px;font-weight: bold">
                                             <div>{{line.linename}}</div>
-                                            <div>{{line.startname}} -> {{line.endname}}</div>
+                                            <div>{{line.startname}} → {{line.endname}}</div>
                                         </van-col>
                                         <van-col span="8" style="color: #0CC893;text-align: right;font-size: 14px">
                                             <div>
@@ -96,7 +96,7 @@
                                     <van-row v-for="(line,indexNum) in refund.data" :key="line.id"
                                              style="margin-bottom: 10px;color: #202020;font-weight: bold">
                                         <van-col span="18" style="color: #5083ED;font-size: 14px;font-weight: bold">
-                                            {{line.linename}}：{{line.startname}}->{{line.endname}}
+                                            {{line.linename}}：{{line.startname}} → {{line.endname}}
                                         </van-col>
                                         <van-col span="6" style="color: #5E5E5E;text-align: right">{{line.state}}
                                         </van-col>
