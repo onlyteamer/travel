@@ -2,29 +2,29 @@
     <div class="contain">
         <!--<Title :title="title" @onClickLeft="onClickLeft"></Title>-->
         <div class="content">
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
+            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px" @click="openTimer">
                 <van-col span="8">始发时间</van-col>
-                <van-col span="16" class="valStyle" @click="openTimer">
+                <van-col span="16" class="valStyle">
                     <van-field v-model="stroke.tripDateTime" placeholder="请选择始发时间" disabled style="padding: 0"/>
                 </van-col>
             </van-row>
 
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
+            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px" @click="changeLine">
                 <van-col span="8">线路</van-col>
                 <van-col span="14" class="valStyle">
                     <van-field v-model="stroke.directLine" placeholder="请选择线路" disabled style="padding: 0"/>
                 </van-col>
-                <van-col span="2" @click="changeLine">
+                <van-col span="2">
                     <van-icon name="arrow" color="#9E9E9E"/>
                 </van-col>
             </van-row>
 
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
+            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px" @click="changePoint">
                 <van-col span="8">方向</van-col>
                 <van-col span="14" class="valStyle">
                     <van-field v-model="stroke.point" placeholder="请选择方向" disabled style="padding: 0"/>
                 </van-col>
-                <van-col span="2" @click="changePoint">
+                <van-col span="2">
                     <van-icon name="arrow" color="#9E9E9E"/>
                 </van-col>
             </van-row>
@@ -32,7 +32,8 @@
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px;display: flex;align-items: center">
                 <van-col span="8">行驶路线</van-col>
                 <van-col span="16" class="valStyle">
-                    <van-field v-model="stroke.tripLine" type="textarea" autosize placeholder="上河湾出发，李哥庄，绿地，果园，少年宫，万象城"/>
+                    <van-field v-model="stroke.tripLine" type="textarea" autosize
+                               placeholder="上河湾出发，李哥庄，绿地，果园，少年宫，万象城"/>
                 </van-col>
             </van-row>
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
@@ -47,10 +48,13 @@
                     <van-field v-model="stroke.endPlace" style="padding: 0" placeholder="请输入目的地"/>
                 </van-col>
             </van-row>
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
+            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px" @click="openSeat">
                 <van-col span="8">座位数</van-col>
-                <van-col span="16" class="valStyle">
-                    <van-field v-model="stroke.totalSeat" style="padding: 0" placeholder="请输入座位数"/>
+                <van-col span="14" class="valStyle">
+                    <van-field v-model="stroke.totalSeat" disabled style="padding: 0" placeholder="请输入座位数"/>
+                </van-col>
+                <van-col span="2">
+                    <van-icon name="arrow" color="#9E9E9E"/>
                 </van-col>
             </van-row>
 
@@ -61,12 +65,12 @@
                 </van-col>
             </van-row>
 
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 10px 2px">
+            <van-row style="border-bottom: 1px solid #ECECEC;padding: 10px 2px" @click="changeCar">
                 <van-col span="8">车辆信息</van-col>
                 <van-col span="14" class="valStyle">
                     <van-field v-model="stroke.carInfo" style="padding: 0" placeholder="请选择车辆信息"/>
                 </van-col>
-                <van-col span="2" @click="changeCar">
+                <van-col span="2">
                     <van-icon name="arrow" color="#9E9E9E"/>
                 </van-col>
             </van-row>
@@ -105,7 +109,8 @@
         </div>
 
         <div class="footer">
-            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="background:#5083ED ">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
                 <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
                 <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
                 <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
@@ -126,6 +131,7 @@
                     @cancel="cancel"
                     @confirm="changeTimer"
                     :visible-item-count="3"
+                    @formatter="formatDate"
             />
         </van-popup>
 
@@ -139,6 +145,12 @@
             <van-picker :columns="carData" show-toolbar value-key="name" @cancel="showCar = false"
                         :visible-item-count="3"
                         @confirm="onCarChange"/>
+        </van-popup>
+
+        <van-popup v-model="showSeat" position="bottom" :style="{ height: '30%' }">
+            <van-picker :columns="seatData" show-toolbar value-key="name" @cancel="showSeat = false"
+                        :visible-item-count="3"
+                        @confirm="onSeatChange"/>
         </van-popup>
     </div>
 </template>
@@ -187,16 +199,17 @@
             [Button.name]: Button,
             [Toast.name]: Toast,
             [Field.name]: Field,
-            [Tabbar.name]:Tabbar,
-            [TabbarItem.name]:TabbarItem
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem
         },
         data() {
             return {
-                chengK:chengK,
-                xingC:xingC,
-                push:push,
-                person:person,
-                active:2,
+                showSeat:false,
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person,
+                active: 2,
                 checked: true,
                 title: "发布行程",
                 minDate: new Date(),
@@ -204,9 +217,9 @@
                 showPop: false,
                 showPoint: false,
                 showLine: false,
-                showCar:false,
+                showCar: false,
                 stroke: {
-                    carId:'',
+                    carId: '',
                     directLineid: "",
                     directLine: "",
                     point: "",
@@ -224,9 +237,30 @@
                 pointData2: [],
                 lineData: [],
                 carData: [],
+                seatData:[{code:'1',name:'1位'},
+                    {code:'2',name:'2位'},
+                    {code:'3',name:'3位'},
+                    {code:'4',name:'4位'},
+                    {code:'5',name:'5位'},
+                    {code:'6',name:'6位'}]
             }
         },
         methods: {
+            openSeat(){
+                this.showSeat= true;
+            },
+            formatDate(type, value) {
+                if (type === 'year') {
+                    return `${value}年`;
+                } else if (type === 'month') {
+                    return `${value}月`
+                }
+                return value;
+            },
+            onSeatChange(picker){
+                this.stroke.totalSeat = picker.code;
+                this.showSeat= false;
+            },
             //线路
             onLineChange(picker, values) {
                 this.stroke.directLine = picker.lineName;
@@ -257,10 +291,10 @@
             changeLine() {
                 this.showLine = true;
             },
-            changeCar(){
-              this.showCar = true;
+            changeCar() {
+                this.showCar = true;
             },
-            onCarChange(picker, values){
+            onCarChange(picker, values) {
                 this.stroke.carInfo = picker.name;
                 this.stroke.carId = picker.id;
                 this.showCar = false;
@@ -320,7 +354,7 @@
                 this.showPop = false
             },
             goAgreement(val) {
-                this.$router.push({path: '/agreement', query: {name: '绿色出行用户协议',id:val}})
+                this.$router.push({path: '/agreement', query: {name: '绿色出行用户协议', id: val}})
             },
             changeTimer(val) {
                 let timer = this.formatTime(val.getTime());
@@ -363,14 +397,14 @@
 
                         }
                         let carinfo = res.data.data.carinfo;
-                        for (let i in carinfo){
+                        for (let i in carinfo) {
                             let car = {};
                             car.id = i;
                             car.name = carinfo[i];
                             this.carData.push(car);
                         }
                         let tripinfo = res.data.data.tripinfo;
-                        if(tripinfo){
+                        if (tripinfo) {
                             this.stroke.totalSeat = tripinfo.totalSeat;
                             this.stroke.tripPrice = tripinfo.tripPrice;
                             this.stroke.remark = tripinfo.remark;
@@ -379,7 +413,8 @@
                     }
                 })
             }
-        },
+        }
+        ,
         created() {
             this.initData();
         }
@@ -407,10 +442,9 @@
         font-size: 14px;
     }
 
-    .footer{
+    .footer {
         width: 100%;
     }
-
 
 
 </style>
