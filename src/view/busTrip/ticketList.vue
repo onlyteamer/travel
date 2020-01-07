@@ -236,6 +236,7 @@
 
             checkTicket(item) {
                 if (item.isCheck === 1) {
+                    this.$router.push({path: '/checkTicket', query: {'id': item.id}});
                     return;
                 }
                 Dialog.confirm({
