@@ -1,7 +1,7 @@
 <template>
     <div>
         <div style="position: fixed;top: 0;height: 46px;width: 100%">
-            <van-nav-bar :fixed="true" />
+            <van-nav-bar :fixed="true"/>
             <div style="position: fixed;top:0;width: 92%;z-index: 9999;left: 8%">
                 <van-tabs v-model="header_active" @click="onClick">
                     <van-tab title="通勤巴士">
@@ -18,10 +18,10 @@
                     <van-tab title="今日票据">
                         <div class="currentDate" v-if="showAll">{{currentDate}}</div>
                         <van-list v-if="showAll">
-                            <div v-for="item in toride.data" :key="item.id" >
+                            <div v-for="item in toride.data" :key="item.id">
                                 <div class="card">
                                     <div style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;height: 45px;justify-content: space-between">
-                                        <span class="line">{{item.linename}}：{{item.startname}}->{{item.endname}}</span>
+                                        <span class="line">{{item.linename}}：{{item.startname}} → {{item.endname}}</span>
                                         <span class="list-price">￥{{item.ticketPrice}}</span>
                                     </div>
                                     <div style="display: flex;align-items: center;justify-content: space-between;height: 85px">
@@ -34,7 +34,8 @@
                                                         style="margin-left: 7px;">{{item.startname}}</span></div>
                                             </div>
                                             <div style="display: flex;height:35px;line-height: 35px">
-                                                <div style="width: 37%"><img :src="redTime" width="13px" height="13px"><span
+                                                <div style="width: 37%"><img :src="redTime" width="13px"
+                                                                             height="13px"><span
                                                         style="margin-left: 7px;margin-right: 13px">{{item.endtime}}</span>
                                                 </div>
                                                 <div><img :src="placeDown" width="13px" height="13px"><span
@@ -42,11 +43,13 @@
                                             </div>
                                         </div>
                                         <div style="display: flex;flex-direction: column;justify-content:space-around;height: 100%">
-                                            <van-button  :disabled="compareDate(item.starttime)" type="default" @click="checkTicket(item.id,item.checkcode)"
+                                            <van-button :disabled="compareDate(item.starttime)" type="default"
+                                                        @click="checkTicket(item)"
                                                         style="width:66px;height:28px;line-height:28px;background: #0CC893;color: #FFFFFF;border-radius: 5px">
                                                 验票
                                             </van-button>
-                                            <van-button type="default" @click="refundTicket(item.ticketid)"
+                                            <van-button type="default" @click="refundTicket(item)"
+                                                        :disabled="refundBtnDisable(item)"
                                                         style="width:66px;height:28px;line-height:28px;background: #9E9E9E;color: #FFFFFF;border-radius: 5px">
                                                 退票
                                             </van-button>
@@ -55,38 +58,9 @@
                                 </div>
                             </div>
                         </van-list>
-                        <div style="text-align: center;margin: 12px 0px" v-if="toride.data&&toride.data.length <1">今日暂无可用票据</div>
-                        <!--<van-button @click="goAll" style="margin-top:15px;width: 100%;height:44px"-->
-                                    <!--plain color="#0CC893" type="default" v-if="showAll">-->
-                            <!--查看全部-->
-                        <!--</van-button>-->
-                        <!--<van-list v-model="tripAllList.loading" :finished="tripAllList.finished" finished-text="没有更多了"-->
-                                  <!--@load="onTorideLoadAll" style="margin-top: 15px" v-if="!showAll">-->
-                            <!--<van-collapse v-model="tripName" accordion @change="initTripAllList($event)">-->
-                                <!--<van-collapse-item :title="item.date" :name="item.date"-->
-                                                   <!--v-for="(item,index) in tripAllList.dateList" :key="index">-->
-                                    <!--<van-row v-for="(line,indexNum) in tripAllList.data" :key="line.id"-->
-                                             <!--style="margin-bottom: 10px;color: #5083ED;display: flex;align-items: center;">-->
-                                        <!--<van-col span="14" style="color: #5083ED;font-size: 14px;font-weight: bold">-->
-                                            <!--<div>{{line.linename}}</div>-->
-                                            <!--<div>{{line.startname}} -> {{line.endname}}</div>-->
-                                        <!--</van-col>-->
-                                        <!--<van-col span="10" style="color: #0CC893;text-align: right;font-size: 14px;">-->
-                                            <!--<div style="display: inline-block">-->
-                                                <!--<van-button :disabled="compareDate(item.date)" type="default" size="small" @click="checkTicket(line.id,line.checkcode)"-->
-                                                            <!--style="background: #0CC893;color: #FFFFFF;border-radius: 5px">-->
-                                                    <!--验票-->
-                                                <!--</van-button>-->
-                                                <!--<van-button type="default" size="small" @click="refundTicket(line.ticketid)"-->
-                                                            <!--style="margin-left: 5px;background: #9E9E9E;color: #FFFFFF;border-radius: 5px">-->
-                                                    <!--退票-->
-                                                <!--</van-button>-->
-                                            <!--</div>-->
-                                        <!--</van-col>-->
-                                    <!--</van-row>-->
-                                <!--</van-collapse-item>-->
-                            <!--</van-collapse>-->
-                        <!--</van-list>-->
+                        <div style="text-align: center;margin: 12px 0px" v-if="toride.data&&toride.data.length <1">
+                            今日暂无可用票据
+                        </div>
                     </van-tab>
                     <van-tab title="待乘车">
                         <van-list v-model="tripAllList.loading" :finished="tripAllList.finished" finished-text="没有更多了"
@@ -98,11 +72,13 @@
                                              style="margin-bottom: 10px;color: #5083ED;display: flex;align-items: center;">
                                         <van-col span="16" style="color: #5083ED;font-size: 14px;font-weight: bold">
                                             <div>{{line.linename}}</div>
-                                            <div>{{line.startname}} -> {{line.endname}}</div>
+                                            <div>{{line.startname}} → {{line.endname}}</div>
                                         </van-col>
                                         <van-col span="8" style="color: #0CC893;text-align: right;font-size: 14px">
-                                            <div >
-                                                <span style="background: #9E9E9E;color: #FFFFFF;padding: 5px 10px;border-radius: 5px;margin-right: 10px"  @click="refundTicket(line.ticketid)">退票</span>
+                                            <div>
+                                                <span style="background: #9E9E9E;color: #FFFFFF;padding: 5px 10px;border-radius: 5px;margin-right: 10px"
+                                                      :disabled="refundBtnDisable(line)"
+                                                      @click="refundTicket(line)">退票</span>
                                                 <span>{{line.state }}</span>
                                             </div>
                                         </van-col>
@@ -120,7 +96,7 @@
                                     <van-row v-for="(line,indexNum) in refund.data" :key="line.id"
                                              style="margin-bottom: 10px;color: #202020;font-weight: bold">
                                         <van-col span="18" style="color: #5083ED;font-size: 14px;font-weight: bold">
-                                            {{line.linename}}：{{line.startname}}->{{line.endname}}
+                                            {{line.linename}}：{{line.startname}} → {{line.endname}}
                                         </van-col>
                                         <van-col span="6" style="color: #5E5E5E;text-align: right">{{line.state}}
                                         </van-col>
@@ -134,7 +110,8 @@
         </div>
 
         <div class="footer">
-            <van-tabbar v-model="footerActive" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="background:#5083ED ">
+            <van-tabbar v-model="footerActive" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
                 <van-tabbar-item :icon="car" to="/busIndex">预定巴士</van-tabbar-item>
                 <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
                 <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
@@ -144,7 +121,22 @@
 </template>
 
 <script>
-    import {NavBar, Button, Tabs, Tab, Toast, List, Collapse, CollapseItem, Row, Col,Tabbar,TabbarItem,Image,Dialog} from 'vant';
+    import {
+        NavBar,
+        Button,
+        Tabs,
+        Tab,
+        Toast,
+        List,
+        Collapse,
+        CollapseItem,
+        Row,
+        Col,
+        Tabbar,
+        TabbarItem,
+        Image,
+        Dialog
+    } from 'vant';
     import request from '../../utils/request'
     import moment from 'moment'
     import blueTime from './../../static/images/busTrip/blue_time.png'
@@ -169,15 +161,15 @@
             [CollapseItem.name]: CollapseItem,
             [Row.name]: Row,
             [Col.name]: Col,
-            [Tabbar.name]:Tabbar,
-            [TabbarItem.name]:TabbarItem,
-            [Image.name]:Image,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem,
+            [Image.name]: Image,
             [Dialog.name]: Dialog,
         },
         data() {
             return {
-                placeDown:placeDown,
-                placeUp:placeUp,
+                placeDown: placeDown,
+                placeUp: placeUp,
                 car: car,
                 scan: scan,
                 user: user,
@@ -188,7 +180,7 @@
                 currentDate: moment().format("YYYY年MM月DD日"),
                 header_active: 0,
                 active: 0,
-                footerActive:1,
+                footerActive: 1,
                 blueTime: blueTime,
                 redTime: redTime,
                 refund: {
@@ -230,7 +222,7 @@
         methods: {
 
             //当天才能验票
-            compareDate(date){
+            compareDate(date) {
                 // let endTime =  new Date(date);
                 // let startTime = new Date();
                 // let days = moment(endTime).diff(moment(startTime), 'days');
@@ -242,40 +234,54 @@
                 return false;
             },
 
-            checkTicket(id,checkcode) {
+            checkTicket(item) {
+                if (item.isCheck === 1) {
+                    this.$router.push({path: '/checkTicket', query: {'id': item.id}});
+                    return;
+                }
                 Dialog.confirm({
                     title: '验票',
-                    message:  '验票后不可退票,确认进行验票么？'
+                    message: '未到发车时间，验票后不可退票，确认是否验票？'
                 }).then(() => {
                     // 确定
                     request.sendPost({
                         url: "/bus/driverChecking",
                         params: {
                             isdriver: 0,
-                            checkcode:checkcode
+                            checkcode: item.checkcode
                         }
                     }).then(res => {
                         if (res.data.code == '0') {
                             Toast.success("验票成功");
-                            this.$router.push({path: '/checkTicket', query: {'id': id}});
+                            this.$router.push({path: '/checkTicket', query: {'id': item.id}});
                         } else {
                             Toast.fail(res.data.msg)
                         }
                     })
-                }).catch(res =>{
+                }).catch(res => {
 
                 })
             },
-            refundTicket(id) {
+            refundBtnDisable(item) {
+                let end_date = moment(item.starttime, "HH:mm");
+                let start_date = moment(new Date(), "HH:mm");
+                return end_date.diff(start_date, "hours") < 2 ? true : false;
+            },
+            refundTicket(item) {
+                let end_date = moment(item.starttime, "HH:mm");
+                let start_date = moment(new Date(), "HH:mm");
+                if (end_date.diff(start_date, "hours") < 2) {
+                    return;
+                }
                 Dialog.confirm({
                     title: '退票',
-                    message:  '是否确认退票？'
+                    message: '是否确认退票？'
                 }).then(() => {
                     // 确定
                     request.sendPost({
                         url: '/bus/refundTicket',
                         params: {
-                            ticketid: id
+                            ticketid: item.id
                         }
                     }).then((res) => {
                         if (res.data.code === 0) {
@@ -286,7 +292,7 @@
                             Toast(res.data.msg);
                         }
                     })
-                }).catch(res =>{
+                }).catch(res => {
 
                 });
             },
@@ -295,13 +301,13 @@
                 switch (this.active) {
                     case 0:
                         // if (this.showAll) {
-                            this.toride.isOneHttp = true;
-                            this.toride.loading = false;
-                            this.toride.finished = false;
-                            this.toride.data = [];
-                            this.toride.pageNum = 1;
-                            this.toride.total = 0;
-                            this.initTorideData();
+                        this.toride.isOneHttp = true;
+                        this.toride.loading = false;
+                        this.toride.finished = false;
+                        this.toride.data = [];
+                        this.toride.pageNum = 1;
+                        this.toride.total = 0;
+                        this.initTorideData();
                         // }
                         // else {
                         //     this.tripAllList.isOneHttp = true;
@@ -351,7 +357,7 @@
                     params: {
                         ischeck: 0,
                         isrefund: 0,
-                        type:this.header_active===0?'1':'2',
+                        type: this.header_active === 0 ? '1' : '2',
                         dateStr: e
                     }
                 }).then((res) => {
@@ -364,7 +370,7 @@
                     params: {
                         ischeck: 0,
                         isrefund: 0,
-                        type:this.header_active===0?'1':'2',
+                        type: this.header_active === 0 ? '1' : '2',
                         pageNum: this.tripAllList.pageNum,
                         pageSize: this.tripAllList.pageSize,
                     }
@@ -415,7 +421,7 @@
                 request.sendPost({
                     url: '/bus/refundlist',
                     params: {
-                        type:this.header_active===0?'1':'2',
+                        type: this.header_active === 0 ? '1' : '2',
                         dateStr: e
                     }
                 }).then((res) => {
@@ -426,7 +432,7 @@
                 request.sendPost({
                     url: '/bus/refundDateList',
                     params: {
-                        type:this.header_active===0?'1':'2',
+                        type: this.header_active === 0 ? '1' : '2',
                         pageNum: this.refund.pageNum,
                         pageSize: this.refund.pageSize,
                     }
@@ -457,7 +463,7 @@
                 request.sendPost({
                     url: '/bus/checklist',
                     params: {
-                        type:this.header_active===0?'1':'2',
+                        type: this.header_active === 0 ? '1' : '2',
                         dateStr: e
                     }
                 }).then((res) => {
@@ -468,7 +474,7 @@
                 request.sendPost({
                     url: '/bus/orderDateList',
                     params: {
-                        type:this.header_active===0?'1':'2',
+                        type: this.header_active === 0 ? '1' : '2',
                         pageNum: this.allOrder.pageNum,
                         pageSize: this.allOrder.pageSize,
                     }
@@ -492,7 +498,7 @@
                 request.sendPost({
                     url: '/bus/checklist',
                     params: {
-                        type:this.header_active===0?'1':'2',
+                        type: this.header_active === 0 ? '1' : '2',
                         dateStr: moment().format("YYYY-MM-DD"),
                         ischeck: 0,
                         isrefund: 0,

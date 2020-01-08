@@ -167,6 +167,7 @@
                     v-model="currentDate"
                     type="datetime"
                     :min-date="minDate"
+                    :visible-item-count="3"
                     @cancel="cancel"
                     @confirm="changeTimer"
             />
@@ -180,6 +181,7 @@
             <van-picker
                     show-toolbar
                     title=""
+                    :visible-item-count="3"
                     :columns="columns"
                     @cancel="showLinePop = false"
                     @confirm="changeDefaultLine"
@@ -242,7 +244,6 @@
                     backTwo
                 ],
                 newTripList:[],
-                lineTitle:"",
                 flag:"0",
                 notice:"",
                 columns:[],
@@ -283,6 +284,7 @@
             this.initNotice();
 
             this.initAdvList();
+            this.initLineData();
         },
         methods: {
             //详情
@@ -323,14 +325,10 @@
 
             //常用线路
             changeDefaultLine(val){
-                console.log(val);
-
                 this.lineList.forEach(e =>{
                     if(e.lineName == val){
                         let arr = [];
                         arr = e.lineName.split("--");
-
-                        console.log(arr)
                         this.strokeInfo.startPlace = arr[0];
                         this.strokeInfo.endPlace = arr[1];
                         this.strokeInfo.lineId = e.lineId;
@@ -341,26 +339,30 @@
             },
 
             openDefaultLine(){
-                if(this.lineList.length == 0){
+                this.showLinePop = true;
+            },
+            initLineData(){
                     request.sendGet({
                         url:"/user/center/linelist",
                         params:{}
                     }).then(res =>{
-                        if(res.data.code == '0'){
+                        if(res.data.code === 0){
                             //处理数据
-                           this.lineList = res.data.rows;
-                           this.columns = [];
-                           this.lineList.forEach(e =>{
-                               this.columns.push(e.lineName);
-                               if(e.isDefault == '1'){
-                                   this.lineTitle = e.lineName;
-                               }
-                           });
-
+                            this.lineList = res.data.rows;
+                            this.columns = [];
+                            this.lineList.forEach(e =>{
+                                this.columns.push(e.lineName);
+                                if(e.isDefault === 1){
+                                    let arr = [];
+                                    arr = e.lineName.split("--");
+                                    this.strokeInfo.startPlace = arr[0];
+                                    this.strokeInfo.endPlace = arr[1];
+                                    this.strokeInfo.lineId = e.lineId;
+                                    this.strokeInfo.lineName = e.lineName;
+                                }
+                            });
                         }
                     });
-                }
-                this.showLinePop = true;
             },
 
             //列表

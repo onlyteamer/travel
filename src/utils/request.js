@@ -37,14 +37,17 @@ fileBaas.interceptors.request.use(function (config) {
     } else {
         server.axios.get('/wx/syncauthorize')
             .then(function (response) {
+                if (response.data.code === 0) {
                     //获取到验证URL,给微信发送请求
                     let authURL = response.data.data.url;
-                    console.log(authURL);
-                    // window.location.href = authURL;
+                    // console.log(authURL);
+                    window.location.href = authURL;
+                }
                 }
             ).catch(function (error) {
             console.log(error);
         });
+        throw new Error("logout");
     }
     return config;
 });
