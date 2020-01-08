@@ -97,6 +97,7 @@
             <!--</van-cell-group>-->
             <div align="center" style="margin-bottom: 10px">
                 <van-button @click="goCarList"  color="#0CC893" style="width: 95%">立即找车</van-button>
+                <van-button @click="goCarList_all"  color="#0CC893" style="width: 95%;margin-top: 10px">查看全部</van-button>
             </div>
         </div>
 
@@ -114,11 +115,11 @@
                 <div class="card" @click="linkLineDetails(item.tripId)">
                     <van-row style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;padding: 8px 2px;">
                         <van-col span="16">
-                            <span class="datetime">{{item.tripDate}}</span>
+                            <span class="datetime">{{item.tripDateTime}}</span>
                         </van-col>
                         <van-col span="8" style="text-align: right">
                             <span>座位:</span>
-                            <span class="seatNum">{{item.totalSeats}}个</span>
+                            <span class="seatNum">{{item.bookSeat}}个</span>
                         </van-col>
                     </van-row>
                     <van-row style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;">
@@ -139,8 +140,10 @@
                             />
                         </van-col>
                         <van-col span="10">
-                            <p style="display: flex;align-items: center"><span style="color: #5083ED">【车主】</span> {{item.nickname}} <img src="../../static/images/sexTag.png" style="width: 13px;height: 13px;display: inline-block;margin-left: 5px" v-if="item.sex == '1'"><img src="../../static/images/man.png" style="width: 13px;height: 13px;display: inline-block;margin-left: 5px" v-else></p>
-                            <p><span>【车型】</span>{{item.carNumber}}</p>
+                            <p style="display: flex;align-items: center"><span style="color: #5083ED">【车主】</span> {{item.nickname}}
+                                <img src="../../static/images/man.png" style="width: 13px;height: 13px;display: inline-block;margin-left: 5px" v-if="item.sex === 1">
+                                <img src="../../static/images/sexTag.png" style="width: 13px;height: 13px;display: inline-block;margin-left: 5px" v-else></p>
+                            <p><span>【车型】</span>{{item.carName}}</p>
                         </van-col>
                     </van-row>
                 </div>
@@ -431,11 +434,19 @@
                     Toast.fail("请选择路线");
                     return;
                 }
-                console.log(this.strokeInfo);
                 sessionStorage.removeItem("queryStroke");
                 sessionStorage.setItem("queryStroke",JSON.stringify(this.strokeInfo));
                 this.$router.push({path:'/carLine'});
-            }
+            },
+            goCarList_all(){
+                if(!this.strokeInfo.lineId){
+                    Toast.fail("请选择路线");
+                    return;
+                }
+                sessionStorage.removeItem("queryStroke");
+                sessionStorage.setItem("queryStroke",JSON.stringify(this.strokeInfo));
+                this.$router.push({path:'/carLine'});
+            },
         },
 
     }
