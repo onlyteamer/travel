@@ -442,4 +442,7 @@
         width: 100%;
     }
 
+    .van-cell__title, .van-cell__value{
+        flex: none;
+    }
 </style>
