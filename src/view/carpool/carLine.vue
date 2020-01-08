@@ -1,6 +1,5 @@
 <template>
     <div class="contain">
-        <Title :title="title" @onClickLeft="onClickLeft"></Title>
         <div class="dateTag">
             <van-tabs type="card" v-model="active" :swipe-threshold="7" background="#FFFFFF" color="#5083ED"
                       title-active-color="#FFFFFF" title-inactive-color="#202020">
@@ -190,9 +189,6 @@
                 this.$router.push({path:"/lineDetails",query:{tripId:tripId}})
             },
 
-            onClickLeft() {
-                this.$router.back(-1);
-            },
             goDeclare(id) {
                 //车辆预约
                 this.$router.push({path: '/declare',query:{id:id}});
@@ -256,7 +252,7 @@
     }
 
     .dateTag {
-        top: 48px;
+        top: 0;
         width: 100%;
         position: fixed;
         z-index: 999;

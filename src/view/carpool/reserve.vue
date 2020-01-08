@@ -1,6 +1,5 @@
 <template>
     <div class="contain">
-        <Title :title="title" @onClickLeft="onClickLeft"></Title>
         <div class="content">
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px;display: flex;align-items: center">
                 <van-col span="6">预定座位数</van-col>
@@ -350,9 +349,6 @@
                 })
 
             },
-            onClickLeft() {
-                this.$router.back(-1);
-            },
             goMyStroke() {
                 this.$router.push({path: '/myStroke'});
             },
@@ -470,7 +466,7 @@
     .contain .content {
         border-top: 1px solid #ECECEC;
         width: 90%;
-        margin: 46px auto 0;
+        margin: 0 auto ;
         color: #202020;
     }
 
