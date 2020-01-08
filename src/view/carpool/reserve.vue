@@ -15,7 +15,7 @@
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
-                <van-col span="6">剩余{{stroke.totalSeats-stroke.bookSeat}}座</van-col>
+                <van-col span="6">剩余{{stroke.bookSeat}}座</van-col>
                 <van-col span="14" style="color: #FF0200">每人限预定{{stroke.totalSeats}}座</van-col>
             </van-row>
 
@@ -357,8 +357,7 @@
                 this.$router.push({path: '/myStroke'});
             },
             changeSeat(item) {
-                let val = this.stroke.totalSeats - this.stroke.bookSeat;
-                if (item > val) {
+                if (item > this.stroke.bookSeat) {
                     return;
                 }
                 this.stroke.seatCount = item;
@@ -389,7 +388,6 @@
                 })
             },
             initPassengerData() {
-                //TODO 需要处理一下分页
                 request.sendGet({
                     url: '/sharecar/pass/list',
                     params: {
@@ -397,8 +395,13 @@
                         pageNum: 1,
                     }
                 }).then((res) => {
-                    this.passengerData = res.data.rows;
-
+                    if(res.data.code===0){
+                        if(res.data.rows&&res.data.rows.length>0){
+                            this.passengerData = res.data.rows;
+                        }else{
+                            this.$router.push({path:'/passenger'});
+                        }
+                    }
                 });
             },
         },
