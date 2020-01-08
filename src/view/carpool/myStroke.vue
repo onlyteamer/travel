@@ -137,7 +137,7 @@
                         </van-col>
                     </van-row>
 
-                    <van-row style="margin: 10px 0" v-if="item.tripState != '1'">
+                    <van-row style="margin: 10px 0" v-if="item.tripState == '0'">
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
                                         size="mini" @click="wxShare">分享
@@ -160,7 +160,7 @@
                         </van-col>
                     </van-row>
 
-                    <van-row style="margin: 10px 0" v-if="item.tripState != 1">
+                    <van-row style="margin: 10px 0" v-if="item.tripState == '0'">
                         <van-col span="6">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
                                         size="mini" @click="showSeat(item.tripId)">调整座位
@@ -183,7 +183,7 @@
                         </van-col>
                     </van-row>
 
-                    <van-row v-if="item.tripState == '1'" style="margin: 10px 0">
+                    <van-row v-if="item.tripState != '0'" style="margin: 10px 0">
                         <van-col span="6" offset="18">
                             <van-button type="default" color="#0CC893" style="font-size: 14px;width: 96%;height: 28px"
                                         size="mini" @click="goPassengerList(item.tripId)">乘客
@@ -191,7 +191,7 @@
                         </van-col>
                     </van-row>
 
-                    <div class="cover" v-if="item.tripState == '3'||item.tripState == '2'"></div>
+                    <!--<div class="cover" v-if="item.tripState == '3'||item.tripState == '2'"></div>-->
                 </div>
 
             </div>
@@ -523,6 +523,11 @@
                         if(res.data.rows.length>0){
                             this.carOwnerTrip.data=this.carOwnerTrip.data.concat(res.data.rows);
                         }
+
+                        if (!this.carOwnerTrip.data||this.carOwnerTrip.total === this.carOwnerTrip.data.length) {
+                            this.finished = true;
+                        }
+                        this.loading = false;
                     }
                 })
             },
@@ -540,6 +545,10 @@
                         if(res.data.rows.length>0){
                             this.passTrip.data=this.passTrip.data.concat(res.data.rows);
                         }
+                        if (!this.passTrip.data||this.passTrip.total === this.passTrip.data.length) {
+                            this.finished = true;
+                        }
+                        this.loading = false;
                     }
                 })
             },
