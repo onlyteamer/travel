@@ -20,11 +20,11 @@
                 <span class="item-label">上传驾驶证</span>
                 <div class="upload-wrap">
                     <div style="position: relative;width: 100%" v-if="driverInfo.driverCardimage">
-                        <van-image :src="baseImgUrl+driverInfo.driverCardimage"  fit="cover" width="100%" height="110px" />
+                        <img :src="baseImgUrl+driverInfo.driverCardimage"   width="100%" height="110px" />
                         <van-icon name="close" @click="delImg3" style="font-size: 20px;position: absolute;top:-10px;right: -10px"/>
                     </div>
                     <van-uploader :max-count=1  v-if="!driverInfo.driverCardimage" :after-read="uploadCallback"  :preview-image="false">
-                        <van-image round width="54px" height="54px" :src="uploadIcon"/>
+                        <img round width="54px" height="54px" :src="uploadIcon"/>
                         <div style="color: #9E9E9E;font-size: 14px">选择文件</div>
                     </van-uploader>
                 </div>
@@ -60,7 +60,7 @@
 </template>
 <!--车主认证-->
 <script>
-    import {NavBar, Field, Button, Uploader, Image, Checkbox,Toast,Icon} from 'vant';
+    import {NavBar, Field, Button, Uploader, Checkbox,Toast,Icon} from 'vant';
     import uploadIcon from '../../static/images/upload.png';
 
     import request from '../../utils/request';
@@ -72,7 +72,6 @@
             [Field.name]: Field,
             [Button.name]: Button,
             [Uploader.name]: Uploader,
-            [Image.name]: Image,
             [Checkbox.name]: Checkbox,
             [Toast.name]: Toast,
             [Icon.name]:Icon
@@ -99,12 +98,24 @@
                 this.$router.back(-1);
             },
             uploadCallback(uploadFile) {
-                if(uploadFile.file.size > 1024 * 1024){
-                    Toast("图片大小不能超过1M");
-                    return false;
+                if (uploadFile.file.size > 1024 * 1024) {
+                    //创建一个image
+                    let img = new Image();
+                    //设置图片路径为 获取的file的content
+                    img.src = uploadFile.content;
+                    let me = this;
+                    img.onload = function(){
+                        let file = me.ontpys(img);
+                        me.upLoadImg(file);
+                    }
+                }else{
+                    this.upLoadImg(uploadFile.file);
                 }
+
+            },
+            upLoadImg(file){
                 let param = new FormData();
-                param.append('file', uploadFile.file);//通过append向form对象添加数据
+                param.append('file', file);//通过append向form对象添加数据
                 request.uploadFile({
                     url: '/image/oss/upload',
                     params: param
@@ -116,6 +127,34 @@
                         }
                     }
                 })
+            },
+            //压缩图片的方法
+            ontpys(img) {
+                let originWidth = img.width, // 压缩后的宽
+                    originHeight = img.height,
+                    maxWidth = 1024,
+                    maxHeight = 768,
+                    quality = 1.5, // 压缩质量
+                    canvas = document.createElement("canvas"),
+                    drawer = canvas.getContext("2d");
+                canvas.width = maxWidth;
+                canvas.height = (originHeight / originWidth) * maxWidth;
+                drawer.drawImage(img, 0, 0, canvas.width, canvas.height);
+                let base64 = canvas.toDataURL("image/jpeg", quality); // 压缩后的base64图片
+                let file = this.dataURLtoFile(base64, Date.parse(Date()) + ".jpg");
+                return file;
+            },
+            //base64转file
+            dataURLtoFile(dataurl, filename) {
+                let arr = dataurl.split(","),
+                    mime = arr[0].match(/:(.*?);/)[1],
+                    bstr = atob(arr[1]),
+                    n = bstr.length,
+                    u8arr = new Uint8Array(n);
+                while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+                return new File([u8arr], filename, {type: mime});
             },
             //删除照片
             delImg3() {
