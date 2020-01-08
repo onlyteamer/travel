@@ -1,6 +1,5 @@
 <template>
     <div>
-        <van-nav-bar title="我的资料" :fixed="true" left-arrow @click-left="onClickLeft"/>
         <div class="content">
             <div class="info-wrap">
                 <div class="info">
@@ -126,9 +125,6 @@
             }
         },
         methods: {
-            onClickLeft() {
-                this.$router.back(-1);
-            },
             getCode() {
                 request.axios.get('/wx/syncauthorize')
                     .then(function (response) {
@@ -231,18 +227,12 @@
         justify-content: flex-start;
     }
 
-    .content {
-        margin-top: 46px;
-    }
 
     /deep/ .van-field__label {
         font-size: 14px !important;
         color: #202020 !important;
     }
 
-    /deep/ .van-nav-bar .van-icon {
-        color: #5E5E5E
-    }
 
     /deep/ .van-cell {
         padding-left: 0 !important;
