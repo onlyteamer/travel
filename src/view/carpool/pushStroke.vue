@@ -61,10 +61,13 @@
                 </van-col>
             </van-row>
 
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
+            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px" @click="openPrice">
                 <van-col span="8">价格</van-col>
-                <van-col span="16" class="valStyle">
-                    <van-field v-model="tripInfo.tripPrice" style="padding: 0" placeholder="请输入价格"/>
+                <van-col span="14" class="valStyle">
+                    <van-field v-model="tripInfo.tripPrice" disabled style="padding: 0" placeholder="请输入价格"/>
+                </van-col>
+                <van-col span="2">
+                    <van-icon name="arrow" color="#9E9E9E"/>
                 </van-col>
             </van-row>
 
@@ -148,6 +151,12 @@
                         :visible-item-count="3"
                         @confirm="onSeatChange"/>
         </van-popup>
+
+        <van-popup v-model="showPrice" position="bottom" :style="{ height: '30%' }">
+            <van-picker :columns="priceData" show-toolbar  @cancel="showPrice = false"
+                        :visible-item-count="3"
+                        @confirm="onPriceChange"/>
+        </van-popup>
     </div>
 </template>
 
@@ -200,6 +209,7 @@
         },
         data() {
             return {
+                showPrice:false,
                 showSeat: false,
                 chengK: chengK,
                 xingC: xingC,
@@ -233,6 +243,10 @@
                 pointData2: [],
                 lineData: [],
                 carData: [],
+                priceData:[
+                    18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35
+                ],
+
                 seatData: [{code: '1', name: '1位'},
                     {code: '2', name: '2位'},
                     {code: '3', name: '3位'},
@@ -244,6 +258,14 @@
             }
         },
         methods: {
+            openPrice(){
+                this.showPrice = true;
+            },
+            onPriceChange(val){
+                this.tripInfo.tripPrice = val;
+                this.showPrice = false;
+            },
+
             openSeat() {
                 this.showSeat = true;
             },
