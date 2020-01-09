@@ -70,16 +70,25 @@
                                 </div>
                             </van-col>
                             <van-col span="4">
-                                <div style="">￥{{item.tripPrice}}</div>
+                                <div style="font-size: 22px;font-weight: bold;color: #FF0200">￥{{item.tripPrice}}</div>
                             </van-col>
                         </van-row>
-                        <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }"/>
+                            <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false" />
+                        <van-row>
+                            <van-col span="24">
+                                <div style="margin: 0;word-break: break-all;">
+                                    <span style="color:#202020;font-weight: bold;font-size: 14px;display: inline-block">路线：</span>
+                                    <span style="font-size: 14px;color: #202020">{{item.tripLine}}</span>
+                                </div>
+                            </van-col>
+                        </van-row>
+                            <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false" />
                         <van-row style="color: #202020;font-weight: bold;font-size: 14px">
                             <van-col span="6">
                                 <div>剩余座位:</div>
                             </van-col>
                             <van-col span="18">
-                                <div>{{item.totalSeats-item.bookSeats}}</div>
+                                <div>{{item.bookSeat}}</div>
                             </van-col>
                         </van-row>
                         </div>
@@ -87,7 +96,7 @@
                             <van-col span="8">
                                 <van-button type="default" color="#0CC893"
                                             style="font-size: 14px;width: 95%;height: 34px"
-                                            size="mini">分享
+                                            size="mini" @click="wxShare">分享
                                 </van-button>
                             </van-col>
                             <van-col span="8">
@@ -162,6 +171,55 @@
         },
 
         methods: {
+            wxShare(){
+                request.sendGet({
+                    url:"/wx/pay/signature",
+                    params:{
+                        url:location.href
+                    }
+                }).then(res =>{
+                    wx.config({
+                        beta: true,// 必须这么写，否则在微信插件有些jsapi会有问题
+                        // debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: res.data.data.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
+                        timestamp: parseInt(res.data.data.timestamp, 10), // 必填，生成签名的时间戳
+                        nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
+                        signature: res.data.data.signature,// 必填，签名，见附录1
+                        //updateTimelineShareData分享到朋友圈,updateAppMessageShareData分享给朋友,
+                        jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
+                    });
+
+
+                    var ShareLink =  location.protocol+"//"+location.hostname + "/#/lineDetails?tripId="+this.tripId; //默认分享链接
+                    var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
+                    var ShareTitle = "申坤出行"; // 分享标题
+                    var ShareDesc = "申坤出行!"; // 分享描述
+                    wx.ready(function(){
+                        //自定义“分享给朋友”及“分享到QQ”按钮的分享内容
+                        wx.updateAppMessageShareData({
+                            title: ShareTitle, // 分享标题
+                            desc: ShareDesc, // 分享描述
+                            link: ShareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            imgUrl: ShareImgUrl, // 分享图标
+                            success: function () {
+                                // 设置成功
+                            }
+                        });
+                        wx.updateTimelineShareData({
+                            title: ShareTitle, // 分享标题
+                            link: ShareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            imgUrl: ShareImgUrl, // 分享图标
+                            success: function () {
+                                // 设置成功
+                            }
+                        })
+                    });
+                    wx.error(function(res){
+                        console.log(res);
+                    });
+                })
+            },
+
 
             linkUserDetails(val){
                 if(val.userId){

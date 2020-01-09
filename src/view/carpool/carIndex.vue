@@ -443,6 +443,9 @@
                     Toast.fail("请选择路线");
                     return;
                 }
+                let week = moment(new Date()).format('d');
+                this.strokeInfo.week = week;
+
                 sessionStorage.removeItem("queryStroke");
                 sessionStorage.setItem("queryStroke",JSON.stringify(this.strokeInfo));
                 this.$router.push({path:'/carLine'});

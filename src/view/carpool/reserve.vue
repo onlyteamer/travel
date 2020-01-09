@@ -4,7 +4,7 @@
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px;display: flex;align-items: center">
                 <van-col span="6">预定座位数</van-col>
                 <van-col span="18">
-                    <van-col v-for="item in stroke.totalSeats" style="padding-bottom:5px " :key="item">
+                    <van-col v-for="item in selectSeat" style="padding-bottom:5px " :key="item">
                         <van-tag :color="stroke.seatCount == item?'#0CC893':'#FFFFFF'"
                                  :text-color="stroke.seatCount == item?'#FFFFFF':'#202020'" class="seatTag"
                                  @click="changeSeat(item)">{{item}}座
@@ -15,7 +15,7 @@
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
                 <van-col span="6">剩余{{stroke.bookSeat}}座</van-col>
-                <van-col span="14" style="color: #FF0200">每人限预定{{stroke.totalSeats}}座</van-col>
+                <van-col span="14" style="color: #FF0200">每人限预定{{selectSeat}}座</van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center">
@@ -64,17 +64,17 @@
             </van-row>
 
             <van-row style="display: flex;align-items: center;border-bottom: 1px solid #ECECEC;padding: 0px 2px 12px">
-                <van-col span="15">
+                <van-col span="16">
                     <div>
                         <van-tag :color="stroke.riderIds === item.id?'#0CC893':'#FFFFFF'"
                                  :text-color="stroke.riderIds === item.id?'#FFFFFF':'#202020'"
-                                 style="border: 1px solid #CFCFCF" class="contactTag"
+                                 style="border: 1px solid #CFCFCF;min-width: 30px;width: fit-content;margin-bottom: 5px" class="contactTag"
                                  v-for="item in normalRiders" :key="item.id" @click="selectRider(item)">
                             {{item.passName}}
                         </van-tag>
                     </div>
                 </van-col>
-                <van-col span="9" align="right" @click="goPassenger">（常用联系人）</van-col>
+                <van-col span="8" align="right" @click="goPassenger" style="font-size: 13px">（常用联系人）</van-col>
             </van-row>
 
 
@@ -190,6 +190,7 @@
                 checked: true,
                 title: "预约",
                 normalRiders: [],
+                selectSeat:"",
                 stroke: {
                     startPlace: "",
                     endPlace: "",
@@ -359,9 +360,15 @@
                 this.stroke.seatCount = item;
             },
             selectRider(data) {
-                this.stroke.riderNames = data.passName;
-                this.stroke.riderIds = data.id;
-                this.stroke.phone = data.passPhone;
+                if(data.id == this.stroke.riderIds){
+                    this.stroke.riderNames = "";
+                    this.stroke.riderIds = "";
+                    this.stroke.phone = "";
+                }else {
+                    this.stroke.riderNames = data.passName;
+                    this.stroke.riderIds = data.id;
+                    this.stroke.phone = data.passPhone;
+                }
             },
             queryTrip() {
                 request.sendPost({
@@ -380,6 +387,7 @@
                         this.stroke.price = res.data.data.tripPrice;
                         this.stroke.bookSeat = res.data.data.bookSeat;
                         this.stroke.totalSeats = res.data.data.totalSeats;
+                        this.selectSeat = this.stroke.totalSeats>4?4:this.stroke.totalSeats;
                     }
                 })
             },
