@@ -183,16 +183,11 @@
             },
 
             contactCar(){
-                let mobile = "";
-                // if(val){
-                //     mobile = val;
-                // }
-
-                Dialog.alert({
-                    message: '手机号:'+mobile
-                }).then(() => {
-                    // on close
-                });
+                if(this.driverInfo.phone){
+                    window.location.href = "tel:" + this.driverInfo.phone;
+                }else{
+                    Toast("暂无联系方式");
+                }
             },
 
             wxShare(){
