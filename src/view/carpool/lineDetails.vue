@@ -1,7 +1,5 @@
 <template>
     <div class="contain">
-        <Title :title="title" @onClickLeft="onClickLeft"></Title>
-
         <div class="lineDetails">
             <van-row style="display: flex;align-items: center">
                 <van-col span="12" >
@@ -152,7 +150,6 @@
                     params:{}
                 }).then(res =>{
                     if(res.data.code == '0'){
-                        console.log(res.data)
                         this.tripDetails.startName = res.data.data.lineinfo.startName;
                         this.tripDetails.endIdName = res.data.data.lineinfo.endIdName;
                         this.tripDetails.lineName = res.data.data.lineinfo.lineName;
@@ -161,7 +158,6 @@
                         this.tripDetails.totalSeat = res.data.data.tripinfo.totalSeat;
                         this.tripDetails.tripPrice = res.data.data.tripinfo.tripPrice;
                         this.tripDetails.remark = res.data.data.tripinfo.remark;
-                        console.log(this.tripDetails)
                     }
                 })
 
@@ -187,20 +183,13 @@
             },
 
             contactCar(){
-                let mobile = "";
-                // if(val){
-                //     mobile = val;
-                // }
-
-                Dialog.alert({
-                    message: '手机号:'+mobile
-                }).then(() => {
-                    // on close
-                });
+                if(this.driverInfo.phone){
+                    window.location.href = "tel:" + this.driverInfo.phone;
+                }else{
+                    Toast("暂无联系方式");
+                }
             },
-            onClickLeft(){
 
-            },
             wxShare(){
                 request.sendGet({
                     url:"/wx/pay/signature",
@@ -208,51 +197,41 @@
                         url:location.href
                     }
                 }).then(res =>{
-                    var data = res.data.data;
                     wx.config({
                         beta: true,// 必须这么写，否则在微信插件有些jsapi会有问题
-                        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                        appId: data.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
-                        timestamp: parseInt(data.timestamp,10), // 必填，生成签名的时间戳
-                        nonceStr: data.nonceStr, // 必填，生成签名的随机串
-                        signature: data.signature,// 必填，签名，见附录1
-                        jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage','onMenuShareQQ','onMenuShareQZone','hideOptionMenu'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                        // debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: res.data.data.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
+                        timestamp: parseInt(res.data.data.timestamp, 10), // 必填，生成签名的时间戳
+                        nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
+                        signature: res.data.data.signature,// 必填，签名，见附录1
+                        //updateTimelineShareData分享到朋友圈,updateAppMessageShareData分享给朋友,
+                        jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
                     });
-                    var ShareLink = context.baseUrl+"/wx/travel/demo.html"; //默认分享链接
+
+
+                    var ShareLink =  location.protocol+"//"+location.hostname + "/#/lineDetails?tripId="+this.tripId; //默认分享链接
                     var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
                     var ShareTitle = "申坤出行"; // 分享标题
                     var ShareDesc = "申坤出行!"; // 分享描述
                     wx.ready(function(){
-                        // 获取"分享到朋友圈"按钮点击状态及自定义分享内容接口
-                        wx.onMenuShareTimeline({
-                            title: ShareTitle, // 分享标题
-                            link:ShareLink,
-                            desc: ShareDesc,
-                            imgUrl:ShareImgUrl // 分享图标
-                        });
-
-                        // 获取"分享给朋友"按钮点击状态及自定义分享内容接口
-                        wx.onMenuShareAppMessage({
+                        //自定义“分享给朋友”及“分享到QQ”按钮的分享内容
+                        wx.updateAppMessageShareData({
                             title: ShareTitle, // 分享标题
                             desc: ShareDesc, // 分享描述
-                            link:ShareLink,
-                            imgUrl:ShareImgUrl // 分享图标
+                            link: ShareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            imgUrl: ShareImgUrl, // 分享图标
+                            success: function () {
+                                // 设置成功
+                            }
                         });
-                        // 分享到QQ
-                        wx.onMenuShareQQ({
+                        wx.updateTimelineShareData({
                             title: ShareTitle, // 分享标题
-                            desc: ShareDesc, // 分享描述
-                            link:ShareLink,
-                            imgUrl:ShareImgUrl // 分享图标
-                        });
-                        // 分享到QQ空间
-                        wx.onMenuShareQZone({
-                            title: ShareTitle, // 分享标题
-                            desc: ShareDesc, // 分享描述
-                            link:ShareLink,
-                            imgUrl:ShareImgUrl // 分享图标
-                        });
-                        // wx.hideOptionMenu();  // 用户中心 隐藏微信菜单
+                            link: ShareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            imgUrl: ShareImgUrl, // 分享图标
+                            success: function () {
+                                // 设置成功
+                            }
+                        })
                     });
                     wx.error(function(res){
                         console.log(res);
@@ -268,7 +247,7 @@
 <style scoped>
     .lineDetails{
         width: 90%;
-        margin: 55px auto 15px;
+        margin: 15px auto 15px;
         background: #FFFFFF;
         padding: 10px 5px;
     }
