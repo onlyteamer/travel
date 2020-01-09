@@ -1,15 +1,13 @@
 <template>
     <div class="contain">
-        <Title :title="title" @onClickLeft="onClickLeft"></Title>
-
-        <div style="margin-top: 46px">
+        <div >
             <div class="black" v-for="(item,index) in carFateList">
                 <van-row  @click="goPassengerDetails(item)">
                     <van-col span="16" >
                         <div style="display: flex;align-items: center">
                             <img :src="item.headimgurl" style="height: 50px;width: 50px;margin-right: 10px">
                             <div>
-                                <p style="margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">{{item.nickName}}</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="item.sex == '1'"><img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px" v-else> </p>
+                                <p style="margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">{{item.nickname}}</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="item.sex == '1'"><img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px" v-else> </p>
                                 <p style="margin: 5px 0">
                                     <img src="./../../static/images/xin.png" style="width: 14px;height: 14px;margin-right: 5px"/><span>{{item.badCount}}</span>
                                     <img src="./../../static/images/unhapply.png" style="width: 14px;height: 14px;margin: 0 5px 0 20px" /> <span>{{item.goodCount}}</span>
@@ -70,10 +68,6 @@
                         }
                     })
                 }
-            },
-
-            onClickLeft(){
-                this.$router.back(-1);
             },
             goPassengerDetails(val){
                 if(val){
