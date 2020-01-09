@@ -1,6 +1,5 @@
 <template>
     <div class="contain">
-        <Title :title="title" @onClickLeft="onClickLeft"></Title>
         <aMap
                 ref="carMap" id="hotelContainer"
                 @select="getPosition"
