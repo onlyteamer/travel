@@ -139,7 +139,7 @@
                                     :src="listImg"
                             />
                         </van-col>
-                        <van-col span="10">
+                        <van-col span="18">
                             <p style="display: flex;align-items: center"><span style="color: #5083ED">【车主】</span> {{item.nickname}}
                                 <img src="../../static/images/man.png" style="width: 13px;height: 13px;display: inline-block;margin-left: 5px" v-if="item.sex === 1">
                                 <img src="../../static/images/sexTag.png" style="width: 13px;height: 13px;display: inline-block;margin-left: 5px" v-else></p>
