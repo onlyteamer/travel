@@ -68,7 +68,8 @@
                     <div>
                         <van-tag :color="stroke.riderIds === item.id?'#0CC893':'#FFFFFF'"
                                  :text-color="stroke.riderIds === item.id?'#FFFFFF':'#202020'"
-                                 style="border: 1px solid #CFCFCF;min-width: 30px;width: fit-content;margin-bottom: 5px" class="contactTag"
+                                 style="border: 1px solid #CFCFCF;min-width: 30px;width: fit-content;margin-bottom: 5px"
+                                 class="contactTag"
                                  v-for="item in normalRiders" :key="item.id" @click="selectRider(item)">
                             {{item.passName}}
                         </van-tag>
@@ -136,13 +137,22 @@
                         :visible-item-count="3"
                         @confirm="onPassengerChange"/>
         </van-popup>
-        <van-popup v-model="wxpay" :style="{height: '45%',width:'90%'}" style="background-color: white;">
+        <van-popup v-model="wxpay" :style="{height: '45%',width:'90%'}"
+                   style="background-color: white;border-radius: 10px">
             <div class="pay-title">拼车充值</div>
             <div class="func-wrap">
                 <div class="func-title">
-                    <van-field v-model="czje" type="number" :border=false
-                               placeholder="充值金额"/>
-                    <span style="color: #5E5E5E;font-size: 17px">元</span>
+                    <div style="color: #5E5E5E;text-align: left;line-height: 35px">请输入充值金额:</div>
+                    <div class="func-input-wrap">
+                        <input v-model="czje" type="number" placeholder="100"/>
+                        <span style="color: #5E5E5E;font-size: 17px;position: absolute;right: 10px">元</span>
+                    </div>
+                    <div class="czje-item">
+                        <div @click="changeCzje(50)" :style="czje===50?{color:'#fff',backgroundColor:'#0CC893'}:{}">50</div>
+                        <div @click="changeCzje(100)" :style="czje===100?{color:'#fff',backgroundColor:'#0CC893'}:{}">100</div>
+                        <div @click="changeCzje(200)" :style="czje===200?{color:'#fff',backgroundColor:'#0CC893'}:{}">200</div>
+                        <div @click="changeCzje(500)" :style="czje===500?{color:'#fff',backgroundColor:'#0CC893'}:{}">500</div>
+                    </div>
                 </div>
                 <div class="func-content">
                     <van-button style="width: 96%;height:40px;" color="#0CC893" type="default" @click="wxPay">
@@ -180,8 +190,8 @@
         },
         data() {
             return {
-                czje:'',
-                wxData:{},
+                czje: 50,
+                wxData: {},
                 wxpay: false,
                 showPassenger: false,
                 passengerData: [],
@@ -190,7 +200,7 @@
                 checked: true,
                 title: "预约",
                 normalRiders: [],
-                selectSeat:"",
+                selectSeat: "",
                 stroke: {
                     startPlace: "",
                     endPlace: "",
@@ -207,6 +217,9 @@
             }
         },
         methods: {
+            changeCzje(je){
+                this.czje = je;
+            },
             recharge() {
                 // {payfor}
                 //1、用户充值 2、拼车充值 3、班车充值 4、商城充值
@@ -216,7 +229,7 @@
                         number: this.czje
                     }
                 }).then((res) => {
-                    if(res.data.code===0){
+                    if (res.data.code === 0) {
                         this.wxpay = true;
                     }
                     Toast(res.data.msg);
@@ -224,9 +237,9 @@
             },
             getWxConfig() {
                 request.sendGet({
-                    url:'/wx/pay/signature',
-                    params:{
-                        url:location.href
+                    url: '/wx/pay/signature',
+                    params: {
+                        url: location.href
                     }
                 }).then(res => {
                     wx.config({
@@ -246,8 +259,8 @@
                     if (document.addEventListener) {
                         document.addEventListener('WeixinJSBridgeReady', this.jsApiCall(), false);
                     } else if (document.attachEvent) {
-                        document.attachEvent('WeixinJSBridgeReady',  this.jsApiCall());
-                        document.attachEvent('onWeixinJSBridgeReady',  this.jsApiCall());
+                        document.attachEvent('WeixinJSBridgeReady', this.jsApiCall());
+                        document.attachEvent('onWeixinJSBridgeReady', this.jsApiCall());
                     }
                 } else {
                     this.jsApiCall();
@@ -260,17 +273,17 @@
                         "appId": this.wxData.appId,
                         "timeStamp": this.wxData.timeStamp,
                         "nonceStr": this.wxData.nonceStr,
-                        "package":  this.wxData.package,
+                        "package": this.wxData.package,
                         "signType": this.wxData.signType,
                         "paySign": this.wxData.paySign
                     },
                     function (res) {
                         // console.log(res.err_code + res.err_desc + res.err_msg);
-                        if(res.err_msg === "get_brand_wcpay_request:ok" ){
+                        if (res.err_msg === "get_brand_wcpay_request:ok") {
                             this.recharge();
                             // 使用以上方式判断前端返回,微信团队郑重提示：
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-                        }else if(res.err_msg === 'get_brand_wcpay_request:fail'){
+                        } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
                             Toast("支付失败");
                         }
                     }
@@ -278,7 +291,7 @@
             },
 
             wxPay() {
-                if(!this.czje){
+                if (!this.czje) {
                     Toast("充值金额不能为空");
                     return;
                 }
@@ -288,10 +301,10 @@
                         paynum: this.czje,
                     }
                 }).then((res) => {
-                    if(res.data.code===0){
+                    if (res.data.code === 0) {
                         this.wxData = res.data.data;
                         this.callpay();
-                    }else{
+                    } else {
                         Toast(res.data.msg);
                     }
                 })
@@ -360,11 +373,11 @@
                 this.stroke.seatCount = item;
             },
             selectRider(data) {
-                if(data.id == this.stroke.riderIds){
+                if (data.id == this.stroke.riderIds) {
                     this.stroke.riderNames = "";
                     this.stroke.riderIds = "";
                     this.stroke.phone = "";
-                }else {
+                } else {
                     this.stroke.riderNames = data.passName;
                     this.stroke.riderIds = data.id;
                     this.stroke.phone = data.passPhone;
@@ -387,7 +400,7 @@
                         this.stroke.price = res.data.data.tripPrice;
                         this.stroke.bookSeat = res.data.data.bookSeat;
                         this.stroke.totalSeats = res.data.data.totalSeats;
-                        this.selectSeat = this.stroke.totalSeats>4?4:this.stroke.totalSeats;
+                        this.selectSeat = this.stroke.totalSeats > 4 ? 4 : this.stroke.totalSeats;
                     }
                 })
             },
@@ -399,11 +412,11 @@
                         pageNum: 1,
                     }
                 }).then((res) => {
-                    if(res.data.code===0){
-                        if(res.data.rows&&res.data.rows.length>0){
+                    if (res.data.code === 0) {
+                        if (res.data.rows && res.data.rows.length > 0) {
                             this.passengerData = res.data.rows;
-                        }else{
-                            this.$router.push({path:'/passenger'});
+                        } else {
+                            this.$router.push({path: '/passenger'});
                         }
                     }
                 });
@@ -423,6 +436,38 @@
         background: #FFFFFF;
     }
 
+    .czje-item {
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around
+    }
+    .czje-item div{
+        font-size: 14px;
+        height: 25px;
+        width: 50px;
+        padding: 0 5px;
+        line-height: 25px;
+        color: #202020;
+        background-color: #fff;
+        border: 1px solid #cecece;
+    }
+
+    .func-input-wrap {
+        text-align: left;
+        display: flex;
+        align-items: center;
+        position: relative
+    }
+
+    .func-input-wrap input {
+        padding: 0 5px;
+        flex: 1;
+        height: 30px;
+        border-radius: 6px;
+        border: 1px solid #cecece
+    }
+
     .func-content {
         width: 100%;
         display: flex;
@@ -433,11 +478,8 @@
     }
 
     .func-title {
-        height: 47px;
+        padding-bottom: 15px;
         width: 96%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
         border-bottom: 1px solid #BBBBBB;
     }
 
@@ -474,7 +516,7 @@
     .contain .content {
         border-top: 1px solid #ECECEC;
         width: 90%;
-        margin: 0 auto ;
+        margin: 0 auto;
         color: #202020;
     }
 
