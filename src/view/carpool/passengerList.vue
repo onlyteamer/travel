@@ -3,8 +3,8 @@
         <Title :title="title" @onClickLeft="onClickLeft"></Title>
         <div style="margin-top: 46px">
             <div class="black" v-for="(item,index) in passList" :key="index">
-                <div @click="goPassengerDetails(item.userId)">
-                    <van-row style="display: flex;align-items: center">
+                <div>
+                    <van-row style="display: flex;align-items: center" @click="goPassengerDetails(item.userId)">
                         <van-col span="14" >
                             <div style="display: flex;align-items: center">
                                 <img :src="item.headimgurl?item.headimgurl:defaultAvatar" style="height: 50px;width: 50px;margin-right: 10px">
@@ -29,10 +29,10 @@
                     <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false" />
                     <van-row>
                         <van-col span="6" offset="11">
-                            <van-button type="default" color="#9E9E9E" size="mini" style="height: 34px;font-size: 14px;width: 100%" @click="confirmTrip(item,'1')">拒绝</van-button>
+                            <van-button type="default" color="#9E9E9E" size="mini" style="height: 34px;font-size: 14px;width: 100%" @click="confirmTrip(item,'2')">拒绝</van-button>
                         </van-col>
                         <van-col span="6">
-                            <van-button type="default" color="#0CC893" size="mini" style="height: 34px;font-size: 14px;width: 100%;margin-left: 10px" @click="confirmTrip(item,'2')">预约确定</van-button>
+                            <van-button type="default" color="#0CC893" size="mini" style="height: 34px;font-size: 14px;width: 100%;margin-left: 10px" @click="confirmTrip(item,'1')">预约确定</van-button>
                         </van-col>
                     </van-row>
                 </div>

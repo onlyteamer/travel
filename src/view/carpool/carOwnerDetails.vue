@@ -45,7 +45,9 @@
             <div><span style="font-size: 16px;font-weight: bold;margin-right: 10px">乘客评价:</span><span>（{{appraiseTotal}}）</span>
             </div>
             <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
-
+            <div v-if="appraiseList.data.length == '0'" style="text-align: center;margin: 10px 0">
+                暂无评价
+            </div>
             <van-list
                     :offset="10"
                     v-model="loading"
@@ -53,6 +55,7 @@
                     finished-text="没有更多了"
                     @load="onLoad"
                     :immediate-check="false"
+                    v-else
             >
                 <div v-for="(item,index) in appraiseList.data" :key="index">
                     <div class="card">
