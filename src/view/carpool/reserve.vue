@@ -148,10 +148,10 @@
                         <span style="color: #5E5E5E;font-size: 17px;position: absolute;right: 10px">元</span>
                     </div>
                     <div class="czje-item">
+                        <div @click="changeCzje(20)" :style="czje===20?{color:'#fff',backgroundColor:'#0CC893'}:{}">20</div>
+                        <div @click="changeCzje(30)" :style="czje===30?{color:'#fff',backgroundColor:'#0CC893'}:{}">30</div>
                         <div @click="changeCzje(50)" :style="czje===50?{color:'#fff',backgroundColor:'#0CC893'}:{}">50</div>
                         <div @click="changeCzje(100)" :style="czje===100?{color:'#fff',backgroundColor:'#0CC893'}:{}">100</div>
-                        <div @click="changeCzje(200)" :style="czje===200?{color:'#fff',backgroundColor:'#0CC893'}:{}">200</div>
-                        <div @click="changeCzje(500)" :style="czje===500?{color:'#fff',backgroundColor:'#0CC893'}:{}">500</div>
                     </div>
                 </div>
                 <div class="func-content">
