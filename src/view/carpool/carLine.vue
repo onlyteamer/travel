@@ -2,7 +2,7 @@
     <div class="contain">
         <div class="dateTag">
             <van-tabs type="card" v-model="active" :swipe-threshold="7" background="#FFFFFF" color="#5083ED"
-                      title-active-color="#FFFFFF" title-inactive-color="#202020">
+                      title-active-color="#FFFFFF" title-inactive-color="#202020" @click="changeDate">
                 <van-tab title="周日"></van-tab>
                 <van-tab title="周一"></van-tab>
                 <van-tab title="周二"></van-tab>
@@ -13,10 +13,11 @@
             </van-tabs>
 
             <div class="placeTab">
-                <van-tabs type="card" color="#0CC893" title-active-color="#FFFFFF" title-inactive-color="#0CC893">
-                    <van-tab title="全部"></van-tab>
-                    <van-tab :title="'去'+startPlace"></van-tab>
-                    <van-tab :title="'去'+endPlace"></van-tab>
+                <van-tabs type="card" @click="changeDirection" color="#0CC893" title-active-color="#FFFFFF"
+                          title-inactive-color="#0CC893">
+                    <van-tab title="全部" name=""></van-tab>
+                    <van-tab :title="'去'+startPlace" name="1"></van-tab>
+                    <van-tab :title="'去'+endPlace" name="0"></van-tab>
                 </van-tabs>
             </div>
         </div>
@@ -34,63 +35,69 @@
                 <div v-for="(item,index) in dataMain.data" :key="item.id">
                     <div class="carBar">
                         <div @click="linkStrokeDetails(item.tripId)">
-                        <van-row>
-                            <van-col span="6">
-                                <div style="display: flex;align-items: center;"><i
-                                        style="width: 8px;height:8px;border-radius: 50%;background: #0CC893;margin-right: 5px"></i><span>{{item.startPlace}}</span>
-                                </div>
-
-                            </van-col>
-                            <van-col span="12">
-                                <div style="text-align: center;color: #FF0200">{{item.tripDateTime}}</div>
-                            </van-col>
-                            <van-col span="6">
-                                <div style="align-items: center;text-align: right"><i
-                                        style="width: 8px;height:8px;border-radius: 50%;display:inline-block;background: #FF0200;margin-right: 5px"></i><span>{{item.endPlace}}</span>
-                                </div>
-                            </van-col>
-                        </van-row>
-                        <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }"/>
-                        <van-row style="display: flex;align-items: center;">
-                            <van-col span="20">
-                                <div style="display: flex;align-items: center">
-                                    <img :src="item.headimgurl" style="height: 44px;width: 44px;border-radius: 50%" @click="linkUserDetails(item)">
-                                    <div>
-                                        <p style="font-size: 14px;margin: 5px 0"><span
-                                                style="color: #5083ED;font-weight: bold">【车主】</span><span
-                                                style="color: #5E5E5E">{{item.nickname}}</span>
-                                            <img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="item.sex == '1'">
-                                            <img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px" v-else>
-                                            <span class="collect"><img src="./../../static/images/xin.png"
-                                                                       style="width: 14px">{{item.goodCount}}</span></p>
-                                        <p style="font-size: 14px;margin: 5px 0"><span
-                                                style="color: #202020;font-weight: bold">【车型】</span><span
-                                                style="color: #5E5E5E">{{item.carName}}</span></p>
+                            <van-row>
+                                <van-col span="6">
+                                    <div style="display: flex;align-items: center;"><i
+                                            style="width: 8px;height:8px;border-radius: 50%;background: #0CC893;margin-right: 5px"></i><span>{{item.startPlace}}</span>
                                     </div>
-                                </div>
-                            </van-col>
-                            <van-col span="4">
-                                <div style="font-size: 22px;font-weight: bold;color: #FF0200">￥{{item.tripPrice}}</div>
-                            </van-col>
-                        </van-row>
-                            <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false" />
-                        <van-row>
-                            <van-col span="24">
-                                <div style="margin: 0;word-break: break-all;">
-                                    <span style="color:#202020;font-weight: bold;font-size: 14px;display: inline-block">路线：</span>
-                                    <span style="font-size: 14px;color: #202020">{{item.tripLine}}</span>
-                                </div>
-                            </van-col>
-                        </van-row>
-                            <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false" />
-                        <van-row style="color: #202020;font-weight: bold;font-size: 14px">
-                            <van-col span="6">
-                                <div>剩余座位:</div>
-                            </van-col>
-                            <van-col span="18">
-                                <div>{{item.bookSeat}}</div>
-                            </van-col>
-                        </van-row>
+
+                                </van-col>
+                                <van-col span="12">
+                                    <div style="text-align: center;color: #FF0200">{{item.tripDateTime}}</div>
+                                </van-col>
+                                <van-col span="6">
+                                    <div style="align-items: center;text-align: right"><i
+                                            style="width: 8px;height:8px;border-radius: 50%;display:inline-block;background: #FF0200;margin-right: 5px"></i><span>{{item.endPlace}}</span>
+                                    </div>
+                                </van-col>
+                            </van-row>
+                            <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }"/>
+                            <van-row style="display: flex;align-items: center;">
+                                <van-col span="20">
+                                    <div style="display: flex;align-items: center">
+                                        <img :src="item.headimgurl" style="height: 44px;width: 44px;border-radius: 50%"
+                                             @click="linkUserDetails(item)">
+                                        <div>
+                                            <p style="font-size: 14px;margin: 5px 0"><span
+                                                    style="color: #5083ED;font-weight: bold">【车主】</span><span
+                                                    style="color: #5E5E5E">{{item.nickname}}</span>
+                                                <img src="../../static/images/sexTag.png"
+                                                     style="width: 12px;height: 12px;margin-left: 5px"
+                                                     v-if="item.sex == '1'">
+                                                <img src="../../static/images/man.png"
+                                                     style="width: 12px;height: 12px;margin-left: 5px" v-else>
+                                                <span class="collect"><img src="./../../static/images/xin.png"
+                                                                           style="width: 14px">{{item.goodCount}}</span>
+                                            </p>
+                                            <p style="font-size: 14px;margin: 5px 0"><span
+                                                    style="color: #202020;font-weight: bold">【车型】</span><span
+                                                    style="color: #5E5E5E">{{item.carName}}</span></p>
+                                        </div>
+                                    </div>
+                                </van-col>
+                                <van-col span="4">
+                                    <div style="font-size: 22px;font-weight: bold;color: #FF0200">￥{{item.tripPrice}}
+                                    </div>
+                                </van-col>
+                            </van-row>
+                            <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
+                            <van-row>
+                                <van-col span="24">
+                                    <div style="margin: 0;word-break: break-all;">
+                                        <span style="color:#202020;font-weight: bold;font-size: 14px;display: inline-block">路线：</span>
+                                        <span style="font-size: 14px;color: #202020">{{item.tripLine}}</span>
+                                    </div>
+                                </van-col>
+                            </van-row>
+                            <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
+                            <van-row style="color: #202020;font-weight: bold;font-size: 14px">
+                                <van-col span="6">
+                                    <div>剩余座位:</div>
+                                </van-col>
+                                <van-col span="18">
+                                    <div>{{item.bookSeat}}</div>
+                                </van-col>
+                            </van-row>
                         </div>
                         <van-row style="color: #202020;font-weight: bold;font-size: 14px;margin: 10px 0">
                             <van-col span="8">
@@ -132,6 +139,7 @@
     import Title from './../../components/header'
     import {Tab, Tabs, Divider, Row, Col, Button,List,Dialog,Tabbar, TabbarItem} from 'vant';
     import request from "../../utils/request";
+    import moment from 'moment'
 
     import chengK from './../../static/images/chengk.png'
     import xingC from './../../static/images/xingC.png'
@@ -161,8 +169,8 @@
                 isOneHttp: true,
                 loading: false,
                 finished: false,
-                startPlace:"",
-                endPlace:"",
+                startPlace: "",
+                endPlace: "",
                 dataMain: {
                     data: [],
                     pageSize: 6,
@@ -175,28 +183,55 @@
                 person: person,
                 lineInfo:{
 
+                lineInfo: {
+                    direction: '',
+
                 }
             }
         },
         mounted() {
             let info = JSON.parse(sessionStorage.getItem("queryStroke"));
             this.lineInfo = info;
-            this.title = "线路："+ info.lineName;
+            if (!this.lineInfo.startDate || !this.lineInfo.endDate) {
+                this.lineInfo.startDate = moment().format("YYYY-MM-DD") + " " + '00:00:00';
+                this.lineInfo.endDate = moment().format("YYYY-MM-DD") + " " + '23:59:59';
+            }
+            this.title = "线路：" + info.lineName;
             this.startPlace = info.startPlace;
             this.endPlace = info.endPlace;
             this.active = Number(info.week);
-
             this.initData();
         },
 
         methods: {
-            wxShare(){
+            changeDate(title) {
+                this.lineInfo.startDate = moment().day(title).format("YYYY-MM-DD") + " " + '00:00:00';
+                this.lineInfo.endDate = moment().day(title).format("YYYY-MM-DD") + " " + '23:59:59';
+                this.isOneHttp = true;
+                this.loading = false;
+                this.finished = false;
+                this.dataMain.data = [];
+                this.dataMain.pageNum = 1;
+                this.dataMain.total = 0;
+                this.initData();
+            },
+            changeDirection(name) {
+                this.lineInfo.direction = name;
+                this.isOneHttp = true;
+                this.loading = false;
+                this.finished = false;
+                this.dataMain.data = [];
+                this.dataMain.pageNum = 1;
+                this.dataMain.total = 0;
+                this.initData();
+            },
+            wxShare() {
                 request.sendGet({
-                    url:"/wx/pay/signature",
-                    params:{
-                        url:location.href
+                    url: "/wx/pay/signature",
+                    params: {
+                        url: location.href
                     }
-                }).then(res =>{
+                }).then(res => {
                     wx.config({
                         beta: true,// 必须这么写，否则在微信插件有些jsapi会有问题
                         // debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -209,11 +244,11 @@
                     });
 
 
-                    var ShareLink =  location.protocol+"//"+location.hostname + "/#/lineDetails?tripId="+this.tripId; //默认分享链接
+                    var ShareLink = location.protocol + "//" + location.hostname + "/#/lineDetails?tripId=" + this.tripId; //默认分享链接
                     var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
                     var ShareTitle = "申坤出行"; // 分享标题
                     var ShareDesc = "申坤出行!"; // 分享描述
-                    wx.ready(function(){
+                    wx.ready(function () {
                         //自定义“分享给朋友”及“分享到QQ”按钮的分享内容
                         wx.updateAppMessageShareData({
                             title: ShareTitle, // 分享标题
@@ -233,36 +268,36 @@
                             }
                         })
                     });
-                    wx.error(function(res){
+                    wx.error(function (res) {
                         console.log(res);
                     });
                 })
             },
 
 
-            linkUserDetails(val){
-                if(val.userId){
-                    this.$router.push({path:'/carOwnerDetails',query:{userId:val.userId}});
+            linkUserDetails(val) {
+                if (val.userId) {
+                    this.$router.push({path: '/carOwnerDetails', query: {userId: val.userId}});
                 }
             },
 
             //手机号
-            showMobile(val){
-                if(val){
+            showMobile(val) {
+                if (val) {
                     window.location.href = "tel:" + val;
-                }else{
+                } else {
                     Toast("暂无联系方式");
                 }
             },
 
             //跳转详情页
-            linkStrokeDetails(tripId){
-                this.$router.push({path:"/lineDetails",query:{tripId:tripId}})
+            linkStrokeDetails(tripId) {
+                this.$router.push({path: "/lineDetails", query: {tripId: tripId}})
             },
 
             goDeclare(id) {
                 //车辆预约
-                this.$router.push({path: '/declare',query:{id:id}});
+                this.$router.push({path: '/declare', query: {id: id}});
             },
             onLoad() {
                 if (this.dataMain.total > this.dataMain.data.length) {
@@ -272,19 +307,15 @@
             },
             initData() {
                 request.sendGet({
-                    url:"/sharecar/pass/select/"+ this.lineInfo.lineId,
+                    url: "/sharecar/pass/select/" + this.lineInfo.lineId,
                     params: {
-                        startDate:this.lineInfo.startDate,
-                        endDate:this.lineInfo.endDate,
-                        lineId:this.lineInfo.lineId,
-                        pageNum:this.dataMain.pageNum,
-                        pageSize:this.dataMain.pageSize
+                        startDate: this.lineInfo.startDate,
+                        endDate: this.lineInfo.endDate,
+                        lineId: this.lineInfo.lineId,
+                        direction: this.lineInfo.direction,
+                        pageNum: this.dataMain.pageNum,
+                        pageSize: this.dataMain.pageSize
                     }
-                    // url: '/sharecar/trip/list',
-                    // params: {
-                    //     pageSize: this.dataMain.pageSize,
-                    //     pageNum: this.dataMain.pageNum,
-                    // }
                 }).then((res) => {
                     this.dataMain.total = res.data.total;
                     //判断是否是第一次请求数据
@@ -318,8 +349,8 @@
     }
 
     .content {
-        margin-top: 130px;
         margin-bottom: 55px;
+        margin-top: 85px;
     }
 
     .dateTag {
