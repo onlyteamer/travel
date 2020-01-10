@@ -67,7 +67,7 @@
             </van-row>
         </div>
 
-        <van-row style="position: fixed;bottom: 0;width: 100%;">
+        <van-row style="position: fixed;bottom: 55px;width: 100%;">
             <van-col span="6">
                 <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini" @click="wxShare">分享</van-button>
             </van-col>
@@ -81,14 +81,30 @@
                 <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini" @click="reserveCar">预约</van-button>
             </van-col>
         </van-row>
+
+        <div style="width: 100%">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
+
     </div>
 </template>
 
 <script>
     import Title from './../../components/header'
-    import { Cell, CellGroup,DatetimePicker,Popup,Row, Col,Icon,Picker ,Checkbox, CheckboxGroup ,Button,Toast ,Dialog } from 'vant';
+    import { Cell, CellGroup,DatetimePicker,Popup,Row, Col,Icon,Picker ,Checkbox, CheckboxGroup ,Button,Toast ,Dialog,Tabbar, TabbarItem } from 'vant';
     import context from "../../utils/context";
     import request from '../../utils/request'
+
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
 
     export default {
         name: "lineDetails",
@@ -107,9 +123,12 @@
             [Button.name]:Button,
             [Toast.name]:Toast,
             [Dialog.name]: Dialog,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem
         },
         data(){
             return{
+                active:"",
                 title:"行车信息",
                 tripDetails:{
                     startName:""
@@ -124,7 +143,11 @@
                     headImageurl: "",
                     sex: ""
                 },
-                tripId:""
+                tripId:"",
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person
             }
         },
         mounted(){

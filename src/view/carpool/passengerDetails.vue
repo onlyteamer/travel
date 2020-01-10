@@ -1,6 +1,6 @@
 <template>
     <div class="contain">
-        <Title :title="title" @onClickLeft="onClickLeft"></Title>
+        <!--<Title :title="title" @onClickLeft="onClickLeft"></Title>-->
 
         <div class="userInfo">
             <van-row style="display: flex;align-items: center;font-size: 14px">
@@ -61,15 +61,27 @@
             </van-list>
         </div>
 
-
+        <div style="width: 100%">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
     </div>
 </template>
 
 <script>
     import Title from './../../components/header'
-    import { Row, Col,Divider,Button,List} from 'vant';
+    import { Row, Col,Divider,Button,List,Tabbar, TabbarItem} from 'vant';
 
     import request from '../../utils/request'
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
 
     export default {
         name: "passengerDetails",
@@ -79,10 +91,13 @@
             [Col.name]:Col,
             [Divider.name]:Divider,
             [Button.name]:Button,
-            [List.name]: List
+            [List.name]: List,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem
         },
         data(){
             return{
+                active:"",
                 title:"乘客详情",
                 userInfo:{},
                 appraiseList:{
@@ -91,6 +106,10 @@
                     pageNum: 1,
                     total: 0
                 },
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person,
                 loading: false,
                 finished: false,
                 appraiseTotal:""
@@ -152,7 +171,7 @@
 <style scoped>
     .userInfo{
         width: 85%;
-        margin: 55px auto 15px;
+        margin: 0px auto 15px;
         padding: 5px 10px;
         background: #FFFFFF;
     }
@@ -160,6 +179,7 @@
     .assess{
         padding: 10px 15px;
         background: #FFFFFF;
+        margin-bottom: 55px;
     }
 
     .card{

@@ -15,16 +15,31 @@
             <div style="margin-bottom: 10px">1. 车主的位置仅供参考；</div>
             <div >2. 如果车主位置一直未刷新，建议电话联系车主。</div>
         </div>
+
+        <div style="width: 100%">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
     </div>
 </template>
 
 <script>
     import Title from './../../components/header'
     import aMap from './../../components/amap_point'
-    import { Row, Col,Divider,Button,Rate,Tag ,Field,CellGroup,Icon ,Toast} from 'vant';
+    import { Row, Col,Divider,Button,Rate,Tag ,Field,CellGroup,Icon ,Toast,Tabbar,TabbarItem} from 'vant';
 
     import context from '../../utils/context'
     import request from '../../utils/request';
+
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
 
 
     export default {
@@ -41,16 +56,23 @@
             [Field.name]:Field,
             [CellGroup.name]:CellGroup,
             [Icon.name]:Icon,
-            [Toast.name]:Toast
+            [Toast.name]:Toast,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem
         },
         data(){
             return{
+                active:"",
                 title:"车主位置",
                 carInfo:{
                     lat:"39.865042",
                     lon:"116.379028"
                 },
-                tripId:""
+                tripId:"",
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person
             }
         },
         created(){
@@ -122,7 +144,7 @@
 <style scoped>
     .footer{
         width: 88%;
-        margin: 0 auto;
+        margin: 0 auto 55px;
         padding: 15px 10px;
         background: #FFFFFF;
         font-size: 14px;

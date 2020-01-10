@@ -1,7 +1,7 @@
 <template>
     <div class="contain">
-        <Title :title="title" @onClickLeft="onClickLeft"></Title>
-        <div style="margin-top: 46px">
+        <!--<Title :title="title" @onClickLeft="onClickLeft"></Title>-->
+        <div style="margin-bottom: 55px">
             <div class="black" v-for="(item,index) in passList" :key="index">
                 <div>
                     <van-row style="display: flex;align-items: center" @click="goPassengerDetails(item.userId)">
@@ -39,16 +39,31 @@
             </div>
         </div>
 
+        <div style="width: 100%">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
+
     </div>
 </template>
 
 <script>
     import Title from './../../components/header'
-    import { Row, Col,Divider,Button,Dialog} from 'vant';
+    import { Row, Col,Divider,Button,Dialog,Tabbar,TabbarItem} from 'vant';
 
     import avatar from "../../static/images/userAvatar.png"
 
     import request from '../../utils/request'
+
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
 
     export default {
         name: "passengerList",
@@ -59,12 +74,19 @@
             [Divider.name]:Divider,
             [Button.name]:Button,
             [Dialog.name]: Dialog,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem
         },
         data(){
             return{
+                active:"",
                 title:"乘客列表",
                 passList:[],
-                defaultAvatar:avatar
+                defaultAvatar:avatar,
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person
             }
         },
         mounted(){

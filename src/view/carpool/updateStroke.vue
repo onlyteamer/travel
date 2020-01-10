@@ -104,6 +104,17 @@
             </van-row>
         </div>
 
+
+        <div style="width: 100%">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
+
         <van-popup v-model="showLine" position="bottom" :style="{height:'30%'}">
             <van-picker :columns="lineData" value-key="lineName" show-toolbar @cancel="showLine = false"
                         :visible-item-count="3"
@@ -149,10 +160,17 @@
         CheckboxGroup,
         Button,
         Toast,
-        Field
+        Field,
+        Tabbar,
+        TabbarItem
     } from 'vant';
     import request from '../../utils/request'
     import moment from 'moment'
+
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
 
     export default {
         name: "updateStroke",
@@ -170,10 +188,17 @@
             [CheckboxGroup.name]: CheckboxGroup,
             [Button.name]: Button,
             [Toast.name]: Toast,
-            [Field.name]: Field
+            [Field.name]: Field,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem
         },
         data() {
             return {
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person,
+                active:"",
                 showSeat: false,
                 checked: true,
                 title: "修改行程",
@@ -460,6 +485,7 @@
 
     .contain {
         background: #FFFFFF;
+        margin-bottom: 55px;
     }
 
     .contain .content {

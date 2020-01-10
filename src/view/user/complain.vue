@@ -81,6 +81,11 @@
                         if(res.data.rows.length>0){
                             this.complain.data=this.complain.data.concat(res.data.rows);
                         }
+
+                        if (!this.complain.data || this.complain.total === this.complain.data.length) {
+                            this.finished = true;
+                        }
+                        this.loading = false;
                     }
                 })
 

@@ -1,6 +1,6 @@
 <template>
     <div class="contain">
-        <div >
+        <div style="margin-bottom: 55px">
             <div class="black" v-for="(item,index) in carFateList">
                 <van-row  @click="goPassengerDetails(item)">
                     <van-col span="16" >

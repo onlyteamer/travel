@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <van-nav-bar title="取消行程" :fixed="true" left-arrow @click-left="onClickLeft"/>
+            <!--<van-nav-bar title="取消行程" :fixed="true" left-arrow @click-left="onClickLeft"/>-->
         </div>
         <div class="content">
             <div class="img-wrap">
@@ -35,14 +35,29 @@
                 确认终止行程
             </van-button>
         </div>
+
+        <div style="width: 100%">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
     </div>
 </template>
 
 <script>
-    import {NavBar, Button, Image, RadioGroup, Radio, Row, Col,Toast} from 'vant';
+    import {NavBar, Button, Image, RadioGroup, Radio, Row, Col,Toast,Tabbar, TabbarItem} from 'vant';
     import imageURL from '../../static/images/stop.png';
 
     import request from '../../utils/request'
+
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
 
     export default {
         components: {
@@ -53,7 +68,9 @@
             [Radio.name]: Radio,
             [Row.name]: Row,
             [Col.name]: Col,
-            [Toast.name]:Toast
+            [Toast.name]:Toast,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem
         },
         data() {
             return {
@@ -63,6 +80,11 @@
                 tripInfo:{
 
                 },
+                active:"",
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person,
                 reasonList:[]
             }
         },
@@ -195,6 +217,7 @@
     .content {
         background-color: #F6F6F6;
         padding: 15px;
-        margin-top: 46px;
+        margin-bottom: 55px;
+        /*margin-top: 46px;*/
     }
 </style>

@@ -1,8 +1,8 @@
 <template>
     <div class="contain">
-        <Title :title="title" @onClickLeft="onClickLeft"></Title>
+        <!--<Title :title="title" @onClickLeft="onClickLeft"></Title>-->
 
-        <div style="margin-top: 46px;padding: 15px 0px;position: relative;">
+        <div style="margin-top: 0px;padding: 15px 0px;position: relative;">
             <div class="userInfo">
                 <van-row>
                     <van-col span="16">{{carOwnerInfo.tripDateTime}}</van-col>
@@ -89,15 +89,29 @@
             </van-button>
         </div>
 
+        <div style="width: 100%">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
 
     </div>
 </template>
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Divider, Button, Rate, Tag, Field, CellGroup,Toast} from 'vant';
+    import {Row, Col, Divider, Button, Rate, Tag, Field, CellGroup,Toast,Tabbar,TabbarItem} from 'vant';
 
     import request from '../../utils/request'
+
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
 
     export default {
         name: "carOwnerAppraise",
@@ -111,10 +125,17 @@
             [Tag.name]: Tag,
             [Field.name]: Field,
             [CellGroup.name]: CellGroup,
-            [Toast.name]:Toast
+            [Toast.name]:Toast,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem
         },
         data() {
             return {
+                active:"",
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person,
                 title: "车主详情",
                 appraise: {
                     driverId: "",
@@ -274,7 +295,7 @@
     }
 
     .assessTag {
-        margin: 15px auto;
+        margin: 15px auto 55px;
     }
 
     .tagStyle {

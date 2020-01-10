@@ -116,14 +116,27 @@
                 </div>
             </van-list>
         </div>
-
+        <div style="width: 100%">
+            <van-tabbar v-model="footActive" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
     </div>
 </template>
 
 <script>
     import Title from './../../components/header'
-    import {Tab, Tabs, Divider, Row, Col, Button,List,Dialog} from 'vant';
+    import {Tab, Tabs, Divider, Row, Col, Button,List,Dialog,Tabbar, TabbarItem} from 'vant';
     import request from "../../utils/request";
+
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
 
     export default {
         name: "carLine",
@@ -136,10 +149,13 @@
             [Col.name]: Col,
             [Button.name]: Button,
             [List.name]:List,
-            [Dialog.name]:Dialog
+            [Dialog.name]:Dialog,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem
         },
         data() {
             return {
+                footActive:"",
                 title: "线路：北京←→密云",
                 active: 1,
                 isOneHttp: true,
@@ -153,7 +169,10 @@
                     pageNum: 1,
                     total: 0
                 },
-
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person,
                 lineInfo:{
 
                 }
@@ -300,7 +319,7 @@
 
     .content {
         margin-top: 130px;
-
+        margin-bottom: 55px;
     }
 
     .dateTag {
