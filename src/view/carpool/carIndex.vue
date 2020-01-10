@@ -515,13 +515,12 @@
         border: 1px solid #f1f1f1;
     }
     .listInfo{
-        margin-bottom: 60px;
-        height: 300px;
+       margin-bottom: 60px;
     }
 
     .listInfo .card{
         width: 90%;
-        margin: 0 auto;
+        margin: 0 auto ;
         font-size: 14px;
         padding: 10px 5px;
         margin-bottom: 10px;
