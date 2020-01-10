@@ -48,8 +48,8 @@
                                                         style="width:66px;height:28px;line-height:28px;background: #0CC893;color: #FFFFFF;border-radius: 5px">
                                                 验票
                                             </van-button>
-                                            <van-button type="default" @click="refundTicket(item)"
-                                                        :disabled="refundBtnDisable(item)"
+                                            <van-button type="default" @click="refundTicket(item,today)"
+                                                        :disabled="refundBtnDisable(item,today)"
                                                         style="width:66px;height:28px;line-height:28px;background: #9E9E9E;color: #FFFFFF;border-radius: 5px">
                                                 退票
                                             </van-button>
@@ -76,10 +76,10 @@
                                         </van-col>
                                         <van-col span="8" style="color: #0CC893;text-align: right;font-size: 14px">
                                             <div>
-                                                <span style="background: #9E9E9E;color: #FFFFFF;padding: 5px 10px;border-radius: 5px;margin-right: 10px"
-                                                      :disabled="refundBtnDisable(line)"
-                                                      @click="refundTicket(line)">退票</span>
                                                 <span>{{line.state }}</span>
+                                                <span style="background: #9E9E9E;color: #FFFFFF;padding: 5px 10px;border-radius: 5px;margin-right: 10px"
+                                                      :disabled="refundBtnDisable(line,item.date)"
+                                                      @click="refundTicket(line,item.date)">退票</span>
                                             </div>
                                         </van-col>
                                     </van-row>
@@ -168,6 +168,7 @@
         },
         data() {
             return {
+                today:moment().format("YYYY-MM-DD"),
                 placeDown: placeDown,
                 placeUp: placeUp,
                 car: car,
@@ -262,14 +263,14 @@
 
                 })
             },
-            refundBtnDisable(item) {
-                let end_date = moment(item.starttime, "HH:mm");
-                let start_date = moment(new Date(), "HH:mm");
+            refundBtnDisable(item,ticketDay) {
+                let end_date = moment(ticketDay + ' '+item.starttime, "YYYY-MM-DD HH:mm");
+                let start_date = moment(new Date(), "YYYY-MM-DD HH:mm");
                 return end_date.diff(start_date, "hours") < 2 ? true : false;
             },
-            refundTicket(item) {
-                let end_date = moment(item.starttime, "HH:mm");
-                let start_date = moment(new Date(), "HH:mm");
+            refundTicket(item,ticketDay) {
+                let end_date = moment(ticketDay + ' '+item.starttime, "YYYY-MM-DD HH:mm");
+                let start_date = moment(new Date(),  "YYYY-MM-DD HH:mm");
                 if (end_date.diff(start_date, "hours") < 2) {
                     return;
                 }

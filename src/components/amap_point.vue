@@ -7,7 +7,7 @@
     <!--</div>-->
     <!-- <Input :id="inputId" placeholder="点击下面地图可选择地址" type="text"></Input> -->
     <!--<div style="margin-top:20px;"></div>-->
-    <div style="margin-top: 46px;text-align: center;padding: 10px;background: #FFFFFF;border-top: 1px solid #ECECEC">{{carPosition.updateTime}}</div>
+    <div style="text-align: center;padding: 10px;background: #FFFFFF;border-top: 1px solid #ECECEC">{{carPosition.updateTime}}</div>
     <div :id="id" :style="{'width':width,'height':height}"></div>
   </div>
 </template>
