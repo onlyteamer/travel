@@ -257,6 +257,12 @@
                 </div>
             </div>
         </van-popup>
+        <van-popup v-model="guide" @click="guide=false">
+            <div style="text-align:center;color:#fff;position: absolute;top: 80%;left: 0;right: 0;margin: auto;">
+                点击右上角,选择分享到好友或朋友圈
+            </div>
+            <img :src="guideIcon"/>
+        </van-popup>
     </div>
 </template>
 
@@ -266,6 +272,7 @@
     import request from '../../utils/request'
     import context from "../../utils/context";
 
+    import guideIcon from '../../static/images/guide.png'
     import chengK from './../../static/images/chengk.png'
     import xingC from './../../static/images/xingC.png'
     import push from './../../static/images/push.png'
@@ -292,6 +299,8 @@
         },
         data() {
             return {
+                guide: false,
+                guideIcon: guideIcon,
                 czje: '',
                 wxData: {},
                 wxpay: false,
@@ -332,8 +341,38 @@
         },
         created() {
             this.getWxConfig();
+
         },
         methods: {
+            wxShareConfig(){
+                var ShareLink = location.protocol + "//" + location.hostname + "/#/myStroke"; //默认分享链接
+                var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
+                var ShareTitle = "申坤出行"; // 分享标题
+                var ShareDesc = "申坤出行!"; // 分享描述
+                wx.ready(function () {
+                    //自定义“分享给朋友”及“分享到QQ”按钮的分享内容
+                    wx.updateAppMessageShareData({
+                        title: ShareTitle, // 分享标题
+                        desc: ShareDesc, // 分享描述
+                        link: ShareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: ShareImgUrl, // 分享图标
+                        success: function () {
+                            // 设置成功
+                        }
+                    });
+                    wx.updateTimelineShareData({
+                        title: ShareTitle, // 分享标题
+                        link: ShareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: ShareImgUrl, // 分享图标
+                        success: function () {
+                            // 设置成功
+                        }
+                    })
+                });
+                wx.error(function (res) {
+                    console.log(res);
+                });
+            },
             //行程详情
             linkLineDetails(item,type){
                 sessionStorage.setItem("strokeType", type);
@@ -372,6 +411,7 @@
                         signature: res.data.data.signature,// 必填，签名，见附录1
                         jsApiList: ['WeixinJSBridge'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                     });
+                    this.wxShareConfig();
                 });
             },
 
@@ -698,33 +738,7 @@
             },
 
             wxShare() {
-                var ShareLink = location.protocol + "//" + location.hostname + "/#/myStroke"; //默认分享链接
-                var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
-                var ShareTitle = "申坤出行"; // 分享标题
-                var ShareDesc = "申坤出行!"; // 分享描述
-                wx.ready(function () {
-                    //自定义“分享给朋友”及“分享到QQ”按钮的分享内容
-                    wx.updateAppMessageShareData({
-                        title: ShareTitle, // 分享标题
-                        desc: ShareDesc, // 分享描述
-                        link: ShareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                        imgUrl: ShareImgUrl, // 分享图标
-                        success: function () {
-                            // 设置成功
-                        }
-                    });
-                    wx.updateTimelineShareData({
-                        title: ShareTitle, // 分享标题
-                        link: ShareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                        imgUrl: ShareImgUrl, // 分享图标
-                        success: function () {
-                            // 设置成功
-                        }
-                    })
-                });
-                wx.error(function (res) {
-                    console.log(res);
-                });
+                this.guide = true;
             }
         }
     }
@@ -819,6 +833,17 @@
 
     .footer {
         width: 100%;
+    }
+    /deep/ .van-popup {
+        background-color: transparent;
+    }
+
+    /deep/ .van-popup--center {
+        top: 20%;
+        height: 30%;
+        width: 100%;
+        text-align: right;
+        padding-right: 15px;
     }
 
 </style>

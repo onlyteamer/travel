@@ -2,11 +2,16 @@
     <div class="contain">
         <div class="lineDetails">
             <van-row style="display: flex;align-items: center">
-                <van-col span="12" >
+                <van-col span="12">
                     <div style="display: flex;align-items: center">
-                        <img :src="driverInfo.headImageurl" style="height: 44px;width: 44px;margin-right: 10px;border-radius: 50%">
+                        <img :src="driverInfo.headImageurl"
+                             style="height: 44px;width: 44px;margin-right: 10px;border-radius: 50%">
                         <div>
-                            <p style="font-size: 14px;margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">{{driverInfo.nickName}}</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="driverInfo.sex == '1'"> <img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px"  v-else></p>
+                            <p style="font-size: 14px;margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">{{driverInfo.nickName}}</span><img
+                                    src="../../static/images/sexTag.png"
+                                    style="width: 12px;height: 12px;margin-left: 5px" v-if="driverInfo.sex == '1'"> <img
+                                    src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px"
+                                    v-else></p>
                             <p style="font-size: 14px;margin: 5px 0">
                                 <span style="color: #FFFFFF;border-radius: 2px;padding: 0px 5px;background-color: #5083ED;">{{driverInfo.carNumber}}</span>
                             </p>
@@ -15,10 +20,13 @@
                 </van-col>
                 <van-col span="12">
                     <div style="padding: 3px 0">
-                        <img src="./../../static/images/tel.png" style="width: 14px" /><span style="font-size: 14px;color: #5E5E5E">{{driverInfo.phone}}</span>
+                        <img src="./../../static/images/tel.png" style="width: 14px"/><span
+                            style="font-size: 14px;color: #5E5E5E">{{driverInfo.phone}}</span>
                     </div>
                     <div style="padding: 0px 5px;border-radius: 3px;border: 1px solid #CFCFCF;font-size: 14px;width: fit-content">
-                        <span style="color: #CFCFCF;margin-right: 5px">好评数</span><img src="./../../static/images/xin.png" style="width: 14px"><span style="margin-left: 5px;color: #5E5E5E">{{driverInfo.goodCount}}</span>
+                        <span style="color: #CFCFCF;margin-right: 5px">好评数</span><img
+                            src="./../../static/images/xin.png" style="width: 14px"><span
+                            style="margin-left: 5px;color: #5E5E5E">{{driverInfo.goodCount}}</span>
                     </div>
                 </van-col>
             </van-row>
@@ -69,16 +77,24 @@
 
         <van-row style="position: fixed;bottom: 55px;width: 100%;">
             <van-col span="6">
-                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini" @click="wxShare">分享</van-button>
+                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini"
+                            @click="wxShare">分享
+                </van-button>
             </van-col>
             <van-col span="6">
-                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini" @click="followUser">关注</van-button>
+                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini"
+                            @click="followUser">关注
+                </van-button>
             </van-col>
             <van-col span="6">
-                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini" @click="contactCar">电话</van-button>
+                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini"
+                            @click="contactCar">电话
+                </van-button>
             </van-col>
             <van-col span="6">
-                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini" @click="reserveCar">预约</van-button>
+                <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini"
+                            @click="reserveCar">预约
+                </van-button>
             </van-col>
         </van-row>
 
@@ -92,14 +108,22 @@
             </van-tabbar>
         </div>
 
+
+        <van-popup v-model="guide" @click="guide=false">
+            <div style="text-align:center;color:#fff;position: absolute;top: 80%;left: 0;right: 0;margin: auto;">
+                点击右上角,选择分享到好友或朋友圈
+            </div>
+            <img :src="guideIcon"/>
+        </van-popup>
     </div>
 </template>
 
 <script>
     import Title from './../../components/header'
-    import { Cell, CellGroup,DatetimePicker,Popup,Row, Col,Icon,Picker ,Checkbox, CheckboxGroup ,Button,Toast ,Dialog,Tabbar, TabbarItem } from 'vant';
+    import { Cell, CellGroup,DatetimePicker,Row,Popup, Col,Icon,Picker ,Checkbox, CheckboxGroup ,Button,Toast ,Dialog,Tabbar, TabbarItem } from 'vant';
     import context from "../../utils/context";
     import request from '../../utils/request'
+    import guideIcon from '../../static/images/guide.png'
 
     import chengK from './../../static/images/chengk.png'
     import xingC from './../../static/images/xingC.png'
@@ -108,32 +132,36 @@
 
     export default {
         name: "lineDetails",
-        components:{
+        components: {
             Title,
-            [Cell.name]:Cell,
-            [CellGroup.name]:CellGroup,
-            [DatetimePicker.name]:DatetimePicker,
+            [Cell.name]: Cell,
             [Popup.name]:Popup,
-            [Row.name]:Row,
-            [Col.name]:Col,
-            [Icon.name]:Icon,
-            [Picker.name]:Picker,
-            [Checkbox.name]:Checkbox,
-            [CheckboxGroup.name]:CheckboxGroup,
-            [Button.name]:Button,
-            [Toast.name]:Toast,
+            [CellGroup.name]: CellGroup,
+            [DatetimePicker.name]: DatetimePicker,
+            [Popup.name]: Popup,
+            [Row.name]: Row,
+            [Col.name]: Col,
+            [Icon.name]: Icon,
+            [Picker.name]: Picker,
+            [Checkbox.name]: Checkbox,
+            [CheckboxGroup.name]: CheckboxGroup,
+            [Button.name]: Button,
+            [Toast.name]: Toast,
             [Dialog.name]: Dialog,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem
         },
-        data(){
-            return{
+
+        data() {
+            return {
                 active:"",
-                title:"行车信息",
-                tripDetails:{
-                    startName:""
+                guide: false,
+                guideIcon: guideIcon,
+                title: "行车信息",
+                tripDetails: {
+                    startName: ""
                 },
-                driverInfo:{
+                driverInfo: {
                     carNumber: "",
                     badCount: "",
                     phone: "",
@@ -150,76 +178,18 @@
                 person: person
             }
         },
-        mounted(){
+        mounted() {
             this.initData();
         },
 
-        methods:{
-            initData(){
-                this.tripId = this.$route.query.tripId;
+        methods: {
+            wxConfig() {
                 request.sendGet({
-                    url:"/sharecar/pass/tripdetail/"+this.tripId,
-                    params: {}
-                }).then(res =>{
-                    if(res.data.code == '0'){
-                        let driverinfo = res.data.data.driverinfo;
-                        this.driverInfo = driverinfo;
-                    }
-                })
-
-
-                request.sendGet({
-                    url:"/sharecar/trip/select/" + this.tripId,
-                    params:{}
-                }).then(res =>{
-                    if(res.data.code == '0'){
-                        this.tripDetails.startName = res.data.data.lineinfo.startName;
-                        this.tripDetails.endIdName = res.data.data.lineinfo.endIdName;
-                        this.tripDetails.lineName = res.data.data.lineinfo.lineName;
-                        this.tripDetails.tripDateTime = res.data.data.tripinfo.tripDateTime;
-                        this.tripDetails.tripLine = res.data.data.tripinfo.tripLine;
-                        this.tripDetails.totalSeat = res.data.data.tripinfo.totalSeat;
-                        this.tripDetails.tripPrice = res.data.data.tripinfo.tripPrice;
-                        this.tripDetails.remark = res.data.data.tripinfo.remark;
-                    }
-                })
-
-            },
-
-            followUser(){
-                request.sendPost({
-                    url:"/user/center/follow",
+                    url: "/wx/pay/signature",
                     params: {
-                        followerId:"1"
+                        url: location.href
                     }
-                }).then(res =>{
-                    if(res.data.code == '0'){
-                        Toast.success("关注用户");
-                    }else {
-                        Toast.fail(res.data.msg);
-                    }
-                })
-            },
-
-            reserveCar(){
-                this.$router.push({path: '/declare',query:{id:this.tripId}});
-            },
-
-            contactCar(){
-                if(this.driverInfo.phone){
-                    window.location.href = "tel:" + this.driverInfo.phone;
-                }else{
-                    Toast("暂无联系方式");
-                }
-            },
-
-            wxShare(){
-                request.sendGet({
-                    url:"/wx/pay/signature",
-                    params:{
-                        url:location.href
-                    }
-                }).then(res =>{
+                }).then(res => {
                     wx.config({
                         beta: true,// 必须这么写，否则在微信插件有些jsapi会有问题
                         // debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -232,11 +202,11 @@
                     });
 
 
-                    var ShareLink =  location.protocol+"//"+location.hostname + "/#/lineDetails?tripId="+this.tripId; //默认分享链接
+                    var ShareLink = location.protocol + "//" + location.hostname + "/#/lineDetails?tripId=" + this.tripId; //默认分享链接
                     var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
                     var ShareTitle = "申坤出行"; // 分享标题
                     var ShareDesc = "申坤出行!"; // 分享描述
-                    wx.ready(function(){
+                    wx.ready(function () {
                         //自定义“分享给朋友”及“分享到QQ”按钮的分享内容
                         wx.updateAppMessageShareData({
                             title: ShareTitle, // 分享标题
@@ -256,30 +226,101 @@
                             }
                         })
                     });
-                    wx.error(function(res){
+                    wx.error(function (res) {
                         console.log(res);
                     });
                 })
+            },
+            initData() {
+                this.tripId = this.$route.query.tripId;
+                request.sendGet({
+                    url: "/sharecar/pass/tripdetail/" + this.tripId,
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == '0') {
+                        let driverinfo = res.data.data.driverinfo;
+                        this.driverInfo = driverinfo;
+                    }
+                })
 
 
+                request.sendGet({
+                    url: "/sharecar/trip/select/" + this.tripId,
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == '0') {
+                        this.tripDetails.startName = res.data.data.lineinfo.startName;
+                        this.tripDetails.endIdName = res.data.data.lineinfo.endIdName;
+                        this.tripDetails.lineName = res.data.data.lineinfo.lineName;
+                        this.tripDetails.tripDateTime = res.data.data.tripinfo.tripDateTime;
+                        this.tripDetails.tripLine = res.data.data.tripinfo.tripLine;
+                        this.tripDetails.totalSeat = res.data.data.tripinfo.totalSeat;
+                        this.tripDetails.tripPrice = res.data.data.tripinfo.tripPrice;
+                        this.tripDetails.remark = res.data.data.tripinfo.remark;
+                    }
+                })
+
+            },
+
+            followUser() {
+                request.sendPost({
+                    url: "/user/center/follow",
+                    params: {
+                        followerId: "1"
+                    }
+                }).then(res => {
+                    if (res.data.code == '0') {
+                        Toast.success("关注用户");
+                    } else {
+                        Toast.fail(res.data.msg);
+                    }
+                })
+            },
+
+            reserveCar() {
+                this.$router.push({path: '/declare', query: {id: this.tripId}});
+            },
+
+            contactCar() {
+                if (this.driverInfo.phone) {
+                    window.location.href = "tel:" + this.driverInfo.phone;
+                } else {
+                    Toast("暂无联系方式");
+                }
+            },
+
+            wxShare() {
+                this.guide = true;
             }
         }
     }
 </script>
 
 <style scoped>
-    .lineDetails{
+    .lineDetails {
         width: 90%;
         margin: 15px auto 15px;
         background: #FFFFFF;
         padding: 10px 5px;
     }
 
-    .collect{
+    .collect {
         margin-left: 20px;
     }
 
-    .content{
+    /deep/ .van-popup {
+        background-color: transparent;
+    }
+
+    /deep/ .van-popup--center {
+        top: 20%;
+        height: 30%;
+        width: 100%;
+        text-align: right;
+        padding-right: 15px;
+    }
+
+    .content {
         padding: 5px 15px;
         background: #FFFFFF;
         font-size: 14px;
