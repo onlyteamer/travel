@@ -3,13 +3,14 @@
         <div class="dateTag">
             <van-tabs type="card" v-model="active" :swipe-threshold="7" background="#FFFFFF" color="#5083ED"
                       title-active-color="#FFFFFF" title-inactive-color="#202020" @click="changeDate">
-                <van-tab title="周日"></van-tab>
-                <van-tab title="周一"></van-tab>
-                <van-tab title="周二"></van-tab>
-                <van-tab title="周三"></van-tab>
-                <van-tab title="周四"></van-tab>
-                <van-tab title="周五"></van-tab>
-                <van-tab title="周六"></van-tab>
+                <van-tab v-for="(item,index) in 7" :title="getWeek(index)" :name="getDate(index)"></van-tab>
+                <!--                <van-tab title="周日"></van-tab>-->
+                <!--                <van-tab title="周一"></van-tab>-->
+                <!--                <van-tab title="周二"></van-tab>-->
+                <!--                <van-tab title="周三"></van-tab>-->
+                <!--                <van-tab title="周四"></van-tab>-->
+                <!--                <van-tab title="周五"></van-tab>-->
+                <!--                <van-tab title="周六"></van-tab>-->
             </van-tabs>
 
             <div class="placeTab">
@@ -21,8 +22,6 @@
                 </van-tabs>
             </div>
         </div>
-
-
         <div class="content">
             <van-list
                     :offset="10"
@@ -123,6 +122,12 @@
                 </div>
             </van-list>
         </div>
+        <van-popup v-model="guide" @click="guide=false">
+            <div style="text-align:center;color:#fff;position: absolute;top: 80%;left: 0;right: 0;margin: auto;">
+                点击右上角,选择分享到好友或朋友圈
+            </div>
+            <img :src="guideIcon"/>
+        </van-popup>
         <div style="width: 100%">
             <van-tabbar v-model="footActive" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
                         style="background:#5083ED ">
@@ -137,9 +142,10 @@
 
 <script>
     import Title from './../../components/header'
-    import {Tab, Tabs, Divider, Row, Col, Button,List,Dialog,Tabbar, TabbarItem} from 'vant';
+    import {Tab, Tabs, Divider, Row, Popup, Col, Button, List, Dialog, Tabbar, TabbarItem} from 'vant';
     import request from "../../utils/request";
     import moment from 'moment'
+    import guideIcon from '../../static/images/guide.png'
 
     import chengK from './../../static/images/chengk.png'
     import xingC from './../../static/images/xingC.png'
@@ -150,20 +156,22 @@
         name: "carLine",
         components: {
             Title,
+            [Popup.name]: Popup,
             [Tab.name]: Tab,
             [Tabs.name]: Tabs,
             [Divider.name]: Divider,
             [Row.name]: Row,
             [Col.name]: Col,
             [Button.name]: Button,
-            [List.name]:List,
-            [Dialog.name]:Dialog,
+            [List.name]: List,
+            [Dialog.name]: Dialog,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem
         },
         data() {
             return {
-                footActive:"",
+                guide: false,
+                footActive: "",
                 title: "线路：北京←→密云",
                 active: 1,
                 isOneHttp: true,
@@ -171,6 +179,7 @@
                 finished: false,
                 startPlace: "",
                 endPlace: "",
+                guideIcon: guideIcon,
                 dataMain: {
                     data: [],
                     pageSize: 6,
@@ -181,7 +190,7 @@
                 xingC: xingC,
                 push: push,
                 person: person,
-                lineInfo:{
+                lineInfo: {
                     direction: ''
                 }
             }
@@ -198,31 +207,17 @@
             this.endPlace = info.endPlace;
             this.active = Number(info.week);
             this.initData();
+            this.wxConfig();
         },
 
         methods: {
-            changeDate(title) {
-                this.lineInfo.startDate = moment().day(title).format("YYYY-MM-DD") + " " + '00:00:00';
-                this.lineInfo.endDate = moment().day(title).format("YYYY-MM-DD") + " " + '23:59:59';
-                this.isOneHttp = true;
-                this.loading = false;
-                this.finished = false;
-                this.dataMain.data = [];
-                this.dataMain.pageNum = 1;
-                this.dataMain.total = 0;
-                this.initData();
+            getWeek(index) {
+                return moment().locale("zh-cn").add(index, 'days').format("dddd").replace("星期", "周");
             },
-            changeDirection(name) {
-                this.lineInfo.direction = name;
-                this.isOneHttp = true;
-                this.loading = false;
-                this.finished = false;
-                this.dataMain.data = [];
-                this.dataMain.pageNum = 1;
-                this.dataMain.total = 0;
-                this.initData();
+            getDate(index) {
+                return moment().locale("zh-cn").add(index, 'days').format("YYYY-MM-DD")
             },
-            wxShare() {
+            wxConfig() {
                 request.sendGet({
                     url: "/wx/pay/signature",
                     params: {
@@ -239,8 +234,6 @@
                         //updateTimelineShareData分享到朋友圈,updateAppMessageShareData分享给朋友,
                         jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
                     });
-
-
                     var ShareLink = location.protocol + "//" + location.hostname + "/#/lineDetails?tripId=" + this.tripId; //默认分享链接
                     var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
                     var ShareTitle = "申坤出行"; // 分享标题
@@ -270,7 +263,31 @@
                     });
                 })
             },
+            changeDate(name) {
+                this.lineInfo.startDate = name + " " + '00:00:00';
+                this.lineInfo.endDate = name + " " + '23:59:59';
+                this.isOneHttp = true;
+                this.loading = false;
+                this.finished = false;
+                this.dataMain.data = [];
+                this.dataMain.pageNum = 1;
+                this.dataMain.total = 0;
+                this.initData();
+            },
+            changeDirection(name) {
+                this.lineInfo.direction = name;
+                this.isOneHttp = true;
+                this.loading = false;
+                this.finished = false;
+                this.dataMain.data = [];
+                this.dataMain.pageNum = 1;
+                this.dataMain.total = 0;
+                this.initData();
+            },
+            wxShare() {
 
+                this.guide = true;
+            },
 
             linkUserDetails(val) {
                 if (val.userId) {
@@ -356,6 +373,18 @@
         position: fixed;
         z-index: 999;
         background-color: #F6F6F6;
+    }
+
+    /deep/ .van-popup {
+        background-color: transparent;
+    }
+
+    /deep/ .van-popup--center {
+        top: 20%;
+        height: 30%;
+        width: 100%;
+        text-align: right;
+        padding-right: 15px;
     }
 
     .placeTab {
