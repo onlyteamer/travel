@@ -182,10 +182,7 @@
                 push: push,
                 person: person,
                 lineInfo:{
-
-                lineInfo: {
-                    direction: '',
-
+                    direction: ''
                 }
             }
         },
