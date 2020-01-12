@@ -7,7 +7,7 @@
                 :lon="carInfo.lon"
                 :lat="carInfo.lat"
                 :tripId="tripId"
-                placeholder="请输入酒店地址或点击下面地图" height="450px" width="375px">
+                placeholder="请输入酒店地址或点击下面地图" height="450px">
         </aMap>
 
         <div class="footer">
@@ -142,6 +142,9 @@
 
 
 <style scoped>
+    .contain{
+        width: 100%;
+    }
     .footer{
         width: 88%;
         margin: 0 auto 55px;
