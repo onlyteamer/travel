@@ -25,7 +25,21 @@
                 </div>
             </div>
             <div style=" background-color: white;">
-                <div class="date-title">{{dateTitle}}</div>
+                <div class="date-title">
+                    <van-row>
+                        <van-col span="6" style="text-align: center">
+                            <van-button icon="arrow-left" type="primary"  @click="preMonth" plain
+                                        color="#333" style="border:none;"/>
+                        </van-col>
+                        <van-col span="12" style="text-align: center">
+                            <span>{{dateTitle}}</span>
+                        </van-col>
+                        <van-col span="6" style="text-align: center">
+                            <van-button icon="arrow" type="primary" @click="nextMonth" plain color="#333"
+                                        style="border:none;"/>
+                        </van-col>
+                    </van-row>
+                </div>
                 <div class="data-week-title">
                     <span v-for="item in week" :key="item">{{item}}</span>
                 </div>
@@ -55,7 +69,8 @@
         </div>
 
         <div class="footer">
-            <van-tabbar  v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="background:#5083ED ">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
                 <van-tabbar-item :icon="car" to="/busIndex">预定巴士</van-tabbar-item>
                 <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
                 <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
@@ -65,7 +80,7 @@
 </template>
 
 <script>
-    import {NavBar, Button, Icon, Toast,Tabbar, TabbarItem} from 'vant';
+    import {NavBar, Button, Icon, Toast, Tabbar, TabbarItem,Row,Col} from 'vant';
     import Kalendar from 'kalendar';
     import request from '../../utils/request';
     import moment from 'moment';
@@ -76,6 +91,8 @@
 
     export default {
         components: {
+            [Row.name]: Row,
+            [Col.name]: Col,
             [NavBar.name]: NavBar,
             [Button.name]: Button,
             [Icon.name]: Icon,
@@ -85,13 +102,14 @@
         },
         data() {
             return {
-                startnum:0,//日期从第几位开始
+                startnum: 0,//日期从第几位开始
                 user: user,
                 car: car,
                 scan: scan,
-                active:"",
+                active: "",
                 num: 0,//购票张数
                 amount: 0,
+                currentDate: moment(),
                 chooseDate: [],
                 busid: '',
                 lineid: '',
@@ -114,6 +132,16 @@
             }
         },
         methods: {
+            nextMonth() {
+                this.currentDate = moment(this.currentDate, 'YYYY-MM').add(1, 'months');
+                this.dateTitle = this.currentDate.format('YYYY月MM日');
+                this.initData();
+            },
+            preMonth() {
+                this.currentDate = moment(this.currentDate, 'YYYY-MM').subtract(1, 'months');
+                this.dateTitle = this.currentDate.format('YYYY月MM日');
+                this.initData();
+            },
             getItemClass(item) {
                 if (item) {
                     switch (item.state) {
@@ -147,16 +175,6 @@
             },
             onClickLeft() {
                 this.$router.back(-1);
-            },
-            checkTicketsLeft(){
-                request.sendPost({
-                    url:'/bus/buyTicketBefore',
-                    params:{
-                        busid:'',
-                        dateStr:[],
-                        lineid:''
-                    }
-                })
             },
             addBuyTicket(item) {
                 if (item && (item.state === 1 || item.state === 2)) {
@@ -206,10 +224,11 @@
                 })
             },
             initData() {
+                let currentDate = this.currentDate.format('YYYY-MM')
                 request.sendPost({
                     url: '/bus/ticketlist',
                     params: {
-                        month: moment().format("YYYY-MM"),
+                        month: currentDate,
                         busid: this.busid,
                         lineid: this.lineid
                     }
@@ -219,10 +238,11 @@
                     } else {
                         Toast(res.data.msg);
                     }
-                    this.initKalendar();
+                    let date = new Date(this.currentDate);
+                    this.initKalendar(date);
                 })
             },
-            initKalendar() {
+            initKalendar(date) {
                 let arr = {};
                 if (this.data && this.data.length > 0) {
                     for (let i = 0, len = this.data.length; i < len; i++) {
@@ -233,7 +253,6 @@
                     }
                 }
                 let continuous = false;
-                let date = new Date();
                 let mount = arr;
                 let unifiedMount = {
                     // state: '售票'
@@ -245,9 +264,9 @@
                     continuous: continuous
                 });
                 let num = 0;
-                for(let i=0;i<this.ticketData[0].length;i++){
-                    if(!this.ticketData[0][i]){
-                        num +=1;
+                for (let i = 0; i < this.ticketData[0].length; i++) {
+                    if (!this.ticketData[0][i]) {
+                        num += 1;
                     }
                 }
                 this.startnum = num;

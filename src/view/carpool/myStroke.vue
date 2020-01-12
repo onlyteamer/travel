@@ -486,17 +486,11 @@
 
 
             contactCar(val) {
-                let mobile = "";
                 if (val) {
-                    mobile = val;
+                    window.location.href = "tel:" + val;
+                } else {
+                    Toast("暂无联系方式");
                 }
-
-                Dialog.alert({
-                    title: "联系车主",
-                    message: mobile
-                }).then(() => {
-                    // on close
-                });
             },
 
             changeTab(val) {

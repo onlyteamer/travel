@@ -408,8 +408,9 @@
                 // Toast('返回');
                 this.$router.back(-1);
             },
+
             goCarList(){
-                console.log(this.strokeInfo)
+                // console.log(this.strokeInfo)
                 // if(!this.strokeInfo.startPlace){
                 //     Toast.fail("请填写出发地点");
                 //     return;
