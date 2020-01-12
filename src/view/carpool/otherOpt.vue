@@ -67,14 +67,14 @@
                     <div style="margin-bottom: 10px"><span style="font-weight: bold">座位数：</span><span>1位（{{tripDetails.tripPrice}}元）</span>
                     </div>
                     <div style="margin-bottom: 10px" v-for="(pass,index) in passList" :key="index"><span style="font-weight: bold">乘车人：</span><span>{{pass.nickname}}</span></div>
-                    <div style="margin-bottom: 10px"><span style="font-weight: bold">乘车人：</span><span>暂无</span></div>
+                    <div style="margin-bottom: 10px" v-if="passList.length == '0'"><span style="font-weight: bold">乘车人：</span><span>暂无</span></div>
                 </div>
                 <!--<van-row>-->
                 <!--<van-col span="4" align="right">路线:</van-col>-->
                 <!--<van-col span="20">上河湾出发，李各庄，康居，果园，少年宫，万象汇，京城高速，芍药居，西坝河，东直门重点。</van-col>-->
                 <!--</van-row>-->
             </div>
-            <div style="width: 100%;height: 100%;position: absolute;top: 0;background:rgba(0, 0, 0, 0.3);"></div>
+            <!--<div style="width: 100%;height: 100%;position: absolute;top: 0;background:rgba(0, 0, 0, 0.3);"></div>-->
         </div>
         <div class="assess" align="right">
             <van-button type="default" :color="isFollow == '0'?'#0CC893':'#9E9E9E'"

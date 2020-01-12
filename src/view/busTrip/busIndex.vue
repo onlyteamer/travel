@@ -31,7 +31,7 @@
                     color="#0BCA92"
                     background="#FFFFFF"
                     :left-icon="laba"
-                    :scrollable="false"
+                    :scrollable="true"
                     :text="notice"
             >
 

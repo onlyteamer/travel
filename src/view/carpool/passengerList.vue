@@ -26,8 +26,8 @@
                             <div><div style="color: #5E5E5E">下车地点：{{item.endPlace}}</div></div>
                         </van-col>
                     </van-row>
-                    <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false" />
-                    <van-row>
+                    <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"  />
+                    <van-row v-if="item.passState == '0'">
                         <van-col span="6" offset="11">
                             <van-button type="default" color="#9E9E9E" size="mini" style="height: 34px;font-size: 14px;width: 100%" @click="confirmTrip(item,'2')">拒绝</van-button>
                         </van-col>
@@ -35,8 +35,14 @@
                             <van-button type="default" color="#0CC893" size="mini" style="height: 34px;font-size: 14px;width: 100%;margin-left: 10px" @click="confirmTrip(item,'1')">预约确定</van-button>
                         </van-col>
                     </van-row>
-                </div>
-            </div>
+
+                    <van-row v-if="item.passState != '0'">
+                        <van-col span="6" style="float: right">
+                            <van-button type="default" :color="item.passState == '1'?'#0CC893':'#cacaca'" size="mini" style="height: 34px;font-size: 14px;width: 100%;margin-left: 10px">{{item.passState == '1'?'已确定':(item.passState == '2'?'已拒绝':'待确定')}}</van-button>
+                        </van-col>
+                    </van-row>
+        </div>
+    </div>
         </div>
 
         <div style="width: 100%">
@@ -54,7 +60,7 @@
 
 <script>
     import Title from './../../components/header'
-    import { Row, Col,Divider,Button,Dialog,Tabbar,TabbarItem} from 'vant';
+    import { Row, Col,Divider,Button,Dialog,Tabbar,TabbarItem,Toast} from 'vant';
 
     import avatar from "../../static/images/userAvatar.png"
 
@@ -75,7 +81,8 @@
             [Button.name]:Button,
             [Dialog.name]: Dialog,
             [Tabbar.name]: Tabbar,
-            [TabbarItem.name]: TabbarItem
+            [TabbarItem.name]: TabbarItem,
+            [Toast.name]: Toast,
         },
         data(){
             return{
@@ -126,19 +133,20 @@
                         request.sendPost({
                             url:'/sharecar/trip/confirm',
                             params:{
-                                bookId:item.bookId,
+                                bookId:val.bookId,
                                 state:flag,
-                                tripId:item.tripId
+                                tripId:val.tripId
                             }
                         }).then(res =>{
                             //刷新列表
                             if(res.data.code == '0'){
                                 this.initPassList();
+                                Toast.success(res.data.msg);
                             }
                         })
                     }).catch(() => {
                         //取消
-
+                        debugger;
                     });
                 }else {
                     Dialog.confirm({
@@ -149,14 +157,15 @@
                         request.sendPost({
                             url:'/sharecar/trip/confirm',
                             params:{
-                                bookId:item.bookId,
+                                bookId:val.bookId,
                                 state:flag,
-                                tripId:item.tripId
+                                tripId:val.tripId
                             }
                         }).then(res =>{
                             //刷新列表
                             if(res.data.code == '0'){
                                 this.initPassList();
+                                Toast.success(res.data.msg);
                             }
                         })
                     }).catch(() => {

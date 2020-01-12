@@ -304,7 +304,7 @@
                     if(res.data.code == '0'){
                         let list = res.data.data;
                         list.forEach(e =>{
-                           this.notice += e.title+"       ";
+                           this.notice += e.title+" ";
 
                         });
                     }

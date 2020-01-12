@@ -77,7 +77,7 @@
                                         <van-col span="8" style="color: #0CC893;text-align: right;font-size: 14px">
                                             <div>
                                                 <span>{{line.state }}</span>
-                                                <span style="background: #9E9E9E;color: #FFFFFF;padding: 5px 10px;border-radius: 5px;margin-right: 10px"
+                                                <span style="background: #9E9E9E;color: #FFFFFF;padding: 5px 10px;border-radius: 5px;margin-left: 10px"
                                                       :disabled="refundBtnDisable(line,item.date)"
                                                       @click="refundTicket(line,item.date)">退票</span>
                                             </div>
@@ -282,7 +282,7 @@
                     request.sendPost({
                         url: '/bus/refundTicket',
                         params: {
-                            ticketid: item.id
+                            ticketid: item.ticketid
                         }
                     }).then((res) => {
                         if (res.data.code === 0) {

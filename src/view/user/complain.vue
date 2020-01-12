@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <van-nav-bar :fixed="true" title="我的投诉" left-arrow @click-left="onClickLeft"/>
+            <!--<van-nav-bar :fixed="true" title="我的投诉" left-arrow @click-left="onClickLeft"/>-->
         </div>
         <div class="content">
             <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
@@ -19,7 +19,7 @@
                                 <img src="../../static/images/tsdx.png" width="19px"/>
                             </div>
                             <div>投诉对象：</div>
-                            <div style="flex: 1">{{item.type == '1'?'乘客':'车主'}}</div>
+                            <div style="flex: 1">{{item.type == '1'?'车主':'乘客'}}</div>
                         </div>
                         <div class="item-li">
                             <div style="width: 20px;margin-right: 8px;">
@@ -110,7 +110,7 @@
     .content {
         background-color: #F6F6F6;
         padding: 10px 15px 0 15px;
-        margin-top: 46px;
+        /*margin-top: 46px;*/
     }
 
     /deep/ .van-nav-bar .van-icon {
