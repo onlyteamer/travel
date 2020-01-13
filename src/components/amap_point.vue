@@ -16,6 +16,7 @@
   var placeSearch = '';
   import request from '../utils/request';
   import moment from 'moment'
+  import AMap from '../utils/AMap'
 
   export default {
     name: "Amap",
@@ -59,6 +60,7 @@
         isInit:true,
         marker:"",
         map:"",
+        resMap: null,
         carPosition:{
             updateTime:"",
             latitude:"",
@@ -71,9 +73,9 @@
     },
 
     mounted() {
-      let _this = this
+      let _this = this;
       if (process.browser) {
-        _this.initMap()
+        _this.initMap();
       }
     },
     methods: {
@@ -94,131 +96,138 @@
                 }
             })
         },
-
-      initMap() {
+      async  initMap() {
+          let me = this;
           //基本地图加载
-          var center = [this.lon,this.lat];
-          let _this = this;
-          var roadNetLayer = new AMap.TileLayer.RoadNet(); //定义一个路网图层
-          var map = new AMap.Map(this.id, {
-            resizeEnable: true,
-            zoom: _this.zoom,
-            center:center,
-            layers: [roadNetLayer] //设置图层
-          });
+          try{
+            var center = [this.lon,this.lat];
+            let _this = this;
+            me.resMap = await AMap();
+            var roadNetLayer = new me.resMap.TileLayer.RoadNet(); //定义一个路网图层
+            var map = new me.resMap.Map(this.id, {
+              resizeEnable: true,
+              zoom: _this.zoom,
+              center:center,
+              layers: [roadNetLayer] //设置图层
+            });
 
-          // var map = new AMap.Map("container", {
-          //     resizeEnable: true,
-          //     center: center,//地图中心点
-          //     zoom: 13 //地图显示的缩放级别
-          // });
+            // var map = new AMap.Map("container", {
+            //     resizeEnable: true,
+            //     center: center,//地图中心点
+            //     zoom: 13 //地图显示的缩放级别
+            // });
 
-          //构造路线导航类
-          var driving = new AMap.Driving({
-              policy: AMap.DrivingPolicy.LEAST_TIME,
+            //构造路线导航类
+            var driving = new me.resMap.Driving({
+              policy: me.resMap.DrivingPolicy.LEAST_TIME,
               map:map
-          });
+            });
 
-          // 根据起终点经纬度规划驾车导航路线
-          driving.search(new AMap.LngLat(this.lon, this.lat), new AMap.LngLat(this.carPosition.longitude,this.carPosition.latitude), function(status, result) {
+            // 根据起终点经纬度规划驾车导航路线
+            driving.search(new me.resMap.LngLat(this.lon, this.lat), new me.resMap.LngLat(this.carPosition.longitude,this.carPosition.latitude), function(status, result) {
               // result 即是对应的驾车导航信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_DrivingResult
               if (status === 'complete') {
-                  // log.success('绘制驾车路线完成')
+                // log.success('绘制驾车路线完成')
               } else {
-                  // log.error('获取驾车数据失败：' + result)
+                // log.error('获取驾车数据失败：' + result)
               }
-          });
-        //地图初始化
-        //
-        // if(this.lon&&this.lat){
-        //   center = [this.lon,this.lat];
-        //   this.marker  = new AMap.Marker({
-        //     position: new AMap.LngLat(this.lon, this.lat),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-        //     title: ''
-        //   });
-        // }
-        // var _this = this;
-        // var roadNetLayer = new AMap.TileLayer.RoadNet(); //定义一个路网图层
-        // var map = new AMap.Map(this.id, {
-        //   resizeEnable: true,
-        //   zoom: _this.zoom,
-        //   center:center,
-        //   layers: [roadNetLayer] //设置图层
-        // });
-        // this.map = "";
-        // this.map = map;
-        // console.log(this.marker);
-        // // if(this.marker){
-        // //   this.map.add(this.marker);
-        // // }
-        // // var toolBar = new AMap.ToolBar({
-        // //   visible: true
-        // // });
-        // // map.addControl(toolBar);
-        // // _this.autoSearch(map);
-        // //
-        // // map.on('click', function(e) {
-        // //   // _this.mapClick(map,e);//地图点击事件
-        // //   // alert('您在[ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ]的位置点击了地图！');
-        // // });
-        //
-        //
-        //   let marker1  = new AMap.Marker({
-        //       icon:"",
-        //       position: new AMap.LngLat(116.379028, 39.865042),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-        //       title: ''
-        //   });
-        //   let arr = [];
-        //   arr.push(marker1);
-        //   let marker2  = new AMap.Marker({
-        //       icon:"",
-        //       position: new AMap.LngLat(116.397281,39.883719),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-        //       title: ''
-        //   });
-        //   arr.push(marker2);
-        //   map.add(arr);
-        //   //构造路线导航类
-        //   // AMap.plugin('AMap.Driving', function() {
-        //       // var driving = new AMap.Driving({
-        //       //     map: map,
-        //       //     panel: "panel"
-        //       // });
-        //       //
-        //       // // 根据起终点经纬度规划驾车导航路线
-        //       // driving.search(new AMap.LngLat(116.379028, 39.865042), new AMap.LngLat(116.427281, 39.903719), function (status, result) {
-        //       //     // result 即是对应的驾车导航信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_DrivingResult
-        //       //     if (status === 'complete') {
-        //       //         log.success('绘制驾车路线完成')
-        //       //     } else {
-        //       //         log.error('获取驾车数据失败：' + result)
-        //       //     }
-        //       // });
-        //       var driving = new AMap.Driving({
-        //           // 驾车路线规划策略，AMap.DrivingPolicy.LEAST_TIME是最快捷模式
-        //           policy: AMap.DrivingPolicy.LEAST_TIME
-        //       })
-        //       console.log(driving)
-        //       var startLngLat = [116.379028, 39.865042]
-        //       var endLngLat = [116.397281, 39.883719]
-        //
-        //
-        //       driving.search(startLngLat, endLngLat, function (status, result) {
-        //           // 未出错时，result即是对应的路线规划方案
-        //       })
-        //   // });
+            });
+            //地图初始化
+            //
+            // if(this.lon&&this.lat){
+            //   center = [this.lon,this.lat];
+            //   this.marker  = new AMap.Marker({
+            //     position: new AMap.LngLat(this.lon, this.lat),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+            //     title: ''
+            //   });
+            // }
+            // var _this = this;
+            // var roadNetLayer = new AMap.TileLayer.RoadNet(); //定义一个路网图层
+            // var map = new AMap.Map(this.id, {
+            //   resizeEnable: true,
+            //   zoom: _this.zoom,
+            //   center:center,
+            //   layers: [roadNetLayer] //设置图层
+            // });
+            // this.map = "";
+            // this.map = map;
+            // console.log(this.marker);
+            // // if(this.marker){
+            // //   this.map.add(this.marker);
+            // // }
+            // // var toolBar = new AMap.ToolBar({
+            // //   visible: true
+            // // });
+            // // map.addControl(toolBar);
+            // // _this.autoSearch(map);
+            // //
+            // // map.on('click', function(e) {
+            // //   // _this.mapClick(map,e);//地图点击事件
+            // //   // alert('您在[ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ]的位置点击了地图！');
+            // // });
+            //
+            //
+            //   let marker1  = new AMap.Marker({
+            //       icon:"",
+            //       position: new AMap.LngLat(116.379028, 39.865042),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+            //       title: ''
+            //   });
+            //   let arr = [];
+            //   arr.push(marker1);
+            //   let marker2  = new AMap.Marker({
+            //       icon:"",
+            //       position: new AMap.LngLat(116.397281,39.883719),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+            //       title: ''
+            //   });
+            //   arr.push(marker2);
+            //   map.add(arr);
+            //   //构造路线导航类
+            //   // AMap.plugin('AMap.Driving', function() {
+            //       // var driving = new AMap.Driving({
+            //       //     map: map,
+            //       //     panel: "panel"
+            //       // });
+            //       //
+            //       // // 根据起终点经纬度规划驾车导航路线
+            //       // driving.search(new AMap.LngLat(116.379028, 39.865042), new AMap.LngLat(116.427281, 39.903719), function (status, result) {
+            //       //     // result 即是对应的驾车导航信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_DrivingResult
+            //       //     if (status === 'complete') {
+            //       //         log.success('绘制驾车路线完成')
+            //       //     } else {
+            //       //         log.error('获取驾车数据失败：' + result)
+            //       //     }
+            //       // });
+            //       var driving = new AMap.Driving({
+            //           // 驾车路线规划策略，AMap.DrivingPolicy.LEAST_TIME是最快捷模式
+            //           policy: AMap.DrivingPolicy.LEAST_TIME
+            //       })
+            //       console.log(driving)
+            //       var startLngLat = [116.379028, 39.865042]
+            //       var endLngLat = [116.397281, 39.883719]
+            //
+            //
+            //       driving.search(startLngLat, endLngLat, function (status, result) {
+            //           // 未出错时，result即是对应的路线规划方案
+            //       })
+            //   // });
+          }catch (e) {
+            console.log("error");
+            console.error(e);
+          }
       },
       mapClick(map,e){
-        // console.log(e);
+        let me = this;
         //改动标识物
         this.map.remove(this.marker);
-        this.marker  = new AMap.Marker({
-          position: new AMap.LngLat(e.lnglat.lng, e.lnglat.lat),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+        this.marker  = new me.resMap.Marker({
+          position: new me.resMap.LngLat(e.lnglat.lng, e.lnglat.lat),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
           title: '当前位置'
         });
         this.map.add(this.marker);
         this.getDetail(e.lnglat,'01');
       },
       autoSearch(map){
+          let me = this;
         if(this.initAddress){
           this.address = this.initAddress ;
         }
@@ -226,13 +235,12 @@
         var autoOptions = {
           input: this.inputId
         };
-        var auto = new AMap.Autocomplete(autoOptions);
-        placeSearch = new AMap.PlaceSearch({
+        var auto = new  me.resMap.Autocomplete(autoOptions);
+        placeSearch = new  me.resMap.PlaceSearch({
           map: map
         });  //构造地点查询类
-        var _this = this;
-        AMap.event.addListener(auto, "select", function(e){
-          _this.select(e)
+        me.resMap.event.addListener(auto, "select", function(e){
+          me.select(e)
         });//注册监听
       },
       select(e){
@@ -245,9 +253,9 @@
       getDetail(lnglatXY,type){
         //通过点击获取到所在地详细地址
         var _this = this;
-        AMap.service('AMap.Geocoder',function(){//回调函数
+        this.resMap.service('AMap.Geocoder',function(){//回调函数
           //实例化Geocoder
-          var geocoder = new AMap.Geocoder();
+          var geocoder = new  _this.resMap.Geocoder();
           //TODO: 使用geocoder 对象完成相关功能
           geocoder.getAddress(lnglatXY,  function(status, result) {
             if (status === 'complete' && result.info === 'OK') {
@@ -276,7 +284,7 @@
       },
       addMarker(map,e){
         //添加点标记
-        new AMap.Marker({
+        new  this.resMap.Marker({
           position: e.lnglat,
           map: map
         })

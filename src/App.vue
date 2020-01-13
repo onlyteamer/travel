@@ -3,8 +3,6 @@
     <router-view />
     <!--<remote-css href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"></remote-css>-->
     <remote-js src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></remote-js>
-
-    <remote-js src="https://webapi.amap.com/maps?v=1.4.5&key=4b5f2cf2cba25200cc6b68c398468899&&plugin=AMap.ToolBar,AMap.Driving,AMap.Autocomplete,AMap.PlaceSearch"></remote-js>
     <!--<remote-js src="https://cache.amap.com/lbs/static/addToolbar.js"></remote-js>-->
     <remote-js src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js"></remote-js>
   </div>
