@@ -2,20 +2,15 @@
     <div class="contain">
         <div class="content">
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px;display: flex;align-items: center">
-                <van-col span="6">预定座位数</van-col>
-                <van-col span="18">
-                    <van-col v-for="item in selectSeat" style="padding-bottom:5px " :key="item">
+                <van-col span="8">剩余{{stroke.bookSeat}}座可预约</van-col>
+                <van-col span="16">
+                    <van-col v-for="item in stroke.bookSeat" style="padding-bottom:5px " :key="item">
                         <van-tag :color="stroke.seatCount == item?'#0CC893':'#FFFFFF'"
                                  :text-color="stroke.seatCount == item?'#FFFFFF':'#202020'" class="seatTag"
                                  @click="changeSeat(item)">{{item}}座
                         </van-tag>
                     </van-col>
                 </van-col>
-            </van-row>
-
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
-                <van-col span="6">剩余{{stroke.bookSeat}}座</van-col>
-                <van-col span="14" style="color: #FF0200">每人限预定{{selectSeat}}座</van-col>
             </van-row>
 
             <van-row style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center">
@@ -58,7 +53,7 @@
 
             <van-row style="display: flex;align-items: center">
                 <van-col span="24">
-                    <van-field v-model="stroke.riderNames" placeholder="乘客人姓名" label="" label-width="5px"
+                    <van-field v-model="stroke.riderNames2.toString()" placeholder="乘客人姓名" label="" label-width="5px"
                                left-icon="user-circle-o" disabled/>
                 </van-col>
             </van-row>
@@ -66,8 +61,8 @@
             <van-row style="display: flex;align-items: center;border-bottom: 1px solid #ECECEC;padding: 0px 2px 12px">
                 <van-col span="16">
                     <div>
-                        <van-tag :color="stroke.riderIds === item.id?'#0CC893':'#FFFFFF'"
-                                 :text-color="stroke.riderIds === item.id?'#FFFFFF':'#202020'"
+                        <van-tag :color="stroke.riderIds2.indexOf(item.id)>-1?'#0CC893':'#FFFFFF'"
+                                 :text-color="stroke.riderIds2.indexOf(item.id)>-1?'#FFFFFF':'#202020'"
                                  style="border: 1px solid #CFCFCF;min-width: 30px;width: fit-content;margin-bottom: 5px"
                                  class="contactTag"
                                  v-for="item in normalRiders" :key="item.id" @click="selectRider(item)">
@@ -143,10 +138,29 @@
             </van-tabbar>
         </div>
 
-        <van-popup v-model="showPassenger" position="bottom" :style="{ height: '30%' }">
-            <van-picker :columns="passengerData" show-toolbar value-key="passName" @cancel="showPassenger = false"
-                        :visible-item-count="3"
-                        @confirm="onPassengerChange"/>
+        <van-popup v-model="showPassenger" position="bottom" :style="{ height: '30%',width:'94%',padding:'0 3%'}">
+            <div style="padding: 10px 0;border-bottom: 1px solid #cecece;text-align: right">
+                <van-button type="default" color="#0CC893" @click="goAdd"
+                            style="min-width: 66px;width: auto;height: 25px;padding: 0 5px;line-height: 25px">新增联系人
+                </van-button>
+            </div>
+            <van-checkbox-group v-model="result" :max="stroke.seatCount" @change="changePassenger">
+                <van-checkbox :name="item.id" v-for="item in passengerData" :key="item.id"
+                              style=" border-bottom: 1px solid #ECECEC;">
+                    <div class="item-li">
+                        <div class="item-li-flex" style="align-items: flex-start">
+                            <div>
+                                <span style="color:#202020;font-size: 16px;margin-right: 8px;font-weight: bolder">{{item.passName}}</span>
+                            </div>
+                            <div style="display:flex;align-items: center;margin-top: 5px">
+                                <img src="../../static/images/tel.png"
+                                     style="width: 14px;height:14px;margin-right: 9px"/>
+                                <span>{{item.passPhone}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </van-checkbox>
+            </van-checkbox-group>
         </van-popup>
         <van-popup v-model="wxpay" :style="{height: '45%',width:'90%'}"
                    style="background-color: white;border-radius: 10px">
@@ -159,10 +173,15 @@
                         <span style="color: #5E5E5E;font-size: 17px;position: absolute;right: 10px">元</span>
                     </div>
                     <div class="czje-item">
-                        <div @click="changeCzje(20)" :style="czje===20?{color:'#fff',backgroundColor:'#0CC893'}:{}">20</div>
-                        <div @click="changeCzje(30)" :style="czje===30?{color:'#fff',backgroundColor:'#0CC893'}:{}">30</div>
-                        <div @click="changeCzje(50)" :style="czje===50?{color:'#fff',backgroundColor:'#0CC893'}:{}">50</div>
-                        <div @click="changeCzje(100)" :style="czje===100?{color:'#fff',backgroundColor:'#0CC893'}:{}">100</div>
+                        <div @click="changeCzje(20)" :style="czje===20?{color:'#fff',backgroundColor:'#0CC893'}:{}">20
+                        </div>
+                        <div @click="changeCzje(30)" :style="czje===30?{color:'#fff',backgroundColor:'#0CC893'}:{}">30
+                        </div>
+                        <div @click="changeCzje(50)" :style="czje===50?{color:'#fff',backgroundColor:'#0CC893'}:{}">50
+                        </div>
+                        <div @click="changeCzje(100)" :style="czje===100?{color:'#fff',backgroundColor:'#0CC893'}:{}">
+                            100
+                        </div>
                     </div>
                 </div>
                 <div class="func-content">
@@ -177,7 +196,21 @@
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Icon, Checkbox, CheckboxGroup, Button, Tag, Field, Popup, Picker, Toast,Tabbar, TabbarItem} from 'vant';
+    import {
+        Row,
+        Col,
+        Icon,
+        Checkbox,
+        CheckboxGroup,
+        Button,
+        Tag,
+        Field,
+        Popup,
+        Picker,
+        Toast,
+        Tabbar,
+        TabbarItem
+    } from 'vant';
 
     import greenBar from './../../static/images/green.png'
     import redBar from './../../static/images/red.png'
@@ -208,7 +241,8 @@
         },
         data() {
             return {
-                active:"",
+                result: [],
+                active: "",
                 chengK: chengK,
                 xingC: xingC,
                 push: push,
@@ -228,10 +262,12 @@
                     startPlace: "",
                     endPlace: "",
                     tripId: "",
-                    riderNames: '',
-                    riderIds: '',
+                    riderNames: [],
+                    riderIds: [],
+                    riderNames2: [],
+                    riderIds2: [],
                     phone: "",
-                    seatCount: "",
+                    seatCount: 0,
                     price: "",
                     remark: "",
                     bookSeat: "",
@@ -240,7 +276,28 @@
             }
         },
         methods: {
-            changeCzje(je){
+            goAdd() {
+                this.$router.push({path: '/passenger-edit'});
+            },
+            changePassenger(value) {
+                if (this.stroke.seatCount === 0) {
+                    Toast("请先选择座位数");
+                    return;
+                }
+                this.stroke.riderNames2 = [];
+                this.stroke.riderIds2 = [];
+                for (let j = 0; j < value.length; j++) {
+                    for (let i = 0; i < this.passengerData.length; i++) {
+                        if (this.passengerData[i].id === value[j]) {
+                            this.stroke.riderNames2.push(this.passengerData[i].passName);
+                            this.stroke.riderIds2.push(this.passengerData[i].id);
+                            this.stroke.phone = this.passengerData[i].passPhone;
+                            continue;
+                        }
+                    }
+                }
+            },
+            changeCzje(je) {
                 this.czje = je;
             },
             recharge() {
@@ -332,14 +389,6 @@
                     }
                 })
             },
-
-            onPassengerChange(picker, values) {
-                this.stroke.riderNames = picker.passName;
-                this.stroke.riderIds = picker.id;
-                this.stroke.phone = picker.passPhone;
-                this.showPassenger = false;
-            },
-
             goAgreement(val) {
                 this.$router.push({path: '/agreement', query: {name: '绿色出行用户协议', id: val}})
             },
@@ -366,11 +415,16 @@
                     return;
                 }
 
-                if (!this.stroke.riderIds) {
+                if (!this.stroke.riderIds2) {
                     Toast.fail("乘客不能为空");
                     return;
                 }
-
+                if (this.stroke.riderIds2.length !== this.stroke.seatCount) {
+                    Toast.fail("请添加全部乘车人");
+                    return;
+                }
+                this.stroke.riderIds = this.stroke.riderIds2.toString();
+                this.stroke.riderNames = this.stroke.riderNames2.toString();
                 request.sendPost({
                     url: '/sharecar/pass/booktrip',
                     params: this.stroke
@@ -396,34 +450,44 @@
                 this.stroke.seatCount = item;
             },
             selectRider(data) {
-                if (data.id == this.stroke.riderIds) {
-                    this.stroke.riderNames = "";
-                    this.stroke.riderIds = "";
-                    this.stroke.phone = "";
+                let index = this.stroke.riderIds2.indexOf(data.id);
+                if (index > -1) {
+                    let index2 = this.stroke.riderNames2.indexOf(data.passName);
+                    this.stroke.riderNames2.splice(index2, 1);
+                    this.stroke.riderIds2.splice(index, 1);
                 } else {
-                    this.stroke.riderNames = data.passName;
-                    this.stroke.riderIds = data.id;
-                    this.stroke.phone = data.passPhone;
+                    this.stroke.riderNames2.push(data.passName);
+                    this.stroke.riderIds2.push(data.id);
                 }
+                this.result = this.stroke.riderIds2;
             },
             queryTrip() {
                 request.sendPost({
-                    url: '/sharecar/pass/booktripinfo/' + this.stroke.tripId,
+                    url: '/sharecar/pass/booktripinfo/'+ this.stroke.tripId,
                     params: {}
                 }).then((res) => {
                     if (res.data.code === 0) {
                         this.normalRiders = res.data.data.passengerList;
                         if (this.normalRiders.length > 0) {
-                            this.stroke.riderNames = this.normalRiders[0].passName;
-                            this.stroke.riderIds = this.normalRiders[0].id;
+                            let len = 0;
+                            if(res.data.data.bookSeat>this.normalRiders.length){
+                                len= this.normalRiders.length;
+                            }else{
+                                len= res.data.data.bookSeat;
+                            }
+                            for (let i = 0; i < len; i++) {
+                                this.stroke.riderNames2.push(this.normalRiders[i].passName);
+                                this.stroke.riderIds2.push(this.normalRiders[i].id);
+                            }
                             this.stroke.phone = this.normalRiders[0].passPhone;
+                            this.stroke.seatCount = len;
                         }
+                        this.result = this.stroke.riderIds2;
                         this.stroke.startPlace = res.data.data.startPlace;
                         this.stroke.endPlace = res.data.data.endPlace;
                         this.stroke.price = res.data.data.tripPrice;
                         this.stroke.bookSeat = res.data.data.bookSeat;
                         this.stroke.totalSeats = res.data.data.totalSeats;
-                        this.selectSeat = this.stroke.totalSeats > 4 ? 4 : this.stroke.totalSeats;
                     }
                 })
             },
@@ -459,13 +523,32 @@
         background: #FFFFFF;
     }
 
+    /deep/ .van-checkbox__label {
+        flex: 1;
+    }
+
+    .item-li {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 15px;
+    }
+
+    .item-li-flex {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
     .czje-item {
         margin-top: 15px;
         display: flex;
         align-items: center;
         justify-content: space-around
     }
-    .czje-item div{
+
+    .czje-item div {
         font-size: 14px;
         height: 25px;
         width: 50px;
