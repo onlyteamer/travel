@@ -303,10 +303,9 @@
                     });
             }else{
                 this.initUserData();
+                //账户信息
+                this.initUserAccount();
             }
-
-            //账户信息
-            this.initUserAccount();
         },
 
     }
