@@ -97,7 +97,7 @@
             <!--</van-cell-group>-->
             <div align="center" style="margin-bottom: 10px">
                 <van-button @click="goCarList"  color="#0CC893" style="width: 95%">立即找车</van-button>
-                <van-button @click="goCarList_all"  color="#0CC893" style="width: 95%;margin-top: 10px">查看全部</van-button>
+                <van-button @click="goCarList_all"  color="#5083ED" style="width: 95%;margin-top: 10px">查看全部</van-button>
             </div>
         </div>
 

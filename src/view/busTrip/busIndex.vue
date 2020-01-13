@@ -91,7 +91,7 @@
                 </van-tab>
             </van-tabs>
             <div align="center" style="margin-bottom: 10px">
-                <van-button @click="queryMore" color="#0CC893" style="width: 95%" >查看全部</van-button>
+                <van-button @click="queryMore" color="#5083ED" style="width: 95%" >查看全部</van-button>
             </div>
         </div>
 
