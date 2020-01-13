@@ -1,8 +1,4 @@
 <template>
-    <div>
-        <div>
-            <van-nav-bar :fixed="true" title="乘车人编辑" left-arrow @click-left="onClickLeft"/>
-        </div>
         <div class="content">
             <div class="item">
                 <van-field label-class="item-label" label="乘车人姓名" v-model="definition.passName"></van-field>
@@ -30,7 +26,6 @@
             </div>
 
         </div>
-    </div>
 </template>
 <!--乘车人编辑页-->
 <script>
@@ -146,9 +141,6 @@
                     }
                 })
             },
-            onClickLeft() {
-                this.$router.back(-1);
-            },
             queryPassenger() {
                 request.sendPost({
                     url: '/sharecar/pass/select/'+this.definition.id,
@@ -184,7 +176,6 @@
     .content {
         background-color: white;
         padding: 15px 15px 0 15px;
-        margin-top: 46px;
     }
 
     .item {

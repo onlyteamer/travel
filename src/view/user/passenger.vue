@@ -1,8 +1,5 @@
 <template>
     <div>
-        <div>
-            <van-nav-bar :fixed="true" title="乘车人管理" left-arrow @click-left="onClickLeft"/>
-        </div>
         <div class="content">
             <div class="item flex">
                 <span style="color:#202020;font-size: 14px">乘车人信息</span>
@@ -100,9 +97,7 @@
                     this.loading = false;
                 });
             },
-            onClickLeft() {
-                this.$router.back(-1);
-            },
+
             goAdd() {
                 this.$router.push({path: '/passenger-edit'});
             },
@@ -181,6 +176,5 @@
 
     .content {
         padding: 15px;
-        margin-top: 46px;
     }
 </style>
