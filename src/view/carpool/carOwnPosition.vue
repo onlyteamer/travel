@@ -115,6 +115,7 @@
                                 success: function (res) {
                                     this.carInfo.lat = res.latitude;
                                     this.carInfo.lon = res.longitude;
+                                    console.log(this.carInfo);
                                 },
                                 fail: function(error) {
                                     Toast.fail("获取地理位置失败，请确保开启GPS且允许微信获取您的地理位置！");
