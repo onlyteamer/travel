@@ -1,6 +1,5 @@
 <template>
     <div>
-        <van-nav-bar title="车辆管理" :fixed="true" left-arrow @click-left="onClickLeft"/>
         <div class="content">
             <div class="item flex">
                 <span style="color:#202020;font-size: 14px">车辆信息</span>
@@ -135,7 +134,6 @@
         height: 79px;
     }
     .content {
-        margin-top: 46px;
         padding: 12px 15px;
     }
     .flex {

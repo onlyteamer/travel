@@ -1,8 +1,5 @@
 <template>
     <div>
-        <div>
-            <van-nav-bar title="车辆实名认证" :fixed="true" left-arrow @click-left="onClickLeft"/>
-        </div>
         <div class="content">
             <div class="img-wrap">
                 <van-image width="80px" height="80px" :src="imageURL"/>
@@ -60,7 +57,6 @@
     .content {
         background-color: #F6F6F6;
         padding: 15px;
-        margin-top: 46px;
     }
 
     .info-wrap {

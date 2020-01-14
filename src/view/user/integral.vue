@@ -1,13 +1,6 @@
 <template>
     <div>
         <div class="info-wrap">
-            <van-row style="height: 40px">
-                <van-col span="8" style="height: 40px" @click="onClickLeft">
-                    <div><img src="../../static/images/left.png" style="width: 11px;height: 18px"/></div>
-                </van-col>
-                <van-col span="8" style="height: 40px;text-align: center"><span style="color: white;font-size: 16px;">积分详情</span>
-                </van-col>
-            </van-row>
             <div>
                 <van-row style="height: 69px">
                     <van-col span="12" class="item-col">
@@ -190,7 +183,7 @@
     .info-wrap {
         background-image: -webkit-linear-gradient(-49deg, #5C77FE, #05CF8A);
         background-image: linear-gradient(-49deg, #5C77FE, #05CF8A);
-        height: 220px;
+        height: 176px;
         padding: 20px 15px 0 15px;
     }
 </style>

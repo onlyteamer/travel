@@ -1,8 +1,5 @@
 <template>
     <div>
-        <div>
-            <van-nav-bar title="车辆信息添加" :fixed="true" left-arrow @click-left="onClickLeft"/>
-        </div>
         <div class="content">
             <div class="item">
                 <van-field label-class="item-label" label="车牌号" placeholder="例如:A123456"
@@ -469,7 +466,6 @@
     .content {
         background-color: white;
         padding: 0 15px 17px 15px;
-        margin-top: 46px;
     }
 
     /deep/ .van-checkbox__label {

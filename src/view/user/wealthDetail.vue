@@ -1,9 +1,6 @@
 <template>
     <div>
         <div>
-            <van-nav-bar title="账单明细" :fixed="true" left-arrow @click-left="onClickLeft"/>
-        </div>
-        <div style="margin-top: 46px;">
             <van-tabs sticky type="card" v-model="active" @click="onClick" title-active-color="#fff"
                       title-inactive-color="#0CC893" color="#0CC893">
                 <van-tab title="消费">

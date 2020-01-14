@@ -1,8 +1,5 @@
 <template>
     <div ref="content" class="content">
-        <div>
-            <van-nav-bar title="司机实名认证" left-arrow @click-left="onClickLeft"/>
-        </div>
         <div class="content">
             <div class="item">
                 <van-field label-class="item-label" v-model="driverInfo.driverName" label="司机姓名"></van-field>

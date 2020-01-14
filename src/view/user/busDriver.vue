@@ -1,8 +1,5 @@
 <template>
     <div>
-        <div>
-            <van-nav-bar title="班车司机" left-arrow @click-left="onClickLeft"/>
-        </div>
         <div style="background-color:white;padding:15px;position: relative">
             <div style="color: #202020;font-size: 14px;font-weight: bold">票务查询</div>
             <div style="border-bottom: 1px solid #ECECEC">

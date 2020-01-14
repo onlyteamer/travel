@@ -1,7 +1,7 @@
 <template>
     <div class="contain">
-        <Title :title="title" @onClickLeft="onClickLeft"></Title>
-        <div style="margin-top: 55px">
+<!--        <Title :title="title" @onClickLeft="onClickLeft"></Title>-->
+        <div >
             <van-list
                     :offset="10"
                     v-model="loading"
