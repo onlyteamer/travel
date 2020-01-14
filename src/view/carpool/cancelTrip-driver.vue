@@ -104,8 +104,6 @@
             this.tripInfo.confirm = confirm;
             this.tripInfo.unconfig = unconfig;
             this.tripInfo.price = price;
-
-            this.state = this.tripInfo.confirm == '0'
         },
         methods: {
             //初始化理由列表
@@ -139,8 +137,6 @@
                 let me = this;
                 let tripId = this.$route.query.tripId;
                 let reasonId = this.reasonId;
-                if(this.state){
-                    //无偿
                     request.sendPost({
                         url:"/sharecar/trip/cancel/"+tripId+"/"+reasonId,
                         params:{}
@@ -164,26 +160,6 @@
                             Toast.fail(res.data.msg)
                         }
                     })
-                }else {
-                    Dialog.confirm({
-                        title: '取消行程',
-                        message: '存在已预约乘客,取消行程需'
-                    }).then(() => {
-                        // on confirm
-                        //有偿
-                        me.payCancel();
-                    }).catch(() => {
-                        me.$router.back(-1);
-                        // on cancel
-                    });
-
-
-                }
-
-
-
-
-
             }
         }
     }
