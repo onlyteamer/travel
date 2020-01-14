@@ -28,7 +28,7 @@
 </template>
 
 <script>
-    import {NavBar, Button, RadioGroup, Radio, Toast,Tabbar, TabbarItem} from 'vant';
+    import {NavBar, Button, RadioGroup, Radio, Toast,Tabbar, Dialog,TabbarItem} from 'vant';
     import request from '../../utils/request'
 
     import chengK from './../../static/images/chengk.png'
@@ -44,6 +44,7 @@
             [Radio.name]: Radio,
             [Toast.name]: Toast,
             [Tabbar.name]: Tabbar,
+            [Dialog.name]: Dialog,
             [TabbarItem.name]: TabbarItem
         },
         data() {
@@ -81,16 +82,28 @@
                 let tripId = this.$route.query.tripId;
                 let bookid = this.$route.query.bookid;
                 let reasonId = this.reasonId;
-
+                let me = this;
                 //无偿
                 request.sendPost({
                     url: "/sharecar/pass/cancel/" + bookid + "/" + reasonId,
                     params: {}
                 }).then(res => {
                     if (res.data.code == '0') {
-                        Toast.success("操作成功")
-                    } else {
-                        Toast.fail("操作失败")
+                        Toast.success(res.data.msg)
+                    }else if(res.data.code == '300'){
+                        Dialog.confirm({
+                            title: '取消行程',
+                            message: res.data.msg
+                        }).then(() => {
+                            // on confirm
+                            //有偿
+                            me.payCancel();
+                        }).catch(() => {
+                            me.$router.back(-1);
+                            // on cancel
+                        });
+                    }else {
+                        Toast.fail(res.data.msg)
                     }
                 })
 

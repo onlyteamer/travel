@@ -49,7 +49,7 @@
 </template>
 
 <script>
-    import {NavBar, Button, Image, RadioGroup, Radio, Row, Col,Toast,Tabbar, TabbarItem} from 'vant';
+    import {NavBar, Button, Image, RadioGroup, Radio, Row, Col,Toast,Tabbar, Dialog,TabbarItem} from 'vant';
     import imageURL from '../../static/images/stop.png';
 
     import request from '../../utils/request'
@@ -70,6 +70,7 @@
             [Col.name]: Col,
             [Toast.name]:Toast,
             [Tabbar.name]: Tabbar,
+            [Dialog.name]: Dialog,
             [TabbarItem.name]: TabbarItem
         },
         data() {
@@ -122,7 +123,20 @@
             onClickLeft() {
                 this.$router.back(-1);
             },
+            payCancel(){
+                request.sendPost({
+                    url:"/sharecar/trip/paycancel/"+tripId+"/"+reasonId,
+                    params:{}
+                }).then(res =>{
+                    if(res.data.code == '0'){
+                        Toast.success("操作成功")
+                    }else {
+                        Toast.fail("操作失败")
+                    }
+                })
+            },
             submit() {
+                let me = this;
                 let tripId = this.$route.query.tripId;
                 let reasonId = this.reasonId;
                 if(this.state){
@@ -132,23 +146,38 @@
                         params:{}
                     }).then(res =>{
                         if(res.data.code == '0'){
-                            Toast.success("操作成功")
-                        }else {
-                            Toast.fail("操作失败")
+                            Toast.success(res.data.msg)
+                        }else if(res.data.code == '300'){
+                            //有偿
+                            Dialog.confirm({
+                                title: '取消行程',
+                                message: res.data.msg
+                            }).then(() => {
+                                // on confirm
+                                //有偿
+                                me.payCancel();
+                            }).catch(() => {
+                                me.$router.back(-1);
+                                // on cancel
+                            });
+                        } else {
+                            Toast.fail(res.data.msg)
                         }
                     })
                 }else {
-                    //有偿
-                    request.sendPost({
-                        url:"/sharecar/trip/paycancel/"+tripId+"/"+reasonId,
-                        params:{}
-                    }).then(res =>{
-                        if(res.data.code == '0'){
-                            Toast.success("操作成功")
-                        }else {
-                            Toast.fail("操作失败")
-                        }
-                    })
+                    Dialog.confirm({
+                        title: '取消行程',
+                        message: '存在已预约乘客,取消行程需'
+                    }).then(() => {
+                        // on confirm
+                        //有偿
+                        me.payCancel();
+                    }).catch(() => {
+                        me.$router.back(-1);
+                        // on cancel
+                    });
+
+
                 }
 
 
