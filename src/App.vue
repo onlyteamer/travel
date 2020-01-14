@@ -38,4 +38,8 @@ body {
   background-color: #f8f8f8;
   -webkit-font-smoothing: antialiased;
 }
+/*修改vant输入框字体大小为16px用来解决ios点击输入框页面放大的问题*/
+.van-field__control{
+  font-size: 16px;
+}
 </style>
