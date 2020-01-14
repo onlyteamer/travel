@@ -352,7 +352,9 @@
                     if (res.data.code === 0) {
                         Toast("行程发布成功,审核后自动发布行程");
                         this.$router.back(-1);
-                    } else {
+                    } else if(res.data.code==400) {
+                        this.$router.push({path: '/simpleAuth'});
+                    }else if(res.data.code==401){
                         Toast(res.data.msg);
                     }
                 })
