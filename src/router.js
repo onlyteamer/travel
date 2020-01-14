@@ -58,6 +58,13 @@ const routes = [
         }
     },
     {
+        name: 'simpleAuth',
+        component: () => import('./view/user/simpleAuth.vue'),
+        meta: {
+            title: '简单认证'
+        }
+    },
+    {
         name: 'addCar',
         component: () => import('./view/user/addCar.vue'),
         meta: {
