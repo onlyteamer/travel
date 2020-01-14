@@ -360,7 +360,14 @@ routes.forEach(route => {
 const router = new Router({ routes });
 
 router.beforeEach((to, from, next) => {
-  const title = to.meta && to.meta.title;
+    let mark = to.fullPath.indexOf('code')
+    if (mark !== -1 && (from.fullPath === '/user'||from.fullPath === '/setting') ) {
+        if(wx){
+            wx.closeWindow()
+        }
+    }
+
+    const title = to.meta && to.meta.title;
   if (title) {
     document.title = title;
   }
