@@ -62,6 +62,7 @@
 
 
             changeLine(item){
+                let me = this;
                     Dialog.confirm({
                         title: '切换路线',
                         message:  '是否切换路线到'+item.lineName+'？'
@@ -72,6 +73,8 @@
                             params: {}
                         }).then(res => {
                             if (res.data.code === 0) {
+                                //切换路线成功后刷新页面
+                                me.initLineList();
                                 Toast.success("切换成功")
                             } else {
                                 Toast.fail(res.data.msg)
