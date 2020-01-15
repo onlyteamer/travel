@@ -121,7 +121,7 @@
 <script>
     import Title from './../../components/header'
     import { Cell, CellGroup,DatetimePicker,Row,Popup, Col,Icon,Picker ,Checkbox, CheckboxGroup ,Button,Toast ,Dialog,Tabbar, TabbarItem } from 'vant';
-    import context from "../../utils/context";
+    import wx from 'weixin-js-sdk'
     import request from '../../utils/request'
     import guideIcon from '../../static/images/guide.png'
 

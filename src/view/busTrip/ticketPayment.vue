@@ -91,6 +91,8 @@
     import scan from './../../static/images/busTrip/scan.png'
     import user from './../../static/images/busTrip/user.png'
 
+    import wx from 'weixin-js-sdk'
+
 
     export default {
         name: "ticketPayment",

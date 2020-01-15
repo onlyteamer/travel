@@ -215,6 +215,7 @@
     import greenBar from './../../static/images/green.png'
     import redBar from './../../static/images/red.png'
     import request from '../../utils/request'
+    import wx from 'weixin-js-sdk'
 
     import chengK from './../../static/images/chengk.png'
     import xingC from './../../static/images/xingC.png'

@@ -33,7 +33,7 @@
     import aMap from './../../components/amap_point'
     import { Row, Col,Divider,Button,Rate,Tag ,Field,CellGroup,Icon ,Toast,Tabbar,TabbarItem} from 'vant';
 
-    import context from '../../utils/context'
+    import wx from 'weixin-js-sdk'
     import request from '../../utils/request';
 
     import chengK from './../../static/images/chengk.png'

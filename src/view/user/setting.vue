@@ -87,7 +87,7 @@
                 <van-button style="margin-top:15px;width: 100%;height:44px" color="#0CC893" type="default">
                     修改
                 </van-button>
-                <van-button style="margin-top:15px;width: 100%;height:44px" color="#9E9E9E" type="default">
+                <van-button  @click="cancel" style="margin-top:15px;width: 100%;height:44px" color="#9E9E9E" type="default">
                     取消
                 </van-button>
             </div>
@@ -125,6 +125,9 @@
             }
         },
         methods: {
+            cancel(){
+              this.$router.back(-1);
+            },
             getCode() {
                 request.axios.get('/wx/syncauthorize')
                     .then(function (response) {

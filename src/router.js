@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import wx from 'weixin-js-sdk'
 
 Vue.use(Router);
 
@@ -360,8 +361,8 @@ routes.forEach(route => {
 const router = new Router({ routes });
 
 router.beforeEach((to, from, next) => {
-    let mark = to.fullPath.indexOf('code')
-    if (mark !== -1 && (from.fullPath === '/user'||from.fullPath === '/setting') ) {
+    let mark = to.fullPath.indexOf('code');
+    if (mark !== -1) {
         if(wx){
             wx.closeWindow()
         }

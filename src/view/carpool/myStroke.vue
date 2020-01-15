@@ -270,7 +270,7 @@
     import Title from './../../components/header'
     import {Tab, Tabs, Divider, Row, Col, Button, Popup, Dialog, Toast, Field, Tabbar, TabbarItem, List} from 'vant';
     import request from '../../utils/request'
-    import context from "../../utils/context";
+    import wx from 'weixin-js-sdk'
 
     import guideIcon from '../../static/images/guide.png'
     import chengK from './../../static/images/chengk.png'

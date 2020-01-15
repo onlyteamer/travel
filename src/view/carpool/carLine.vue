@@ -151,6 +151,7 @@
     import xingC from './../../static/images/xingC.png'
     import push from './../../static/images/push.png'
     import person from './../../static/images/chengk.png'
+    import wx from 'weixin-js-sdk'
 
     export default {
         name: "carLine",

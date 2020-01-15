@@ -109,7 +109,7 @@
 <script>
     import {NavBar, Row, Col, Field, Button, Toast, Tab, Tabs} from 'vant';
     import request from "../../utils/request"
-
+    import wx from 'weixin-js-sdk'
 
 
     export default {
