@@ -488,6 +488,8 @@
                         this.stroke.price = res.data.data.tripPrice;
                         this.stroke.bookSeat = res.data.data.bookSeat;
                         this.stroke.totalSeats = res.data.data.totalSeats;
+                    }else{
+                        Toast(res.data.msg);
                     }
                 })
             },
