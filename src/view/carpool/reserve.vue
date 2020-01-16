@@ -63,7 +63,6 @@
                     <div>
                         <van-tag :color="stroke.riderIds2.indexOf(item.id)>-1?'#0CC893':'#FFFFFF'"
                                  :text-color="stroke.riderIds2.indexOf(item.id)>-1?'#FFFFFF':'#202020'"
-                                 style="border: 1px solid #CFCFCF;min-width: 30px;width: fit-content;margin-bottom: 5px"
                                  class="contactTag"
                                  v-for="item in normalRiders" :key="item.id" @click="selectRider(item)">
                             {{item.passName}}
@@ -457,8 +456,10 @@
                     this.stroke.riderNames2.splice(index2, 1);
                     this.stroke.riderIds2.splice(index, 1);
                 } else {
-                    this.stroke.riderNames2.push(data.passName);
-                    this.stroke.riderIds2.push(data.id);
+                    if (this.stroke.seatCount > this.stroke.riderIds2.length) {
+                        this.stroke.riderNames2.push(data.passName);
+                        this.stroke.riderIds2.push(data.id);
+                    }
                 }
                 this.result = this.stroke.riderIds2;
             },
@@ -471,10 +472,10 @@
                         this.normalRiders = res.data.data.passengerList;
                         if (this.normalRiders.length > 0) {
                             let len = 0;
-                            if(res.data.data.bookSeat>this.normalRiders.length){
-                                len= this.normalRiders.length;
-                            }else{
-                                len= res.data.data.bookSeat;
+                            if (res.data.data.bookSeat > this.normalRiders.length) {
+                                len = this.normalRiders.length;
+                            } else {
+                                len = res.data.data.bookSeat;
                             }
                             for (let i = 0; i < len; i++) {
                                 this.stroke.riderNames2.push(this.normalRiders[i].passName);
@@ -489,7 +490,7 @@
                         this.stroke.price = res.data.data.tripPrice;
                         this.stroke.bookSeat = res.data.data.bookSeat;
                         this.stroke.totalSeats = res.data.data.totalSeats;
-                    }else{
+                    } else {
                         Toast(res.data.msg);
                         this.$router.go(-2);
                     }
@@ -645,11 +646,15 @@
     }
 
     .contactTag {
-        width: 30px;
         height: 20px;
         font-size: 14px;
         margin-right: 5px;
         justify-content: center;
+        border: 1px solid #CFCFCF;
+        min-width: 30px;
+        width: auto;
+        padding: 0 5px;
+        margin-bottom: 5px
     }
 
     .van-cell {
