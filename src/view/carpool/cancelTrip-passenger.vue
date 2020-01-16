@@ -7,7 +7,9 @@
             <div class="radio-wrap">
                 <div class="radio-wrap-title">取消行程原因：</div>
                 <van-radio-group v-model="reasonId" class="radio-wrap-content">
-                    <van-radio :name="item.reasonId" checked-color="#07BD06" v-for="(item,index) in reasonList">{{item.reasonContext}}</van-radio>
+                    <van-radio :name="item.reasonId" checked-color="#07BD06" v-for="(item,index) in reasonList">
+                        {{item.reasonContext}}
+                    </van-radio>
                 </van-radio-group>
             </div>
             <van-button @click="submit" style="margin-top:15px;width: 100%;height:44px" color="#0CC893" type="default">
@@ -28,7 +30,7 @@
 </template>
 
 <script>
-    import {NavBar, Button, RadioGroup, Radio, Toast,Tabbar, Dialog,TabbarItem} from 'vant';
+    import {NavBar, Button, RadioGroup, Radio, Toast, Tabbar, Dialog, TabbarItem} from 'vant';
     import request from '../../utils/request'
 
     import chengK from './../../static/images/chengk.png'
@@ -49,27 +51,27 @@
         },
         data() {
             return {
-                active:"",
+                active: "",
                 reasonId: 1,
                 chengK: chengK,
                 xingC: xingC,
                 push: push,
                 person: person,
-                reasonList:[]
+                reasonList: []
             }
         },
-        mounted(){
+        mounted() {
             this.initReasonList();
         },
 
         methods: {
             //理由列表
-            initReasonList(){
+            initReasonList() {
                 request.sendGet({
-                    url:"/sharecar/pass/cancelreason",
-                    params:{}
-                }).then(res =>{
-                    if(res.data.code == '0'){
+                    url: "/sharecar/pass/cancelreason",
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == '0') {
                         this.reasonList = res.data.rows;
                     }
                 })
@@ -78,6 +80,20 @@
             onClickLeft() {
                 this.$router.back(-1);
             },
+            payCancel() {
+                let bookid = this.$route.query.bookid;
+                request.sendPost({
+                    url: "sharecar/pass/paycancel/" + bookid ,
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == '0') {
+                        Toast.success(res.data.msg)
+                    } else {
+                        Toast.fail(res.data.msg)
+                    }
+                })
+            },
+
             submit() {
                 let tripId = this.$route.query.tripId;
                 let bookid = this.$route.query.bookid;
@@ -90,7 +106,7 @@
                 }).then(res => {
                     if (res.data.code == '0') {
                         Toast.success(res.data.msg)
-                    }else if(res.data.code == '300'){
+                    } else if (res.data.code == '300') {
                         Dialog.confirm({
                             title: '取消行程',
                             message: res.data.msg
@@ -102,7 +118,7 @@
                             me.$router.back(-1);
                             // on cancel
                         });
-                    }else {
+                    } else {
                         Toast.fail(res.data.msg)
                     }
                 })
