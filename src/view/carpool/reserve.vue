@@ -491,6 +491,7 @@
                         this.stroke.totalSeats = res.data.data.totalSeats;
                     }else{
                         Toast(res.data.msg);
+                        this.$router.go(-2);
                     }
                 })
             },
