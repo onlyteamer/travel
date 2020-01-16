@@ -49,7 +49,7 @@
                             <van-col span="6">
                                 <van-button type="default" color="#0CC893"
                                             style="font-size: 14px;width: 96%;height: 28px"
-                                            size="mini" @click="wxShare">分享
+                                            size="mini" @click="wxShare(item)">分享
                                 </van-button>
                             </van-col>
                             <van-col span="6">
@@ -153,7 +153,7 @@
                             <van-col span="6">
                                 <van-button type="default" color="#0CC893"
                                             style="font-size: 14px;width: 96%;height: 28px"
-                                            size="mini" @click="wxShare">分享
+                                            size="mini" @click="wxShare(item)">分享
                                 </van-button>
                             </van-col>
                             <van-col span="6">
@@ -344,8 +344,7 @@
 
         },
         methods: {
-            wxShareConfig(){
-                var ShareLink = location.protocol + "//" + location.hostname + "/#/myStroke"; //默认分享链接
+            wxShareConfig(url){
                 var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
                 var ShareTitle = "申坤出行"; // 分享标题
                 var ShareDesc = "申坤出行!"; // 分享描述
@@ -354,7 +353,7 @@
                     wx.updateAppMessageShareData({
                         title: ShareTitle, // 分享标题
                         desc: ShareDesc, // 分享描述
-                        link: ShareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                         imgUrl: ShareImgUrl, // 分享图标
                         success: function () {
                             // 设置成功
@@ -362,7 +361,7 @@
                     });
                     wx.updateTimelineShareData({
                         title: ShareTitle, // 分享标题
-                        link: ShareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                         imgUrl: ShareImgUrl, // 分享图标
                         success: function () {
                             // 设置成功
@@ -483,7 +482,6 @@
                     }
                 }
             },
-
 
             contactCar(val) {
                 if (val) {
@@ -731,9 +729,11 @@
                 }
             },
 
-            wxShare() {
+            wxShare(item){
                 this.guide = true;
-            }
+                let  url = location.protocol + "//" + location.hostname +'/#/lineDetails?tripId='+item.tripId;
+                this.wxShareConfig(url);
+            },
         }
     }
 </script>
