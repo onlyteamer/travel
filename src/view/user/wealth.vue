@@ -165,6 +165,7 @@
                 this.$router.push({path: '/wealthDetail', query: {activeIndex: e}});
             },
             recharge() {
+
                 // {payfor}
                 //1、用户充值 2、拼车充值 3、班车充值 4、商城充值
                 request.sendPost({
@@ -240,6 +241,10 @@
                     Toast("充值金额不能为空");
                     return;
                 }
+                if (this.czje.indexOf('.') > -1) {
+                    Toast('请输入整数');
+                    return;
+                }
                 request.sendGet({
                     url: '/wx/pay/create/order/3',
                     params: {
@@ -303,7 +308,7 @@
     }
 
     /deep/ .van-field__control {
-    font-size: 18px!important;
+        font-size: 18px !important;
     }
 
     /deep/ .van-field__label {
