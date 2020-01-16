@@ -121,18 +121,6 @@
             onClickLeft() {
                 this.$router.back(-1);
             },
-            payCancel(){
-                request.sendPost({
-                    url:"/sharecar/trip/paycancel/"+tripId+"/"+reasonId,
-                    params:{}
-                }).then(res =>{
-                    if(res.data.code == '0'){
-                        Toast.success("操作成功")
-                    }else {
-                        Toast.fail("操作失败")
-                    }
-                })
-            },
             submit() {
                 let me = this;
                 let tripId = this.$route.query.tripId;
@@ -151,7 +139,16 @@
                             }).then(() => {
                                 // on confirm
                                 //有偿
-                                me.payCancel();
+                                request.sendPost({
+                                    url:"/sharecar/trip/paycancel/"+tripId+"/"+reasonId,
+                                    params:{}
+                                }).then(res =>{
+                                    if(res.data.code == '0'){
+                                        Toast.success("操作成功")
+                                    }else {
+                                        Toast.fail("操作失败")
+                                    }
+                                })
                             }).catch(() => {
                                 me.$router.back(-1);
                                 // on cancel

@@ -80,20 +80,6 @@
             onClickLeft() {
                 this.$router.back(-1);
             },
-            payCancel() {
-                let bookid = this.$route.query.bookid;
-                request.sendPost({
-                    url: "sharecar/pass/paycancel/" + bookid ,
-                    params: {}
-                }).then(res => {
-                    if (res.data.code == '0') {
-                        Toast.success(res.data.msg)
-                    } else {
-                        Toast.fail(res.data.msg)
-                    }
-                })
-            },
-
             submit() {
                 let tripId = this.$route.query.tripId;
                 let bookid = this.$route.query.bookid;
@@ -113,7 +99,16 @@
                         }).then(() => {
                             // on confirm
                             //有偿
-                            me.payCancel();
+                            request.sendPost({
+                                url: "sharecar/pass/paycancel/" + bookid ,
+                                params: {}
+                            }).then(res => {
+                                if (res.data.code == '0') {
+                                    Toast.success(res.data.msg)
+                                } else {
+                                    Toast.fail(res.data.msg)
+                                }
+                            })
                         }).catch(() => {
                             me.$router.back(-1);
                             // on cancel
