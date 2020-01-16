@@ -385,7 +385,7 @@
                     params: {}
                 }).then((res) => {
                     if (res.data.code === 0) {
-                        this.tripInfo = res.data.data.tripinfo;
+                        this.tripInfo = res.data.data.tripinfo?res.data.data.tripinfo:{};
                         let linesData = res.data.data.lineinfo;
                         for (let i in linesData) {
                             let point = {};
