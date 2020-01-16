@@ -9,9 +9,6 @@
                 <van-field label-class="item-label" label="车辆品牌" placeholder="例如:大众" v-model="definition.carBrand"/>
             </div>
             <div class="item">
-                <van-field label-class="item-label" label="车辆别名" placeholder="例如:小白" v-model="definition.carName"/>
-            </div>
-            <div class="item">
                 <van-field label-class="item-label" label="车辆型号" placeholder="例如:速腾" v-model="definition.carType"/>
             </div>
             <div class="item">
@@ -116,7 +113,6 @@
                     carImage2Url: '',//车辆行驶证
                     carImage3Url: '',//车辆保险照片
                     carInsurance: 1,//是否有商业保险:1 有 0 没有
-                    carName: '',// 车辆名称-用户起的别称
                     carNumber: '',// 车牌号
                     carType: '',//车辆型号
                     isAudite: 0,
@@ -140,7 +136,6 @@
                             carImage2Url: this.definition.carImage2Url,
                             carImage3Url: this.definition.carImage3Url,
                             carInsurance: this.definition.carInsurance,
-                            carName: this.definition.carName,
                             carNumber: this.definition.carNumber,
                             carType: this.definition.carType,
                         }
@@ -182,7 +177,6 @@
                             carImage2Url: this.definition.carImage2Url,
                             carImage3Url: this.definition.carImage3Url,
                             carInsurance: this.definition.carInsurance,
-                            carName: this.definition.carName,
                             carNumber: this.definition.carNumber,
                             carType: this.definition.carType,
                         }
