@@ -351,7 +351,7 @@
                 }).then((res) => {
                     if (res.data.code === 0) {
                         Toast("行程发布成功,审核后自动发布行程");
-                        this.$router.back(-1);
+                        this.$router.push({path:'/myStroke'});
                     } else{
                         Toast.fail(res.data.msg);
                     }
