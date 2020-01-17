@@ -246,7 +246,7 @@
                     return;
                 }
                 request.sendGet({
-                    url: '/wx/pay/create/order/3',
+                    url: '/wx/pay/create/order/3',//用户充值
                     params: {
                         paynum: this.czje,
                     }

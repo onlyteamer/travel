@@ -455,7 +455,7 @@
                     return;
                 }
                 request.sendGet({
-                    url: '/wx/pay/create/order/2',
+                    url: '/wx/pay/create/order/2',//拼车充值2
                     params: {
                         paynum: this.czje,
                     }
@@ -517,9 +517,9 @@
                     }
                 }).then(res => {
                     if (res.data.code == '0') {
-                        Toast.success("操作成功");
+                        Toast.success(res.data.msg);
                     } else {
-                        Toast.fail("操作失败")
+                        Toast.fail(res.data.msg)
                     }
 
                 })
@@ -540,9 +540,9 @@
                         params: {}
                     }).then(res => {
                         if (res.data.code == '0') {
-                            Toast.success("操作成功");
+                            Toast.success(res.data.msg);
                         } else {
-                            Toast.fail("操作失败")
+                            Toast.fail(res.data.msg)
                         }
                     })
                 })
@@ -560,10 +560,10 @@
                         params: {}
                     }).then(res => {
                         if (res.data.code == '0') {
-                            Toast.success("操作成功");
+                            Toast.success(res.data.msg);
                             this.changeSeatInfo.seatCount = "";
                         } else {
-                            Toast.fail("操作失败")
+                            Toast.fail(res.data.msg)
                         }
                     })
                 })
@@ -623,9 +623,9 @@
                         params: {}
                     }).then(res => {
                         if (res.data.code == '0') {
-                            Toast.success("操作成功")
+                            Toast.success(res.data.msg)
                         } else {
-                            Toast.fail("操作失败")
+                            Toast.fail(res.data.msg)
                         }
                     })
                 }).catch(() => {
@@ -648,9 +648,9 @@
                             params: {}
                         }).then(res => {
                             if (res.data.code == '0') {
-                                Toast.success("操作成功")
+                                Toast.success(res.data.msg)
                             } else {
-                                Toast.fail("操作失败")
+                                Toast.fail(res.data.msg)
                             }
                         })
                     }).catch(() => {
@@ -668,9 +668,9 @@
                             params: {}
                         }).then(res => {
                             if (res.data.code == '0') {
-                                Toast.success("操作成功")
+                                Toast.success(res.data.msg)
                             } else {
-                                Toast.fail("操作失败")
+                                Toast.fail(res.data.msg)
                             }
                         })
                     }).catch(() => {

@@ -376,7 +376,7 @@
                     return;
                 }
                 request.sendGet({
-                    url: '/wx/pay/create/order/2',
+                    url: '/wx/pay/create/order/2',//拼车充值
                     params: {
                         paynum: this.czje,
                     }

@@ -264,7 +264,7 @@
 
             wxPay() {
                 request.sendGet({
-                    url: '/wx/pay/create/order/1',
+                    url: '/wx/pay/create/order/1',//班车购票
                     params: {
                         paynum: this.amount,
                     }
