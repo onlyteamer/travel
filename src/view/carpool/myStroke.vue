@@ -730,9 +730,9 @@
             },
 
             wxShare(item){
-                this.guide = true;
                 let  url = location.protocol + "//" + location.hostname +'/#/lineDetails?tripId='+item.tripId;
                 this.wxShareConfig(url);
+                this.guide = true;
             },
         }
     }
