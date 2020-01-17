@@ -134,9 +134,11 @@
                     <van-row style="padding: 0px 2px;display: flex;align-items: center;">
                         <van-col span="6">
                             <van-image
+                                    round
+                                    fit="cover"
                                     width="60"
                                     height="60"
-                                    :src="listImg"
+                                    :src="item.headimgurl"
                             />
                         </van-col>
                         <van-col span="18">
@@ -201,7 +203,6 @@
     import greenBar from './../../static/images/green.png'
     import redBar from './../../static/images/red.png'
     import timeBar from './../../static/images/timer.png'
-    import listImg from './../../static/images/listImg.png'
 
     import chengK from './../../static/images/chengk.png'
     import xingC from './../../static/images/xingC.png'
@@ -262,7 +263,6 @@
                 greenBar:greenBar,
                 redBar:redBar,
                 timeBar:timeBar,
-                listImg:listImg,
                 chengK:chengK,
                 xingC:xingC,
                 push:push,
