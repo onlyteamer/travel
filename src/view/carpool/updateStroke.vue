@@ -4,13 +4,13 @@
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px"  @click="openTimer">
                 <van-col span="8">始发时间</van-col>
                 <van-col span="16" class="valStyle">
-                    <van-field v-model="tripInfo.tripDateTime" placeholder="请选择始发时间" disabled style="padding: 0"/>
+                    <van-field v-model="tripInfo.tripDateTime" placeholder="请选择始发时间" readonly style="padding: 0"/>
                 </van-col>
             </van-row>
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px"  @click="changeLine">
                 <van-col span="8">线路</van-col>
                 <van-col span="14" class="valStyle">
-                    <van-field v-model="tripInfo.directLine" placeholder="请选择线路" disabled style="padding: 0"/>
+                    <van-field v-model="tripInfo.directLine" placeholder="请选择线路" readonly style="padding: 0"/>
                 </van-col>
                 <van-col span="2">
                     <van-icon name="arrow" color="#9E9E9E"/>
@@ -20,7 +20,7 @@
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px" @click="changePoint">
                 <van-col span="8">方向</van-col>
                 <van-col span="14" class="valStyle">
-                    <van-field v-model="tripInfo.point" placeholder="请选择方向" disabled style="padding: 0"/>
+                    <van-field v-model="tripInfo.point" placeholder="请选择方向" readonly style="padding: 0"/>
                 </van-col>
                 <van-col span="2" >
                     <van-icon name="arrow" color="#9E9E9E"/>
@@ -49,7 +49,7 @@
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px" @click="openSeat">
                 <van-col span="8">座位数</van-col>
                 <van-col span="14" class="valStyle">
-                    <van-field v-model="tripInfo.totalSeat" disabled style="padding: 0" placeholder="请输入座位数"/>
+                    <van-field v-model="tripInfo.totalSeat" readonly style="padding: 0" placeholder="请输入座位数"/>
                 </van-col>
                 <van-col span="2">
                     <van-icon name="arrow" color="#9E9E9E"/>
@@ -65,7 +65,7 @@
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 10px 2px" @click="changeCar">
                 <van-col span="8">车辆信息</van-col>
                 <van-col span="14" class="valStyle">
-                    <van-field v-model="tripInfo.carInfo" style="padding: 0" placeholder="请选择车辆信息"/>
+                    <van-field v-model="tripInfo.carInfo" readonly style="padding: 0" placeholder="请选择车辆信息"/>
                 </van-col>
                 <van-col span="2" >
                     <van-icon name="arrow" color="#9E9E9E"/>
