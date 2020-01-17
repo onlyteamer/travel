@@ -347,7 +347,7 @@
             wxShareConfig(url){
                 var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
                 var ShareTitle = "申坤出行"; // 分享标题
-                var ShareDesc = "申坤出行!"; // 分享描述
+                var ShareDesc = "拼车详情"; // 分享描述
                 wx.ready(function () {
                     //自定义“分享给朋友”及“分享到QQ”按钮的分享内容
                     wx.updateAppMessageShareData({
@@ -410,7 +410,6 @@
                         signature: res.data.data.signature,// 必填，签名，见附录1
                         jsApiList: ['WeixinJSBridge','onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                     });
-                    this.wxShareConfig();
                 });
             },
 

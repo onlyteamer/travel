@@ -102,7 +102,7 @@
                             <van-col span="8">
                                 <van-button type="default" color="#0CC893"
                                             style="font-size: 14px;width: 95%;height: 34px"
-                                            size="mini" @click="wxShare">分享
+                                            size="mini" @click="wxShare(item.tripId)">分享
                                 </van-button>
                             </van-col>
                             <van-col span="8">
@@ -236,30 +236,6 @@
                         //updateTimelineShareData分享到朋友圈,updateAppMessageShareData分享给朋友,
                         jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
                     });
-                    var ShareLink = location.protocol + "//" + location.hostname + "/#/lineDetails?tripId=" + me.tripId; //默认分享链接
-                    var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
-                    var ShareTitle = "申坤出行"; // 分享标题
-                    var ShareDesc = "申坤出行!"; // 分享描述
-                    wx.ready(function () {
-                        //自定义“分享给朋友”及“分享到QQ”按钮的分享内容
-                        wx.updateAppMessageShareData({
-                            title: ShareTitle, // 分享标题
-                            desc: ShareDesc, // 分享描述
-                            link: ShareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                            imgUrl: ShareImgUrl, // 分享图标
-                            success: function () {
-                                // 设置成功
-                            }
-                        });
-                        wx.updateTimelineShareData({
-                            title: ShareTitle, // 分享标题
-                            link: ShareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                            imgUrl: ShareImgUrl, // 分享图标
-                            success: function () {
-                                // 设置成功
-                            }
-                        })
-                    });
                     wx.error(function (res) {
                         console.log(res);
                     });
@@ -286,7 +262,37 @@
                 this.dataMain.total = 0;
                 this.initData();
             },
-            wxShare() {
+            wxShareConfig(url){
+                var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
+                var ShareTitle = "申坤出行"; // 分享标题
+                var ShareDesc = "拼车详情!"; // 分享描述
+                wx.ready(function () {
+                    //自定义“分享给朋友”及“分享到QQ”按钮的分享内容
+                    wx.updateAppMessageShareData({
+                        title: ShareTitle, // 分享标题
+                        desc: ShareDesc, // 分享描述
+                        link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: ShareImgUrl, // 分享图标
+                        success: function () {
+                            // 设置成功
+                        }
+                    });
+                    wx.updateTimelineShareData({
+                        title: ShareTitle, // 分享标题
+                        link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: ShareImgUrl, // 分享图标
+                        success: function () {
+                            // 设置成功
+                        }
+                    })
+                });
+                wx.error(function (res) {
+                    console.log(res);
+                });
+            },
+            wxShare(item) {
+                let  url = location.protocol + "//" + location.hostname +'/#/lineDetails?tripId='+item.tripId;
+                this.wxShareConfig(url);
                 this.guide = true;
             },
 
