@@ -88,10 +88,10 @@
                     }
                 }).then(res =>{
                     if(res.data.code == '0'){
-                        Toast.success("操作成功");
+                        Toast.success(res.data.msg);
                         this.$router.back(-1);
                     }else {
-                        Toast.fail("操作失败")
+                        Toast.fail(res.data.msg)
                     }
                 })
             }

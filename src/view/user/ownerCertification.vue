@@ -204,7 +204,7 @@
                     params:this.driverInfo
                 }).then(res =>{
                     if(res.data.code == '0'){
-                        Toast.success("操作成功");
+                        Toast.success(res.data.msg);
                         this.$router.push({path:'/ownerCertificationRemind'});
                     }else {
                         Toast.fail(res.data.msg)
