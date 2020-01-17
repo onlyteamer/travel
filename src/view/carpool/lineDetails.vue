@@ -249,8 +249,8 @@
                     params: {}
                 }).then(res => {
                     if (res.data.code == '0') {
-                        this.tripDetails.startName = res.data.data.lineinfo.startName;
-                        this.tripDetails.endIdName = res.data.data.lineinfo.endIdName;
+                        this.tripDetails.startName = res.data.data.tripinfo.startPlace;
+                        this.tripDetails.endIdName = res.data.data.tripinfo.endPlace;
                         this.tripDetails.lineName = res.data.data.lineinfo.lineName;
                         this.tripDetails.tripDateTime = res.data.data.tripinfo.tripDateTime;
                         this.tripDetails.tripLine = res.data.data.tripinfo.tripLine;
