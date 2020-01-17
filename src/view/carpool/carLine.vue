@@ -219,6 +219,7 @@
                 return moment().locale("zh-cn").add(index, 'days').format("YYYY-MM-DD")
             },
             wxConfig() {
+                let me = this;
                 request.sendGet({
                     url: "/wx/pay/signature",
                     params: {
@@ -235,7 +236,7 @@
                         //updateTimelineShareData分享到朋友圈,updateAppMessageShareData分享给朋友,
                         jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
                     });
-                    var ShareLink = location.protocol + "//" + location.hostname + "/#/lineDetails?tripId=" + this.tripId; //默认分享链接
+                    var ShareLink = location.protocol + "//" + location.hostname + "/#/lineDetails?tripId=" + me.tripId; //默认分享链接
                     var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
                     var ShareTitle = "申坤出行"; // 分享标题
                     var ShareDesc = "申坤出行!"; // 分享描述
@@ -286,7 +287,6 @@
                 this.initData();
             },
             wxShare() {
-
                 this.guide = true;
             },
 
