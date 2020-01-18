@@ -52,12 +52,12 @@
                 <div style="color: #202020;font-weight: bold">支付方式</div>
                 <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
 
-                <van-radio-group v-model="radio">
+                <van-radio-group v-model="paytype">
                     <van-cell-group>
-                        <van-cell title="微信付款" :icon="wxChar" clickable @click="radio = '1'" :border="false">
+                        <van-cell title="微信付款" :icon="wxChar" clickable @click="paytype = '1'" :border="false">
                             <van-radio slot="right-icon" name="1" checked-color="#07c160"/>
                         </van-cell>
-                        <van-cell title="余额付款" :icon="balance" clickable @click="radio = '2'" :border="false">
+                        <van-cell title="余额付款" :icon="balance" clickable @click="paytype = '2'" :border="false">
                             <van-radio slot="right-icon" name="2" checked-color="#07c160"/>
                         </van-cell>
                     </van-cell-group>
@@ -77,12 +77,54 @@
                 <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
             </van-tabbar>
         </div>
+        <van-popup v-model="wxpay" :style="{height: '45%',width:'90%'}"
+                   style="background-color: white;border-radius: 10px">
+            <div class="pay-title">班车充值</div>
+            <div class="func-wrap">
+                <div class="func-title">
+                    <div style="color: #5E5E5E;text-align: left;line-height: 35px">请输入充值金额:</div>
+                    <div class="func-input-wrap">
+                        <input v-model="czje" type="number" placeholder="100"/>
+                        <span style="color: #5E5E5E;font-size: 17px;position: absolute;right: 10px">元</span>
+                    </div>
+                    <div class="czje-item">
+                        <div @click="changeCzje(20)" :style="czje===20?{color:'#fff',backgroundColor:'#0CC893'}:{}">20
+                        </div>
+                        <div @click="changeCzje(30)" :style="czje===30?{color:'#fff',backgroundColor:'#0CC893'}:{}">30
+                        </div>
+                        <div @click="changeCzje(50)" :style="czje===50?{color:'#fff',backgroundColor:'#0CC893'}:{}">50
+                        </div>
+                        <div @click="changeCzje(100)" :style="czje===100?{color:'#fff',backgroundColor:'#0CC893'}:{}">
+                            100
+                        </div>
+                    </div>
+                </div>
+                <div class="func-content">
+                    <van-button style="width: 96%;height:40px;" color="#0CC893" type="default" @click="wxPay2">
+                        立即充值
+                    </van-button>
+                </div>
+            </div>
+        </van-popup>
     </div>
 </template>
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Button, Toast, Divider, RadioGroup, Radio, Cell, CellGroup, Tabbar, TabbarItem} from 'vant';
+    import {
+        Row,
+        Col,
+        Button,
+        Toast,
+        Popup,
+        Divider,
+        RadioGroup,
+        Radio,
+        Cell,
+        CellGroup,
+        Tabbar,
+        TabbarItem
+    } from 'vant';
     import wxChar from './../../static/images/busTrip/wxchar.png'
     import balance from './../../static/images/busTrip/balance.png'
     import request from "../../utils/request";
@@ -106,6 +148,7 @@
             [RadioGroup.name]: RadioGroup,
             [Radio.name]: Radio,
             [Cell.name]: Cell,
+            [Popup.name]: Popup,
             [CellGroup.name]: CellGroup,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem,
@@ -114,9 +157,11 @@
             return {
                 active: "",
                 title: "支付",
-                radio: '1',
+                paytype: '1',
+                wxpay: false,
                 num: 0,
                 amount: 0,
+                czje: 50,
                 busid: '',
                 lineid: '',
                 dateStr: [],
@@ -141,6 +186,9 @@
             }
         },
         methods: {
+            changeCzje(je) {
+                this.czje = je;
+            },
             queryBus() {
                 request.sendPost({
                     url: '/bus/selectLineInfo/' + this.busid,
@@ -152,15 +200,19 @@
                 })
             },
             submitOrder() {
+                let params = {
+                    busid: this.busid,
+                    dateStr: this.chooseDate,
+                    lineid: this.lineid,
+                    payment: this.amount,
+                    paytype: this.paytype
+                };
+                if (this.paytype === '1') {
+                    params.push('prepayId', this.wxData.prepayId)
+                }
                 request.sendPost({
                     url: '/bus/buyTicket',
-                    params: {
-                        busid: this.busid,
-                        dateStr: this.chooseDate,
-                        lineid: this.lineid,
-                        payment: this.amount,
-                        prepayId: this.wxData.prepayId,
-                    }
+                    params: params
                 }).then((res) => {
                     if (res.data.code === 0) {
                         this.$router.push({path: '/ticketList'});
@@ -229,7 +281,12 @@
                     function (res) {
                         if (res.err_msg === "get_brand_wcpay_request:ok") {
                             Toast("支付成功");
-                            me.submitOrder();
+                            if (!this.wxpay) {
+                                me.submitOrder();
+                            } else {
+                                me.recharge();
+                            }
+
                             // 使用以上方式判断前端返回,微信团队郑重提示：
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                         } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
@@ -245,6 +302,22 @@
                 );
             },
 
+            recharge() {
+                // {payfor}
+                //1、用户充值 2、拼车充值 3、班车充值 4、商城充值
+                request.sendPost({
+                    url: '/user/center/recharge/3',
+                    params: {
+                        number: this.czje
+                    }
+                }).then((res) => {
+                    if (res.data.code === 0) {
+                        this.wxpay = false;
+                    }
+                    Toast(res.data.msg);
+                })
+            },
+
             buyTicketBefore() {
                 request.sendPost({
                     url: '/bus/buyTicketBefore',
@@ -255,7 +328,30 @@
                     }
                 }).then(res => {
                     if (res.data.code === 0) {
-                        this.wxPay();
+                        if (this.paytype === '1') {
+                            this.wxPay();
+                        } else if (this.paytype === '2') {
+                            this.balancePay();
+                        }
+
+                    } else {
+                        Toast(res.data.msg);
+                    }
+                })
+            },
+
+            balancePay() {
+                request.sendPost({
+                    url: '/bus/balancePay',
+                    params: {
+                        payment: this.amount,
+                        ticketnum: this.num
+                    }
+                }).then(res => {
+                    if (res.data.code === 0) {
+                        this.submitOrder();
+                    } else if (res.data.code === 100) {
+                        this.wxpay = true;
                     } else {
                         Toast(res.data.msg);
                     }
@@ -267,6 +363,30 @@
                     url: '/wx/pay/create/order/1',//班车购票
                     params: {
                         paynum: this.amount,
+                    }
+                }).then((res) => {
+                    if (res.data.code === 0) {
+                        this.wxData = res.data.data;
+                        this.callpay();
+                    } else {
+                        Toast(res.data.msg);
+                    }
+                })
+            },
+            wxPay2() {
+                this.czje = this.czje+'';
+                if (!this.czje) {
+                    Toast("充值金额不能为空");
+                    return;
+                }
+                if (this.czje.indexOf('.') > -1) {
+                    Toast('请输入整数');
+                    return;
+                }
+                request.sendGet({
+                    url: '/wx/pay/create/order/4',//班车充值
+                    params: {
+                        paynum: this.czje,
                     }
                 }).then((res) => {
                     if (res.data.code === 0) {
@@ -319,6 +439,71 @@
     .footerBar {
         width: 100%;
     }
+    .func-content {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        bottom: 10px;
+    }
 
+    .czje-item {
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around
+    }
+    .czje-item div {
+        font-size: 14px;
+        height: 25px;
+        width: 50px;
+        padding: 0 5px;
+        line-height: 25px;
+        color: #202020;
+        background-color: #fff;
+        border: 1px solid #cecece;
+    }
+    .func-input-wrap {
+        text-align: left;
+        display: flex;
+        align-items: center;
+        position: relative
+    }
+    .func-input-wrap input {
+        padding: 0 5px;
+        flex: 1;
+        height: 30px;
+        border-radius: 6px;
+        border: 1px solid #cecece
+    }
+    .func-title {
+        padding-bottom: 15px;
+        width: 96%;
+        border-bottom: 1px solid #BBBBBB;
+    }
+    .func-wrap {
+        background-color: white;
+        border-radius: 6px;
+        /*padding: 10px 11px;*/
+        height: 84%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+    .pay-title {
+        background-color: white;
+        width: 100%;
+        height: 15%;
+        font-size: 20px;
+        color: #202020;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid #CECECE
+    }
 </style>
 
