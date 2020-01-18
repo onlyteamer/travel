@@ -24,11 +24,13 @@
             <div class="radio-wrap">
                 <div style="height: 38px;line-height:38px;border-bottom: 1px solid #ECECEC">
                     <span class="tips" v-if="state">尚无已确认订单，无需赔偿</span>
-                    <span class="tips" v-else>存在已确认订单，需赔偿乘客{{tripInfo.price}}元/人。</span>
+                    <span class="tips" v-else>存在已确认订单，需赔偿乘客10元/人。</span>
                 </div>
                 <div class="radio-wrap-title">取消行程原因：</div>
                 <van-radio-group v-model="reasonId" class="radio-wrap-content">
-                    <van-radio :name="item.reasonId" checked-color="#07BD06" v-for="(item,index) in reasonList">{{item.reasonContext}}</van-radio>
+                    <van-radio :name="item.reasonId" checked-color="#07BD06" v-for="(item,index) in reasonList">
+                        {{item.reasonContext}}
+                    </van-radio>
                 </van-radio-group>
             </div>
             <van-button @click="submit" style="margin-top:15px;width: 100%;height:44px" color="#0CC893" type="default">
@@ -49,7 +51,7 @@
 </template>
 
 <script>
-    import {NavBar, Button, Image, RadioGroup, Radio, Row, Col,Toast,Tabbar, Dialog,TabbarItem} from 'vant';
+    import {NavBar, Button, Image, RadioGroup, Radio, Row, Col, Toast, Tabbar, Dialog, TabbarItem} from 'vant';
     import imageURL from '../../static/images/stop.png';
 
     import request from '../../utils/request'
@@ -68,7 +70,7 @@
             [Radio.name]: Radio,
             [Row.name]: Row,
             [Col.name]: Col,
-            [Toast.name]:Toast,
+            [Toast.name]: Toast,
             [Tabbar.name]: Tabbar,
             [Dialog.name]: Dialog,
             [TabbarItem.name]: TabbarItem
@@ -77,20 +79,18 @@
             return {
                 reasonId: 1,
                 imageURL: imageURL,
-                state:true,
-                tripInfo:{
-
-                },
-                active:"",
+                state: true,
+                tripInfo: {},
+                active: "",
                 chengK: chengK,
                 xingC: xingC,
                 push: push,
                 person: person,
-                reasonList:[]
+                reasonList: []
             }
         },
 
-        mounted(){
+        mounted() {
             this.initReasonList();
 
             let tripId = this.$route.query.tripId;
@@ -104,16 +104,19 @@
             this.tripInfo.confirm = confirm;
             this.tripInfo.unconfig = unconfig;
             this.tripInfo.price = price;
+            if (this.tripInfo.confirm > 0) {
+                this.state = false;
+            }
         },
         methods: {
             //初始化理由列表
-            initReasonList(){
+            initReasonList() {
                 request.sendGet({
-                    url:"/sharecar/trip/cancelreason",
-                    params:{}
-                }).then(res =>{
-                    if(res.data.code == '0'){
-                       this.reasonList = res.data.rows;
+                    url: "/sharecar/trip/cancelreason",
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == '0') {
+                        this.reasonList = res.data.rows;
                     }
                 })
             },
@@ -125,38 +128,38 @@
                 let me = this;
                 let tripId = this.$route.query.tripId;
                 let reasonId = this.reasonId;
-                    request.sendPost({
-                        url:"/sharecar/trip/cancel/"+tripId+"/"+reasonId,
-                        params:{}
-                    }).then(res =>{
-                        if(res.data.code == '0'){
-                            Toast.success(res.data.msg)
-                        }else if(res.data.code == '300'){
+                request.sendPost({
+                    url: "/sharecar/trip/cancel/" + tripId + "/" + reasonId,
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == '0') {
+                        Toast.success(res.data.msg)
+                    } else if (res.data.code == '300') {
+                        //有偿
+                        Dialog.confirm({
+                            title: '取消行程',
+                            message: res.data.msg
+                        }).then(() => {
+                            // on confirm
                             //有偿
-                            Dialog.confirm({
-                                title: '取消行程',
-                                message: res.data.msg
-                            }).then(() => {
-                                // on confirm
-                                //有偿
-                                request.sendPost({
-                                    url:"/sharecar/trip/paycancel/"+tripId+"/"+reasonId,
-                                    params:{}
-                                }).then(res =>{
-                                    if(res.data.code == '0'){
-                                        Toast.success(res.data.msg)
-                                    }else {
-                                        Toast.fail(res.data.msg)
-                                    }
-                                })
-                            }).catch(() => {
-                                me.$router.back(-1);
-                                // on cancel
-                            });
-                        } else {
-                            Toast.fail(res.data.msg)
-                        }
-                    })
+                            request.sendPost({
+                                url: "/sharecar/trip/paycancel/" + tripId + "/" + reasonId,
+                                params: {}
+                            }).then(res => {
+                                if (res.data.code == '0') {
+                                    Toast.success(res.data.msg)
+                                } else {
+                                    Toast.fail(res.data.msg)
+                                }
+                            })
+                        }).catch(() => {
+                            me.$router.back(-1);
+                            // on cancel
+                        });
+                    } else {
+                        Toast.fail(res.data.msg)
+                    }
+                })
             }
         }
     }
