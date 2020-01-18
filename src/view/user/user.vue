@@ -247,6 +247,7 @@
                 }).then(res=>{
                     if(res.data.code===0){
                         this.userInfo = res.data.data;
+                        localStorage.setItem("userId",res.data.data.userId);
                     }else{
                         Toast(res.data.msg);
                     }
