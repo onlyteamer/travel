@@ -162,6 +162,7 @@
             }
         },
         mounted(){
+
             this.initUserInfo();
         },
 
@@ -195,6 +196,8 @@
                 }
                 let userId = this.$route.query.userId;
                 this.appraise.userId = userId;
+                let tripId = this.$route.query.tripId;
+                this.appraise.tripId = tripId;
 
                 request.sendPost({
                     url:"/sharecar/pass/doevaluate/"+this.appraise.tripId,
