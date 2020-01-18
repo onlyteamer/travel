@@ -249,13 +249,27 @@
                     required
             />
         </van-dialog>
-        <van-popup v-model="wxpay" :style="{height: '45%',width:'90%'}" style="background-color: white;">
+        <van-popup v-model="wxpay" :style="{height: '45%',width:'90%'}"
+                   style="background-color: white;border-radius: 10px">
             <div class="pay-title">拼车充值</div>
             <div class="func-wrap">
                 <div class="func-title">
-                    <van-field v-model="czje" type="number" :border=false
-                               placeholder="充值金额"/>
-                    <span style="color: #5E5E5E;font-size: 17px">元</span>
+                    <div style="color: #5E5E5E;text-align: left;line-height: 35px">请输入充值金额:</div>
+                    <div class="func-input-wrap">
+                        <input v-model="czje" type="number" placeholder="100"/>
+                        <span style="color: #5E5E5E;font-size: 17px;position: absolute;right: 10px">元</span>
+                    </div>
+                    <div class="czje-item">
+                        <div @click="changeCzje(20)" :style="czje===20?{color:'#fff',backgroundColor:'#0CC893'}:{}">20
+                        </div>
+                        <div @click="changeCzje(30)" :style="czje===30?{color:'#fff',backgroundColor:'#0CC893'}:{}">30
+                        </div>
+                        <div @click="changeCzje(50)" :style="czje===50?{color:'#fff',backgroundColor:'#0CC893'}:{}">50
+                        </div>
+                        <div @click="changeCzje(100)" :style="czje===100?{color:'#fff',backgroundColor:'#0CC893'}:{}">
+                            100
+                        </div>
+                    </div>
                 </div>
                 <div class="func-content">
                     <van-button style="width: 96%;height:40px;" color="#0CC893" type="default" @click="wxPay">
@@ -353,6 +367,9 @@
 
         },
         methods: {
+            changeCzje(je) {
+                this.czje = je;
+            },
             wxShareConfig(url) {
                 var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
                 var ShareTitle = "申坤出行"; // 分享标题
@@ -398,7 +415,7 @@
                     }
                 }).then((res) => {
                     if (res.data.code === 0) {
-                        this.wxpay = true;
+                        this.wxpay = false;
                     }
                     Toast(res.data.msg);
                 })
@@ -461,6 +478,11 @@
             wxPay() {
                 if (!this.czje) {
                     Toast("充值金额不能为空");
+                    return;
+                }
+                this.czje = this.czje+"";
+                if (this.czje.indexOf('.') > -1) {
+                    Toast('请输入整数');
                     return;
                 }
                 request.sendGet({
@@ -576,6 +598,8 @@
                             this.passTrip.pageNum = 1;
                             this.initPassTripList();
                             this.changeSeatInfo.seatCount = "";
+                        } else if (res.data.code === 100) {
+                            this.wxpay = true;
                         } else {
                             Toast.fail(res.data.msg)
                         }
@@ -773,40 +797,6 @@
         bottom: 10px;
     }
 
-    .func-title {
-        height: 47px;
-        width: 96%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 1px solid #BBBBBB;
-    }
-
-    .func-wrap {
-        background-color: white;
-        border-radius: 6px;
-        /*padding: 10px 11px;*/
-        height: 84%;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-        align-items: center;
-    }
-
-    .pay-title {
-        background-color: white;
-        width: 100%;
-        height: 15%;
-        font-size: 20px;
-        color: #202020;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-bottom: 1px solid #CECECE
-    }
-
     .contain {
 
     }
@@ -862,4 +852,67 @@
         padding-right: 15px;
     }
 
+    .czje-item {
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around
+    }
+
+    .czje-item div {
+        font-size: 14px;
+        height: 25px;
+        width: 50px;
+        padding: 0 5px;
+        line-height: 25px;
+        color: #202020;
+        background-color: #fff;
+        border: 1px solid #cecece;
+    }
+
+    .func-input-wrap {
+        text-align: left;
+        display: flex;
+        align-items: center;
+        position: relative
+    }
+
+    .func-input-wrap input {
+        padding: 0 5px;
+        flex: 1;
+        height: 30px;
+        border-radius: 6px;
+        border: 1px solid #cecece
+    }
+
+    .func-title {
+        padding-bottom: 15px;
+        width: 96%;
+        border-bottom: 1px solid #BBBBBB;
+    }
+
+    .func-wrap {
+        background-color: white;
+        border-radius: 6px;
+        /*padding: 10px 11px;*/
+        height: 84%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+
+    .pay-title {
+        background-color: white;
+        width: 100%;
+        height: 15%;
+        font-size: 20px;
+        color: #202020;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid #CECECE
+    }
 </style>

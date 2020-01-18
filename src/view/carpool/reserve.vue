@@ -310,7 +310,7 @@
                     }
                 }).then((res) => {
                     if (res.data.code === 0) {
-                        this.wxpay = true;
+                        this.wxpay = false;
                     }
                     Toast(res.data.msg);
                 })
@@ -373,6 +373,11 @@
             wxPay() {
                 if (!this.czje) {
                     Toast("充值金额不能为空");
+                    return;
+                }
+                this.czje = this.czje+"";
+                if (this.czje.indexOf('.') > -1) {
+                    Toast('请输入整数');
                     return;
                 }
                 request.sendGet({
