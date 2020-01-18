@@ -45,7 +45,8 @@
                             </van-col>
                         </van-row>
 
-                        <van-row style="margin: 10px 0" v-if="item.tripState != '2' && item.tripState != '4'&&item.tripState != '3'">
+                        <van-row style="margin: 10px 0"
+                                 v-if="item.tripState != '2' && item.tripState != '4'&&item.tripState != '3'">
                             <van-col span="6">
                                 <van-button type="default" color="#0CC893"
                                             style="font-size: 14px;width: 96%;height: 28px"
@@ -65,32 +66,36 @@
                                 </van-button>
                             </van-col>
                             <van-col span="6">
-                                <van-button @click="goCarFate(item.tripId)" :disabled="item.tripState == '0'" type="default" color="#0CC893"
+                                <van-button @click="goCarFate(item.tripId)" :disabled="item.tripState == '0'"
+                                            type="default" color="#0CC893"
                                             style="font-size: 14px;width: 96%;height: 28px" size="mini">同车缘分
                                 </van-button>
                             </van-col>
                         </van-row>
 
-                        <van-row style="margin: 10px 0" v-if="item.tripState != '2' && item.tripState != '4' &&item.tripState != '3'">
+                        <van-row style="margin: 10px 0" v-if="item.tripState != '2' &&item.tripState != '3'">
                             <van-col span="6">
 
                             </van-col>
                             <van-col span="6">
                                 <van-button type="default" color="#0CC893"
                                             style="font-size: 14px;width: 96%;height: 28px"
-                                            size="mini" @click="changeArrive(item.tripId)" :disabled="item.tripState == '0'">已到达
+                                            size="mini" @click="changeArrive(item.tripId)"
+                                            :disabled="item.tripState == '0'">已到达
                                 </van-button>
                             </van-col>
                             <van-col span="6">
                                 <van-button type="default" color="#0CC893"
                                             style="font-size: 14px;width: 96%;height: 28px"
-                                            size="mini" @click="passengerPayment(item)" :disabled="item.tripState == '0'">上车支付
+                                            size="mini" @click="passengerPayment(item)"
+                                            :disabled="item.tripState == '0'">上车支付
                                 </van-button>
                             </van-col>
                             <van-col span="6">
                                 <van-button type="default" color="#0CC893"
                                             style="font-size: 14px;width: 96%;height: 28px"
-                                            size="mini" @click="linkToCancel(item)" :disabled="item.tripState == '0'">取消行程
+                                            size="mini" @click="linkToCancel(item)" :disabled="item.tripState == '0'">
+                                    取消行程
                                 </van-button>
                             </van-col>
                         </van-row>
@@ -132,7 +137,7 @@
                             </van-col>
                             <van-col span="5" align="right" :style="{color: item.tripState == '1'?'#202020':'#FF0200'}">
                                 {{item.tripState =='1'?'已完成':(item.tripState =='0'?'待出行':(item.tripState ==
-                                '2'?'已取消':'已终止'))}}
+                                '2'?'已取消':(item.tripState =='3'?'已终止':(item.tripState =='4'?'已发车':'待确认'))))}}
                             </van-col>
                         </van-row>
 
@@ -169,7 +174,8 @@
                                 </van-button>
                             </van-col>
                             <van-col span="6">
-                                <van-button @click="goPassengerList(item.tripId)" type="default" color="#0CC893"
+                                <van-button @click="goPassengerList(item.tripId,item.tripState)" type="default"
+                                            color="#0CC893"
                                             style="font-size: 14px;width: 96%;height: 28px" size="mini">乘客
                                 </van-button>
                             </van-col>
@@ -206,10 +212,11 @@
                             <van-col span="6" offset="18">
                                 <van-button type="default" color="#0CC893"
                                             style="font-size: 14px;width: 96%;height: 28px"
-                                            size="mini" @click="goPassengerList(item.tripId)">乘客
+                                            size="mini" @click="goPassengerList(item.tripId,item.tripState)">乘客
                                 </van-button>
                             </van-col>
                         </van-row>
+
 
                         <!--<div class="cover" v-if="item.tripState == '3'||item.tripState == '2'"></div>-->
                     </div>
@@ -299,13 +306,14 @@
         },
         data() {
             return {
+                loading: false,
+                finished: false,
+                isOneHttp: true,
                 guide: false,
                 guideIcon: guideIcon,
                 czje: '',
                 wxData: {},
                 wxpay: false,
-                loading: false,
-                finished: false,
                 active: 1,
                 showSeatDialog: false,
                 changeSeatInfo: {
@@ -318,13 +326,14 @@
                     data: [],
                     pageSize: 10,
                     pageNum: 1,
-                    total: 0
+                    total: 0,
+
                 },
                 carOwnerTrip: {
                     data: [],
                     pageSize: 10,
                     pageNum: 1,
-                    total: 0
+                    total: 0,
                 },
                 chengK: chengK,
                 xingC: xingC,
@@ -344,7 +353,7 @@
 
         },
         methods: {
-            wxShareConfig(url){
+            wxShareConfig(url) {
                 var ShareImgUrl = "https://bitgeek.qhdsx.com/img/logo.jpg"; // 分享图标
                 var ShareTitle = "申坤出行"; // 分享标题
                 var ShareDesc = "拼车详情"; // 分享描述
@@ -373,7 +382,7 @@
                 });
             },
             //行程详情
-            linkLineDetails(item,type){
+            linkLineDetails(item, type) {
                 sessionStorage.setItem("strokeType", type);
                 this.$router.push({path: '/lineDetails', query: {tripId: item.tripId}});
             },
@@ -408,7 +417,7 @@
                         timestamp: parseInt(res.data.data.timestamp, 10), // 必填，生成签名的时间戳
                         nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
                         signature: res.data.data.signature,// 必填，签名，见附录1
-                        jsApiList: ['WeixinJSBridge','onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                        jsApiList: ['WeixinJSBridge', 'onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                     });
                 });
             },
@@ -561,6 +570,11 @@
                     }).then(res => {
                         if (res.data.code == '0') {
                             Toast.success(res.data.msg);
+                            this.finished = false;
+                            this.loading = true;
+                            this.passTrip.data = [];
+                            this.passTrip.pageNum = 1;
+                            this.initPassTripList();
                             this.changeSeatInfo.seatCount = "";
                         } else {
                             Toast.fail(res.data.msg)
@@ -623,7 +637,12 @@
                         params: {}
                     }).then(res => {
                         if (res.data.code == '0') {
-                            Toast.success(res.data.msg)
+                            Toast.success(res.data.msg);
+                            this.finished = false;
+                            this.loading = true;
+                            this.carOwnerTrip.data = [];
+                            this.carOwnerTrip.pageNum = 1;
+                            this.initCarOwnerTripList();
                         } else {
                             Toast.fail(res.data.msg)
                         }
@@ -687,9 +706,9 @@
                 sessionStorage.setItem("strokeType", "0");
                 this.$router.push({path: '/carFate', query: {tripId: val}});
             },
-            goPassengerList(val) {
+            goPassengerList(val, tripState) {
                 sessionStorage.setItem("strokeType", "1");
-                this.$router.push({path: '/passengerList', query: {tripId: val}});
+                this.$router.push({path: '/passengerList', query: {tripId: val, tripState: tripState}});
             },
             linkCarPosition(val) {
                 sessionStorage.setItem("strokeType", "0");
@@ -700,6 +719,8 @@
                 sessionStorage.setItem("strokeType", "0");
                 this.$router.push({path: '/carOwnerAppraise', query: {tripId: val}});
             },
+
+
             linkOpt(val) {
                 sessionStorage.setItem("strokeType", "0");
                 this.$router.push({path: '/otherOpt', query: {tripId: val.tripId}})
@@ -716,7 +737,8 @@
                     this.$router.push({path: '/cancelTrip-passenger', query: {tripId: val.tripId, bookid: val.bookId}})
                 } else {
                     sessionStorage.setItem("strokeType", "1");
-                    this.$router.push({path: '/cancelTrip-driver',
+                    this.$router.push({
+                        path: '/cancelTrip-driver',
                         query: {
                             tripId: val.tripId,
                             seat: val.totalSeats,
@@ -728,8 +750,8 @@
                 }
             },
 
-            wxShare(item){
-                let  url = location.protocol + "//" + location.hostname +'/#/lineDetails?tripId='+item.tripId;
+            wxShare(item) {
+                let url = location.protocol + "//" + location.hostname + '/#/lineDetails?tripId=' + item.tripId;
                 this.wxShareConfig(url);
                 this.guide = true;
             },
@@ -827,6 +849,7 @@
     .footer {
         width: 100%;
     }
+
     /deep/ .van-popup {
         background-color: transparent;
     }
