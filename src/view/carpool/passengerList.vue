@@ -37,8 +37,13 @@
                     </van-row>
 
                     <van-row v-if="item.passState != '0'">
+
                         <van-col span="6" style="float: right">
                             <van-button type="default" :color="item.passState == '1'?'#0CC893':'#cacaca'" size="mini" style="height: 34px;font-size: 14px;width: 100%;margin-left: 10px">{{item.passState == '1'?'已确定':(item.passState == '2'?'已拒绝':'待确定')}}</van-button>
+                        </van-col>
+
+                        <van-col span="6" style="float: right;margin-right: 10px"  v-if="tripState=='1'">
+                            <van-button type="default" @click="goPassengerAppraise(item.userId)" :color="item.passState == '1'?'#0CC893':'#cacaca'" size="mini" style="height: 34px;font-size: 14px;width: 100%;margin-left: 10px">评价乘客</van-button>
                         </van-col>
                     </van-row>
         </div>
@@ -93,24 +98,35 @@
                 chengK: chengK,
                 xingC: xingC,
                 push: push,
-                person: person
+                person: person,
+                tripState:'',
+                tripId:''
             }
         },
         mounted(){
+            this.tripState = this.$route.query.tripState;
+            this.tripId = this.$route.query.tripId;
             //初始化列表数据
             this.initPassList();
+
         },
 
         methods:{
             onClickLeft(){
                 this.$router.back(-1);
             },
+            //行车评价
+            goPassengerAppraise(val) {
+                let tripId =  this.tripId;
+                this.$router.push({path: '/passengerAppraise', query: {tripId: tripId,userId:val}});
+            },
+
             goPassengerDetails(val){
                 this.$router.push({path:'/passengerDetails',query:{userId:val}});
             },
             initPassList(){
                 //获取行程id
-                let tripId = this.$route.query.tripId;
+                let tripId =  this.tripId;
 
                 request.sendGet({
                     url:"/sharecar/trip/passlist/"+tripId,
