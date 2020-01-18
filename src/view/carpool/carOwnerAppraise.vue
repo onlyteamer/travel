@@ -216,6 +216,8 @@
                 }).then(res => {
                     if(res.data.code =='0'){
                         this.carOwnerInfo = res.data.data;
+                    }else{
+                        Toast(res.data.msg);
                     }
                 })
             },
@@ -259,10 +261,10 @@
                     params: this.appraise
                 }).then(res =>{
                     if(res.data.code == '0'){
-                        Toast.success("发布成功");
+                        Toast.success(res.data.msg);
                         this.$router.push({path:"/myStroke"});
                     }else {
-                        Toast.fail("发布失败");
+                        Toast.fail(res.data.msg);
                     }
                 })
             }
@@ -282,6 +284,7 @@
     .assess {
         padding: 10px 15px;
         background: #FFFFFF;
+        margin-bottom: 55px;
     }
 
     .card {
