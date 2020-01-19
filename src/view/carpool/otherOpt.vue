@@ -12,8 +12,13 @@
                 <van-row style="display: flex;align-items: center;font-size: 14px">
                     <van-col span="24">
                         <div style="display: flex;align-items: center">
-                            <img :src="tripDetails.headimgurl"
-                                 style="height: 52px;width: 52px;margin-right: 10px;border-radius: 50%">
+                            <van-image
+                                    round
+                                    fit="cover"
+                                    width="60"
+                                    height="60"
+                                    :src="tripDetails.headImageurl"
+                            />
                             <div style="width: 100%">
                                 <p style="margin: 5px 0">
                                     <span style="color: #5E5E5E;font-weight: bold">{{tripDetails.nickName}}</span>
@@ -106,7 +111,7 @@
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Divider, Button, Rate, Tag, Field, CellGroup,Toast,Tabbar, TabbarItem} from 'vant';
+    import {Row,Image, Col, Divider, Button, Rate, Tag, Field, CellGroup,Toast,Tabbar, TabbarItem} from 'vant';
 
     import request from '../../utils/request'
 
@@ -121,6 +126,7 @@
             Title,
             [Row.name]: Row,
             [Col.name]: Col,
+            [Image.name]:Image,
             [Divider.name]: Divider,
             [Button.name]: Button,
             [Rate.name]: Rate,
