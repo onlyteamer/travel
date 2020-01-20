@@ -57,20 +57,26 @@
                                left-icon="user-circle-o" disabled/>
                 </van-col>
             </van-row>
+            <div style="border-bottom: 1px solid #ECECEC;padding: 0px 2px 12px">
+                <van-row style="display: flex;align-items: center;">
+                    <van-col span="16">
+                        <div>
+                            <van-tag :color="stroke.riderIds2.indexOf(item.id)>-1?'#0CC893':'#FFFFFF'"
+                                     :text-color="stroke.riderIds2.indexOf(item.id)>-1?'#FFFFFF':'#202020'"
+                                     class="contactTag"
+                                     v-for="item in normalRiders" :key="item.id" @click="selectRider(item)">
+                                {{item.passName}}
+                            </van-tag>
+                        </div>
+                    </van-col>
 
-            <van-row style="display: flex;align-items: center;border-bottom: 1px solid #ECECEC;padding: 0px 2px 12px">
-                <van-col span="16">
-                    <div>
-                        <van-tag :color="stroke.riderIds2.indexOf(item.id)>-1?'#0CC893':'#FFFFFF'"
-                                 :text-color="stroke.riderIds2.indexOf(item.id)>-1?'#FFFFFF':'#202020'"
-                                 class="contactTag"
-                                 v-for="item in normalRiders" :key="item.id" @click="selectRider(item)">
-                            {{item.passName}}
-                        </van-tag>
-                    </div>
-                </van-col>
-                <van-col span="8" align="right" @click="goPassenger" style="font-size: 13px">（常用联系人）</van-col>
-            </van-row>
+                </van-row>
+                <div style="display: flex;align-items: center;justify-content: flex-end">
+                    <van-button type="default" color="#0CC893"  @click="goPassenger" size="mini" style="font-size: 13px">常用联系人</van-button>
+                    <van-button type="default" color="#0CC893"  @click="goAdd" size="mini" style="font-size: 13px">新增</van-button>
+                </div>
+
+            </div>
 
 
             <van-row style="border-bottom: 1px solid #ECECEC;padding: 8px 0px">
@@ -138,11 +144,6 @@
         </div>
 
         <van-popup v-model="showPassenger" position="bottom" :style="{ height: '30%',width:'94%',padding:'0 3%'}">
-            <div style="padding: 10px 0;border-bottom: 1px solid #cecece;text-align: right">
-                <van-button type="default" color="#0CC893" @click="goAdd"
-                            style="min-width: 66px;width: auto;height: 25px;padding: 0 5px;line-height: 25px">新增联系人
-                </van-button>
-            </div>
             <van-checkbox-group v-model="result" :max="stroke.seatCount" @change="changePassenger">
                 <van-checkbox :name="item.id" v-for="item in passengerData" :key="item.id"
                               style=" border-bottom: 1px solid #ECECEC;">
@@ -375,7 +376,7 @@
                     Toast("充值金额不能为空");
                     return;
                 }
-                this.czje = this.czje+"";
+                this.czje = this.czje + "";
                 if (this.czje.indexOf('.') > -1) {
                     Toast('请输入整数');
                     return;
@@ -470,14 +471,14 @@
             },
             queryTrip() {
                 request.sendPost({
-                    url: '/sharecar/pass/booktripinfo/'+ this.stroke.tripId,
+                    url: '/sharecar/pass/booktripinfo/' + this.stroke.tripId,
                     params: {}
                 }).then((res) => {
                     if (res.data.code === 0) {
                         this.normalRiders = res.data.data.passengerList;
                         if (this.normalRiders.length > 0) {
-                            for (let i = 0; i < this.normalRiders.length ; i++) {
-                                if(this.normalRiders[i].isLastPassanger===1){
+                            for (let i = 0; i < this.normalRiders.length; i++) {
+                                if (this.normalRiders[i].isLastPassanger === 1) {
                                     this.stroke.riderNames2.push(this.normalRiders[i].passName);
                                     this.stroke.riderIds2.push(this.normalRiders[i].id);
                                     this.stroke.phone = this.normalRiders[i].passPhone;
