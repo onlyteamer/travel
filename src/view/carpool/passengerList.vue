@@ -4,50 +4,89 @@
         <div style="margin-bottom: 55px">
             <div class="black" v-for="(item,index) in passList" :key="index">
                 <div>
-                    <van-row style="display: flex;align-items: center" @click="goPassengerDetails(item.userId)">
-                        <van-col span="14" >
+                    <van-row style="display: flex;align-items: center"
+                             @click="goPassengerDetails(item.showPassenger.userId)">
+                        <van-col span="14">
                             <div style="display: flex;align-items: center">
-                                <img :src="item.headimgurl?item.headimgurl:defaultAvatar" style="height: 50px;width: 50px;margin-right: 10px">
+                                <img :src="item.showPassenger.headimgurl?item.showPassenger.headimgurl:defaultAvatar"
+                                     style="height: 50px;width: 50px;margin-right: 10px">
                                 <div>
-                                    <p style="margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">{{item.nickname}}</span> <img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="item.sex == '1'"><img src="./../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px" v-else> </p>
+                                    <p style="margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">{{item.showPassenger.nickname}}</span>
+                                        <img src="../../static/images/sexTag.png"
+                                             style="width: 12px;height: 12px;margin-left: 5px"
+                                             v-if="item.showPassenger.sex == '1'"><img
+                                                src="./../../static/images/man.png"
+                                                style="width: 12px;height: 12px;margin-left: 5px"
+                                                v-else></p>
                                     <p style="margin: 5px 0">
-                                        <img src="./../../static/images/xin.png" style="width: 14px;height: 14px;margin-right: 5px"/><span>{{item.goodCount}}</span>
-                                        <img src="./../../static/images/unhapply.png" style="width: 14px;height: 14px;margin: 0 5px 0 20px" /> <span>{{item.badCount}}</span>
+                                        <img src="./../../static/images/xin.png"
+                                             style="width: 14px;height: 14px;margin-right: 5px"/><span>{{item.showPassenger.goodCount}}</span>
+                                        <img src="./../../static/images/unhapply.png"
+                                             style="width: 14px;height: 14px;margin: 0 5px 0 20px"/> <span>{{item.showPassenger.badCount}}</span>
                                     </p>
                                     <p style="margin: 5px 0">
-                                        <span style="color: #5E5E5E">乘车地点：{{item.startPlace}}</span>
+                                        <span style="color: #5E5E5E">乘车地点：{{item.showPassenger.startPlace}}</span>
                                     </p>
                                 </div>
                             </div>
                         </van-col>
                         <van-col span="10" align="right">
-                            <div><div class="userType" v-if="item.tag == '0'">乘客</div></div>
-                            <div style="color: #5E5E5E;margin: 5px 0">乘坐过 {{item.passCount}} 次</div>
-                            <div><div style="color: #5E5E5E">下车地点：{{item.endPlace}}</div></div>
+                            <div>
+                                <div class="userType" v-if="item.showPassenger.tag == '0'">乘客</div>
+                            </div>
+                            <div style="color: #5E5E5E;margin: 5px 0">乘坐过 {{item.showPassenger.passCount}} 次</div>
+                            <div>
+                                <div style="color: #5E5E5E">下车地点：{{item.showPassenger.endPlace}}</div>
+                            </div>
                         </van-col>
                     </van-row>
-                    <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"  />
-                    <van-row v-if="item.passState == '0'">
-                        <van-col span="6" offset="11">
-                            <van-button type="default" color="#9E9E9E" size="mini" style="height: 34px;font-size: 14px;width: 100%" @click="confirmTrip(item,'2')">拒绝</van-button>
+                    <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
+                    <!--乘客状态：0:待确认 1:已确认 2:已拒绝 3:已取消-->
+                    <van-row gutter="10">
+                        <van-col span="6" v-if="item.refuseBtn===1">
+                            <van-button type="default" color="#9E9E9E" size="mini"
+                                        style="height: 34px;font-size: 14px;width: 100%"
+                                        @click="confirmTrip(item.showPassenger)">
+                                拒绝
+                            </van-button>
                         </van-col>
-                        <van-col span="6">
-                            <van-button type="default" color="#0CC893" size="mini" style="height: 34px;font-size: 14px;width: 100%;margin-left: 10px" @click="confirmTrip(item,'1')">预约确定</van-button>
+                        <van-col span="6" v-if="item.agreeBtn===1">
+                            <van-button type="default" color="#0CC893" size="mini"
+                                        style="height: 34px;font-size: 14px;width: 100%;"
+                                        @click="passTrip(item.showPassenger)">预约确定
+                            </van-button>
+                        </van-col>
+                        <van-col span="6" v-if="item.arriveBtn===1">
+                            <van-button type="default" color="#0CC893" size="mini"
+                                        style="height: 34px;font-size: 14px;width: 100%;"
+                                        @click="changeArrive(item.showPassenger.userId)">已到达
+                            </van-button>
+                        </van-col>
+                        <van-col span="6" v-if="item.phoneBtn===1">
+                            <van-button type="default" color="#0CC893" size="mini"
+                                        style="height: 34px;font-size: 14px;width: 100%;"
+                                        @click="call(item.showPassenger.phone)">联系乘客
+                            </van-button>
+                        </van-col>
+                        <!--tripState 行程状态：0 待出行 1 已完成 2 已取消 3 已终止 4 已发车 5 待确认 -->
+                        <van-col span="6" style="float: right;margin-right: 10px" v-if="item.evaluateBtn===1">
+                            <van-button type="default" @click="goPassengerAppraise(item.showPassenger.userId)" color='#0CC893'
+                                        style="height: 34px;font-size: 14px;width: 100%;">评价乘客
+                            </van-button>
+                        </van-col>
+                        <van-col span="6" style="float: right;text-align:right;"
+                                 v-if="item.showPassenger.passState !== 0">
+                            <span style="color:#0CC893;height: 34px;font-size: 14px;width: 100%;margin-left: 10px"
+                                  v-if="item.showPassenger.passState === 1">已确定</span>
+                            <span style="color:#cacaca;height: 34px;font-size: 14px;width: 100%;margin-left: 10px"
+                                  v-if="item.showPassenger.passState !== 1">
+                                {{item.showPassenger.passState === 2?'已拒绝':(item.showPassenger.passState === 3?'已取消':"")}}
+                            </span>
                         </van-col>
                     </van-row>
-
-                    <van-row v-if="item.passState != '0'">
-
-                        <van-col span="6" style="float: right">
-                            <van-button type="default" :color="item.passState == '1'?'#0CC893':'#cacaca'" size="mini" style="height: 34px;font-size: 14px;width: 100%;margin-left: 10px">{{item.passState == '1'?'已确定':(item.passState == '2'?'已拒绝':'待确定')}}</van-button>
-                        </van-col>
-
-                        <van-col span="6" style="float: right;margin-right: 10px"  v-if="tripState=='1'">
-                            <van-button type="default" @click="goPassengerAppraise(item.userId)" :color="item.passState == '1'?'#0CC893':'#cacaca'" size="mini" style="height: 34px;font-size: 14px;width: 100%;margin-left: 10px">评价乘客</van-button>
-                        </van-col>
-                    </van-row>
-        </div>
-    </div>
+                    <!--乘客状态：0:待确认 1:已确认 2:已拒绝 3:已取消-->
+                </div>
+            </div>
         </div>
 
         <div style="width: 100%">
@@ -59,13 +98,17 @@
                 <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
             </van-tabbar>
         </div>
-
+        <van-popup v-model="showtime" position="bottom" :style="{ height: '30%' }">
+            <van-picker :columns="timeData" show-toolbar @cancel="showtime = false"
+                        :visible-item-count="3"
+                        @confirm="ontimeChange"/>
+        </van-popup>
     </div>
 </template>
 
 <script>
     import Title from './../../components/header'
-    import { Row, Col,Divider,Button,Dialog,Tabbar,TabbarItem,Toast} from 'vant';
+    import {Row, Col, Divider, Popup, Button, Dialog, Tabbar, TabbarItem, Picker, Toast} from 'vant';
 
     import avatar from "../../static/images/userAvatar.png"
 
@@ -78,32 +121,40 @@
 
     export default {
         name: "passengerList",
-        components:{
+        components: {
             Title,
-            [Row.name]:Row,
-            [Col.name]:Col,
-            [Divider.name]:Divider,
-            [Button.name]:Button,
+            [Row.name]: Row,
+            [Col.name]: Col,
+            [Divider.name]: Divider,
+            [Button.name]: Button,
+            [Picker.name]: Picker,
+            [Popup.name]: Popup,
             [Dialog.name]: Dialog,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem,
             [Toast.name]: Toast,
         },
-        data(){
-            return{
-                active:"",
-                title:"乘客列表",
-                passList:[],
-                defaultAvatar:avatar,
+        data() {
+            return {
+                showtime: false,
+                active: "",
+                title: "乘客列表",
+                passList: [],
+                defaultAvatar: avatar,
                 chengK: chengK,
                 xingC: xingC,
                 push: push,
                 person: person,
-                tripState:'',
-                tripId:''
+                tripState: '',
+                tripId: '',
+                timeData: ['1分钟', '5分钟', '10分钟', '15分钟', '20分钟', '25分钟', '30分钟'],
+                definition:{
+                    bookId:'',
+                    tripId:'',
+                }
             }
         },
-        mounted(){
+        mounted() {
             this.tripState = this.$route.query.tripState;
             this.tripId = this.$route.query.tripId;
             //初始化列表数据
@@ -111,84 +162,108 @@
 
         },
 
-        methods:{
-            onClickLeft(){
-                this.$router.back(-1);
+        methods: {
+            ontimeChange(value) {
+                request.sendPost({
+                    url: '/sharecar/trip/confirm',
+                    params: {
+                        bookId: this.definition.bookId,
+                        state: 1,//1预约确认 2拒绝
+                        tripId: this.definition.tripId,
+                        minute:value.split("分钟")[0]
+                    }
+                }).then(res => {
+                    //刷新列表
+                    if (res.data.code === 0) {
+                        this.initPassList();
+                        Toast.success(res.data.msg);
+                        this.showtime = false;
+                    }
+                })
+            },
+            call(val) {
+                if (val) {
+                    window.location.href = "tel:" + val;
+                } else {
+                    Toast("暂无联系方式");
+                }
+            },
+            changeArrive(passengerId) {
+                let tripId = this.tripId;
+                Dialog.confirm({
+                    title: '已到达',
+                    message: '车主已到达发车地点，通知乘客乘车地点等候'
+                }).then(() => {
+                    // 确定
+                    request.sendPost({
+                        url: "/sharecar/trip/arrive/" + tripId,
+                        params: {
+                            passengerId: passengerId
+                        }
+                    }).then(res => {
+                        if (res.data.code == '0') {
+                            Toast.success(res.data.msg)
+                        } else {
+                            Toast.fail(res.data.msg)
+                        }
+                    })
+                }).catch(() => {
+                    //取消
+
+                });
             },
             //行车评价
             goPassengerAppraise(val) {
-                let tripId =  this.tripId;
-                this.$router.push({path: '/passengerAppraise', query: {tripId: tripId,userId:val}});
+                let tripId = this.tripId;
+                this.$router.push({path: '/passengerAppraise', query: {tripId: tripId, passengerId: val}});
             },
 
-            goPassengerDetails(val){
-                this.$router.push({path:'/passengerDetails',query:{userId:val}});
+            goPassengerDetails(val) {
+                this.$router.push({path: '/passengerDetails', query: {userId: val}});
             },
-            initPassList(){
+            initPassList() {
                 //获取行程id
-                let tripId =  this.tripId;
+                let tripId = this.tripId;
 
                 request.sendGet({
-                    url:"/sharecar/trip/passlist/"+tripId,
+                    url: "/sharecar/trip/passlist/" + tripId,
                     params: {}
-                }).then(res =>{
-                    if(res.data.code==0){
+                }).then(res => {
+                    if (res.data.code == 0) {
                         this.passList = res.data.rows;
                     }
                 })
             },
 
-            confirmTrip(val,flag){
-                //1-确认 2-拒绝
-                if(flag == '1'){
-                    Dialog.confirm({
-                        title: '预约确定',
-                        message: '同意该乘客预约！'
-                    }).then(() => {
-                        // 确定
-                        request.sendPost({
-                            url:'/sharecar/trip/confirm',
-                            params:{
-                                bookId:val.bookId,
-                                state:flag,
-                                tripId:val.tripId
-                            }
-                        }).then(res =>{
-                            //刷新列表
-                            if(res.data.code == '0'){
-                                this.initPassList();
-                                Toast.success(res.data.msg);
-                            }
-                        })
-                    }).catch(() => {
-                        //取消
-                        debugger;
-                    });
-                }else {
-                    Dialog.confirm({
-                        title: '拒绝确定',
-                        message: '是否拒绝该乘客乘车？'
-                    }).then(() => {
-                        // 确定
-                        request.sendPost({
-                            url:'/sharecar/trip/confirm',
-                            params:{
-                                bookId:val.bookId,
-                                state:flag,
-                                tripId:val.tripId
-                            }
-                        }).then(res =>{
-                            //刷新列表
-                            if(res.data.code == '0'){
-                                this.initPassList();
-                                Toast.success(res.data.msg);
-                            }
-                        })
-                    }).catch(() => {
-                        //取消
+            confirmTrip(val) {
+                Dialog.confirm({
+                    title: '拒绝确定',
+                    message: '是否拒绝该乘客乘车？'
+                }).then(() => {
+                    // 确定
+                    request.sendPost({
+                        url: '/sharecar/trip/confirm',
+                        params: {
+                            bookId: val.bookId,
+                            state: 2,//1预约确认 2拒绝
+                            tripId: val.tripId
+                        }
+                    }).then(res => {
+                        //刷新列表
+                        if (res.data.code === 0) {
+                            this.initPassList();
+                            Toast.success(res.data.msg);
+                        }
+                    })
+                }).catch(() => {
+                    //取消
 
-                    });
-                }
+                });
+            },
+            passTrip(val) {
+                this.showtime = true;
+                this.definition.bookId=val.bookId;
+                this.definition.tripId=val.tripId;
             }
         }
     }
@@ -196,7 +271,7 @@
 
 <style scoped>
 
-    .black{
+    .black {
         width: 90%;
         margin: 10px auto;
         padding: 5px 10px 10px 5px;
@@ -204,7 +279,7 @@
         font-size: 14px;
     }
 
-    .userType{
+    .userType {
         width: fit-content;
         padding: 2px 8px;
         border-radius: 5px;
@@ -212,7 +287,7 @@
         background: #0CC893;
     }
 
-    .removeTag{
+    .removeTag {
         width: fit-content;
         padding: 2px 8px;
         margin-top: 10px;
