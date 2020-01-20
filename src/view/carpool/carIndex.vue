@@ -42,17 +42,9 @@
         </div>
         <div class="travel">
             <van-cell title="常用路线选择:" is-link title-style="color:#0CC893" :value="strokeInfo.lineName" @click="openDefaultLine" />
-            <!--<van-cell-group>-->
-                <!--<van-field-->
-                        <!--v-model="strokeInfo.startPlace"-->
-                        <!--placeholder="出发地点"-->
-                        <!--label=""-->
-                        <!--label-width="5px"-->
-                        <!--:left-icon="greenBar"-->
-                <!--/>-->
-            <!--</van-cell-group>-->
             <van-cell-group >
                 <van-field
+                        input-align="left"
                         v-model="strokeInfo.startDate"
                         placeholder="开始时间"
                         label=""
@@ -63,17 +55,9 @@
                 />
             </van-cell-group>
             <van-divider style="width: 90%;margin: 0 auto" />
-            <!--<van-cell-group >-->
-                <!--<van-field-->
-                        <!--v-model="strokeInfo.endPlace"-->
-                        <!--placeholder="目的地点"-->
-                        <!--label=""-->
-                        <!--label-width="5px"-->
-                        <!--:left-icon="redBar"-->
-                <!--/>-->
-            <!--</van-cell-group>-->
             <van-cell-group >
                 <van-field
+                        input-align="left"
                         v-model="strokeInfo.endDate"
                         placeholder="下车时间"
                         label=""
@@ -83,18 +67,6 @@
                         @click="()=>{showPop = true;flag = '1'}"
                 />
             </van-cell-group>
-            <!--<van-divider  style="width: 90%;margin: 0 auto"/>-->
-            <!--<van-cell-group >-->
-                <!--<van-field-->
-                        <!--v-model="strokeInfo.driveTime"-->
-                        <!--placeholder="乘车时间"-->
-                        <!--label=""-->
-                        <!--label-width="5px"-->
-                        <!--:left-icon="timeBar"-->
-                        <!--disabled-->
-                        <!--@click="showPop = true"-->
-                <!--/>-->
-            <!--</van-cell-group>-->
             <div align="center" style="margin-bottom: 10px">
                 <van-button @click="goCarList"  color="#0CC893" style="width: 95%">立即找车</van-button>
                 <van-button @click="goCarList_all"  color="#5083ED" style="width: 95%;margin-top: 10px">查看全部</van-button>
@@ -102,14 +74,6 @@
         </div>
 
         <div class="listInfo">
-            <!--<van-list-->
-                    <!--v-model="loading"-->
-                    <!--:error.sync="error"-->
-                    <!--error-text="请求失败，点击重新加载"-->
-                    <!--@load="onLoad"-->
-                    <!--:offset="10"-->
-                    <!--:immediate-check="false"-->
-            <!--&gt;-->
 
             <div v-for="(item,index) in newTripList" :key="index">
                 <div class="card" @click="linkLineDetails(item.tripId)">
@@ -117,9 +81,12 @@
                         <van-col span="16">
                             <span class="datetime">{{item.tripDateTime}}</span>
                         </van-col>
-                        <van-col span="8" style="text-align: right">
+                        <van-col span="8" style="text-align: right" v-if="item.bookSeat>0">
                             <span>座位:</span>
                             <span class="seatNum">{{item.bookSeat}}个</span>
+                        </van-col>
+                        <van-col span="8" style="text-align: right" v-if="item.bookSeat===0">
+                            <span class="seatNum" style="color: red">车满</span>
                         </van-col>
                     </van-row>
                     <van-row style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;">
