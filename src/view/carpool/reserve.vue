@@ -476,18 +476,15 @@
                     if (res.data.code === 0) {
                         this.normalRiders = res.data.data.passengerList;
                         if (this.normalRiders.length > 0) {
-                            let len = 0;
-                            if (res.data.data.bookSeat > this.normalRiders.length) {
-                                len = this.normalRiders.length;
-                            } else {
-                                len = res.data.data.bookSeat;
+                            for (let i = 0; i < this.normalRiders.length ; i++) {
+                                if(this.normalRiders[i].isLastPassanger===1){
+                                    this.stroke.riderNames2.push(this.normalRiders[i].passName);
+                                    this.stroke.riderIds2.push(this.normalRiders[i].id);
+                                    this.stroke.phone = this.normalRiders[i].passPhone;
+                                }
                             }
-                            for (let i = 0; i < len; i++) {
-                                this.stroke.riderNames2.push(this.normalRiders[i].passName);
-                                this.stroke.riderIds2.push(this.normalRiders[i].id);
-                            }
-                            this.stroke.phone = this.normalRiders[0].passPhone;
-                            this.stroke.seatCount = len;
+
+                            this.stroke.seatCount = this.stroke.riderIds2.length;
                         }
                         this.result = this.stroke.riderIds2;
                         this.stroke.startPlace = res.data.data.startPlace;
