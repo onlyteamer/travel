@@ -45,42 +45,49 @@
                     <van-row gutter="10">
                         <van-col span="6" v-if="item.refuseBtn===1">
                             <van-button type="default" color="#9E9E9E" size="mini"
-                                        style="height: 34px;font-size: 14px;width: 100%"
+                                        style="line-height: 34px;height: 34px;font-size: 14px;width: 100%"
                                         @click="confirmTrip(item.showPassenger)">
                                 拒绝
                             </van-button>
                         </van-col>
                         <van-col span="6" v-if="item.agreeBtn===1">
                             <van-button type="default" color="#0CC893" size="mini"
-                                        style="height: 34px;font-size: 14px;width: 100%;"
+                                        style="line-height: 34px;height: 34px;font-size: 14px;width: 100%;"
                                         @click="passTrip(item.showPassenger)">预约确定
                             </van-button>
                         </van-col>
                         <van-col span="6" v-if="item.arriveBtn===1">
                             <van-button type="default" color="#0CC893" size="mini"
-                                        style="height: 34px;font-size: 14px;width: 100%;"
+                                        style="line-height: 34px;height: 34px;font-size: 14px;width: 100%;"
                                         @click="changeArrive(item.showPassenger.userId)">已到达
                             </van-button>
                         </van-col>
                         <van-col span="6" v-if="item.phoneBtn===1">
                             <van-button type="default" color="#0CC893" size="mini"
-                                        style="height: 34px;font-size: 14px;width: 100%;"
+                                        style="line-height: 34px;height: 34px;font-size: 14px;width: 100%;"
                                         @click="call(item.showPassenger.phone)">电话
                             </van-button>
                         </van-col>
                         <!--tripState 行程状态：0 待出行 1 已完成 2 已取消 3 已终止 4 已发车 5 待确认 -->
-                        <van-col span="6" style="float: right;margin-right: 10px" v-if="item.evaluateBtn===1">
+                        <van-col span="6" style="margin-right: 10px" v-if="item.evaluateBtn===1">
                             <van-button type="default" @click="goPassengerAppraise(item.showPassenger.userId)" color='#0CC893'
-                                        style="height: 34px;font-size: 14px;width: 100%;">评价乘客
+                                        style="line-height: 34px;height: 34px;font-size: 14px;width: 100%;">评价
                             </van-button>
                         </van-col>
+                        <!--预约状态：0 未确认，1 已确认，2 已拒绝， 3 已取消，4 已到达 5 已支付-->
                         <van-col span="6" style="float: right;text-align:right;"
                                  v-if="item.showPassenger.passState !== 0">
                             <span style="color:#0CC893;height: 34px;font-size: 14px;width: 100%;margin-left: 10px"
-                                  v-if="item.showPassenger.passState === 1">已确定</span>
+                                  v-if="item.showPassenger.passState === 1||item.showPassenger.passState === 4">
+                                 {{item.showPassenger.passState === 1?'已确认':'已到达'}}
+                            </span>
                             <span style="color:#cacaca;height: 34px;font-size: 14px;width: 100%;margin-left: 10px"
-                                  v-if="item.showPassenger.passState !== 1">
-                                {{item.showPassenger.passState === 2?'已拒绝':(item.showPassenger.passState === 3?'已取消':"")}}
+                                  v-if="item.showPassenger.passState === 2 ||item.showPassenger.passState === 3">
+                                {{item.showPassenger.passState === 2?'已拒绝':'已取消'}}
+                            </span>
+                            <span style="color:#5083ED;height: 34px;font-size: 14px;width: 100%;margin-left: 10px"
+                                  v-if="item.showPassenger.passState === 5">
+                               已支付
                             </span>
                         </van-col>
                     </van-row>
