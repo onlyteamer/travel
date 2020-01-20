@@ -3,21 +3,21 @@
         <div class="header">
             <!--<Title :title="title" @onClickLeft="onClickLeft"></Title>-->
             <!--<van-row type="flex" justify="center" gutter="30">-->
-                <!--<van-col span="6">-->
-                    <!--<div class="logo">-->
-                        <!--<van-image-->
-                                <!--width="60"-->
-                                <!--height="60"-->
-                                <!--:src="logo"-->
-                        <!--/>-->
-                    <!--</div>-->
-                <!--</van-col>-->
-                <!--<van-col span="15">-->
-                    <!--<div class="tag">-->
-                        <!--<h3>昌坤出行</h3>-->
-                        <!--<p>让你省心、安心、放心！</p>-->
-                    <!--</div>-->
-                <!--</van-col>-->
+            <!--<van-col span="6">-->
+            <!--<div class="logo">-->
+            <!--<van-image-->
+            <!--width="60"-->
+            <!--height="60"-->
+            <!--:src="logo"-->
+            <!--/>-->
+            <!--</div>-->
+            <!--</van-col>-->
+            <!--<van-col span="15">-->
+            <!--<div class="tag">-->
+            <!--<h3>昌坤出行</h3>-->
+            <!--<p>让你省心、安心、放心！</p>-->
+            <!--</div>-->
+            <!--</van-col>-->
             <!--</van-row>-->
             <van-swipe :autoplay="3000" style="height: 200px;margin-top: 0px">
                 <van-swipe-item v-for="(image, index) in images" :key="index">
@@ -41,8 +41,9 @@
             </div>
         </div>
         <div class="travel">
-            <van-cell title="常用路线选择:" is-link title-style="color:#0CC893" :value="strokeInfo.lineName" @click="openDefaultLine" />
-            <van-cell-group >
+            <van-cell title="常用路线选择:" is-link title-style="color:#0CC893" :value="strokeInfo.lineName"
+                      @click="openDefaultLine"/>
+            <van-cell-group>
                 <van-field
                         input-align="left"
                         v-model="strokeInfo.startDate"
@@ -54,8 +55,8 @@
                         @click="()=>{showPop = true;flag = '0'}"
                 />
             </van-cell-group>
-            <van-divider style="width: 90%;margin: 0 auto" />
-            <van-cell-group >
+            <van-divider style="width: 90%;margin: 0 auto"/>
+            <van-cell-group>
                 <van-field
                         input-align="left"
                         v-model="strokeInfo.endDate"
@@ -68,8 +69,8 @@
                 />
             </van-cell-group>
             <div align="center" style="margin-bottom: 10px">
-                <van-button @click="goCarList"  color="#0CC893" style="width: 95%">立即找车</van-button>
-                <van-button @click="goCarList_all"  color="#5083ED" style="width: 95%;margin-top: 10px">查看全部</van-button>
+                <van-button @click="goCarList" color="#0CC893" style="width: 95%">立即找车</van-button>
+                <van-button @click="goCarList_all" color="#5083ED" style="width: 95%;margin-top: 10px">查看全部</van-button>
             </div>
         </div>
 
@@ -77,7 +78,8 @@
 
             <div v-for="(item,index) in newTripList" :key="index">
                 <div class="card" @click="linkLineDetails(item.tripId)">
-                    <van-row style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;padding: 8px 2px;">
+                    <van-row
+                            style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;padding: 8px 2px;">
                         <van-col span="16">
                             <span class="datetime">{{item.tripDateTime}}</span>
                         </van-col>
@@ -85,9 +87,10 @@
                             <span>座位:</span>
                             <span class="seatNum">{{item.bookSeat}}个</span>
                         </van-col>
-                        <van-col span="8" style="display:flex;align-items: center;justify-content: flex-end" v-if="item.bookSeat===0">
-                            <van-icon name="warning-o" color="red" size="14"/>
-                            <span class="seatNum" style="color: red">车满</span>
+                        <van-col span="8" style="display:flex;align-items: center;justify-content: flex-end"
+                                 v-if="item.bookSeat===0">
+                            <i class="van-icon van-icon-warning-o van-cell__left-icon" style="color: red"/>
+                            <span  style="color: red;font-weight: bold;"> 车满</span>
                         </van-col>
                     </van-row>
                     <van-row style="border-bottom: 1px solid #ECECEC;display: flex;align-items: center;">
@@ -110,9 +113,13 @@
                             />
                         </van-col>
                         <van-col span="18">
-                            <p style="display: flex;align-items: center"><span style="color: #5083ED">【车主】</span> {{item.nickname}}
-                                <img src="../../static/images/man.png" style="width: 13px;height: 13px;display: inline-block;margin-left: 5px" v-if="item.sex === 1">
-                                <img src="../../static/images/sexTag.png" style="width: 13px;height: 13px;display: inline-block;margin-left: 5px" v-else></p>
+                            <p style="display: flex;align-items: center"><span style="color: #5083ED">【车主】</span>
+                                {{item.nickname}}
+                                <img src="../../static/images/man.png"
+                                     style="width: 13px;height: 13px;display: inline-block;margin-left: 5px"
+                                     v-if="item.sex === 1">
+                                <img src="../../static/images/sexTag.png"
+                                     style="width: 13px;height: 13px;display: inline-block;margin-left: 5px" v-else></p>
                             <p><span>【车型】</span>{{item.carName}}</p>
                         </van-col>
                     </van-row>
@@ -123,7 +130,8 @@
 
 
         <div class="footer">
-            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="background:#5083ED ">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
                 <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
                 <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
                 <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
@@ -164,7 +172,29 @@
 </template>
 
 <script>
-    import {NavBar,Row,Col,Image,NoticeBar,Cell,CellGroup,Field,Divider,Icon ,Button,Card,Tabbar, TabbarItem,Toast ,DatetimePicker,Popup,List,Picker ,Swipe, SwipeItem } from 'vant';
+    import {
+        NavBar,
+        Row,
+        Col,
+        Image,
+        NoticeBar,
+        Cell,
+        CellGroup,
+        Field,
+        Divider,
+        Icon,
+        Button,
+        Card,
+        Tabbar,
+        TabbarItem,
+        Toast,
+        DatetimePicker,
+        Popup,
+        List,
+        Picker,
+        Swipe,
+        SwipeItem
+    } from 'vant';
     import Title from './../../components/header'
     import logo from './../../static/images/logo.png'
     import laba from './../../static/images/laba.png'
@@ -187,69 +217,69 @@
         name: "carIndex",
         components: {
             Title,
-            [NavBar.name]:NavBar,
-            [Row.name]:Row,
-            [Col.name]:Col,
-            [Image.name]:Image,
-            [NoticeBar.name]:NoticeBar,
-            [Cell.name]:Cell,
-            [CellGroup.name]:CellGroup,
-            [Field.name]:Field,
-            [Divider.name]:Divider,
-            [Button.name]:Button,
-            [Card.name]:Card,
-            [Tabbar.name]:Tabbar,
-            [TabbarItem.name]:TabbarItem,
-            [Toast.name]:Toast,
-            [DatetimePicker.name]:DatetimePicker,
-            [Popup.name]:Popup,
-            [List.name]:List,
-            [Picker.name]:Picker,
-            [Swipe.name]:Swipe,
-            [SwipeItem.name]:SwipeItem,
-            [Icon.name]:Icon,
+            [NavBar.name]: NavBar,
+            [Row.name]: Row,
+            [Col.name]: Col,
+            [Image.name]: Image,
+            [NoticeBar.name]: NoticeBar,
+            [Cell.name]: Cell,
+            [CellGroup.name]: CellGroup,
+            [Field.name]: Field,
+            [Divider.name]: Divider,
+            [Button.name]: Button,
+            [Card.name]: Card,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem,
+            [Toast.name]: Toast,
+            [DatetimePicker.name]: DatetimePicker,
+            [Popup.name]: Popup,
+            [List.name]: List,
+            [Picker.name]: Picker,
+            [Swipe.name]: Swipe,
+            [SwipeItem.name]: SwipeItem,
+            [Icon.name]: Icon,
         },
-        data(){
-            return{
-                title:"共享拼车",
+        data() {
+            return {
+                title: "共享拼车",
                 images: [
                     backOne,
                     backTwo
                 ],
-                newTripList:[],
-                flag:"0",
-                notice:"",
-                columns:[],
-                lineList:[],
-                showLinePop:false,
+                newTripList: [],
+                flag: "0",
+                notice: "",
+                columns: [],
+                lineList: [],
+                showLinePop: false,
                 error: false,
                 loading: false,
                 minDate: new Date(),
-                currentDate:"",
-                showPop:false,
-                logo:logo,
-                laba:laba,
-                greenBar:greenBar,
-                redBar:redBar,
-                timeBar:timeBar,
-                chengK:chengK,
-                xingC:xingC,
-                push:push,
-                person:person,
+                currentDate: "",
+                showPop: false,
+                logo: logo,
+                laba: laba,
+                greenBar: greenBar,
+                redBar: redBar,
+                timeBar: timeBar,
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person,
                 active: 0,
-                strokeInfo:{
-                    startPlace:"",
-                    endPlace:"",
-                    driveTime:"",
-                    week:"",
-                    startDate:"",
-                    endDate:"",
-                    lineId:"",
-                    lineName:""
+                strokeInfo: {
+                    startPlace: "",
+                    endPlace: "",
+                    driveTime: "",
+                    week: "",
+                    startDate: "",
+                    endDate: "",
+                    lineId: "",
+                    lineName: ""
                 }
             }
         },
-        mounted(){
+        mounted() {
             //初始化列表
             this.initListData();
 
@@ -260,20 +290,20 @@
         },
         methods: {
             //详情
-            linkLineDetails(val){
-                this.$router.push({path:"/lineDetails",query:{tripId:val}})
+            linkLineDetails(val) {
+                this.$router.push({path: "/lineDetails", query: {tripId: val}})
             },
 
             //通知
-            initNotice(){
+            initNotice() {
                 request.sendGet({
-                    url:"/common/notice/list",
-                    params:{}
-                }).then(res =>{
-                    if(res.data.code == '0'){
+                    url: "/common/notice/list",
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == '0') {
                         let list = res.data.data;
-                        list.forEach(e =>{
-                           this.notice += e.title+" ";
+                        list.forEach(e => {
+                            this.notice += e.title + " ";
 
                         });
                     }
@@ -282,23 +312,23 @@
             },
 
             //广告位
-            initAdvList(){
+            initAdvList() {
                 //1-拼车 2-班车 3-班车验票
                 let positionId = 1;
                 request.sendGet({
-                    url:"/common/advertlist/"+ positionId,
-                    params:{}
-                }).then(res =>{
-                    if(res.data.code == '0'){
+                    url: "/common/advertlist/" + positionId,
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == '0') {
                         this.images = res.data.rows;
                     }
                 })
             },
 
             //常用线路
-            changeDefaultLine(val){
-                this.lineList.forEach(e =>{
-                    if(e.lineName == val){
+            changeDefaultLine(val) {
+                this.lineList.forEach(e => {
+                    if (e.lineName == val) {
                         let arr = [];
                         arr = e.lineName.split("--");
                         this.strokeInfo.startPlace = arr[0];
@@ -310,66 +340,66 @@
                 this.showLinePop = false;
             },
 
-            openDefaultLine(){
+            openDefaultLine() {
                 this.showLinePop = true;
             },
-            initLineData(){
-                    request.sendGet({
-                        url:"/user/center/linelist",
-                        params:{}
-                    }).then(res =>{
-                        if(res.data.code === 0){
-                            //处理数据
-                            this.lineList = res.data.rows;
-                            this.columns = [];
-                            this.lineList.forEach(e =>{
-                                this.columns.push(e.lineName);
-                                if(e.isDefault === 1){
-                                    let arr = [];
-                                    arr = e.lineName.split("--");
-                                    this.strokeInfo.startPlace = arr[0];
-                                    this.strokeInfo.endPlace = arr[1];
-                                    this.strokeInfo.lineId = e.lineId;
-                                    this.strokeInfo.lineName = e.lineName;
-                                }
-                            });
-                        }
-                    });
+            initLineData() {
+                request.sendGet({
+                    url: "/user/center/linelist",
+                    params: {}
+                }).then(res => {
+                    if (res.data.code === 0) {
+                        //处理数据
+                        this.lineList = res.data.rows;
+                        this.columns = [];
+                        this.lineList.forEach(e => {
+                            this.columns.push(e.lineName);
+                            if (e.isDefault === 1) {
+                                let arr = [];
+                                arr = e.lineName.split("--");
+                                this.strokeInfo.startPlace = arr[0];
+                                this.strokeInfo.endPlace = arr[1];
+                                this.strokeInfo.lineId = e.lineId;
+                                this.strokeInfo.lineName = e.lineName;
+                            }
+                        });
+                    }
+                });
             },
 
             //列表
-            initListData(){
+            initListData() {
                 request.sendGet({
-                    url:"/sharecar/pass/newtrips",
-                    params:{}
-                }).then(res =>{
-                    if(res.data.code == '0'){
+                    url: "/sharecar/pass/newtrips",
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == '0') {
                         this.newTripList = res.data.rows;
                     }
                 })
             },
 
-            cancel(){
+            cancel() {
                 this.showPop = false
             },
 
-            changeTimer(val){
+            changeTimer(val) {
                 // let timer = this.formatTime(val.getTime());
                 //
                 // this.stroke.startDate = timer;
                 var timer = moment(val).format("YYYY-MM-DD HH:mm");
                 // this.strokeInfo.driveTime = timer;
-                if(this.flag == '0'){
+                if (this.flag == '0') {
                     this.strokeInfo.startDate = timer;
                     let week = moment(val).format('d');
                     this.strokeInfo.week = week;
-                }else {
+                } else {
                     this.strokeInfo.endDate = timer;
                 }
                 this.showPop = false;
             },
 
-            async  onLoad() {
+            async onLoad() {
 
             },
 
@@ -378,7 +408,7 @@
                 this.$router.back(-1);
             },
 
-            goCarList(){
+            goCarList() {
                 // console.log(this.strokeInfo)
                 // if(!this.strokeInfo.startPlace){
                 //     Toast.fail("请填写出发地点");
@@ -392,24 +422,24 @@
                 //     Toast.fail("请填写乘车时间");
                 //     return;
                 // }
-                if(!this.strokeInfo.startDate){
+                if (!this.strokeInfo.startDate) {
                     Toast.fail("请填写开始时间");
                     return;
                 }
-                if(!this.strokeInfo.endDate){
+                if (!this.strokeInfo.endDate) {
                     Toast.fail("请填写结束时间");
                     return;
                 }
-                if(!this.strokeInfo.lineId){
+                if (!this.strokeInfo.lineId) {
                     Toast.fail("请选择路线");
                     return;
                 }
                 sessionStorage.removeItem("queryStroke");
-                sessionStorage.setItem("queryStroke",JSON.stringify(this.strokeInfo));
-                this.$router.push({path:'/carLine'});
+                sessionStorage.setItem("queryStroke", JSON.stringify(this.strokeInfo));
+                this.$router.push({path: '/carLine'});
             },
-            goCarList_all(){
-                if(!this.strokeInfo.lineId){
+            goCarList_all() {
+                if (!this.strokeInfo.lineId) {
                     Toast.fail("请选择路线");
                     return;
                 }
@@ -417,8 +447,8 @@
                 this.strokeInfo.week = week;
 
                 sessionStorage.removeItem("queryStroke");
-                sessionStorage.setItem("queryStroke",JSON.stringify(this.strokeInfo));
-                this.$router.push({path:'/carLine'});
+                sessionStorage.setItem("queryStroke", JSON.stringify(this.strokeInfo));
+                this.$router.push({path: '/carLine'});
             },
         },
 
@@ -428,41 +458,41 @@
 <style scoped>
 
     /*.van-nav-bar {*/
-        /*position: relative;*/
-        /*height: 46px;*/
-        /*line-height: 46px;*/
-        /*text-align: center;*/
-        /*background-color:transparent;*/
-        /*-webkit-user-select: none;*/
-        /*user-select: none;*/
+    /*position: relative;*/
+    /*height: 46px;*/
+    /*line-height: 46px;*/
+    /*text-align: center;*/
+    /*background-color:transparent;*/
+    /*-webkit-user-select: none;*/
+    /*user-select: none;*/
     /*}*/
     /*.van-hairline--bottom::after {*/
-        /*border-bottom-width: 0px;*/
+    /*border-bottom-width: 0px;*/
     /*}*/
 
     /*.van-icon-arrow-left{*/
-        /*color: #fff;*/
+    /*color: #fff;*/
     /*}*/
 
     /*.van-nav-bar__title {*/
-        /*max-width: 60%;*/
-        /*margin: 0 auto;*/
-        /*color: #fff;*/
-        /*font-weight: 500;*/
-        /*font-size: 16px;*/
+    /*max-width: 60%;*/
+    /*margin: 0 auto;*/
+    /*color: #fff;*/
+    /*font-weight: 500;*/
+    /*font-size: 16px;*/
     /*}*/
 
-    .contain{
+    .contain {
         background: #F6F6F6;
         overflow-x: hidden;
     }
 
-    .notice{
+    .notice {
         background: #FFFFFF;
 
     }
 
-    .logo{
+    .logo {
         width: 100%;
         height: 100%;
         display: flex;
@@ -470,7 +500,7 @@
         align-items: center;
     }
 
-    .header{
+    .header {
         /*background-image: linear-gradient(49deg, #05CF8A, #5C77FE);*/
         /*opacity:1;*/
     }
@@ -479,18 +509,19 @@
         color: #fff;
     }
 
-    .travel{
+    .travel {
         background: #fff;
         margin-bottom: 10px;
         border: 1px solid #f1f1f1;
     }
-    .listInfo{
-       margin-bottom: 60px;
+
+    .listInfo {
+        margin-bottom: 60px;
     }
 
-    .listInfo .card{
+    .listInfo .card {
         width: 90%;
-        margin: 0 auto ;
+        margin: 0 auto;
         font-size: 14px;
         padding: 10px 5px;
         margin-bottom: 10px;
@@ -498,17 +529,17 @@
         border-radius: 5px;
     }
 
-    .datetime{
+    .datetime {
         color: #5E5E5E;
-        padding-left: 8px ;
+        padding-left: 8px;
     }
 
-    .seatNum{
+    .seatNum {
         font-weight: bold;
         margin-left: 8px;
     }
 
-    .greenBar{
+    .greenBar {
         border-radius: 50%;
         background: rgb(12, 200, 147);
         width: 10px;
@@ -517,7 +548,7 @@
         margin-right: 5px;
     }
 
-    .redBar{
+    .redBar {
         border-radius: 50%;
         background: rgb(255, 42, 35);
         width: 10px;
@@ -526,20 +557,19 @@
         margin-right: 5px;
     }
 
-    .price{
+    .price {
         height: 100%;
         width: 100%;
         font-size: 22px;
         color: red;
     }
 
-    .footer{
+    .footer {
         width: 100%;
     }
 
 
-
-    .van-cell__value{
+    .van-cell__value {
         text-align: left;
     }
 
