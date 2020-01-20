@@ -130,7 +130,7 @@
                         @confirm="onLineChange"/>
         </van-popup>
         <van-popup v-model="showPop" position="bottom" :style="{ height: '30%' }">
-            <van-picker :columns="datesColumns" show-toolbar @cancel="cancel " :visible-item-count="3"
+            <van-picker :columns="datesColumns" show-toolbar @cancel="cancel " :visible-item-count="3" ref="timepick"
                         @confirm="changeTimer"/>
         </van-popup>
 
@@ -359,6 +359,9 @@
             },
             openTimer() {
                 this.showPop = true;
+                // this.$refs.timepick.setColumnIndex(){
+                //
+                // };
             },
             cancel() {
                 this.showPop = false
@@ -451,12 +454,12 @@
                     {
                         values: Object.values(hours),
                         className: 'hour',
-                        defaultIndex: 2,
+                        defaultIndex: moment().format('HH') ,
                     },
                     {
                         values: Object.values(minutes),
                         className: 'min',
-                        defaultIndex: 3
+                        defaultIndex:moment().format('mm')
                     }
                 ];
             }
