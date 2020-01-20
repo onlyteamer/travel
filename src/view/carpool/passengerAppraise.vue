@@ -106,7 +106,6 @@
                     remark: "",
                     templateContext: "",
                     tripId: "",
-                    userId: ""
                 },
                 chengK: chengK,
                 xingC: xingC,
@@ -168,9 +167,9 @@
 
         methods: {
             initUserInfo(){
-                let userId = this.$route.query.userId;
+                let passengerId = this.$route.query.passengerId;
                 request.sendGet({
-                    url:"/sharecar/pass/passenger/"+userId,
+                    url:"/sharecar/pass/passenger/"+passengerId,
                     params: {}
                 }).then(res =>{
                     if(res.data.code == '0'){
@@ -194,20 +193,19 @@
                     Toast.fail("评论不能为空");
                     return false;
                 }
-                let userId = this.$route.query.userId;
-                this.appraise.userId = userId;
-                let tripId = this.$route.query.tripId;
-                this.appraise.tripId = tripId;
+                this.appraise.tripId = this.$route.query.tripId;
+                this.appraise.passengerId = this.$route.query.passengerId;
+                this.appraise.type  = '2';//评价对象：1、车主 2、乘客
 
                 request.sendPost({
-                    url:"/sharecar/pass/doevaluate/"+this.appraise.tripId,
+                    url:"/sharecar/trip/doevaluate/"+this.appraise.tripId,
                     params: this.appraise
                 }).then(res =>{
                     if(res.data.code == '0'){
-                        Toast.success("发布成功");
+                        Toast.success(res.data.msg);
                         this.$router.push({path:"/myStroke"});
                     }else {
-                        Toast.fail("发布失败");
+                        Toast.fail(res.data.msg);
                     }
                 })
             },

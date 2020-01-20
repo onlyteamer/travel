@@ -112,7 +112,7 @@
     import xingC from './../../static/images/xingC.png'
     import push from './../../static/images/push.png'
     import person from './../../static/images/chengk.png'
-
+    //乘客评价详情
     export default {
         name: "carOwnerAppraise",
         components: {
@@ -143,7 +143,6 @@
                     remark: "",
                     templateContext: "",
                     tripId: "",
-                    userId: ""
                 },
                 carOwnerInfo:{
 
@@ -254,7 +253,7 @@
                 }
 
                 this.appraise.driverId = this.carOwnerInfo.driverId;
-                this.appraise.userId = "";
+                this.appraise.type  = '1';//评价对象：1、车主 2、乘客
 
                 request.sendPost({
                     url:"/sharecar/pass/doevaluate/"+this.appraise.tripId,
