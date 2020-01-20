@@ -85,7 +85,8 @@
                             <span>座位:</span>
                             <span class="seatNum">{{item.bookSeat}}个</span>
                         </van-col>
-                        <van-col span="8" style="text-align: right" v-if="item.bookSeat===0">
+                        <van-col span="8" style="display:flex;align-items: center;justify-content: flex-end" v-if="item.bookSeat===0">
+                            <van-icon name="warning-o" color="red" size="14"/>
                             <span class="seatNum" style="color: red">车满</span>
                         </van-col>
                     </van-row>
@@ -163,7 +164,7 @@
 </template>
 
 <script>
-    import {NavBar,Row,Col,Image,NoticeBar,Cell,CellGroup,Field,Divider,Button,Card,Tabbar, TabbarItem,Toast ,DatetimePicker,Popup,List,Picker ,Swipe, SwipeItem } from 'vant';
+    import {NavBar,Row,Col,Image,NoticeBar,Cell,CellGroup,Field,Divider,Icon ,Button,Card,Tabbar, TabbarItem,Toast ,DatetimePicker,Popup,List,Picker ,Swipe, SwipeItem } from 'vant';
     import Title from './../../components/header'
     import logo from './../../static/images/logo.png'
     import laba from './../../static/images/laba.png'
@@ -206,6 +207,7 @@
             [Picker.name]:Picker,
             [Swipe.name]:Swipe,
             [SwipeItem.name]:SwipeItem,
+            [Icon.name]:Icon,
         },
         data(){
             return{
