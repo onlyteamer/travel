@@ -154,7 +154,7 @@
                             </van-col>
                         </van-row>
 
-                        <van-row style="margin: 10px 0" v-if="item.tripState == '0'">
+                        <van-row style="margin: 10px 0" v-if="item.tripState == '0'" type="flex" justify="end">
                             <van-col span="6">
                                 <van-button type="default" color="#0CC893"
                                             style="font-size: 14px;width: 96%;height: 28px"
@@ -164,24 +164,27 @@
                             <van-col span="6">
                                 <van-button type="default" color="#0CC893"
                                             style="font-size: 14px;width: 96%;height: 28px"
-                                            size="mini" @click="startCar(item.tripId)">已发车
+                                            size="mini" @click="startCar(item.tripId)">发车
                                 </van-button>
                             </van-col>
-                            <van-col span="6">
-                                <van-button type="default" color="#0CC893"
-                                            style="font-size: 14px;width: 96%;height: 28px"
-                                            size="mini" @click="changeArrive(item.tripId)">已到达
-                                </van-button>
-                            </van-col>
+                            <!--                            <van-col span="6">-->
+                            <!--                                <van-button type="default" color="#0CC893"-->
+                            <!--                                            style="font-size: 14px;width: 96%;height: 28px"-->
+                            <!--                                            size="mini" @click="changeArrive(item.tripId)">已到达-->
+                            <!--                                </van-button>-->
+                            <!--                            </van-col>-->
+
+
                             <van-col span="6">
                                 <van-button @click="goPassengerList(item.tripId,item.tripState)" type="default"
                                             color="#0CC893"
                                             style="font-size: 14px;width: 96%;height: 28px" size="mini">乘客
                                 </van-button>
                             </van-col>
+
                         </van-row>
 
-                        <van-row style="margin: 10px 0" v-if="item.tripState == '0'">
+                        <van-row style="margin: 10px 0" v-if="item.tripState == '0'" type="flex" justify="end">
                             <van-col span="6">
                                 <van-button type="default" color="#0CC893"
                                             style="font-size: 14px;width: 96%;height: 28px"
@@ -208,8 +211,14 @@
                             </van-col>
                         </van-row>
 
-                        <van-row v-if="item.tripState != '0'" style="margin: 10px 0">
-                            <van-col span="6" offset="18">
+                        <van-row v-if="item.tripState != '0'" style="margin: 10px 0" type="flex" justify="end">
+                            <van-col span="6" v-if="item.tripState === 4">
+                                <van-button type="default" color="#0CC893"
+                                            style="font-size: 14px;width: 96%;height: 28px"
+                                            size="mini" @click="finishTrip(item.tripId)">结束行程
+                                </van-button>
+                            </van-col>
+                            <van-col span="6">
                                 <van-button type="default" color="#0CC893"
                                             style="font-size: 14px;width: 96%;height: 28px"
                                             size="mini" @click="goPassengerList(item.tripId,item.tripState)">乘客
@@ -367,6 +376,23 @@
 
         },
         methods: {
+            finishTrip(tripId){
+                request.sendPost({
+                    url:'/sharecar/trip/end/'+tripId,
+                    params:{}
+                }).then(res=>{
+                    if (res.data.code === 0) {
+                        Toast.success(res.data.msg);
+                        this.finished = false;
+                        this.loading = true;
+                        this.carOwnerTrip.data = [];
+                        this.carOwnerTrip.pageNum = 1;
+                        this.initCarOwnerTripList();
+                    } else {
+                        Toast.fail(res.data.msg)
+                    }
+                })
+            },
             changeCzje(je) {
                 this.czje = je;
             },
@@ -480,7 +506,7 @@
                     Toast("充值金额不能为空");
                     return;
                 }
-                this.czje = this.czje+"";
+                this.czje = this.czje + "";
                 if (this.czje.indexOf('.') > -1) {
                     Toast('请输入整数');
                     return;
@@ -547,8 +573,13 @@
                         tripId: this.changeSeatInfo.tripId
                     }
                 }).then(res => {
-                    if (res.data.code == '0') {
+                    if (res.data.code === 0) {
                         Toast.success(res.data.msg);
+                        this.finished = false;
+                        this.loading = true;
+                        this.carOwnerTrip.data = [];
+                        this.carOwnerTrip.pageNum = 1;
+                        this.initCarOwnerTripList();
                     } else {
                         Toast.fail(res.data.msg)
                     }
@@ -570,8 +601,13 @@
                         url: "/sharecar/trip/full/" + val.tripId,
                         params: {}
                     }).then(res => {
-                        if (res.data.code == '0') {
+                        if (res.data.code === 0) {
                             Toast.success(res.data.msg);
+                            this.finished = false;
+                            this.loading = true;
+                            this.carOwnerTrip.data = [];
+                            this.carOwnerTrip.pageNum = 1;
+                            this.initCarOwnerTripList();
                         } else {
                             Toast.fail(res.data.msg)
                         }
@@ -679,48 +715,32 @@
             },
             //已到达
             changeArrive(val) {
-                if (this.strokeType == '0') {
-                    //乘客
-                    Dialog.confirm({
-                        title: '已到达',
-                        message: '通知车主，已到达指定地点等候'
-                    }).then(() => {
-                        // 确定
-                        request.sendPost({
-                            url: "/sharecar/pass/arrive/" + val,
-                            params: {}
-                        }).then(res => {
-                            if (res.data.code == '0') {
-                                Toast.success(res.data.msg)
-                            } else {
-                                Toast.fail(res.data.msg)
-                            }
-                        })
-                    }).catch(() => {
-                        //取消
+                //乘客
+                Dialog.confirm({
+                    title: '已到达',
+                    message: '通知车主，已到达指定地点等候'
+                }).then(() => {
+                    // 确定
+                    request.sendPost({
+                        url: "/sharecar/pass/arrive/" + val,
+                        params: {}
+                    }).then(res => {
+                        if (res.data.code == '0') {
+                            Toast.success(res.data.msg);
+                            this.finished = false;
+                            this.loading = true;
+                            this.passTrip.data = [];
+                            this.passTrip.pageNum = 1;
+                            this.initPassTripList();
+                            this.changeSeatInfo.seatCount = "";
+                        }else {
+                            Toast.fail(res.data.msg)
+                        }
+                    })
+                }).catch(() => {
+                    //取消
 
-                    });
-                } else {
-                    Dialog.confirm({
-                        title: '已到达',
-                        message: '车主已到达发车地点，通知乘客乘车地点等候'
-                    }).then(() => {
-                        // 确定
-                        request.sendPost({
-                            url: "/sharecar/trip/arrive/" + val,
-                            params: {}
-                        }).then(res => {
-                            if (res.data.code == '0') {
-                                Toast.success(res.data.msg)
-                            } else {
-                                Toast.fail(res.data.msg)
-                            }
-                        })
-                    }).catch(() => {
-                        //取消
-
-                    });
-                }
+                });
             },
 
             onClickLeft() {
