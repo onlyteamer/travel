@@ -48,7 +48,7 @@
                                                         style="width:66px;height:28px;line-height:28px;background: #0CC893;color: #FFFFFF;border-radius: 5px">
                                                 验票
                                             </van-button>
-                                            <van-button type="default" @click="refundTicket(item,today)"
+                                            <van-button type="default" @click="refundTicket(item,today)" v-if="item.isCheck===0"
                                                         :disabled="refundBtnDisable(item,today)"
                                                         style="width:66px;height:28px;line-height:28px;background: #9E9E9E;color: #FFFFFF;border-radius: 5px">
                                                 退票
@@ -79,6 +79,7 @@
                                                 <span>{{line.state }}</span>
                                                 <span style="background: #9E9E9E;color: #FFFFFF;padding: 5px 10px;border-radius: 5px;margin-left: 10px"
                                                       :disabled="refundBtnDisable(line,item.date)"
+                                                      v-if="line.isCheck===0"
                                                       @click="refundTicket(line,item.date)">退票</span>
                                             </div>
                                         </van-col>
