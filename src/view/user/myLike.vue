@@ -14,12 +14,18 @@
                     <van-row style="display: flex;align-items: center">
                         <van-col span="12" >
                             <div style="display: flex;align-items: center">
-                                <img src="../../static/images/userAvatar.png" style="height: 50px;width: 50px;margin-right: 10px">
+                                <img :src="item.personalInfo.headimgurl" style="height: 50px;width: 50px;margin-right: 10px">
                                 <div>
-                                    <p style="margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">加菲猫</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px"> </p>
+                                    <p style="margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">{{item.personalInfo.nickname}}</span>
+                                        <img src="../../static/images/man.png"
+                                             style="width: 13px;height: 13px;display: inline-block;margin-left: 5px"
+                                             v-if="item.personalInfo.sex === 1">
+                                        <img src="../../static/images/sexTag.png"
+                                             style="width: 13px;height: 13px;display: inline-block;margin-left: 5px" v-else>
+                                    </p>
                                     <p style="margin: 5px 0">
-                                        <img src="./../../static/images/xin.png" style="width: 14px;height: 14px;margin-right: 5px"/><span>231</span>
-                                        <img src="./../../static/images/unhapply.png" style="width: 14px;height: 14px;margin: 0 5px 0 20px" /> <span>3</span>
+                                        <img src="./../../static/images/xin.png" style="width: 14px;height: 14px;margin-right: 5px"/><span>{{item.personalInfo.goodCount}}</span>
+                                        <img src="./../../static/images/unhapply.png" style="width: 14px;height: 14px;margin: 0 5px 0 20px" /> <span>{{item.personalInfo.badConunt}}</span>
                                     </p>
                                     <p style="margin: 5px 0">
                                         <span style="color: #5E5E5E">乘坐2次</span>
@@ -48,7 +54,7 @@
     import Title from './../../components/header'
     import { Row, Col,List} from 'vant';
     import  request from '../../utils/request'
-
+//TODO 字段没齐
     export default {
         components:{
             Title,
