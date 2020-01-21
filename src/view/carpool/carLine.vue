@@ -81,6 +81,21 @@
                             </van-row>
                             <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
                             <van-row>
+                                <van-col span="12">
+                                    <div style="margin: 0;word-break: break-all;">
+                                        <span style="color:#202020;font-weight: bold;font-size: 14px;display: inline-block">始发站：</span>
+                                        <span style="font-size: 14px;color: #202020">{{item.startPlace}}</span>
+                                    </div>
+                                </van-col>
+                                <van-col span="12">
+                                    <div style="margin: 0;word-break: break-all;">
+                                        <span style="color:#202020;font-weight: bold;font-size: 14px;display: inline-block">终点站：</span>
+                                        <span style="font-size: 14px;color: #202020">{{item.endPlace}}</span>
+                                    </div>
+                                </van-col>
+                            </van-row>
+                            <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
+                            <van-row>
                                 <van-col span="24">
                                     <div style="margin: 0;word-break: break-all;">
                                         <span style="color:#202020;font-weight: bold;font-size: 14px;display: inline-block">路线：</span>
@@ -90,11 +105,16 @@
                             </van-row>
                             <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" :hairline="false"/>
                             <van-row style="color: #202020;font-weight: bold;font-size: 14px">
-                                <van-col span="6">
+                                <van-col span="6" v-if="item.bookSeat>0">
                                     <div>剩余座位:</div>
                                 </van-col>
-                                <van-col span="18">
+                                <van-col span="18" v-if="item.bookSeat>0">
                                     <div>{{item.bookSeat}}</div>
+                                </van-col>
+                                <van-col span="24" style="display:flex;align-items: center;justify-content: flex-start"
+                                         v-if="item.bookSeat===0">
+                                    <i class="van-icon van-icon-warning-o van-cell__left-icon" style="color: red"/>
+                                    <span  style="color: red;font-weight: bold;"> 车满</span>
                                 </van-col>
                             </van-row>
                         </div>
