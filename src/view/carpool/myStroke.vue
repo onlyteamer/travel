@@ -73,7 +73,8 @@
                             </van-col>
                         </van-row>
 
-                        <van-row style="margin: 10px 0" v-if="item.tripState != '2' &&item.tripState != '3'">
+                        <van-row style="margin: 10px 0"
+                                 v-if="item.tripState != '2' &&item.tripState != '3'&&item.tripStateName!='已取消'&&item.tripStateName!='已拒绝'">
                             <van-col span="6">
 
                             </van-col>
@@ -374,11 +375,11 @@
             this.getWxConfig();
         },
         methods: {
-            finishTrip(tripId){
+            finishTrip(tripId) {
                 request.sendPost({
-                    url:'/sharecar/trip/end/'+tripId,
-                    params:{}
-                }).then(res=>{
+                    url: '/sharecar/trip/end/' + tripId,
+                    params: {}
+                }).then(res => {
                     if (res.data.code === 0) {
                         this.$toast.success(res.data.msg);
                         this.finished = false;
@@ -725,7 +726,7 @@
                     }).then(res => {
                         if (res.data.code == '0') {
                             this.$toast.success(res.data.msg);
-                        }else {
+                        } else {
                             this.$toast.fail(res.data.msg)
                         }
                     })
