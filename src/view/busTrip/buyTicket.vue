@@ -126,20 +126,33 @@
                 },
                 ticketData: {},
                 data: [],
-                dateTitle: moment().format('YYYY月MM日'),
+                dateTitle: moment().format('YYYY年MM月'),
                 week: ["日", "一", "二", "三", "四", "五", "六"]
             }
         },
         methods: {
             nextMonth() {
                 this.currentDate = moment(this.currentDate, 'YYYY-MM').add(1, 'months');
-                this.dateTitle = this.currentDate.format('YYYY月MM日');
+                this.dateTitle = this.currentDate.format('YYYY年MM月');
+                let elArr = this.$refs.item;
+                for(let i = 0; i< elArr.length;i++){
+                    let el = elArr[i];
+                    el.classList.remove('choose');
+                }
                 this.initData();
             },
             preMonth() {
                 this.currentDate = moment(this.currentDate, 'YYYY-MM').subtract(1, 'months');
-                this.dateTitle = this.currentDate.format('YYYY月MM日');
+                this.dateTitle = this.currentDate.format('YYYY年MM月');
+
+                let elArr = this.$refs.item;
+                for(let i = 0; i< elArr.length;i++){
+                    let el = elArr[i];
+                    el.classList.remove('choose');
+                }
+
                 this.initData();
+
             },
             getItemClass(item) {
                 if (item) {
@@ -181,19 +194,21 @@
                     if (index2 === -1) {
                         this.chooseDate.push(item.dateText);
                         let el = this.$refs.item[item.date - 1 + this.startnum];
-                        el.style.backgroundColor = '#0CC893';
-                        el.style.color = '#fff';
+                        el.classList.add('choose');
+                        // el.style.backgroundColor = '#0CC893';
+                        // el.style.color = '#fff';
                         this.num += 1;
                     } else {
                         this.chooseDate.splice(index2, 1);
                         let el = this.$refs.item[item.date - 1 + this.startnum];
-                        if (item.state === 2) {
-                            el.style.backgroundColor = '#5083ED';
-                            el.style.color = '#fff';
-                        } else {
-                            el.style.backgroundColor = '#fff';
-                            el.style.color = '#202020';
-                        }
+                        el.classList.remove('choose');
+                        //  if (item.state === 2) {
+                        //      el.style.backgroundColor = '#5083ED';
+                        //      el.style.color = '#fff';
+                        //  } else {
+                        //      el.style.backgroundColor = '#fff';
+                        //      el.style.color = '#202020';
+                        // }
 
                         this.num -= 1;
                     }
@@ -234,7 +249,6 @@
                 }).then((res) => {
                     if (res.data.code === 0) {
                         this.data = res.data.rows;
-                        this.$toast.success(res.data.msg);
                     } else {
                         this.$toast.fail(res.data.msg);
                     }
@@ -270,6 +284,17 @@
                     }
                 }
                 this.startnum = num;
+
+                let currentMonth = moment(date).format("MM");
+                for(let index in  this.chooseDate){
+                    let date1 = this.chooseDate[index];
+                    let month = moment(date1).format("MM");
+                    let day = parseInt(moment(date1).format("DD"));
+                    if(month===currentMonth){
+                        let el = this.$refs.item[ day- 1 + this.startnum];
+                        el.classList.add('choose');
+                    }
+                }
             }
         },
         created() {
@@ -283,6 +308,11 @@
 
 <style scoped>
     /*-----------日历模块样式start--------------*/
+    /*!!!!不要换class位置 ,会对样式产生影响*/
+    .choose{
+        background-color:#0CC893 !important;
+        color:#fff !important;
+    }
     .saleStop {
         color: #0CC893;
     }
