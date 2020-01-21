@@ -1,7 +1,7 @@
 <template>
     <div class="contain">
         <div ref="scrollView" style="overflow-y: auto;">
-            <div class="lineDetails">
+            <div class="lineDetails" @click="goDriverDetail">
                 <van-row style="display: flex;align-items: center">
                     <van-col span="12">
                         <div style="display: flex;align-items: center">
@@ -186,6 +186,9 @@
         },
 
         methods: {
+            goDriverDetail(){
+                this.$router.push({path: '/carOwnerDetails', query: {userId: this.driverInfo.driverId}});
+            },
             wxConfig() {
                 request.sendGet({
                     url: "/wx/pay/signature",

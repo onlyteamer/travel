@@ -16,16 +16,18 @@
                         </div>
                     </van-col>
                 </van-row>
-                <van-row style="height: 69px">
-                    <van-col span="12" class="item-col">
-                        <div style="font-size: 14px;color: white">累计充值（元）</div>
-                        <div style="font-size: 20px;color: white;font-weight: bold">{{dataMain.recharge}}</div>
-                    </van-col>
-                    <van-col span="12" class="item-col">
-                        <div style="font-size: 14px;color: white">累计消费（元）</div>
-                        <div style="font-size: 20px;color: white;font-weight: bold">{{dataMain.consume}}</div>
-                    </van-col>
-                </van-row>
+<!--                <van-row style="height: 69px">-->
+<!--                    <van-col span="12" class="item-col">-->
+<!--                        <div style="font-size: 14px;color: white">累计充值（元）</div>-->
+<!--                        <div style="font-size: 20px;color: white;font-weight: bold">*</div>-->
+<!--&lt;!&ndash;                        <div style="font-size: 20px;color: white;font-weight: bold">{{dataMain.recharge}}</div>&ndash;&gt;-->
+<!--                    </van-col>-->
+<!--                    <van-col span="12" class="item-col">-->
+<!--                        <div style="font-size: 14px;color: white">累计消费（元）</div>-->
+<!--                        <div style="font-size: 20px;color: white;font-weight: bold">*</div>-->
+<!--&lt;!&ndash;                        <div style="font-size: 20px;color: white;font-weight: bold">{{dataMain.consume}}</div>&ndash;&gt;-->
+<!--                    </van-col>-->
+<!--                </van-row>-->
             </div>
         </div>
         <div class="content">
@@ -67,6 +69,21 @@
                                     </van-button>
                                 </div>
                             </div>
+                            <div class="func-wrap" style="padding-top:20px">
+                                <div style="display: flex;align-items: center">
+                                    <img style="width: 16px;height: 16px" src="../../static/images/notice.png"/>
+                                    <span style="font-size: 14px;color: #202020;font-weight: bold">注意：</span>
+                                </div>
+                                <div style="font-size: 14px;color: #202020;margin-top: 3px">
+                                    1. 如遇充值失败，请将微信升级到最新版本。
+                                </div>
+                                <div style="font-size: 14px;color: #202020;margin-top: 3px">
+                                    2. 如充值过程中遇到任何问题，点击这里联系客服。
+                                </div>
+                                <div style="font-size: 14px;color: #202020;margin-top: 3px">
+                                    3. 如因司机原因取消行程出现【负余额】情况，请先进行充值补平。
+                                </div>
+                            </div>
                         </van-tab>
                         <van-tab title="提现">
                             <div class="func-wrap">
@@ -82,24 +99,36 @@
                                     </van-button>
                                 </div>
                             </div>
+                            <div class="func-wrap" style="padding-top:20px">
+                                <div style="display: flex;align-items: center">
+                                    <img style="width: 16px;height: 16px" src="../../static/images/notice.png"/>
+                                    <span style="font-size: 14px;color: #202020;font-weight: bold">注意：</span>
+                                </div>
+                                <div style="font-size: 14px;color: #202020;margin-top: 3px">
+                                    1. 提现需要微信账户的实名认证，认证方法请点击这里。
+
+                                </div>
+                                <div style="font-size: 14px;color: #202020;margin-top: 3px">
+                                    2. 每天可提现一次。可操作提现的时间段为：9:00 - 18:00（工作日）。
+
+                                </div>
+                                <div style="font-size: 14px;color: #202020;margin-top: 3px">
+                                    3. 操作提现之后，1-3个工作日到账。
+                                </div>
+                                <div style="font-size: 14px;color: #202020;margin-top: 3px">
+                                    4. 如有已乘车未支付的订单，将会锁定一部分余额。
+                                </div>
+                                <div style="font-size: 14px;color: #202020;margin-top: 3px">
+                                    5. 当乘客存在未支付订单时，为了避免乘客不支付，我们会锁定相应的金额，用于乘客支付订单。
+                                </div>
+                                <div style="font-size: 14px;color: #202020;margin-top: 3px">
+                                    6. 每个未结束行程锁定20元金额，用于赔付保证金。行程结束后，会自动解锁这部分余额（行程时间超过24小时无相关投诉记录，或者行程所有订单均已支付，视为结束）。
+                                </div>
+                            </div>
                         </van-tab>
                     </van-tabs>
                 </div>
-                <div class="func-wrap" style="padding-top:20px">
-                    <div style="display: flex;align-items: center">
-                        <img style="width: 16px;height: 16px" src="../../static/images/notice.png"/>
-                        <span style="font-size: 14px;color: #202020;font-weight: bold">注意：</span>
-                    </div>
-                    <div style="font-size: 14px;color: #202020;margin-top: 3px">
-                        1. 充值提现规则，后台设置，前端展示。
-                    </div>
-                    <div style="font-size: 14px;color: #202020;margin-top: 3px">
-                        2. 充值提现规则，后台设置，前端展示。
-                    </div>
-                    <div style="font-size: 14px;color: #202020;margin-top: 3px">
-                        3. 充值提现规则，后台设置，前端展示。
-                    </div>
-                </div>
+
             </div>
 
         </div>

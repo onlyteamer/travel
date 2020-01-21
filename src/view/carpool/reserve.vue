@@ -128,7 +128,12 @@
                 注意:
             </div>
             <div class="notice">
-                1. 后台设置规则1；设置规则1；设置规则1； 1. 后台设置规则1设置规则1；设置规则1；； 1. 后台设置规则1；
+                <div>
+                    1. 乘客原因取消订单需支付赔偿10元/位。
+                </div>
+                <div>
+                    2. 如余额不足，<span style="color: #05CF8A;" @click="goReCharge">请点击这里充值</span>，然后再预约。
+                </div>
             </div>
 
         </div>
@@ -275,6 +280,9 @@
             }
         },
         methods: {
+            goReCharge(){
+                this.$router.push({path: '/wealth'});
+            },
             goAdd() {
                 this.$router.push({path: '/passenger-edit'});
             },

@@ -13,47 +13,78 @@
 
         <div class="fate">
             <div style="font-size: 16px;font-weight: bold">同车缘分</div>
-            <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }" />
-            <van-row style="padding: 10px 0;border-bottom: 1px solid #ECECEC;" v-if="upFateList.length>0">
-                <van-col span="12" v-for="(item,index) in upFateList" :key="index">
+            <van-divider :style="{borderColor: '#ECECEC',margin:'8px 0' }"/>
+            <div style="padding: 10px 0;display:flex;align-items: center;justify-content:flex-start;flex-wrap: wrap;border-bottom: 1px solid #ECECEC;"
+                 v-if="carFateList.length>0">
+                <div style="width: 50%" v-for="(item,index) in carFateList" :key="index">
                     <div class="left">
                         <img :src="item.headimgurl" style="height: 44px;width: 44px">
                         <div>
-                            <p style="font-size: 12px;margin: 5px 0"><span>【{{item.tag == '0'?'乘客':'车主'}}】</span><span>{{item.nickname}}</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="item.sex == '1'"><img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px" v-else></p>
-                            <p style="color:#9E9E9E;font-size: 12px;margin: 5px 5px 0 ">同城过{{item.passCount}}次</p>
+                            <p style="font-size: 12px;margin: 5px 0"><span>【{{item.tag == '0'?'乘客':'车主'}}】</span>
+                                <span>{{item.nickname}}</span>
+                                <img src="../../static/images/man.png"
+                                     style="width: 13px;height: 13px;display: inline-block;margin-left: 5px"
+                                     v-if="item.sex === 1">
+                                <img src="../../static/images/sexTag.png"
+                                     style="width: 13px;height: 13px;display: inline-block;margin-left: 5px" v-else>
+                            </p>
+                            <p style="color:#9E9E9E;font-size: 12px;margin: 5px 5px 0 ">同乘过{{item.passCount}}次</p>
                         </div>
                     </div>
-                </van-col>
-            </van-row>
+                </div>
+            </div>
 
-            <van-row style="padding: 10px 0">
-                <van-col span="12" v-for="(item,index) in downFateList" :key="index">
-                    <div class="left">
-                        <img src="../../static/images/userAvatar.png" style="height: 44px;width: 44px">
-                        <div>
-                            <p style="font-size: 12px;margin: 5px 0"><span>【{{item.tag == '0'?'乘客':'车主'}}】</span><span>{{item.nickname}}</span><img src="../../static/images/sexTag.png" style="width: 12px;height: 12px;margin-left: 5px" v-if="item.sex == '1'"><img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px" v-else></p>
-                            <p style="color:#9E9E9E;font-size: 12px;margin: 5px 5px 0 ">同城过{{item.passCount}}次</p>
-                        </div>
-                    </div>
-                </van-col>
-            </van-row>
+            <!--            <van-row style="padding: 10px 0">-->
+            <!--                <van-col span="12" v-for="(item,index) in downFateList" :key="index">-->
+            <!--                    <div class="left">-->
+            <!--                        <img src="../../static/images/userAvatar.png" style="height: 44px;width: 44px">-->
+            <!--                        <div>-->
+            <!--                            <p style="font-size: 12px;margin: 5px 0"><span>【{{item.tag == '0'?'乘客':'车主'}}】</span>-->
+            <!--                                <span>{{item.nickname}}</span><img src="../../static/images/sexTag.png"-->
+            <!--                                                                   style="width: 12px;height: 12px;margin-left: 5px"-->
+            <!--                                                                   v-if="item.sex == '1'">-->
+            <!--                                <img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px"-->
+            <!--                                     v-else></p>-->
+            <!--                            <p style="color:#9E9E9E;font-size: 12px;margin: 5px 5px 0 ">同乘过{{item.passCount}}次</p>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                </van-col>-->
+            <!--            </van-row>-->
         </div>
 
 
         <div class="footer">
-            <div><van-icon name="warning" color="#F55456"/> 注意:</div>
+            <div>
+                <van-icon name="warning" color="#F55456"/>
+                注意:
+            </div>
             <div class="notice">
-                1. 后台设置规则1；设置规则1；设置规则1； 1. 后台设置规则1设置规则1；设置规则1；； 1. 后台设置规则1；
+                <div>
+                    1.婴幼儿(无论年龄和大小)均需单独预约位置。
+                </div>
+                <div>
+                    2.车主确认前，或者确认后3分钟内，乘客均可无责取消。
+                </div>
+                <div>
+                    3.如乘客迟到，需支付赔偿，且车主有权利不等。
+                </div>
+                <div>
+                    4. 如余额不足，<span style="color: #05CF8A;" @click="goReCharge">请点击这里充值</span>，然后再预约。
+                </div>
             </div>
         </div>
 
         <div class="bottomBar">
             <van-row>
                 <van-col span="12">
-                    <van-button @click="cancel" type="default" color="#9E9E9E" style="width: 100%;margin: 0 auto;border: none;border-radius: unset">取消</van-button>
+                    <van-button @click="cancel" type="default" color="#9E9E9E"
+                                style="width: 100%;margin: 0 auto;border: none;border-radius: unset">取消
+                    </van-button>
                 </van-col>
                 <van-col span="12">
-                    <van-button @click="goReserve" type="default" color="#0CC893" style="width: 100%;margin: 0 auto;border: none;border-radius: unset">同意</van-button>
+                    <van-button @click="goReserve" type="default" color="#0CC893"
+                                style="width: 100%;margin: 0 auto;border: none;border-radius: unset">同意
+                    </van-button>
                 </van-col>
             </van-row>
         </div>
@@ -72,7 +103,7 @@
 
 <script>
     import Title from './../../components/header'
-    import { Cell, CellGroup,Row, Col ,Button,Tag,Field, Divider ,Icon,Tabbar, TabbarItem} from 'vant';
+    import {Cell, CellGroup, Row, Col, Button, Tag, Field, Divider, Icon, Tabbar, TabbarItem} from 'vant';
 
     import greenBar from './../../static/images/green.png'
     import redBar from './../../static/images/red.png'
@@ -86,64 +117,63 @@
 
     export default {
         name: "declare",
-        components:{
+        components: {
             Title,
-            [Cell.name]:Cell,
-            [CellGroup.name]:CellGroup,
-            [Row.name]:Row,
-            [Col.name]:Col,
-            [Button.name]:Button,
-            [Tag.name]:Tag,
-            [Field.name]:Field,
-            [Divider.name]:Divider,
-            [Icon.name]:Icon,
+            [Cell.name]: Cell,
+            [CellGroup.name]: CellGroup,
+            [Row.name]: Row,
+            [Col.name]: Col,
+            [Button.name]: Button,
+            [Tag.name]: Tag,
+            [Field.name]: Field,
+            [Divider.name]: Divider,
+            [Icon.name]: Icon,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem
         },
-        data(){
-            return{
-                active:"",
-                id:'',//行程id
-                redBar:redBar,
-                greenBar:greenBar,
-                checked:true,
-                title:"车辆预约",
-                carFateList:[],
-                upFateList:[],
-                downFateList:[],
+        data() {
+            return {
+                active: "",
+                id: '',//行程id
+                redBar: redBar,
+                greenBar: greenBar,
+                checked: true,
+                title: "车辆预约",
+                carFateList: [],
+                upFateList: [],
+                downFateList: [],
                 chengK: chengK,
                 xingC: xingC,
                 push: push,
                 person: person
             }
         },
-        methods:{
-            onClickLeft(){
+        methods: {
+            goReCharge(){
+                this.$router.push({path: '/wealth'});
+            },
+            onClickLeft() {
                 this.$router.back(-1);
             },
-            cancel(){
+            cancel() {
                 this.$router.back(-1);
             },
-            goReserve(){
-                this.$router.push({path:'/reserve',query:{id:this.id}});
+            goReserve() {
+                this.$router.push({path: '/reserve', query: {id: this.id}});
             },
 
-            initCarFate(){
+            initCarFate() {
                 request.sendGet({
-                    url:"/sharecar/pass/samecar/"+this.id,
-                    params:{}
-                }).then(res =>{
-                    if(res.data.code == '0'){
-                        if(res.data.rows.length>4){
-                            this.carFateList = res.data.rows.slice(0,4);
-                        }else {
-                            this.carFateList = res.data.rows;
-                        }
+                    url: "/sharecar/pass/samecar/" + this.id,
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == '0') {
+                        this.carFateList = res.data.rows;
                     }
                 })
             }
         },
-        created(){
+        created() {
             this.id = this.$route.query.id;
 
             //同车缘分
@@ -153,15 +183,15 @@
 </script>
 
 <style scoped>
-    body{
+    body {
         background: #FFFFFF;
     }
 
-    .contain{
+    .contain {
         font-size: 14px;
     }
 
-    .contain .content{
+    .contain .content {
         background: #FFFFFF;
         border-top: 1px solid #ECECEC;
         /*width: 90%;*/
@@ -170,24 +200,24 @@
         color: #202020;
     }
 
-    .contain .content .valStyle{
+    .contain .content .valStyle {
         color: #9E9E9E;
         font-size: 14px;
     }
 
-    .contain .fate{
+    .contain .fate {
         margin-top: 10px;
         padding: 5px 10px;
         background: #ffffff;
     }
 
-    .declareImg{
+    .declareImg {
         width: 100%;
         display: flex;
         justify-content: center;
     }
 
-    .seatTag{
+    .seatTag {
         width: 30px;
         height: 20px;
         font-size: 16px;
@@ -195,7 +225,7 @@
         justify-content: center;
     }
 
-    .contactTag{
+    .contactTag {
         width: 30px;
         height: 20px;
         font-size: 14px;
@@ -203,7 +233,7 @@
         justify-content: center;
     }
 
-    .van-cell{
+    .van-cell {
         position: relative;
         display: -webkit-box;
         display: -webkit-flex;
@@ -218,43 +248,43 @@
         background-color: #fff;
     }
 
-    .footer{
+    .footer {
         margin-top: 10px;
-        padding:  10px;
+        padding: 10px;
         background: #FFFFFF;
-        margin-bottom: 50px;
+        margin-bottom: 100px;
     }
 
-    .footer .notice{
+    .footer .notice {
         margin-top: 6px;
         line-height: 24px;
     }
 
-    .bottomBar{
+    .bottomBar {
         position: fixed;
         bottom: 55px;
         width: 100%;
     }
 
-    .declareImg{
+    .declareImg {
         margin-top: 16px;
         width: 100%;
         display: flex;
         justify-content: center;
     }
 
-    .declareImg img{
+    .declareImg img {
         width: 80px;
         height: 80px;
     }
 
-    .declareContent{
+    .declareContent {
         line-height: 24px;
         font-size: 14px;
         color: #202020;
     }
 
-    .declare{
+    .declare {
         text-align: center;
         font-size: 18px;
         font-weight: bold;
@@ -262,7 +292,7 @@
         margin-bottom: 15px;
     }
 
-    .left{
+    .left {
         display: flex;
         align-items: center;
     }
