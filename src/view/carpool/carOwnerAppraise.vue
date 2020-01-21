@@ -215,7 +215,7 @@
                     if(res.data.code =='0'){
                         this.carOwnerInfo = res.data.data;
                     }else{
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },

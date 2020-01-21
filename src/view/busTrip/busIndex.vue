@@ -42,6 +42,7 @@
                 <van-tab title="通勤巴士">
                     <van-cell-group>
                         <van-field
+                                input-align="left"
                                 v-model="strokeInfo.startPlace"
                                 placeholder="出发地点"
                                 label=""
@@ -52,6 +53,7 @@
                     <van-divider style="width: 90%;margin: 0 auto"/>
                     <van-cell-group>
                         <van-field
+                                input-align="left"
                                 v-model="strokeInfo.endPlace"
                                 placeholder="目的地点"
                                 label=""

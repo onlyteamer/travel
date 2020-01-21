@@ -140,10 +140,10 @@
                         }
                     }).then((res) => {
                         if (res.data.code === 0) {
-                            this.$toast(res.data.msg);
+                            this.$toast.success(res.data.msg);
                             this.$router.back(-1);
                         } else {
-                            this.$toast(res.data.msg);
+                            this.$toast.fail(res.data.msg);
                         }
                     })
                 }
@@ -156,10 +156,10 @@
                     }
                 }).then((res) => {
                     if (res.data.code === 0) {
-                        this.$toast(res.data.msg);
+                        this.$toast.success(res.data.msg);
                         this.$router.back(-1);
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
@@ -181,41 +181,41 @@
                         }
                     }).then((res) => {
                         if (res.data.code === 0) {
-                            this.$toast(res.data.msg);
+                            this.$toast.success(res.data.msg);
                             this.$router.go(-2);
                         } else {
-                            this.$toast(res.data.msg);
+                            this.$toast.fail(res.data.msg);
                         }
                     })
                 }
             },
             checkValid() {
                 if (!this.definition.carBrand) {
-                    this.$toast("请填写车辆品牌");
+                    this.$toast.fail("请填写车辆品牌");
                     return false;
                 }
                 if (!this.definition.carColor) {
-                    this.$toast("请填写车辆颜色");
+                    this.$toast.fail("请填写车辆颜色");
                     return false;
                 }
                 if (!this.definition.carImage1Url) {
-                    this.$toast("请上传车辆图片");
+                    this.$toast.fail("请上传车辆图片");
                     return false;
                 }
                 if (!this.definition.carImage2Url) {
-                    this.$toast("请上传车辆行驶证");
+                    this.$toast.fail("请上传车辆行驶证");
                     return false;
                 }
                 if (!this.definition.carImage3Url) {
-                    this.$toast("请上传车辆保险照片");
+                    this.$toast.fail("请上传车辆保险照片");
                     return false;
                 }
                 if (!this.definition.carNumber) {
-                    this.$toast("请填写车牌号");
+                    this.$toast.fail("请填写车牌号");
                     return false;
                 }
                 if (!this.definition.carType) {
-                    this.$toast("请填写车辆型号");
+                    this.$toast.fail("请填写车辆型号");
                     return false;
                 }
                 if (!this.definition.checked) {

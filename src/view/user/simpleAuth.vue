@@ -78,10 +78,10 @@
                         }
                     }).then((res) => {
                         if (res.data.code === 0) {
-                            this.$toast(res.data.msg);
+                            this.$toast.success(res.data.msg);
                             this.$router.go(-1);
                         } else {
-                            this.$toast(res.data.msg);
+                            this.$toast.fail(res.data.msg);
                         }
                     })
                 }
@@ -95,31 +95,31 @@
             },
             checkValid() {
                 if (!this.definition.carBrand) {
-                    this.$toast("请填写车辆品牌");
+                    this.$toast.fail("请填写车辆品牌");
                     return false;
                 }
                 if (!this.definition.carColor) {
-                    this.$toast("请填写车辆颜色");
+                    this.$toast.fail("请填写车辆颜色");
                     return false;
                 }
                 if (!this.definition.driverAge) {
-                    this.$toast("请填写驾龄");
+                    this.$toast.fail("请填写驾龄");
                     return false;
                 }
                 if (!this.definition.driverName) {
-                    this.$toast("请填写司机姓名");
+                    this.$toast.fail("请填写司机姓名");
                     return false;
                 }
                 if (!this.definition.cardId || !this.checkIdCard(this.definition.cardId)) {
-                    this.$toast("请输入正确的身份证号");
+                    this.$toast.fail("请输入正确的身份证号");
                     return;
                 }
                 if (!this.definition.carNumber) {
-                    this.$toast("请填写车牌号");
+                    this.$toast.fail("请填写车牌号");
                     return false;
                 }
                 if (!this.definition.carType) {
-                    this.$toast("请填写车辆型号");
+                    this.$toast.fail("请填写车辆型号");
                     return false;
                 }
                 if (!this.definition.checked) {

@@ -59,10 +59,10 @@
                     }
                 }).then((res) => {
                     if (res.data.code == 0) {
-                        this.$toast(res.data.msg);
+                        this.$toast.success(res.data.msg);
                         this.$router.back(-1);
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
@@ -86,15 +86,15 @@
             //新增乘车人
             submitInfo() {
                 if (!this.definition.passName) {
-                    this.$toast("请填写乘车人姓名");
+                    this.$toast.fail("请填写乘车人姓名");
                     return;
                 }
                 if (!this.definition.cardId || !this.checkIdCard(this.definition.cardId)) {
-                    this.$toast("请输入正确的身份证号");
+                    this.$toast.fail("请输入正确的身份证号");
                     return;
                 }
                 if (!this.definition.passPhone || !this.checkPhone(this.definition.passPhone)) {
-                    this.$toast("请输入正确的手机号");
+                    this.$toast.fail("请输入正确的手机号");
                     return;
                 }
                 if (this.definition.id) {
@@ -114,10 +114,10 @@
                     }
                 }).then((res) => {
                     if (res.data.code == 0) {
-                        this.$toast(res.data.msg);
+                        this.$toast.success(res.data.msg);
                         this.$router.back(-1);
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
@@ -133,10 +133,10 @@
                     }
                 }).then((res) => {
                     if (res.data.code == 0) {
-                        this.$toast(res.data.msg);
+                        this.$toast.success(res.data.msg);
                         this.$router.back(-1);
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },

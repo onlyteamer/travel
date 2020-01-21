@@ -234,8 +234,9 @@
                 }).then((res) => {
                     if (res.data.code === 0) {
                         this.data = res.data.rows;
+                        this.$toast.success(res.data.msg);
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                     let date = new Date(this.currentDate);
                     this.initKalendar(date);

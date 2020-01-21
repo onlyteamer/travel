@@ -248,7 +248,7 @@
                         this.userInfo = res.data.data;
                         localStorage.setItem("userId",res.data.data.userId);
                     }else{
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },

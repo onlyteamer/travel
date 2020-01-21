@@ -151,10 +151,10 @@
                     }
                 }).then(res=>{
                     if(res.data.code===0){
-                        this.$toast(res.data.msg);
+                        this.$toast.success(res.data.msg);
                         window.location.href = location.protocol+"//"+location.hostname + "/#/setting"
                     }else{
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
@@ -166,7 +166,7 @@
                     if (res.data.code === 0) {
                         this.userInfo = res.data.data;
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },

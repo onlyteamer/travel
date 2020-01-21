@@ -380,14 +380,14 @@
                     params:{}
                 }).then(res=>{
                     if (res.data.code === 0) {
-                        this.$toast(res.data.msg);
+                        this.$toast.success(res.data.msg);
                         this.finished = false;
                         this.loading = true;
                         this.carOwnerTrip.data = [];
                         this.carOwnerTrip.pageNum = 1;
                         this.initCarOwnerTripList();
                     } else {
-                        this.$toast(res.data.msg)
+                        this.$toast.fail(res.data.msg)
                     }
                 })
             },
@@ -501,12 +501,12 @@
 
             wxPay() {
                 if (!this.czje) {
-                    this.$toast("充值金额不能为空");
+                    this.$toast.fail("充值金额不能为空");
                     return;
                 }
                 this.czje = this.czje + "";
                 if (this.czje.indexOf('.') > -1) {
-                    this.$toast('请输入整数');
+                    this.$toast.fail('请输入整数');
                     return;
                 }
                 request.sendGet({
@@ -519,7 +519,7 @@
                         this.wxData = res.data.data;
                         this.callpay();
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
@@ -561,7 +561,7 @@
 
             updateSeat() {
                 if (!this.changeSeatInfo.seatCount) {
-                    this.$toast("请填写座位数");
+                    this.$toast.fail("请填写座位数");
                     return;
                 }
 
@@ -572,14 +572,14 @@
                     }
                 }).then(res => {
                     if (res.data.code === 0) {
-                        this.$toast(res.data.msg);
+                        this.$toast.success(res.data.msg);
                         this.finished = false;
                         this.loading = true;
                         this.carOwnerTrip.data = [];
                         this.carOwnerTrip.pageNum = 1;
                         this.initCarOwnerTripList();
                     } else {
-                        this.$toast(res.data.msg)
+                        this.$toast.fail(res.data.msg)
                     }
 
                 })
@@ -600,14 +600,14 @@
                         params: {}
                     }).then(res => {
                         if (res.data.code === 0) {
-                            this.$toast(res.data.msg);
+                            this.$toast.success(res.data.msg);
                             this.finished = false;
                             this.loading = true;
                             this.carOwnerTrip.data = [];
                             this.carOwnerTrip.pageNum = 1;
                             this.initCarOwnerTripList();
                         } else {
-                            this.$toast(res.data.msg)
+                            this.$toast.fail(res.data.msg)
                         }
                     })
                 })
@@ -625,7 +625,7 @@
                         params: {}
                     }).then(res => {
                         if (res.data.code == '0') {
-                            this.$toast(res.data.msg);
+                            this.$toast.success(res.data.msg);
                             this.finished = false;
                             this.loading = true;
                             this.passTrip.data = [];
@@ -635,7 +635,7 @@
                         } else if (res.data.code === 100) {
                             this.wxpay = true;
                         } else {
-                            this.$toast(res.data.msg)
+                            this.$toast.fail(res.data.msg)
                         }
                     })
                 })
@@ -695,14 +695,14 @@
                         params: {}
                     }).then(res => {
                         if (res.data.code == '0') {
-                            this.$toast(res.data.msg);
+                            this.$toast.success(res.data.msg);
                             this.finished = false;
                             this.loading = true;
                             this.carOwnerTrip.data = [];
                             this.carOwnerTrip.pageNum = 1;
                             this.initCarOwnerTripList();
                         } else {
-                            this.$toast(res.data.msg)
+                            this.$toast.fail(res.data.msg)
                         }
                     })
                 }).catch(() => {
@@ -724,9 +724,9 @@
                         params: {}
                     }).then(res => {
                         if (res.data.code == '0') {
-                            this.$toast(res.data.msg);
+                            this.$toast.success(res.data.msg);
                         }else {
-                            this.$toast(res.data.msg)
+                            this.$toast.fail(res.data.msg)
                         }
                     })
                 }).catch(() => {

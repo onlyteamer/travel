@@ -280,7 +280,7 @@
             },
             changePassenger(value) {
                 if (this.stroke.seatCount === 0) {
-                    this.$toast("请先选择座位数");
+                    this.$toast.fail("请先选择座位数");
                     return;
                 }
                 this.stroke.riderNames2 = [];
@@ -363,7 +363,7 @@
                             // 使用以上方式判断前端返回,微信团队郑重提示：
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                         } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
-                            this.$toast("支付失败");
+                            this.$toast.fail("支付失败");
                         }
                     }
                 );
@@ -371,12 +371,12 @@
 
             wxPay() {
                 if (!this.czje) {
-                    this.$toast("充值金额不能为空");
+                    this.$toast.fail("充值金额不能为空");
                     return;
                 }
                 this.czje = this.czje + "";
                 if (this.czje.indexOf('.') > -1) {
-                    this.$toast('请输入整数');
+                    this.$toast.fail('请输入整数');
                     return;
                 }
                 request.sendGet({
@@ -389,7 +389,7 @@
                         this.wxData = res.data.data;
                         this.callpay();
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
@@ -438,7 +438,7 @@
                     } else if (res.data.code === 100) {
                         this.wxpay = true;
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
 
                 })
@@ -492,7 +492,7 @@
                         this.stroke.bookSeat = res.data.data.bookSeat;
                         this.stroke.totalSeats = res.data.data.totalSeats;
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                         this.$router.go(-2);
                     }
                 })

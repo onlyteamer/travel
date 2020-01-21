@@ -140,11 +140,11 @@
         methods: {
             cashOut() {
                 if (!this.txje || this.txje < 100) {
-                    this.$toast("提现金额不能低于一百");
+                    this.$toast.fail("提现金额不能低于一百");
                     return;
                 }
                 if (this.txje > this.balance) {
-                    this.$toast("提现金额不能大于总资产");
+                    this.$toast.fail("提现金额不能大于总资产");
                     return;
                 }
                 //提现
@@ -173,9 +173,11 @@
                         number: this.czje
                     }
                 }).then((res) => {
-                    this.$toast(res.data.msg);
                     if (res.data.code === 0) {
+                        this.$toast.success(res.data.msg);
                         this.initData();
+                    }else{
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
@@ -229,7 +231,7 @@
                             // 使用以上方式判断前端返回,微信团队郑重提示：
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                         } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
-                            this.$toast("支付失败");
+                            this.$toast.fail("支付失败");
                         }
                     }
                 );
@@ -237,11 +239,11 @@
 
             wxPay() {
                 if (!this.czje) {
-                    this.$toast("充值金额不能为空");
+                    this.$toast.fail("充值金额不能为空");
                     return;
                 }
                 if (this.czje.indexOf('.') > -1) {
-                    this.$toast('请输入整数');
+                    this.$toast.fail('请输入整数');
                     return;
                 }
                 request.sendGet({

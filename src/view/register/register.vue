@@ -76,7 +76,7 @@
 
                         })
                 } else {
-                    this.$toast('请输入正确的手机号');
+                    this.$toast.fail('请输入正确的手机号');
                 }
             },
 
@@ -98,11 +98,11 @@
             // 登录
             login() {
                 if (!(this.definition.phone && this.checkPhone(this.definition.phone))) {
-                    this.$toast('请输入正确的手机号');
+                    this.$toast.fail('请输入正确的手机号');
                     return;
                 }
                 if (!this.definition.code) {
-                    this.$toast('请输入验证码');
+                    this.$toast.fail('请输入验证码');
                     return;
                 }
                 if (!this.definition.checked) {

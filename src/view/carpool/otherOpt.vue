@@ -170,7 +170,7 @@
                     }
                 }).then((res)=>{
                     if (res.data.code === 0) {
-                        this.$toast("加入黑名单成功");
+                        this.$toast.success("加入黑名单成功");
                     }else {
                         this.$toast.fail(res.data.msg);
                     }

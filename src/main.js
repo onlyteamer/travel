@@ -9,7 +9,7 @@ Vue.use(Toast);
 Vue.use(Lazyload);
 Vue.use(AMap);
 
-Toast.setDefaultOptions({ duration: 5000 });
+Toast.setDefaultOptions({ duration: 5000 ,className:'my-toast'});
 // 初始化vue-amap
 AMap.initAMapApiLoader({
   // 高德的key

@@ -208,9 +208,9 @@
                         }
                     }).then(res => {
                         if (res.data.code == '0') {
-                            this.$toast(res.data.msg)
+                            this.$toast.success(res.data.msg)
                         } else {
-                            this.$toast(res.data.msg)
+                            this.$toast.fail(res.data.msg)
                         }
                     })
                 }).catch(() => {

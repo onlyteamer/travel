@@ -214,8 +214,9 @@
                 }).then((res) => {
                     if (res.data.code === 0) {
                         this.$router.push({path: '/ticketList'});
+                        this.$toast.success(res.data.msg);
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 });
 
@@ -278,7 +279,7 @@
                     },
                     function (res) {
                         if (res.err_msg === "get_brand_wcpay_request:ok") {
-                            this.$toast("支付成功");
+                            this.$toast.success("支付成功");
                             if (!this.wxpay) {
                                 me.submitOrder();
                             } else {
@@ -288,7 +289,7 @@
                             // 使用以上方式判断前端返回,微信团队郑重提示：
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                         } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
-                            this.$toast("支付失败");
+                            this.$toast.fail("支付失败");
                             me.$router.push({path: '/buyTicket'});
                             me.cancelTicket();
                         } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
@@ -333,7 +334,7 @@
                         }
 
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
@@ -351,7 +352,7 @@
                     } else if (res.data.code === 100) {
                         this.wxpay = true;
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
@@ -367,18 +368,18 @@
                         this.wxData = res.data.data;
                         this.callpay();
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
             wxPay2() {
                 this.czje = this.czje+'';
                 if (!this.czje) {
-                    this.$toast("充值金额不能为空");
+                    this.$toast.fail("充值金额不能为空");
                     return;
                 }
                 if (this.czje.indexOf('.') > -1) {
-                    this.$toast('请输入整数');
+                    this.$toast.fail('请输入整数');
                     return;
                 }
                 request.sendGet({
@@ -391,7 +392,7 @@
                         this.wxData = res.data.data;
                         this.callpay();
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },

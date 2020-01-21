@@ -327,10 +327,10 @@
                     params: this.tripInfo
                 }).then((res) => {
                     if (res.data.code == 0) {
-                        this.$toast("更新成功");
+                        this.$toast.success("更新成功");
                         this.$router.back(-1);
                     } else {
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },

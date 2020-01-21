@@ -290,7 +290,7 @@
                             this.tripInfo.carId = car.id;
                         }
                     }else if(res.data.code===401){
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
@@ -457,7 +457,7 @@
                     }else if(res.data.code===400) {
                         this.$router.push({path: '/simpleAuth'});
                     }else if(res.data.code===401){
-                        this.$toast(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
