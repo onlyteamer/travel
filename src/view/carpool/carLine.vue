@@ -307,7 +307,7 @@
                 if (val) {
                     window.location.href = "tel:" + val;
                 } else {
-                    Toast("暂无联系方式");
+                    this.$toast("暂无联系方式");
                 }
             },
 

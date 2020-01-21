@@ -107,7 +107,7 @@
 </template>
 <!--个人中心-充值提现-->
 <script>
-    import {NavBar, Row, Col, Field, Button, Toast, Tab, Tabs} from 'vant';
+    import {NavBar, Row, Col, Field, Button, Tab, Tabs} from 'vant';
     import request from "../../utils/request"
     import wx from 'weixin-js-sdk'
 
@@ -119,7 +119,6 @@
             [Col.name]: Col,
             [Button.name]: Button,
             [Field.name]: Field,
-            [Toast.name]: Toast,
             [Tab.name]: Tab,
             [Tabs.name]: Tabs
         },
@@ -141,11 +140,11 @@
         methods: {
             cashOut() {
                 if (!this.txje || this.txje < 100) {
-                    Toast("提现金额不能低于一百");
+                    this.$toast("提现金额不能低于一百");
                     return;
                 }
                 if (this.txje > this.balance) {
-                    Toast("提现金额不能大于总资产");
+                    this.$toast("提现金额不能大于总资产");
                     return;
                 }
                 //提现
@@ -155,7 +154,7 @@
                         number: this.txje
                     }
                 }).then((res) => {
-                    Toast(res.data.msg);
+                    this.$toast(res.data.msg);
                 })
             },
             onClickLeft() {
@@ -174,7 +173,7 @@
                         number: this.czje
                     }
                 }).then((res) => {
-                    Toast(res.data.msg);
+                    this.$toast(res.data.msg);
                     if (res.data.code === 0) {
                         this.initData();
                     }
@@ -230,7 +229,7 @@
                             // 使用以上方式判断前端返回,微信团队郑重提示：
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                         } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
-                            Toast("支付失败");
+                            this.$toast("支付失败");
                         }
                     }
                 );
@@ -238,11 +237,11 @@
 
             wxPay() {
                 if (!this.czje) {
-                    Toast("充值金额不能为空");
+                    this.$toast("充值金额不能为空");
                     return;
                 }
                 if (this.czje.indexOf('.') > -1) {
-                    Toast('请输入整数');
+                    this.$toast('请输入整数');
                     return;
                 }
                 request.sendGet({
@@ -255,7 +254,7 @@
                         this.wxData = res.data.data;
                         this.callpay();
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },

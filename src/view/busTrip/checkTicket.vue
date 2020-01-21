@@ -131,7 +131,7 @@
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Tag, Divider, Swipe, SwipeItem, NoticeBar, List, Toast,Dialog,Tabbar, TabbarItem} from 'vant'
+    import {Row, Col, Tag, Divider, Swipe, SwipeItem, NoticeBar, List, Dialog,Tabbar, TabbarItem} from 'vant'
     import backOne from './../../static/images/backOne.jpg'
     import backTwo from './../../static/images/backTwo.jpg'
     import laba from './../../static/images/laba.png'
@@ -166,7 +166,6 @@
             [SwipeItem.name]: SwipeItem,
             [NoticeBar.name]: NoticeBar,
             [List.name]: List,
-            [Toast.name]: Toast,
             [Dialog.name]: Dialog,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem,
@@ -273,9 +272,9 @@
                 //             }
                 //         }).then(res => {
                 //             if (res.data.code == '0') {
-                //                 Toast.success("验票成功")
+                //                 this.$toast.success("验票成功")
                 //             } else {
-                //                 Toast.fail(res.data.msg)
+                //                 this.$toast.fail(res.data.msg)
                 //             }
                 //         })
                 //     }).catch(res =>{

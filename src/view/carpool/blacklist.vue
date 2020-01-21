@@ -56,7 +56,7 @@
 
 <script>
     import Title from './../../components/header'
-    import { Row, Col,List,Toast,Tabbar, TabbarItem} from 'vant';
+    import { Row, Col,List,Tabbar, TabbarItem} from 'vant';
     import  request from '../../utils/request'
     import avatar from '../../static/images/userAvatar.png'
 
@@ -71,7 +71,6 @@
             [Row.name]:Row,
             [Col.name]:Col,
             [List.name]: List,
-            [Toast.name]: Toast,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem
         },
@@ -109,9 +108,9 @@
                         this.dataMain.pageNum = 1;
                         this.dataMain.data = [];
                         this.initData();
-                        Toast.success(res.data.msg)
+                        this.$toast.success(res.data.msg)
                     }else {
-                        Toast.fail(res.data.msg)
+                        this.$toast.fail(res.data.msg)
                     }
                 })
             },

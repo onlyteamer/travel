@@ -57,7 +57,7 @@
 </template>
 <!--车主认证-->
 <script>
-    import {NavBar, Field, Button, Uploader, Checkbox,Toast,Icon} from 'vant';
+    import {NavBar, Field, Button, Uploader, Checkbox,Icon} from 'vant';
     import uploadIcon from '../../static/images/upload.png';
 
     import request from '../../utils/request';
@@ -70,7 +70,6 @@
             [Button.name]: Button,
             [Uploader.name]: Uploader,
             [Checkbox.name]: Checkbox,
-            [Toast.name]: Toast,
             [Icon.name]:Icon
         },
         data() {
@@ -174,28 +173,28 @@
             },
             submit() {
                 if(!this.definition.checked){
-                    Toast.fail("请同意条款再操作");
+                    this.$toast.fail("请同意条款再操作");
                     return false;
                 }
 
                 if(!this.driverInfo.driverName){
-                    Toast.fail("司机姓名不能为空");
+                    this.$toast.fail("司机姓名不能为空");
                     return false;
                 }
                 if(!this.driverInfo.cardId){
-                    Toast.fail("司机身份证号不能为空");
+                    this.$toast.fail("司机身份证号不能为空");
                     return false;
                 }
                 if(!this.driverInfo.driverCardId){
-                    Toast.fail("驾驶证编号不能为空");
+                    this.$toast.fail("驾驶证编号不能为空");
                     return false;
                 }
                 if(!this.driverInfo.driverAge){
-                    Toast.fail("驾龄不能为空");
+                    this.$toast.fail("驾龄不能为空");
                     return false;
                 }
                 if(!this.driverInfo.driverCardimage){
-                    Toast.fail("请上传驾驶证图片");
+                    this.$toast.fail("请上传驾驶证图片");
                     return false;
                 }
 
@@ -204,10 +203,10 @@
                     params:this.driverInfo
                 }).then(res =>{
                     if(res.data.code == '0'){
-                        Toast.success(res.data.msg);
+                        this.$toast.success(res.data.msg);
                         this.$router.push({path:'/ownerCertificationRemind'});
                     }else {
-                        Toast.fail(res.data.msg)
+                        this.$toast.fail(res.data.msg)
                     }
                 })
 

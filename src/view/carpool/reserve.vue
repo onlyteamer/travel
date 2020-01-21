@@ -207,7 +207,6 @@
         Field,
         Popup,
         Picker,
-        Toast,
         Tabbar,
         TabbarItem
     } from 'vant';
@@ -234,7 +233,6 @@
             [Button.name]: Button,
             [Tag.name]: Tag,
             [Field.name]: Field,
-            [Toast.name]: Toast,
             [Popup.name]: Popup,
             [Picker.name]: Picker,
             [Tabbar.name]: Tabbar,
@@ -282,7 +280,7 @@
             },
             changePassenger(value) {
                 if (this.stroke.seatCount === 0) {
-                    Toast("请先选择座位数");
+                    this.$toast("请先选择座位数");
                     return;
                 }
                 this.stroke.riderNames2 = [];
@@ -313,7 +311,7 @@
                     if (res.data.code === 0) {
                         this.wxpay = false;
                     }
-                    Toast(res.data.msg);
+                    this.$toast(res.data.msg);
                 })
             },
             getWxConfig() {
@@ -365,7 +363,7 @@
                             // 使用以上方式判断前端返回,微信团队郑重提示：
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                         } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
-                            Toast("支付失败");
+                            this.$toast("支付失败");
                         }
                     }
                 );
@@ -373,12 +371,12 @@
 
             wxPay() {
                 if (!this.czje) {
-                    Toast("充值金额不能为空");
+                    this.$toast("充值金额不能为空");
                     return;
                 }
                 this.czje = this.czje + "";
                 if (this.czje.indexOf('.') > -1) {
-                    Toast('请输入整数');
+                    this.$toast('请输入整数');
                     return;
                 }
                 request.sendGet({
@@ -391,7 +389,7 @@
                         this.wxData = res.data.data;
                         this.callpay();
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },
@@ -404,29 +402,29 @@
             //预约
             reserveCar() {
                 if (!this.checked) {
-                    Toast.fail("请选协议后进行操作");
+                    this.$toast.fail("请选协议后进行操作");
                     return;
                 }
 
                 if (!this.stroke.phone) {
-                    Toast.fail("乘客手机号不能为空");
+                    this.$toast.fail("乘客手机号不能为空");
                     return;
                 }
                 if (!this.stroke.startPlace) {
-                    Toast.fail("上车地点不能为空");
+                    this.$toast.fail("上车地点不能为空");
                     return;
                 }
                 if (!this.stroke.endPlace) {
-                    Toast.fail("下车地点不能为空");
+                    this.$toast.fail("下车地点不能为空");
                     return;
                 }
 
                 if (!this.stroke.riderIds2) {
-                    Toast.fail("乘客不能为空");
+                    this.$toast.fail("乘客不能为空");
                     return;
                 }
                 if (this.stroke.riderIds2.length !== this.stroke.seatCount) {
-                    Toast.fail("请添加全部乘车人");
+                    this.$toast.fail("请添加全部乘车人");
                     return;
                 }
                 this.stroke.riderIds = this.stroke.riderIds2.toString();
@@ -440,7 +438,7 @@
                     } else if (res.data.code === 100) {
                         this.wxpay = true;
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
 
                 })
@@ -494,7 +492,7 @@
                         this.stroke.bookSeat = res.data.data.bookSeat;
                         this.stroke.totalSeats = res.data.data.totalSeats;
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                         this.$router.go(-2);
                     }
                 })

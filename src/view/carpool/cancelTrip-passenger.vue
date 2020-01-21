@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import {NavBar, Button, RadioGroup, Radio, Toast, Tabbar, Dialog, TabbarItem} from 'vant';
+    import {NavBar, Button, RadioGroup, Radio,  Tabbar, Dialog, TabbarItem} from 'vant';
     import request from '../../utils/request'
 
     import chengK from './../../static/images/chengk.png'
@@ -44,7 +44,6 @@
             [Button.name]: Button,
             [RadioGroup.name]: RadioGroup,
             [Radio.name]: Radio,
-            [Toast.name]: Toast,
             [Tabbar.name]: Tabbar,
             [Dialog.name]: Dialog,
             [TabbarItem.name]: TabbarItem
@@ -91,7 +90,7 @@
                     params: {}
                 }).then(res => {
                     if (res.data.code == '0') {
-                        Toast.success(res.data.msg)
+                        this.$toast.success(res.data.msg)
                     } else if (res.data.code == '300') {
                         Dialog.confirm({
                             title: '取消行程',
@@ -104,9 +103,9 @@
                                 params: {}
                             }).then(res => {
                                 if (res.data.code == '0') {
-                                    Toast.success(res.data.msg)
+                                    this.$toast.success(res.data.msg)
                                 } else {
-                                    Toast.fail(res.data.msg)
+                                    this.$toast.fail(res.data.msg)
                                 }
                             })
                         }).catch(() => {
@@ -114,7 +113,7 @@
                             // on cancel
                         });
                     } else {
-                        Toast.fail(res.data.msg)
+                        this.$toast.fail(res.data.msg)
                     }
                 })
 

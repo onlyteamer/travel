@@ -96,7 +96,7 @@
 </template>
 <!--我的资料-->
 <script>
-    import {NavBar, Field, Button, Image, DropdownMenu, DropdownItem, Icon,Toast} from 'vant';
+    import {NavBar, Field, Button, Image, DropdownMenu, DropdownItem, Icon} from 'vant';
     import greenDot from "../../static/images/dot-green.png"
     import redDot from "../../static/images/dot-red.png"
     import request from "../../utils/request";
@@ -110,7 +110,6 @@
             [Icon.name]: Icon,
             [DropdownMenu.name]: DropdownMenu,
             [DropdownItem.name]: DropdownItem,
-            [Toast.name]:Toast,
         },
         data() {
             return {
@@ -152,10 +151,10 @@
                     }
                 }).then(res=>{
                     if(res.data.code===0){
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                         window.location.href = location.protocol+"//"+location.hostname + "/#/setting"
                     }else{
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },
@@ -167,7 +166,7 @@
                     if (res.data.code === 0) {
                         this.userInfo = res.data.data;
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },

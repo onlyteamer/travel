@@ -80,7 +80,7 @@
 </template>
 
 <script>
-    import {NavBar, Button, Icon, Toast, Tabbar, TabbarItem,Row,Col} from 'vant';
+    import {NavBar, Button, Icon, Tabbar, TabbarItem,Row,Col} from 'vant';
     import Kalendar from 'kalendar';
     import request from '../../utils/request';
     import moment from 'moment';
@@ -96,7 +96,6 @@
             [NavBar.name]: NavBar,
             [Button.name]: Button,
             [Icon.name]: Icon,
-            [Toast.name]: Toast,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem,
         },
@@ -236,7 +235,7 @@
                     if (res.data.code === 0) {
                         this.data = res.data.rows;
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                     let date = new Date(this.currentDate);
                     this.initKalendar(date);

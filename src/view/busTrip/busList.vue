@@ -55,7 +55,7 @@
 </template>
 
 <script>
-    import {NavBar, Toast, List,Image, Button,Tab, Tabs,Tabbar, TabbarItem} from 'vant';
+    import {NavBar,List,Image, Button,Tab, Tabs,Tabbar, TabbarItem} from 'vant';
     import request from "../../utils/request";
     import blueTime from './../../static/images/busTrip/blue_time.png'
     import redTime from './../../static/images/busTrip/red_time.png'
@@ -73,7 +73,6 @@
             [Tabs.name]: Tabs,
             [NavBar.name]:NavBar,
             [Image.name]:Image,
-            [Toast.name]:Toast,
             [List.name]:List,
             [Button.name]: Button,
             [Tabbar.name]: Tabbar,

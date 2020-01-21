@@ -115,7 +115,7 @@
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Divider, Popup, Button, Dialog, Tabbar, TabbarItem, Picker, Toast} from 'vant';
+    import {Row, Col, Divider, Popup, Button, Dialog, Tabbar, TabbarItem, Picker} from 'vant';
 
     import avatar from "../../static/images/userAvatar.png"
 
@@ -139,7 +139,6 @@
             [Dialog.name]: Dialog,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem,
-            [Toast.name]: Toast,
         },
         data() {
             return {
@@ -183,7 +182,7 @@
                     //刷新列表
                     if (res.data.code === 0) {
                         this.initPassList();
-                        Toast.success(res.data.msg);
+                        this.$toast(res.data.msg);
                         this.showtime = false;
                     }
                 })
@@ -192,7 +191,7 @@
                 if (val) {
                     window.location.href = "tel:" + val;
                 } else {
-                    Toast("暂无联系方式");
+                    this.$toast("暂无联系方式");
                 }
             },
             changeArrive(passengerId) {
@@ -209,9 +208,9 @@
                         }
                     }).then(res => {
                         if (res.data.code == '0') {
-                            Toast.success(res.data.msg)
+                            this.$toast(res.data.msg)
                         } else {
-                            Toast.fail(res.data.msg)
+                            this.$toast(res.data.msg)
                         }
                     })
                 }).catch(() => {
@@ -259,7 +258,7 @@
                         //刷新列表
                         if (res.data.code === 0) {
                             this.initPassList();
-                            Toast.success(res.data.msg);
+                            this.$toast(res.data.msg);
                         }
                     })
                 }).catch(() => {

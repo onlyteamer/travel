@@ -115,7 +115,6 @@
         Row,
         Col,
         Button,
-        Toast,
         Popup,
         Divider,
         RadioGroup,
@@ -143,7 +142,6 @@
             [Row.name]: Row,
             [Col.name]: Col,
             [Button.name]: Button,
-            [Toast.name]: Toast,
             [Divider.name]: Divider,
             [RadioGroup.name]: RadioGroup,
             [Radio.name]: Radio,
@@ -217,7 +215,7 @@
                     if (res.data.code === 0) {
                         this.$router.push({path: '/ticketList'});
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 });
 
@@ -280,7 +278,7 @@
                     },
                     function (res) {
                         if (res.err_msg === "get_brand_wcpay_request:ok") {
-                            Toast("支付成功");
+                            this.$toast("支付成功");
                             if (!this.wxpay) {
                                 me.submitOrder();
                             } else {
@@ -290,11 +288,11 @@
                             // 使用以上方式判断前端返回,微信团队郑重提示：
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                         } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
-                            Toast("支付失败");
+                            this.$toast("支付失败");
                             me.$router.push({path: '/buyTicket'});
                             me.cancelTicket();
                         } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
-                            Toast("取消支付");
+                            this.$toast("取消支付");
                             me.$router.push({path: '/buyTicket'});
                             me.cancelTicket();
                         }
@@ -314,7 +312,7 @@
                     if (res.data.code === 0) {
                         this.wxpay = false;
                     }
-                    Toast(res.data.msg);
+                    this.$toast(res.data.msg);
                 })
             },
 
@@ -335,7 +333,7 @@
                         }
 
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },
@@ -353,7 +351,7 @@
                     } else if (res.data.code === 100) {
                         this.wxpay = true;
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },
@@ -369,18 +367,18 @@
                         this.wxData = res.data.data;
                         this.callpay();
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },
             wxPay2() {
                 this.czje = this.czje+'';
                 if (!this.czje) {
-                    Toast("充值金额不能为空");
+                    this.$toast("充值金额不能为空");
                     return;
                 }
                 if (this.czje.indexOf('.') > -1) {
-                    Toast('请输入整数');
+                    this.$toast('请输入整数');
                     return;
                 }
                 request.sendGet({
@@ -393,7 +391,7 @@
                         this.wxData = res.data.data;
                         this.callpay();
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },

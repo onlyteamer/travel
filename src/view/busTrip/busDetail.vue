@@ -83,7 +83,7 @@
 </template>
 
 <script>
-    import {NavBar, Button, Tabbar, Tab, Toast, List,TabbarItem} from 'vant';
+    import {NavBar, Button, Tabbar, Tab,List,TabbarItem} from 'vant';
     import request from '../../utils/request'
     import blueTime from './../../static/images/busTrip/blue_time.png'
     import redTime from './../../static/images/busTrip/red_time.png'
@@ -107,7 +107,6 @@
             [NavBar.name]: NavBar,
             [Button.name]: Button,
             [Tabbar.name]: Tabbar,
-            [Toast.name]: Toast,
             [List.name]: List,
             [Tab.name]: Tab,
             [TabbarItem.name]: TabbarItem,

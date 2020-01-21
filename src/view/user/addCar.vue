@@ -85,7 +85,7 @@
 </template>
 
 <script>
-    import {NavBar, Button, Field, Uploader, RadioGroup, Radio, Checkbox, Toast, Icon} from 'vant';
+    import {NavBar, Button, Field, Uploader, RadioGroup, Radio, Checkbox, Icon} from 'vant';
     import uploadIcon from '../../static/images/upload.png';
     import request from "../../utils/request";
     import context from "../../utils/context";
@@ -99,7 +99,6 @@
             [RadioGroup.name]: RadioGroup,
             [Radio.name]: Radio,
             [Checkbox.name]: Checkbox,
-            [Toast.name]: Toast,
             [Icon.name]: Icon
         },
         data() {
@@ -141,10 +140,10 @@
                         }
                     }).then((res) => {
                         if (res.data.code === 0) {
-                            Toast(res.data.msg);
+                            this.$toast(res.data.msg);
                             this.$router.back(-1);
                         } else {
-                            Toast(res.data.msg);
+                            this.$toast(res.data.msg);
                         }
                     })
                 }
@@ -157,10 +156,10 @@
                     }
                 }).then((res) => {
                     if (res.data.code === 0) {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                         this.$router.back(-1);
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },
@@ -182,41 +181,41 @@
                         }
                     }).then((res) => {
                         if (res.data.code === 0) {
-                            Toast(res.data.msg);
+                            this.$toast(res.data.msg);
                             this.$router.go(-2);
                         } else {
-                            Toast(res.data.msg);
+                            this.$toast(res.data.msg);
                         }
                     })
                 }
             },
             checkValid() {
                 if (!this.definition.carBrand) {
-                    Toast("请填写车辆品牌");
+                    this.$toast("请填写车辆品牌");
                     return false;
                 }
                 if (!this.definition.carColor) {
-                    Toast("请填写车辆颜色");
+                    this.$toast("请填写车辆颜色");
                     return false;
                 }
                 if (!this.definition.carImage1Url) {
-                    Toast("请上传车辆图片");
+                    this.$toast("请上传车辆图片");
                     return false;
                 }
                 if (!this.definition.carImage2Url) {
-                    Toast("请上传车辆行驶证");
+                    this.$toast("请上传车辆行驶证");
                     return false;
                 }
                 if (!this.definition.carImage3Url) {
-                    Toast("请上传车辆保险照片");
+                    this.$toast("请上传车辆保险照片");
                     return false;
                 }
                 if (!this.definition.carNumber) {
-                    Toast("请填写车牌号");
+                    this.$toast("请填写车牌号");
                     return false;
                 }
                 if (!this.definition.carType) {
-                    Toast("请填写车辆型号");
+                    this.$toast("请填写车辆型号");
                     return false;
                 }
                 if (!this.definition.checked) {

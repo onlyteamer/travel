@@ -1,14 +1,24 @@
 <template>
     <div class="contain">
-        <aMap
-                ref="carMap" id="hotelContainer"
-                @select="getPosition"
-                @getAddress="getAddress"
-                :lon="carInfo.lon"
-                :lat="carInfo.lat"
-                :tripId="tripId"
-                placeholder="请输入酒店地址或点击下面地图" height="450px">
-        </aMap>
+<!--        <aMap-->
+<!--                ref="carMap" id="hotelContainer"-->
+<!--                @select="getPosition"-->
+<!--                @getAddress="getAddress"-->
+<!--                :lon="carInfo.lon"-->
+<!--                :lat="carInfo.lat"-->
+<!--                :tripId="tripId"-->
+<!--                placeholder="请输入酒店地址或点击下面地图" height="450px">-->
+<!--        </aMap>-->
+<!--        <div style="text-align: center;padding: 10px;background: #FFFFFF;border-top: 1px solid #ECECEC">{{carPosition.updateTime}}</div>-->
+        <div class="amap-wrapper">
+            <el-amap vid="amapDemo">
+<!--                <el-amap-marker vid="component-marker" :position="componentMarker.position" :content-render="componentMarker.contentRender" ></el-amap-marker>-->
+<!--                <el-amap-marker v-for="(marker, index) in markers" :position="marker.position" :events="marker.events" :visible="marker.visible" :draggable="marker.draggable" :vid="index"></el-amap-marker>-->
+            </el-amap>
+        </div>
+<!--        <div>-->
+<!--            <div id="hotelContainer" :style="{'width':'100%','height':'450px'}"></div>-->
+<!--        </div>-->
 
         <div class="footer">
             <div style="margin-bottom: 10px;display: flex;align-items: center"><van-icon name="warning" color="#F55456"/><span style="font-weight: bold;margin-left: 5px">注意：</span></div>
@@ -30,23 +40,24 @@
 
 <script>
     import Title from './../../components/header'
-    import aMap from './../../components/amap_point'
-    import { Row, Col,Divider,Button,Rate,Tag ,Field,CellGroup,Icon ,Toast,Tabbar,TabbarItem} from 'vant';
+    import { Row, Col,Divider,Button,Rate,Tag ,Field,CellGroup,Icon ,Tabbar,TabbarItem} from 'vant';
 
     import wx from 'weixin-js-sdk'
     import request from '../../utils/request';
-
     import chengK from './../../static/images/chengk.png'
     import xingC from './../../static/images/xingC.png'
     import push from './../../static/images/push.png'
     import person from './../../static/images/chengk.png'
 
-
+    const exampleComponents = {
+        props: ['text'],
+        template: `<div>text from  parent: {{text}}</div>`
+    };
     export default {
         name: "carOwnPosition",
         components:{
             Title,
-            aMap,
+            // aMap,
             [Row.name]:Row,
             [Col.name]:Col,
             [Divider.name]:Divider,
@@ -56,7 +67,6 @@
             [Field.name]:Field,
             [CellGroup.name]:CellGroup,
             [Icon.name]:Icon,
-            [Toast.name]:Toast,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem
         },
@@ -72,7 +82,61 @@
                 chengK: chengK,
                 xingC: xingC,
                 push: push,
-                person: person
+                person: person,
+
+                count: 1,
+                slotStyle: {
+                    padding: '2px 8px',
+                    background: '#eee',
+                    color: '#333',
+                    border: '1px solid #aaa'
+                },
+                zoom: 14,
+                center: [121.5273285, 31.21515044],
+                markers: [
+                    {
+                        position: [121.5273285, 31.21515044],
+                        events: {
+                            click: () => {
+                                alert('click marker');
+                            },
+                            dragend: (e) => {
+                                console.log('---event---: dragend')
+                                this.markers[0].position = [e.lnglat.lng, e.lnglat.lat];
+                            }
+                        },
+                        visible: true,
+                        draggable: false,
+                        template: '<span>1</span>',
+                    }
+                ],
+                renderMarker: {
+                    position: [121.5273285, 31.21715058],
+                    contentRender: (h, instance) => {
+                        // if use jsx you can write in this
+                        // return <div style={{background: '#80cbc4', whiteSpace: 'nowrap', border: 'solid #ddd 1px', color: '#f00'}} onClick={() => ...}>marker inner text</div>
+                        return h(
+                            'div',
+                            {
+                                style: {background: '#80cbc4', whiteSpace: 'nowrap', border: 'solid #ddd 1px', color: '#f00'},
+                                on: {
+                                    click: () => {
+                                        const position = this.renderMarker.position;
+                                        this.renderMarker.position = [position[0] + 0.002, position[1] - 0.002];
+                                    }
+                                }
+                            },
+                            ['marker inner text']
+                        )
+                    }
+                },
+                componentMarker: {
+                    position: [121.5273285, 31.21315058],
+                    contentRender: (h, instance) => h(exampleComponents,{style: {backgroundColor: '#fff'}, props: {text: 'father is here'}}, ['xxxxxxx'])
+                },
+                slotMarker: {
+                    position: [121.5073285, 31.21715058]
+                }
             }
         },
         created(){
@@ -118,7 +182,7 @@
                                     console.log(this.carInfo);
                                 },
                                 fail: function(error) {
-                                    Toast.fail("获取地理位置失败，请确保开启GPS且允许微信获取您的地理位置！");
+                                    this.$toast.fail("获取地理位置失败，请确保开启GPS且允许微信获取您的地理位置！");
                                 }
                             });
                         });
@@ -136,7 +200,8 @@
             getPosition(){
 
             },
-            getAddress(){}
+            getAddress(){},
+
         }
     }
 </script>
@@ -153,5 +218,9 @@
         background: #FFFFFF;
         font-size: 14px;
         color: #202020;
+    }
+    .amap-wrapper{
+        width: 100%;
+        height: 450px;
     }
 </style>

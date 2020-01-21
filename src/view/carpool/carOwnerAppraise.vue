@@ -104,7 +104,7 @@
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Divider, Button, Rate, Tag, Field, CellGroup,Toast,Tabbar,TabbarItem} from 'vant';
+    import {Row, Col, Divider, Button, Rate, Tag, Field, CellGroup,Tabbar,TabbarItem} from 'vant';
 
     import request from '../../utils/request'
 
@@ -125,7 +125,6 @@
             [Tag.name]: Tag,
             [Field.name]: Field,
             [CellGroup.name]: CellGroup,
-            [Toast.name]:Toast,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem
         },
@@ -216,7 +215,7 @@
                     if(res.data.code =='0'){
                         this.carOwnerInfo = res.data.data;
                     }else{
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },
@@ -248,7 +247,7 @@
                 this.appraise.templateContext = arr.join(",");
 
                 if(!this.appraise.remark){
-                    Toast.fail("评论不能为空");
+                    this.$toast.fail("评论不能为空");
                     return false;
                 }
 
@@ -260,10 +259,10 @@
                     params: this.appraise
                 }).then(res =>{
                     if(res.data.code == '0'){
-                        Toast.success(res.data.msg);
+                        this.$toast.success(res.data.msg);
                         this.$router.push({path:"/myStroke"});
                     }else {
-                        Toast.fail(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             }

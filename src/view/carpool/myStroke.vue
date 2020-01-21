@@ -298,7 +298,7 @@
 
 <script>
     import Title from './../../components/header'
-    import {Tab, Tabs, Divider, Row, Col, Button, Popup, Dialog, Toast, Field, Tabbar, TabbarItem, List} from 'vant';
+    import {Tab, Tabs, Divider, Row, Col, Button, Popup, Dialog, Field, Tabbar, TabbarItem, List} from 'vant';
     import request from '../../utils/request'
     import wx from 'weixin-js-sdk'
 
@@ -320,7 +320,6 @@
             [Button.name]: Button,
             [Popup.name]: Popup,
             [Dialog.name]: Dialog,
-            [Toast.name]: Toast,
             [Field.name]: Field,
             [Dialog.Component.name]: Dialog.Component,
             [Tabbar.name]: Tabbar,
@@ -373,7 +372,6 @@
         },
         created() {
             this.getWxConfig();
-
         },
         methods: {
             finishTrip(tripId){
@@ -382,14 +380,14 @@
                     params:{}
                 }).then(res=>{
                     if (res.data.code === 0) {
-                        Toast.success(res.data.msg);
+                        this.$toast(res.data.msg);
                         this.finished = false;
                         this.loading = true;
                         this.carOwnerTrip.data = [];
                         this.carOwnerTrip.pageNum = 1;
                         this.initCarOwnerTripList();
                     } else {
-                        Toast.fail(res.data.msg)
+                        this.$toast(res.data.msg)
                     }
                 })
             },
@@ -443,7 +441,7 @@
                     if (res.data.code === 0) {
                         this.wxpay = false;
                     }
-                    Toast(res.data.msg);
+                    this.$toast(res.data.msg);
                 })
             },
             getWxConfig() {
@@ -495,7 +493,7 @@
                             // 使用以上方式判断前端返回,微信团队郑重提示：
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                         } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
-                            Toast("支付失败");
+                            this.$toast("支付失败");
                         }
                     }
                 );
@@ -503,12 +501,12 @@
 
             wxPay() {
                 if (!this.czje) {
-                    Toast("充值金额不能为空");
+                    this.$toast("充值金额不能为空");
                     return;
                 }
                 this.czje = this.czje + "";
                 if (this.czje.indexOf('.') > -1) {
-                    Toast('请输入整数');
+                    this.$toast('请输入整数');
                     return;
                 }
                 request.sendGet({
@@ -521,7 +519,7 @@
                         this.wxData = res.data.data;
                         this.callpay();
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },
@@ -543,7 +541,7 @@
                 if (val) {
                     window.location.href = "tel:" + val;
                 } else {
-                    Toast("暂无联系方式");
+                    this.$toast("暂无联系方式");
                 }
             },
 
@@ -563,7 +561,7 @@
 
             updateSeat() {
                 if (!this.changeSeatInfo.seatCount) {
-                    Toast.fail("请填写座位数");
+                    this.$toast("请填写座位数");
                     return;
                 }
 
@@ -574,14 +572,14 @@
                     }
                 }).then(res => {
                     if (res.data.code === 0) {
-                        Toast.success(res.data.msg);
+                        this.$toast(res.data.msg);
                         this.finished = false;
                         this.loading = true;
                         this.carOwnerTrip.data = [];
                         this.carOwnerTrip.pageNum = 1;
                         this.initCarOwnerTripList();
                     } else {
-                        Toast.fail(res.data.msg)
+                        this.$toast(res.data.msg)
                     }
 
                 })
@@ -602,14 +600,14 @@
                         params: {}
                     }).then(res => {
                         if (res.data.code === 0) {
-                            Toast.success(res.data.msg);
+                            this.$toast(res.data.msg);
                             this.finished = false;
                             this.loading = true;
                             this.carOwnerTrip.data = [];
                             this.carOwnerTrip.pageNum = 1;
                             this.initCarOwnerTripList();
                         } else {
-                            Toast.fail(res.data.msg)
+                            this.$toast(res.data.msg)
                         }
                     })
                 })
@@ -627,7 +625,7 @@
                         params: {}
                     }).then(res => {
                         if (res.data.code == '0') {
-                            Toast.success(res.data.msg);
+                            this.$toast(res.data.msg);
                             this.finished = false;
                             this.loading = true;
                             this.passTrip.data = [];
@@ -637,7 +635,7 @@
                         } else if (res.data.code === 100) {
                             this.wxpay = true;
                         } else {
-                            Toast.fail(res.data.msg)
+                            this.$toast(res.data.msg)
                         }
                     })
                 })
@@ -697,14 +695,14 @@
                         params: {}
                     }).then(res => {
                         if (res.data.code == '0') {
-                            Toast.success(res.data.msg);
+                            this.$toast(res.data.msg);
                             this.finished = false;
                             this.loading = true;
                             this.carOwnerTrip.data = [];
                             this.carOwnerTrip.pageNum = 1;
                             this.initCarOwnerTripList();
                         } else {
-                            Toast.fail(res.data.msg)
+                            this.$toast(res.data.msg)
                         }
                     })
                 }).catch(() => {
@@ -726,15 +724,9 @@
                         params: {}
                     }).then(res => {
                         if (res.data.code == '0') {
-                            Toast.success(res.data.msg);
-                            this.finished = false;
-                            this.loading = true;
-                            this.passTrip.data = [];
-                            this.passTrip.pageNum = 1;
-                            this.initPassTripList();
-                            this.changeSeatInfo.seatCount = "";
+                            this.$toast(res.data.msg);
                         }else {
-                            Toast.fail(res.data.msg)
+                            this.$toast(res.data.msg)
                         }
                     })
                 }).catch(() => {

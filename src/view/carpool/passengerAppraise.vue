@@ -71,7 +71,7 @@
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Divider, Button, Rate, Tag, Field, CellGroup,Tabbar, TabbarItem} from 'vant';
+    import {Row, Col, Divider, Button, Rate, Tag, Field,CellGroup,Tabbar, TabbarItem} from 'vant';
     import request from '../../utils/request'
 
     import chengK from './../../static/images/chengk.png'
@@ -92,7 +92,7 @@
             [Field.name]: Field,
             [CellGroup.name]: CellGroup,
             [Tabbar.name]: Tabbar,
-            [TabbarItem.name]: TabbarItem
+            [TabbarItem.name]: TabbarItem,
 
         },
         data() {
@@ -163,6 +163,7 @@
         mounted(){
 
             this.initUserInfo();
+            this.initevaluate();
         },
 
         methods: {
@@ -178,8 +179,27 @@
                 })
 
             },
+            initevaluate(){
+                let tripId = this.$route.query.tripId;
+                let passengerId = this.$route.query.passengerId;
+                let  me = this;
+              request.sendPost({
+                  url:'/sharecar/trip/evaluate/'+tripId,
+                  params:{
+                      passengerId:passengerId
+                  }
+              }).then(res=>{
+                  if(res.data.code===0){
 
+                  }else if(res.data.code===500){
+                      this.$toast.fail(res.data.msg);
+                      setTimeout(function(){
+                          me.$router.push({path:"/myStroke"});
+                      },2000)
 
+                  }
+              })
+            },
             pushAppraise(){
                 let arr = [];
                 this.tagList.forEach(e =>{
@@ -190,7 +210,7 @@
                 this.appraise.templateContext = arr.join(",");
 
                 if(!this.appraise.remark){
-                    Toast.fail("评论不能为空");
+                    this.$toast.fail("评论不能为空");
                     return false;
                 }
                 this.appraise.tripId = this.$route.query.tripId;
@@ -201,11 +221,11 @@
                     url:"/sharecar/trip/doevaluate/"+this.appraise.tripId,
                     params: this.appraise
                 }).then(res =>{
-                    if(res.data.code == '0'){
-                        Toast.success(res.data.msg);
+                    if(res.data.code === 0){
+                        this.$toast.success(res.data.msg);
                         this.$router.push({path:"/myStroke"});
                     }else {
-                        Toast.fail(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },

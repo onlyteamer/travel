@@ -131,7 +131,7 @@
 </template>
 
 <script>
-    import {Row, Col, Image, Toast,Tabbar,TabbarItem} from 'vant';
+    import {Row, Col, Image,Tabbar,TabbarItem} from 'vant';
     import listImg from "./../../static/images/listImg.png";
 
     import car from './../../static/images/busTrip/car.png'
@@ -153,7 +153,6 @@
             [Row.name]: Row,
             [Col.name]: Col,
             [Image.name]: Image,
-            [Toast.name]: Toast,
             [Tabbar.name]:Tabbar,
             [TabbarItem.name]:TabbarItem
         },
@@ -249,7 +248,7 @@
                         this.userInfo = res.data.data;
                         localStorage.setItem("userId",res.data.data.userId);
                     }else{
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },
@@ -291,13 +290,13 @@
                             } else if(res.data.code === 2){
                                 window.location.href = location.protocol+"//"+location.hostname + "/#/register";
                             }else{
-                                Toast(res.data.msg);
+                                this.$toast(res.data.msg);
                             }
                         })
                     }else if(res.data.code === 2){
                         window.location.href = location.protocol+"//"+location.hostname + "/#/register";
                     }else{
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 }).catch(error => {
                         console.log(error);

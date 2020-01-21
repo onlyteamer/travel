@@ -126,7 +126,6 @@
         Button,
         Tabs,
         Tab,
-        Toast,
         List,
         Collapse,
         CollapseItem,
@@ -153,7 +152,6 @@
         components: {
             [NavBar.name]: NavBar,
             [Button.name]: Button,
-            [Toast.name]: Toast,
             [List.name]: List,
             [Tab.name]: Tab,
             [Tabs.name]: Tabs,
@@ -253,10 +251,10 @@
                         }
                     }).then(res => {
                         if (res.data.code == '0') {
-                            Toast.success("验票成功");
+                            this.$toast.success("验票成功");
                             this.$router.push({path: '/checkTicket', query: {'id': item.id}});
                         } else {
-                            Toast.fail(res.data.msg)
+                            this.$toast.fail(res.data.msg)
                         }
                     })
                 }).catch(res => {
@@ -286,11 +284,11 @@
                         }
                     }).then((res) => {
                         if (res.data.code === 0) {
-                            Toast(res.data.msg);
+                            this.$toast(res.data.msg);
                             this.active = 2;
                             this.onClick();
                         } else {
-                            Toast(res.data.msg);
+                            this.$toast(res.data.msg);
                         }
                     })
                 }).catch(res => {

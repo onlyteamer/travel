@@ -32,7 +32,7 @@
 </template>
 
 <script>
-    import {Field, Button, Checkbox, Image, Toast} from 'vant';
+    import {Field, Button, Checkbox, Image} from 'vant';
     import request from '../../utils/request';
     import axios from 'axios';
     import qs from 'querystring'
@@ -44,7 +44,6 @@
             [Button.name]: Button,
             [Image.name]: Image,
             [Checkbox.name]: Checkbox,
-            [Toast.name]: Toast,
         },
         data() {
             return {
@@ -77,7 +76,7 @@
 
                         })
                 } else {
-                    Toast('请输入正确的手机号');
+                    this.$toast('请输入正确的手机号');
                 }
             },
 
@@ -99,11 +98,11 @@
             // 登录
             login() {
                 if (!(this.definition.phone && this.checkPhone(this.definition.phone))) {
-                    Toast('请输入正确的手机号');
+                    this.$toast('请输入正确的手机号');
                     return;
                 }
                 if (!this.definition.code) {
-                    Toast('请输入验证码');
+                    this.$toast('请输入验证码');
                     return;
                 }
                 if (!this.definition.checked) {
@@ -129,11 +128,11 @@
                             }if(res.data.code === 2){
                                 this.$router.push({path: '/register'})
                         }else{
-                                Toast(res.data.msg);
+                                this.$toast(res.data.msg);
                             }
                         })
                     }else{
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
 

@@ -37,7 +37,7 @@
 </template>
 
 <script>
-    import {NavBar, Button, Field,Toast,Checkbox, Icon} from 'vant';
+    import {NavBar, Button, Field,Checkbox, Icon} from 'vant';
     import request from "../../utils/request";
 
     export default {
@@ -45,7 +45,6 @@
             [NavBar.name]: NavBar,
             [Button.name]: Button,
             [Field.name]: Field,
-            [Toast.name]: Toast,
             [Icon.name]: Icon,
             [Checkbox.name]: Checkbox,
         },
@@ -79,10 +78,10 @@
                         }
                     }).then((res) => {
                         if (res.data.code === 0) {
-                            Toast(res.data.msg);
+                            this.$toast(res.data.msg);
                             this.$router.go(-1);
                         } else {
-                            Toast(res.data.msg);
+                            this.$toast(res.data.msg);
                         }
                     })
                 }
@@ -96,31 +95,31 @@
             },
             checkValid() {
                 if (!this.definition.carBrand) {
-                    Toast("请填写车辆品牌");
+                    this.$toast("请填写车辆品牌");
                     return false;
                 }
                 if (!this.definition.carColor) {
-                    Toast("请填写车辆颜色");
+                    this.$toast("请填写车辆颜色");
                     return false;
                 }
                 if (!this.definition.driverAge) {
-                    Toast("请填写驾龄");
+                    this.$toast("请填写驾龄");
                     return false;
                 }
                 if (!this.definition.driverName) {
-                    Toast("请填写司机姓名");
+                    this.$toast("请填写司机姓名");
                     return false;
                 }
                 if (!this.definition.cardId || !this.checkIdCard(this.definition.cardId)) {
-                    Toast("请输入正确的身份证号");
+                    this.$toast("请输入正确的身份证号");
                     return;
                 }
                 if (!this.definition.carNumber) {
-                    Toast("请填写车牌号");
+                    this.$toast("请填写车牌号");
                     return false;
                 }
                 if (!this.definition.carType) {
-                    Toast("请填写车辆型号");
+                    this.$toast("请填写车辆型号");
                     return false;
                 }
                 if (!this.definition.checked) {

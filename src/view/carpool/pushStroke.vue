@@ -174,7 +174,6 @@
         Checkbox,
         CheckboxGroup,
         Button,
-        Toast,
         Field,
         Tabbar,
         TabbarItem
@@ -202,7 +201,6 @@
             [Checkbox.name]: Checkbox,
             [CheckboxGroup.name]: CheckboxGroup,
             [Button.name]: Button,
-            [Toast.name]: Toast,
             [Field.name]: Field,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem
@@ -258,6 +256,44 @@
             }
         },
         methods: {
+            initTripData(){
+                request.sendGet({
+                    url: '/sharecar/trip/defaultinfo',
+                    params: {
+                        direction: this.tripInfo.direction ,
+                        lineId: this.tripInfo.directLineid ,
+                    }
+                }).then((res) => {
+                    if (res.data.code === 0) {
+                        if(res.data.data.tripinfo){
+                            this.tripInfo.tripLine = res.data.data.tripinfo.tripLine;
+                            this.tripInfo.startPlace = res.data.data.tripinfo.startPlace;
+                            this.tripInfo.endPlace = res.data.data.tripinfo.endPlace;
+                            this.tripInfo.direction = res.data.data.tripinfo.direction;
+                            this.tripInfo.remark = res.data.data.tripinfo.remark;
+                            this.tripInfo.totalSeat = res.data.data.tripinfo.totalSeat;
+                            this.tripInfo.tripPrice = res.data.data.tripinfo.tripPrice;
+                        }
+                         for(let i=0;i<this.pointData2.length;i++){
+                            if(this.pointData2[i].pointId == this.tripInfo.direction){
+                                this.tripInfo.point = this.pointData2[i].pointName;
+                            }
+                         }
+
+                        let carinfo = res.data.data.carinfo;
+                        for (let i in carinfo) {
+                            let car = {};
+                            car.id = i;
+                            car.name = carinfo[i];
+                            this.carData.push(car);
+                            this.tripInfo.carInfo = car.name;
+                            this.tripInfo.carId = car.id;
+                        }
+                    }else if(res.data.code===401){
+                        this.$toast(res.data.msg);
+                    }
+                })
+            },
             openPrice(){
                 this.showPrice = true;
             },
@@ -294,10 +330,11 @@
                         };
                         this.pointData2.push(point1);
                         this.pointData2.push(point2);
-                        this.tripInfo.direction = this.pointData[i].endId;
-                        this.tripInfo.point = this.pointData[i].endIdName;
+                        // this.tripInfo.direction = this.pointData[i].endId;
+                        // this.tripInfo.point = this.pointData[i].endIdName;
                     }
                 }
+                this.initTripData();
                 this.showLine = false;
             },
             changeLine() {
@@ -321,28 +358,29 @@
             onChange(picker, values) {
                 this.tripInfo.direction = picker.pointId;
                 this.tripInfo.point = picker.pointName;
+                this.initTripData();
                 this.showPoint = false;
             },
             //发布行程
             pushStroke() {
                 if (!this.checked) {
-                    Toast.fail("请同意协议再提交");
+                    this.$toast.fail("请同意协议再提交");
                     return;
                 }
                 if (!this.tripInfo.tripDateTime) {
-                    Toast.fail("始发时间不能为空");
+                    this.$toast.fail("始发时间不能为空");
                     return;
                 }
                 if (!this.tripInfo.tripLine) {
-                    Toast.fail("行驶路线不能为空");
+                    this.$toast.fail("行驶路线不能为空");
                     return;
                 }
                 if (!this.tripInfo.totalSeat) {
-                    Toast.fail("座位数不能为空");
+                    this.$toast.fail("座位数不能为空");
                     return;
                 }
                 if (!this.tripInfo.tripPrice) {
-                    Toast.fail("价格不能为空");
+                    this.$toast.fail("价格不能为空");
                     return;
                 }
                 request.sendPost({
@@ -350,10 +388,10 @@
                     params: this.tripInfo
                 }).then((res) => {
                     if (res.data.code === 0) {
-                        Toast("行程发布成功,审核后自动发布行程");
+                        this.$toast("行程发布成功,审核后自动发布行程");
                         this.$router.push({path:'/myStroke'});
                     } else{
-                        Toast.fail(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
@@ -419,7 +457,7 @@
                     }else if(res.data.code===400) {
                         this.$router.push({path: '/simpleAuth'});
                     }else if(res.data.code===401){
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },
@@ -454,12 +492,12 @@
                     {
                         values: Object.values(hours),
                         className: 'hour',
-                        defaultIndex: moment().format('HH') ,
+                        defaultIndex: parseInt(moment().format('HH')),
                     },
                     {
                         values: Object.values(minutes),
                         className: 'min',
-                        defaultIndex:moment().format('mm')
+                        defaultIndex:parseInt(moment().format('mm'))
                     }
                 ];
             }

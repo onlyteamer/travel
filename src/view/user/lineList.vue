@@ -17,13 +17,12 @@
 </template>
 
 <script>
-    import { Button, Toast, Row, Col,Divider,Dialog} from 'vant';
+    import { Button, Row, Col,Divider,Dialog} from 'vant';
     import request from "../../utils/request"
     export default {
 
         components:{
             [Button.name]: Button,
-            [Toast.name]: Toast,
             [Row.name]:Row,
             [Col.name]:Col,
             [Divider.name]:Divider,
@@ -75,9 +74,9 @@
                             if (res.data.code === 0) {
                                 //切换路线成功后刷新页面
                                 me.initLineList();
-                                Toast.success("切换成功")
+                                this.$toast.success("切换成功")
                             } else {
-                                Toast.fail(res.data.msg)
+                                this.$toast.fail(res.data.msg)
                             }
                         })
                     }).catch(res =>{

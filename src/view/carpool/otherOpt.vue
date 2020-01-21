@@ -111,7 +111,7 @@
 
 <script>
     import Title from './../../components/header'
-    import {Row,Image, Col, Divider, Button, Rate, Tag, Field, CellGroup,Toast,Tabbar, TabbarItem} from 'vant';
+    import {Row,Image, Col, Divider, Button, Rate, Tag, Field, CellGroup,Tabbar, TabbarItem} from 'vant';
 
     import request from '../../utils/request'
 
@@ -133,7 +133,6 @@
             [Tag.name]: Tag,
             [Field.name]: Field,
             [CellGroup.name]: CellGroup,
-            [Toast.name]:Toast,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem
         },
@@ -171,9 +170,9 @@
                     }
                 }).then((res)=>{
                     if (res.data.code === 0) {
-                        Toast("加入黑名单成功");
+                        this.$toast("加入黑名单成功");
                     }else {
-                        Toast.fail(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
@@ -226,9 +225,9 @@
                     }).then(res => {
                         if (res.data.code == '0') {
                             // this.isFollow = '1'
-                            Toast.success("关注成功");
+                            this.$toast.success("关注成功");
                         }else {
-                            Toast.fail(res.data.msg)
+                            this.$toast.fail(res.data.msg)
                         }
                     })
 

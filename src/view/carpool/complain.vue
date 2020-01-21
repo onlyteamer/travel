@@ -37,7 +37,7 @@
 </template>
 
 <script>
-    import {NavBar, Button, RadioGroup, Radio,Field ,Toast,Tabbar,TabbarItem} from 'vant';
+    import {NavBar, Button, RadioGroup, Radio,Field ,Tabbar,TabbarItem} from 'vant';
     import request from '../../utils/request'
     import chengK from './../../static/images/chengk.png'
     import xingC from './../../static/images/xingC.png'
@@ -51,7 +51,6 @@
             [RadioGroup.name]: RadioGroup,
             [Radio.name]: Radio,
             [Field .name]:Field,
-            [Toast.name]:Toast,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem
         },
@@ -72,7 +71,7 @@
             },
             submit(){
                 if(!this.content){
-                    Toast.fail("请填写内容");
+                    this.$toast.fail("请填写内容");
                     return;
                 }
 
@@ -88,10 +87,10 @@
                     }
                 }).then(res =>{
                     if(res.data.code == '0'){
-                        Toast.success(res.data.msg);
+                        this.$toast.success(res.data.msg);
                         this.$router.back(-1);
                     }else {
-                        Toast.fail(res.data.msg)
+                        this.$toast.fail(res.data.msg)
                     }
                 })
             }

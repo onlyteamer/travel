@@ -156,7 +156,6 @@
         Tab,
         Tabs,
         TabbarItem,
-        Toast,
         NoticeBar,
         List,
         Swipe,
@@ -199,7 +198,6 @@
             [Button.name]: Button,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem,
-            [Toast.name]: Toast,
             [List.name]: List,
             [Tab.name]: Tab,
             [Tabs.name]: Tabs,
@@ -311,16 +309,16 @@
             },
 
             onClickLeft() {
-                // Toast('返回');
+                // this.$toast('返回');
                 this.$router.back(-1);
             },
             goCarList() {
                 if (!this.strokeInfo.startPlace) {
-                    Toast.fail("请填写出发地点");
+                    this.$toast.fail("请填写出发地点");
                     return;
                 }
                 if (!this.strokeInfo.endPlace) {
-                    Toast.fail("请填写目的地点");
+                    this.$toast.fail("请填写目的地点");
                     return;
                 }
                 this.$router.push({path: '/resultList',query:{

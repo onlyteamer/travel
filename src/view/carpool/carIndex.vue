@@ -187,7 +187,6 @@
         Card,
         Tabbar,
         TabbarItem,
-        Toast,
         DatetimePicker,
         Popup,
         List,
@@ -230,7 +229,6 @@
             [Card.name]: Card,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem,
-            [Toast.name]: Toast,
             [DatetimePicker.name]: DatetimePicker,
             [Popup.name]: Popup,
             [List.name]: List,
@@ -404,34 +402,34 @@
             },
 
             onClickLeft() {
-                // Toast('返回');
+                // this.$toast('返回');
                 this.$router.back(-1);
             },
 
             goCarList() {
                 // console.log(this.strokeInfo)
                 // if(!this.strokeInfo.startPlace){
-                //     Toast.fail("请填写出发地点");
+                //     this.$toast.fail("请填写出发地点");
                 //     return;
                 // }
                 // if(!this.strokeInfo.endPlace){
-                //     Toast.fail("请填写目的地点");
+                //     this.$toast.fail("请填写目的地点");
                 //     return;
                 // }
                 // if(!this.strokeInfo.driveTime){
-                //     Toast.fail("请填写乘车时间");
+                //     this.$toast.fail("请填写乘车时间");
                 //     return;
                 // }
                 if (!this.strokeInfo.startDate) {
-                    Toast.fail("请填写开始时间");
+                    this.$toast.fail("请填写开始时间");
                     return;
                 }
                 if (!this.strokeInfo.endDate) {
-                    Toast.fail("请填写结束时间");
+                    this.$toast.fail("请填写结束时间");
                     return;
                 }
                 if (!this.strokeInfo.lineId) {
-                    Toast.fail("请选择路线");
+                    this.$toast.fail("请选择路线");
                     return;
                 }
                 sessionStorage.removeItem("queryStroke");
@@ -440,7 +438,7 @@
             },
             goCarList_all() {
                 if (!this.strokeInfo.lineId) {
-                    Toast.fail("请选择路线");
+                    this.$toast.fail("请选择路线");
                     return;
                 }
                 let week = moment(new Date()).format('d');

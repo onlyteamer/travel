@@ -159,7 +159,6 @@
         Checkbox,
         CheckboxGroup,
         Button,
-        Toast,
         Field,
         Tabbar,
         TabbarItem
@@ -187,7 +186,6 @@
             [Checkbox.name]: Checkbox,
             [CheckboxGroup.name]: CheckboxGroup,
             [Button.name]: Button,
-            [Toast.name]: Toast,
             [Field.name]: Field,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem
@@ -305,23 +303,23 @@
             //修改行程
             updateStroke() {
                 if (!this.checked) {
-                    Toast.fail("请同意协议再提交");
+                    this.$toast.fail("请同意协议再提交");
                     return;
                 }
                 if (!this.tripInfo.tripDateTime) {
-                    Toast.fail("始发时间不能为空");
+                    this.$toast.fail("始发时间不能为空");
                     return;
                 }
                 if (!this.tripInfo.tripLine) {
-                    Toast.fail("行驶路线不能为空");
+                    this.$toast.fail("行驶路线不能为空");
                     return;
                 }
                 if (!this.tripInfo.totalSeat) {
-                    Toast.fail("座位数不能为空");
+                    this.$toast.fail("座位数不能为空");
                     return;
                 }
                 if (!this.tripInfo.tripPrice) {
-                    Toast.fail("价格不能为空");
+                    this.$toast.fail("价格不能为空");
                     return;
                 }
                 request.sendPost({
@@ -329,10 +327,10 @@
                     params: this.tripInfo
                 }).then((res) => {
                     if (res.data.code == 0) {
-                        Toast("更新成功");
+                        this.$toast("更新成功");
                         this.$router.back(-1);
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },

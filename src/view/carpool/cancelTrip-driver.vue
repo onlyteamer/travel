@@ -51,7 +51,7 @@
 </template>
 
 <script>
-    import {NavBar, Button, Image, RadioGroup, Radio, Row, Col, Toast, Tabbar, Dialog, TabbarItem} from 'vant';
+    import {NavBar, Button, Image, RadioGroup, Radio, Row, Col,Tabbar, Dialog, TabbarItem} from 'vant';
     import imageURL from '../../static/images/stop.png';
 
     import request from '../../utils/request'
@@ -70,7 +70,6 @@
             [Radio.name]: Radio,
             [Row.name]: Row,
             [Col.name]: Col,
-            [Toast.name]: Toast,
             [Tabbar.name]: Tabbar,
             [Dialog.name]: Dialog,
             [TabbarItem.name]: TabbarItem
@@ -133,7 +132,7 @@
                     params: {}
                 }).then(res => {
                     if (res.data.code == '0') {
-                        Toast.success(res.data.msg)
+                        this.$toast.success(res.data.msg)
                     } else if (res.data.code == '300') {
                         //有偿
                         Dialog.confirm({
@@ -147,9 +146,9 @@
                                 params: {}
                             }).then(res => {
                                 if (res.data.code == '0') {
-                                    Toast.success(res.data.msg)
+                                    this.$toast.success(res.data.msg)
                                 } else {
-                                    Toast.fail(res.data.msg)
+                                    this.$toast.fail(res.data.msg)
                                 }
                             })
                         }).catch(() => {
@@ -157,7 +156,7 @@
                             // on cancel
                         });
                     } else {
-                        Toast.fail(res.data.msg)
+                        this.$toast.fail(res.data.msg)
                     }
                 })
             }

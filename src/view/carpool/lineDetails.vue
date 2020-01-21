@@ -1,80 +1,81 @@
 <template>
     <div class="contain">
-        <div class="lineDetails">
-            <van-row style="display: flex;align-items: center">
-                <van-col span="12">
-                    <div style="display: flex;align-items: center">
-                        <img :src="driverInfo.headImageurl"
-                             style="height: 44px;width: 44px;margin-right: 10px;border-radius: 50%">
-                        <div>
-                            <p style="font-size: 14px;margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">{{driverInfo.nickName}}</span><img
-                                    src="../../static/images/sexTag.png"
-                                    style="width: 12px;height: 12px;margin-left: 5px" v-if="driverInfo.sex == '1'"> <img
-                                    src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px"
-                                    v-else></p>
-                            <p style="font-size: 14px;margin: 5px 0">
-                                <span style="color: #FFFFFF;border-radius: 2px;padding: 0px 5px;background-color: #5083ED;">{{driverInfo.carNumber}}</span>
-                            </p>
+        <div ref="scrollView" style="overflow-y: auto;">
+            <div class="lineDetails">
+                <van-row style="display: flex;align-items: center">
+                    <van-col span="12">
+                        <div style="display: flex;align-items: center">
+                            <img :src="driverInfo.headImageurl"
+                                 style="height: 44px;width: 44px;margin-right: 10px;border-radius: 50%">
+                            <div>
+                                <p style="font-size: 14px;margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">{{driverInfo.nickName}}</span><img
+                                        src="../../static/images/sexTag.png"
+                                        style="width: 12px;height: 12px;margin-left: 5px" v-if="driverInfo.sex == '1'"> <img
+                                        src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px"
+                                        v-else></p>
+                                <p style="font-size: 14px;margin: 5px 0">
+                                    <span style="color: #FFFFFF;border-radius: 2px;padding: 0px 5px;background-color: #5083ED;">{{driverInfo.carNumber}}</span>
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                </van-col>
-                <van-col span="12">
-                    <div style="padding: 3px 0">
-                        <img src="./../../static/images/tel.png" style="width: 14px"/><span
-                            style="font-size: 14px;color: #5E5E5E">{{driverInfo.phone}}</span>
-                    </div>
-                    <div style="padding: 0px 5px;border-radius: 3px;border: 1px solid #CFCFCF;font-size: 14px;width: fit-content">
-                        <span style="color: #CFCFCF;margin-right: 5px">好评数</span><img
-                            src="./../../static/images/xin.png" style="width: 14px"><span
-                            style="margin-left: 5px;color: #5E5E5E">{{driverInfo.goodCount}}</span>
-                    </div>
-                </van-col>
-            </van-row>
+                    </van-col>
+                    <van-col span="12">
+                        <div style="padding: 3px 0">
+                            <img src="./../../static/images/tel.png" style="width: 14px"/><span
+                                style="font-size: 14px;color: #5E5E5E">{{driverInfo.phone}}</span>
+                        </div>
+                        <div style="padding: 0px 5px;border-radius: 3px;border: 1px solid #CFCFCF;font-size: 14px;width: fit-content">
+                            <span style="color: #CFCFCF;margin-right: 5px">好评数</span><img
+                                src="./../../static/images/xin.png" style="width: 14px"><span
+                                style="margin-left: 5px;color: #5E5E5E">{{driverInfo.goodCount}}</span>
+                        </div>
+                    </van-col>
+                </van-row>
+            </div>
+
+            <div class="content">
+
+                <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
+                    <van-col span="6">线路</van-col>
+                    <van-col span="18">{{tripDetails.lineName}}</van-col>
+                </van-row>
+
+                <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
+                    <van-col span="6">发车时间</van-col>
+                    <van-col span="18">{{tripDetails.tripDateTime}}</van-col>
+                </van-row>
+
+                <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
+                    <van-col span="6">出发地</van-col>
+                    <van-col span="18">{{tripDetails.startName}}</van-col>
+                </van-row>
+
+                <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
+                    <van-col span="6">目的地</van-col>
+                    <van-col span="18">{{tripDetails.endIdName}}</van-col>
+                </van-row>
+
+                <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px;display: flex;align-items: center">
+                    <van-col span="6">路线</van-col>
+                    <van-col span="18">{{tripDetails.tripLine}}</van-col>
+                </van-row>
+
+                <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
+                    <van-col span="6">座位数</van-col>
+                    <van-col span="18">{{tripDetails.totalSeat}}位</van-col>
+                </van-row>
+
+                <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
+                    <van-col span="6">价格</van-col>
+                    <van-col span="18">{{tripDetails.tripPrice}}元</van-col>
+                </van-row>
+
+                <van-row style="padding: 12px 2px">
+                    <van-col span="6">备注</van-col>
+                    <van-col span="18">{{tripDetails.remark}}</van-col>
+                </van-row>
+            </div>
         </div>
-
-        <div class="content">
-
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
-                <van-col span="6">线路</van-col>
-                <van-col span="18">{{tripDetails.lineName}}</van-col>
-            </van-row>
-
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
-                <van-col span="6">发车时间</van-col>
-                <van-col span="18">{{tripDetails.tripDateTime}}</van-col>
-            </van-row>
-
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
-                <van-col span="6">出发地</van-col>
-                <van-col span="18">{{tripDetails.startName}}</van-col>
-            </van-row>
-
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
-                <van-col span="6">目的地</van-col>
-                <van-col span="18">{{tripDetails.endIdName}}</van-col>
-            </van-row>
-
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px;display: flex;align-items: center">
-                <van-col span="6">路线</van-col>
-                <van-col span="18">{{tripDetails.tripLine}}</van-col>
-            </van-row>
-
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
-                <van-col span="6">座位数</van-col>
-                <van-col span="18">{{tripDetails.totalSeat}}位</van-col>
-            </van-row>
-
-            <van-row style="border-bottom: 1px solid #ECECEC;padding: 12px 2px">
-                <van-col span="6">价格</van-col>
-                <van-col span="18">{{tripDetails.tripPrice}}元</van-col>
-            </van-row>
-
-            <van-row style="padding: 12px 2px">
-                <van-col span="6">备注</van-col>
-                <van-col span="18">{{tripDetails.remark}}</van-col>
-            </van-row>
-        </div>
-
         <van-row style="position: fixed;bottom: 55px;width: 100%;">
             <van-col span="6">
                 <van-button type="default" color="#0CC893" style="font-size: 14px;width: 99%;height: 34px" size="mini"
@@ -120,7 +121,7 @@
 
 <script>
     import Title from './../../components/header'
-    import { Cell, CellGroup,DatetimePicker,Row,Popup, Col,Icon,Picker ,Checkbox, CheckboxGroup ,Button,Toast ,Dialog,Tabbar, TabbarItem } from 'vant';
+    import { Cell, CellGroup,DatetimePicker,Row,Popup, Col,Icon,Picker ,Checkbox, CheckboxGroup ,Button,Dialog,Tabbar, TabbarItem } from 'vant';
     import wx from 'weixin-js-sdk'
     import request from '../../utils/request'
     import guideIcon from '../../static/images/guide.png'
@@ -146,7 +147,6 @@
             [Checkbox.name]: Checkbox,
             [CheckboxGroup.name]: CheckboxGroup,
             [Button.name]: Button,
-            [Toast.name]: Toast,
             [Dialog.name]: Dialog,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem
@@ -180,6 +180,9 @@
         },
         mounted() {
             this.initData();
+            this.$refs.scrollView.style.height=(window.innerHeight-55-30)+'px';
+        },
+        created(){
         },
 
         methods: {
@@ -270,9 +273,9 @@
                     }
                 }).then(res => {
                     if (res.data.code == '0') {
-                        Toast.success("关注用户");
+                        this.$toast.success("关注用户");
                     } else {
-                        Toast.fail(res.data.msg);
+                        this.$toast.fail(res.data.msg);
                     }
                 })
             },
@@ -285,7 +288,7 @@
                 if (this.driverInfo.phone) {
                     window.location.href = "tel:" + this.driverInfo.phone;
                 } else {
-                    Toast("暂无联系方式");
+                    this.$toast("暂无联系方式");
                 }
             },
 

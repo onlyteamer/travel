@@ -29,7 +29,7 @@
 </template>
 <!--乘车人编辑页-->
 <script>
-    import {NavBar, Field, Button, Checkbox, Toast} from 'vant';
+    import {NavBar, Field, Button, Checkbox} from 'vant';
     import request from '../../utils/request';
 
     export default {
@@ -38,7 +38,6 @@
             [Field.name]: Field,
             [Button.name]: Button,
             [Checkbox.name]: Checkbox,
-            [Toast.name]: Toast,
         },
         data() {
             return {
@@ -60,10 +59,10 @@
                     }
                 }).then((res) => {
                     if (res.data.code == 0) {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                         this.$router.back(-1);
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },
@@ -87,15 +86,15 @@
             //新增乘车人
             submitInfo() {
                 if (!this.definition.passName) {
-                    Toast("请填写乘车人姓名");
+                    this.$toast("请填写乘车人姓名");
                     return;
                 }
                 if (!this.definition.cardId || !this.checkIdCard(this.definition.cardId)) {
-                    Toast("请输入正确的身份证号");
+                    this.$toast("请输入正确的身份证号");
                     return;
                 }
                 if (!this.definition.passPhone || !this.checkPhone(this.definition.passPhone)) {
-                    Toast("请输入正确的手机号");
+                    this.$toast("请输入正确的手机号");
                     return;
                 }
                 if (this.definition.id) {
@@ -115,10 +114,10 @@
                     }
                 }).then((res) => {
                     if (res.data.code == 0) {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                         this.$router.back(-1);
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },
@@ -134,10 +133,10 @@
                     }
                 }).then((res) => {
                     if (res.data.code == 0) {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                         this.$router.back(-1);
                     } else {
-                        Toast(res.data.msg);
+                        this.$toast(res.data.msg);
                     }
                 })
             },
