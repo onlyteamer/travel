@@ -28,7 +28,9 @@
 
         <!--<div class="btnStyle" @click="checkTicket" id="showTitleBox">{{ticketInfo.showcode}}</div>-->
         <div class="btnStyle" @click="checkTicket" id="showTitleBox">
-            <span v-for="(item,index) in charList" :key="index">{{item}}</span>
+            <canvas id="title" height="130" :width="titleWidth" style=""></canvas>
+            <!--            恭喜发财-->
+            <!--            <span v-for="(item,index) in charList" :key="index">{{item}}</span>-->
         </div>
 
 
@@ -41,7 +43,8 @@
 
                 <van-row style="margin: 10px 0">
                     <van-col span="6" style="font-weight: bold">方向：</van-col>
-                    <van-col span="18" style="color: #202020">{{ticketInfo.startname}} → {{ticketInfo.endname}}</van-col>
+                    <van-col span="18" style="color: #202020">{{ticketInfo.startname}} → {{ticketInfo.endname}}
+                    </van-col>
                 </van-row>
                 <van-row style="margin: 10px 0">
                     <van-col span="6" style="font-weight: bold">票号：</van-col>
@@ -69,14 +72,21 @@
                 <div class="info-wrap">
                     <div style="width: 90%">
                         <div style="display: flex;height:35px;line-height: 35px">
-                            <div style="margin-left: 45px;width: 25%"><img :src="blueTime" width="13px" height="13px"><span class="place" style="margin-left: 7px;margin-right: 13px">{{ticketInfo.starttime}}</span></div>
-                            <div style="margin-left: 10px"><img :src="placeUp" width="13px" height="13px"><span class="place" style="margin-left: 7px;">{{ticketInfo.startname}}</span>
+                            <div style="margin-left: 45px;width: 25%"><img :src="blueTime" width="13px"
+                                                                           height="13px"><span class="place"
+                                                                                               style="margin-left: 7px;margin-right: 13px">{{ticketInfo.starttime}}</span>
+                            </div>
+                            <div style="margin-left: 10px"><img :src="placeUp" width="13px" height="13px"><span
+                                    class="place" style="margin-left: 7px;">{{ticketInfo.startname}}</span>
                             </div>
                         </div>
                         <div style="display: flex;height:35px;line-height: 35px">
-                            <div style="margin-left: 45px;width: 25%"><img :src="redTime" width="13px" height="13px"><span class="place" style="margin-left: 7px;margin-right: 13px">{{ticketInfo.endtime}}</span>
+                            <div style="margin-left: 45px;width: 25%"><img :src="redTime" width="13px"
+                                                                           height="13px"><span class="place"
+                                                                                               style="margin-left: 7px;margin-right: 13px">{{ticketInfo.endtime}}</span>
                             </div>
-                            <div style="margin-left: 10px"><img :src="placeDown" width="13px" height="13px"><span class="place" style="margin-left: 7px;">{{ticketInfo.endname}}</span>
+                            <div style="margin-left: 10px"><img :src="placeDown" width="13px" height="13px"><span
+                                    class="place" style="margin-left: 7px;">{{ticketInfo.endname}}</span>
                             </div>
                         </div>
                     </div>
@@ -120,7 +130,8 @@
         </div>
 
         <div class="footer">
-            <van-tabbar  v-model="active"  active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="background:#5083ED ">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
                 <van-tabbar-item :icon="car" to="/busIndex">预定巴士</van-tabbar-item>
                 <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
                 <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
@@ -131,7 +142,7 @@
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Tag, Divider, Swipe, SwipeItem, NoticeBar, List, Dialog,Tabbar, TabbarItem} from 'vant'
+    import {Row, Col, Tag, Divider, Swipe, SwipeItem, NoticeBar, List, Dialog, Tabbar, TabbarItem} from 'vant'
     import backOne from './../../static/images/backOne.jpg'
     import backTwo from './../../static/images/backTwo.jpg'
     import laba from './../../static/images/laba.png'
@@ -172,11 +183,12 @@
         },
         data() {
             return {
-                active:"",
-                lineDown:lineDown,
-                lineUp:lineUp,
-                placeDown:placeDown,
-                placeUp:placeUp,
+                titleWidth: 0,
+                active: "",
+                lineDown: lineDown,
+                lineUp: lineUp,
+                placeDown: placeDown,
+                placeUp: placeUp,
                 id: '',
                 title: "验票",
                 notice: "",
@@ -212,13 +224,31 @@
         mounted() {
             this.initNotice();
             this.initData();
-
             this.initAdvList();
 
         },
 
         methods: {
-
+            doDraw() {
+                //  获取canvas
+                var canvas = document.getElementById("title");
+                //  可以理解为一个画笔，可画路径、矩形、文字、图像
+                var ctx = canvas.getContext('2d');
+                ctx.fillStyle = "white";
+                ctx.font = "70px '微软雅黑' ";
+                ctx.textAlign = "center";
+                //shadowBlur:模式级数
+                ctx.shadowBlur = 10;
+                ctx.shadowOffsetX = 5;
+                ctx.shadowOffsetY = 5;
+                ctx.shadowColor = "#6B6B6B";
+                //fillText("要添加的文字",x0坐标，y0坐标)
+                let word = this.charList;
+                let width = this.titleWidth / word.length;
+                for (let i = 0; i < word.length; i++) {
+                    ctx.fillText(word[i], i * width + width / 2, 90);
+                }
+            },
             initAdvList() {
                 //1-拼车 2-班车 3-班车验票
                 let positionId = 3;
@@ -287,7 +317,7 @@
 
             },
             initData() {
-                let id = this.id || 51;
+                let id = this.id;
                 request.sendPost({
                     url: "/bus/selectTicketInfo/" + id,
                     params: {
@@ -304,6 +334,7 @@
                                 str += e.trim() + (index == '0' ? '年' : (index == '1' ? '月' : '日'));
                             });
                             this.ticketInfo.dateStr = str;
+                            this.doDraw();
                         }
                         if (this.ticketInfo.showcode) {
                             let size = this.ticketInfo.showcode.length;
@@ -311,9 +342,8 @@
                                 this.charList.push(this.ticketInfo.showcode.charAt(i));
                             }
                         }
-
-
                         this.queryLineDetailsList(this.ticketInfo.busid);
+                        this.doDraw();
                     }
                 })
             },
@@ -333,8 +363,10 @@
                     })
                 }
             }
-        },
+        }
+        ,
         created() {
+            this.titleWidth = window.innerWidth * 0.88;
             this.id = this.$route.query.id;
         }
     }
@@ -385,15 +417,16 @@
     }
 
     .btnStyle {
-        text-align: center;
-        font-size: 36px;
+        /*text-align: center;*/
+        /*font-size: 70px;*/
+        height: 130px;
         color: #FFFFFF;
         font-weight: 900;
         width: 88%;
         margin: 0 auto;
         /*background-image: linear-gradient(135deg, #41B3FF, #50EDE2, #0CC893);*/
         background-image: linear-gradient(135deg, #ee0a24, #ed7e50, #ee0a24);
-
+        /*letter-spacing:10px;*/
         padding: 10px;
         margin-top: 10px;
     }
