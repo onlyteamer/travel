@@ -20,31 +20,32 @@
                 <div v-for="(item,index) in passTrip.data" :key="index" v-if="strokeType == '0'">
                     <div class="listInfo">
                         <van-row style="border-bottom: 1px solid #ECECEC;padding: 10px 2px">
-                            <van-col span="14">
+                            <van-col span="12">
                                 {{item.tripDate}}
                             </van-col>
-                            <van-col span="5" style="font-weight: bold">
-                                ¥ {{item.tripPrice}}
+                            <van-col span="7" style="font-weight: bold">
+                                ¥ {{item.tripPrice}} * {{item.passengerCount}} 人
                             </van-col>
                             <van-col span="5" align="right"
                                      :style="{color:item.tripState == '3'?'#202020':'#FF0200'}">
                                 {{item.tripStateName}}
                             </van-col>
                         </van-row>
-
                         <van-row style="padding: 5px 2px" @click="linkLineDetails(item,'0')">
                             <van-col span="12">
                                 <p><span>发车地点：{{item.startPlace}}</span></p>
-                                <p><span>车牌：{{item.carNumber}}</span></p>
+                                <p style="margin-bottom:0.5rem "><span>车牌：{{item.carNumber}}</span></p>
                                 <!--<p v-if="index == '1'"><span>待确认：1人</span></p>-->
                             </van-col>
                             <van-col span="12">
                                 <p><span>目的地：{{item.endPlace}}</span></p>
-                                <p><span>车型：{{item.carInfo}}</span></p>
+                                <p style="margin-bottom:0.5rem "><span>车型：{{item.carInfo}}</span></p>
                                 <!--<p v-if="index == '1'"><span>已确认：2人</span></p>-->
                             </van-col>
                         </van-row>
-
+                        <div style="padding: 0 2px;margin: 0">
+                            <span>乘车人：{{item.passengers}}</span>
+                        </div>
                         <van-row style="margin: 10px 0"
                                  v-if="item.tripState != '2' && item.tripState != '4'&&item.tripState != '3'">
                             <van-col span="6">
