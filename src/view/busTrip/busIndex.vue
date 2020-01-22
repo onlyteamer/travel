@@ -28,6 +28,7 @@
         </div>
         <div class="notice">
             <van-notice-bar
+                    @click="showNotice"
                     color="#0BCA92"
                     background="#FFFFFF"
                     :left-icon="laba"
@@ -161,7 +162,8 @@
         NoticeBar,
         List,
         Swipe,
-        SwipeItem
+        SwipeItem,
+        Dialog
     } from 'vant';
     import logo from './../../static/images/logo.png'
     import laba from './../../static/images/laba.png'
@@ -204,7 +206,8 @@
             [Tab.name]: Tab,
             [Tabs.name]: Tabs,
             [Swipe.name]:Swipe,
-            [SwipeItem.name]:SwipeItem
+            [SwipeItem.name]:SwipeItem,
+            [Dialog.name]:Dialog
         },
         data() {
             return {
@@ -248,6 +251,17 @@
             this.initAdvList();
         },
         methods: {
+            showNotice(){
+                let notice = this.notice;
+                Dialog.alert({
+                    title: '通知',
+                    confirmButtonText:'关闭',
+                    confirmButtonColor:'#0CC893',
+                    message: notice
+                }).then(() => {
+                    // on close
+                });
+            },
             queryMore(){
                 //跳转到更多页面
                 this.$router.push({path:'/busList'})

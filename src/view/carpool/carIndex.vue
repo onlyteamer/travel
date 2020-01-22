@@ -31,6 +31,7 @@
         <div class="notice">
             <div>
                 <van-notice-bar
+                        @click="showNotice"
                         color="#0BCA92"
                         background="#FFFFFF"
                         :left-icon="laba"
@@ -183,6 +184,7 @@
         Field,
         Divider,
         Icon,
+        Dialog,
         Button,
         Card,
         Tabbar,
@@ -236,6 +238,7 @@
             [Swipe.name]: Swipe,
             [SwipeItem.name]: SwipeItem,
             [Icon.name]: Icon,
+            [Dialog.name]:Dialog
         },
         data() {
             return {
@@ -287,6 +290,17 @@
             this.initLineData();
         },
         methods: {
+            showNotice(){
+                let notice = this.notice;
+                Dialog.alert({
+                    title: '通知',
+                    confirmButtonText:'关闭',
+                    confirmButtonColor:'#0CC893',
+                    message: notice
+                }).then(() => {
+                    // on close
+                });
+            },
             //详情
             linkLineDetails(val) {
                 this.$router.push({path: "/lineDetails", query: {tripId: val}})
