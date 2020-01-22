@@ -229,25 +229,27 @@
         },
 
         methods: {
-            doDraw() {
+            doDraw(color) {
                 //  获取canvas
                 var canvas = document.getElementById("title");
                 //  可以理解为一个画笔，可画路径、矩形、文字、图像
                 var ctx = canvas.getContext('2d');
-                ctx.fillStyle = "white";
+                ctx.fillStyle = color;
                 ctx.font = "70px '微软雅黑' ";
                 ctx.textAlign = "center";
+
                 //shadowBlur:模式级数
-                ctx.shadowBlur = 10;
-                ctx.shadowOffsetX = 5;
-                ctx.shadowOffsetY = 5;
-                ctx.shadowColor = "#6B6B6B";
+                // ctx.shadowBlur = 10;
+                // ctx.shadowOffsetX = 5;
+                // ctx.shadowOffsetY = 5;
+                // ctx.shadowColor = "#6B6B6B";
                 //fillText("要添加的文字",x0坐标，y0坐标)
                 let word = this.charList;
                 let width = this.titleWidth / word.length;
                 for (let i = 0; i < word.length; i++) {
                     ctx.fillText(word[i], i * width + width / 2, 90);
                 }
+
             },
             initAdvList() {
                 //1-拼车 2-班车 3-班车验票
@@ -318,6 +320,7 @@
             },
             initData() {
                 let id = this.id;
+                let me = this;
                 request.sendPost({
                     url: "/bus/selectTicketInfo/" + id,
                     params: {
@@ -343,11 +346,21 @@
                             }
                         }
                         this.queryLineDetailsList(this.ticketInfo.busid);
-                        this.doDraw();
+                        if (me.timer) {
+                            clearInterval(me.timer);
+                        }
+                          me.timer = setInterval(()=>{
+                           let color = me.randomHexColor();
+                           // setTimeout(function() {
+                           me.doDraw(color);
+                        },600);
+
                     }
                 })
             },
-
+             randomHexColor() {	//随机生成十六进制颜色
+        return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).substr(-6);
+    },
             queryLineDetailsList(busid) {
                 if (busid) {
                     request.sendGet({
@@ -368,6 +381,9 @@
         created() {
             this.titleWidth = window.innerWidth * 0.88;
             this.id = this.$route.query.id;
+        },
+        destroyed(){
+            clearInterval(this.timer);
         }
     }
 </script>
@@ -388,33 +404,33 @@
         border-radius: 5px;
     }
 
-    @keyframes blink {
-        33% {
-            color: #41B3FF;
-        }
-        33% {
-            color: #50EDE2;
-        }
-        33% {
-            color: #0CC893;
-        }
-    }
+    /*@keyframes blink {*/
+    /*    33% {*/
+    /*        color: #41B3FF;*/
+    /*    }*/
+    /*    33% {*/
+    /*        color: #50EDE2;*/
+    /*    }*/
+    /*    33% {*/
+    /*        color: #0CC893;*/
+    /*    }*/
+    /*}*/
 
-    #showTitleBox span:nth-child(1) {
-        animation: blink 2s steps(1, start) 0.33s infinite;
-    }
+    /*#showTitleBox span:nth-child(1) {*/
+    /*    animation: blink 2s steps(1, start) 0.33s infinite;*/
+    /*}*/
 
-    #showTitleBox span:nth-child(2) {
-        animation: blink 2s steps(1, start) 0.66s infinite;
-    }
+    /*#showTitleBox span:nth-child(2) {*/
+    /*    animation: blink 2s steps(1, start) 0.66s infinite;*/
+    /*}*/
 
-    #showTitleBox span:nth-child(3) {
-        animation: blink 2s steps(1, start) 0.33s infinite;
-    }
+    /*#showTitleBox span:nth-child(3) {*/
+    /*    animation: blink 2s steps(1, start) 0.33s infinite;*/
+    /*}*/
 
-    #showTitleBox span:nth-child(4) {
-        animation: blink 2s steps(1, start) 0.66s infinite;
-    }
+    /*#showTitleBox span:nth-child(4) {*/
+    /*    animation: blink 2s steps(1, start) 0.66s infinite;*/
+    /*}*/
 
     .btnStyle {
         /*text-align: center;*/
