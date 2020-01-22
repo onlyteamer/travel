@@ -28,7 +28,7 @@
                 <div class="date-title">
                     <van-row>
                         <van-col span="6" style="text-align: center">
-                            <van-button icon="arrow-left" type="primary"  @click="preMonth" plain
+                            <van-button icon="arrow-left" type="primary" @click="preMonth" plain
                                         color="#333" style="border:none;"/>
                         </van-col>
                         <van-col span="12" style="text-align: center">
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-    import {NavBar, Button, Icon, Tabbar, TabbarItem,Row,Col} from 'vant';
+    import {NavBar, Button, Icon, Tabbar, TabbarItem, Row, Col} from 'vant';
     import Kalendar from 'kalendar';
     import request from '../../utils/request';
     import moment from 'moment';
@@ -135,7 +135,7 @@
                 this.currentDate = moment(this.currentDate, 'YYYY-MM').add(1, 'months');
                 this.dateTitle = this.currentDate.format('YYYY年MM月');
                 let elArr = this.$refs.item;
-                for(let i = 0; i< elArr.length;i++){
+                for (let i = 0; i < elArr.length; i++) {
                     let el = elArr[i];
                     el.classList.remove('choose');
                 }
@@ -146,7 +146,7 @@
                 this.dateTitle = this.currentDate.format('YYYY年MM月');
 
                 let elArr = this.$refs.item;
-                for(let i = 0; i< elArr.length;i++){
+                for (let i = 0; i < elArr.length; i++) {
                     let el = elArr[i];
                     el.classList.remove('choose');
                 }
@@ -216,6 +216,10 @@
                 }
             },
             buy() {
+                if (this.num === 0) {
+                    this.$toast.fail("请先选择车票日期");
+                    return;
+                }
                 this.$router.push({
                     path: '/ticketPayment',
                     query: {
@@ -286,12 +290,12 @@
                 this.startnum = num;
 
                 let currentMonth = moment(date).format("MM");
-                for(let index in  this.chooseDate){
+                for (let index in this.chooseDate) {
                     let date1 = this.chooseDate[index];
                     let month = moment(date1).format("MM");
                     let day = parseInt(moment(date1).format("DD"));
-                    if(month===currentMonth){
-                        let el = this.$refs.item[ day- 1 + this.startnum];
+                    if (month === currentMonth) {
+                        let el = this.$refs.item[day - 1 + this.startnum];
                         el.classList.add('choose');
                     }
                 }
@@ -309,10 +313,11 @@
 <style scoped>
     /*-----------日历模块样式start--------------*/
     /*!!!!不要换class位置 ,会对样式产生影响*/
-    .choose{
-        background-color:#0CC893 !important;
-        color:#fff !important;
+    .choose {
+        background-color: #0CC893 !important;
+        color: #fff !important;
     }
+
     .saleStop {
         color: #0CC893;
     }
