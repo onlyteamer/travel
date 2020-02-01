@@ -33,7 +33,7 @@
                         </van-row>
                         <van-row style="padding: 5px 2px" @click="linkLineDetails(item,'0')">
                             <van-col span="12">
-                                <p><span>发车地点：{{item.startPlace}}</span></p>
+                                <p><span>出发地：{{item.startPlace}}</span></p>
                                 <p style="margin-bottom:0.5rem "><span>车牌：{{item.carNumber}}</span></p>
                                 <!--<p v-if="index == '1'"><span>待确认：1人</span></p>-->
                             </van-col>
