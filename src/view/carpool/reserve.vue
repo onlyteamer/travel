@@ -129,7 +129,7 @@
             </div>
             <div class="notice">
                 <div>
-                    1. 乘客原因取消订单需支付赔偿10元/位。
+                    1. 乘客原因取消订单需支付赔偿10元/位。<span style="color: #05CF8A;" @click="showRule">赔偿规则</span>
                 </div>
                 <div>
                     2. 如余额不足，<span style="color: #05CF8A;" @click="goReCharge">请点击这里充值</span>，然后再预约。
@@ -280,6 +280,9 @@
             }
         },
         methods: {
+            showRule(){
+                this.$router.push({path: '/compensationRule'});
+            },
             goReCharge(){
                 this.$router.push({path: '/wealth'});
             },
