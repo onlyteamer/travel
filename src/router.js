@@ -9,6 +9,13 @@ const routes = [
     path: '*',
     redirect: '/carIndex'
   },
+    {
+        path: 'login',
+        component: () => import('./view/login.vue'),
+        meta: {
+            title: '登录'
+        }
+    },
   {
     name: 'register',
     component: () => import('./view/register/register.vue'),
