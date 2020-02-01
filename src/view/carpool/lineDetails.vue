@@ -239,22 +239,22 @@
             },
             initData() {
                 this.tripId = this.$route.query.tripId;
-                request.sendGet({
-                    url: "/sharecar/pass/tripdetail/" + this.tripId,
-                    params: {}
-                }).then(res => {
-                    if (res.data.code == '0') {
-                        let driverinfo = res.data.data.driverinfo;
-                        this.driverInfo = driverinfo;
-                    }
-                })
-
+                // request.sendGet({
+                //     url: "/sharecar/pass/tripdetail/" + this.tripId,
+                //     params: {}
+                // }).then(res => {
+                //     if (res.data.code == '0') {
+                //         let driverinfo = res.data.data.driverinfo;
+                //         this.driverInfo = driverinfo;
+                //     }
+                // });
 
                 request.sendGet({
                     url: "/sharecar/trip/select/" + this.tripId,
                     params: {}
                 }).then(res => {
                     if (res.data.code == '0') {
+                        this.driverInfo = res.data.data.driverInfo;
                         this.tripDetails.startName = res.data.data.tripinfo.startPlace;
                         this.tripDetails.endIdName = res.data.data.tripinfo.endPlace;
                         this.tripDetails.lineName = res.data.data.lineinfo.lineName;
@@ -265,7 +265,6 @@
                         this.tripDetails.remark = res.data.data.tripinfo.remark;
                     }
                 })
-
             },
 
             followUser() {
@@ -288,8 +287,8 @@
             },
 
             contactCar() {
-                if (this.driverInfo.phone) {
-                    window.location.href = "tel:" + this.driverInfo.phone;
+                if (this.driverInfo.telphone) {
+                    window.location.href = "tel:" + this.driverInfo.telphone;
                 } else {
                     this.$toast("暂无联系方式");
                 }
@@ -297,6 +296,14 @@
 
             wxShare() {
                 this.guide = true;
+            },
+            getUserInfo(){
+                request.sendGet({
+                    url:'user/center/userinfo/'+userId,
+                    params:{},
+                }).then(res=>{
+
+                });
             }
         }
     }
