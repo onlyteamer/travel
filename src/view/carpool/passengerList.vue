@@ -77,15 +77,15 @@
                         <!--预约状态：0 未确认，1 已确认，2 已拒绝， 3 已取消，4 已到达 5 已支付-->
                         <van-col span="6" style="float: right;text-align:right;"
                                  v-if="item.showPassenger.passState !== 0">
-                            <span style="color:#0CC893;height: 34px;font-size: 14px;width: 100%;margin-left: 10px"
+                            <span style="color:#FFFFFF;height: 34px;font-size: 14px;width: fit-content;padding: 3px 4px;border-radius: 5px;background: #0CC893;margin-left: 10px"
                                   v-if="item.showPassenger.passState === 1||item.showPassenger.passState === 4">
                                  {{item.showPassenger.passState === 1?'已确认':'已到达'}}
                             </span>
-                            <span style="color:#cacaca;height: 34px;font-size: 14px;width: 100%;margin-left: 10px"
+                            <span style="color:#FFFFFF;height: 34px;font-size: 14px;width: fit-content;padding: 3px 4px;background: #ff2626;border-radius: 5px;margin-left: 10px"
                                   v-if="item.showPassenger.passState === 2 ||item.showPassenger.passState === 3">
                                 {{item.showPassenger.passState === 2?'已拒绝':'已取消'}}
                             </span>
-                            <span style="color:#5083ED;height: 34px;font-size: 14px;width: 100%;margin-left: 10px"
+                            <span style="color:#FFFFFF;background:#5083ED;padding:3px 4px;border-radius:5px;height: 34px;font-size: 14px;width: fit-content;margin-left: 10px"
                                   v-if="item.showPassenger.passState === 5">
                                已支付
                             </span>
