@@ -22,7 +22,7 @@
             <van-swipe :autoplay="3000" style="height: 200px">
                 <van-swipe-item v-for="(image, index) in images" :key="index">
                     <!--<img :src="image" width="100px" height="100px"/>-->
-                    <div :style="{width: '100%',height: '100%',backgroundImage:'url('+image+')'}"></div>
+                    <div :style="{width: '100%',height: '100%',backgroundSize:'cover',backgroundImage:'url('+image.imageUrl+')'}"></div>
                 </van-swipe-item>
             </van-swipe>
         </div>
@@ -179,8 +179,6 @@
     import placeDown from './../../static/images/busTrip/placeDown.png'
     import placeUp from './../../static/images/busTrip/placeUp.png'
 
-    import backOne from './../../static/images/backOne.jpg'
-    import backTwo from './../../static/images/backTwo.jpg'
 
     import request from '../../utils/request'
     import moment from 'moment'
@@ -214,10 +212,7 @@
                 placeDown:placeDown,
                 placeUp:placeUp,
                 notice:"",
-                images: [
-                    backOne,
-                    backTwo
-                ],
+                images: [],
                 title:"绿色班车",
                 header_active: 0,
                 error: false,
@@ -279,7 +274,7 @@
                     params:{}
                 }).then(res =>{
                     if(res.data.code == '0'){
-                        this.images = res.data.rows;
+                        this.images = res.data.data;
                     }
                 })
             },

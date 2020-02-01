@@ -336,6 +336,7 @@
                 guide: false,
                 guideIcon: guideIcon,
                 czje: '',
+                carLineList:[],
                 wxData: {},
                 wxpay: false,
                 active: 1,
@@ -556,6 +557,7 @@
                 } else {
                     //车主
                     this.carOwnerTrip.data = [];
+                    this.carLineList = [];
                     this.carOwnerTrip.pageNum = 1;
                     this.initCarOwnerTripList();
                 }
@@ -661,6 +663,11 @@
                             this.finished = true;
                         }
                         this.loading = false;
+
+                        //获取待出行的记录  定时器
+
+
+
                     }
                 })
             },

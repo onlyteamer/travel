@@ -5,7 +5,7 @@
         <van-swipe :autoplay="3000" style="height: 200px;margin-top: 0px">
             <van-swipe-item v-for="(image, index) in images" :key="index">
                 <!--<img :src="image" width="100px" height="100px"/>-->
-                <div :style="{width: '100%',height: '100%',backgroundImage:'url('+image+')'}"></div>
+                <div :style="{width: '100%',height: '100%',backgroundSize:'cover',backgroundImage:'url('+image.imageUrl+')'}"></div>
             </van-swipe-item>
         </van-swipe>
 
@@ -143,8 +143,6 @@
 <script>
     import Title from './../../components/header'
     import {Row, Col, Tag, Divider, Swipe, SwipeItem, NoticeBar, List, Dialog, Tabbar, TabbarItem} from 'vant'
-    import backOne from './../../static/images/backOne.jpg'
-    import backTwo from './../../static/images/backTwo.jpg'
     import laba from './../../static/images/laba.png'
     import down from '../../static/images/busTrip/down.png'
     import blueTime from './../../static/images/busTrip/blue_time.png'
@@ -200,10 +198,7 @@
                 loading: false,
                 finished: false,
                 laba: laba,
-                images: [
-                    backOne,
-                    backTwo
-                ],
+                images: [],
                 lineDetailsList: [],
                 listSize: "",
                 dataMain: {
@@ -259,7 +254,7 @@
                     params: {}
                 }).then(res => {
                     if (res.data.code == '0') {
-                        this.images = res.data.rows;
+                        this.images = res.data.data;
                     }
                 })
             },

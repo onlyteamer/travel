@@ -22,7 +22,7 @@
             <van-swipe :autoplay="3000" style="height: 200px;margin-top: 0px">
                 <van-swipe-item v-for="(image, index) in images" :key="index">
                     <!--<img :src="image" width="100px" height="100px"/>-->
-                    <div :style="{width: '100%',height: '100%',backgroundImage:'url('+image+')'}"></div>
+                    <div :style="{width: '100%',height: '100%',backgroundSize:'cover',backgroundImage:'url('+image.imageUrl+')'}"></div>
                 </van-swipe-item>
             </van-swipe>
 
@@ -207,8 +207,7 @@
     import xingC from './../../static/images/xingC.png'
     import push from './../../static/images/push.png'
     import person from './../../static/images/chengk.png'
-    import backOne from './../../static/images/backOne.jpg'
-    import backTwo from './../../static/images/backTwo.jpg'
+
 
     import request from '../../utils/request'
     import moment from 'moment'
@@ -243,10 +242,7 @@
         data() {
             return {
                 title: "共享拼车",
-                images: [
-                    backOne,
-                    backTwo
-                ],
+                images: [],
                 newTripList: [],
                 flag: "0",
                 notice: "",
@@ -332,7 +328,7 @@
                     params: {}
                 }).then(res => {
                     if (res.data.code == '0') {
-                        this.images = res.data.rows;
+                        this.images = res.data.data;
                     }
                 })
             },
