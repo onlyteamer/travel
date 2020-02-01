@@ -13,7 +13,7 @@ Toast.setDefaultOptions({ duration: 5000 ,className:'my-toast'});
 // 初始化vue-amap
 AMap.initAMapApiLoader({
   // 高德的key
-  key: '4b5f2cf2cba25200cc6b68c398468899',
+  key: 'e4c0d7465fc1b862129af75632982eba',
   // 插件集合 （插件按需引入）
   plugin: ['AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.PolyEditor']
 });
