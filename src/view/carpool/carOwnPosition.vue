@@ -74,7 +74,11 @@
             return{
                 active:"",
                 title:"车主位置",
-                carInfo:{
+                passengerPosition:{
+                    lat:"39.865042",
+                    lon:"116.379028"
+                },
+                driverPosition:{
                     lat:"39.865042",
                     lon:"116.379028"
                 },
@@ -83,7 +87,6 @@
                 xingC: xingC,
                 push: push,
                 person: person,
-
                 count: 1,
                 slotStyle: {
                     padding: '2px 8px',
@@ -113,8 +116,6 @@
                 renderMarker: {
                     position: [121.5273285, 31.21715058],
                     contentRender: (h, instance) => {
-                        // if use jsx you can write in this
-                        // return <div style={{background: '#80cbc4', whiteSpace: 'nowrap', border: 'solid #ddd 1px', color: '#f00'}} onClick={() => ...}>marker inner text</div>
                         return h(
                             'div',
                             {
@@ -145,10 +146,9 @@
 
         mounted(){
             this.getOwnerPosition();
-
+            this.getPosition();
         },
         methods:{
-
             //自身位置
             getOwnerPosition(){
                 request.sendGet({
@@ -157,11 +157,10 @@
                         url:location.href
                     }
                 }).then(res =>{
-                    if(res.data.code == '0'){
+                    if(res.data.code === 0){
                         var data = res.data.data;
                         wx.config({
                             beta: true,// 必须这么写，否则在微信插件有些jsapi会有问题
-                            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                             appId: data.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
                             timestamp: parseInt(data.timestamp,10), // 必填，生成签名的时间戳
                             nonceStr: data.nonceStr, // 必填，生成签名的随机串
@@ -169,7 +168,6 @@
                             jsApiList: ['getLocation','openLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                         });
                         wx.ready(function(){
-                            var isCheck=false;
                             wx.checkJsApi({
                                 jsApiList: [
                                     'getLocation'
@@ -177,9 +175,8 @@
                             });
                             wx.getLocation({
                                 success: function (res) {
-                                    this.carInfo.lat = res.latitude;
-                                    this.carInfo.lon = res.longitude;
-                                    console.log(this.carInfo);
+                                    this.passengerPosition.lat = res.latitude;
+                                    this.passengerPosition.lon = res.longitude;
                                 },
                                 fail: function(error) {
                                     this.$toast.fail("获取地理位置失败，请确保开启GPS且允许微信获取您的地理位置！");
@@ -194,13 +191,20 @@
 
             },
 
-            onClickLeft(){
-
-            },
+            //获取车主位置
             getPosition(){
-
+                request.sendGet({
+                    url:'/sharecar/pass/driver/'+this.tripId,
+                    params:{}
+                }).then(res=>{
+                    if(res.data.code===0){
+                        console.log(res.data.data);
+                    }else{
+                        this.$toast.fail(res.data.msg)
+                    }
+                });
             },
-            getAddress(){},
+           // getAddress(){},
 
         }
     }
