@@ -3,11 +3,18 @@ import App from './App';
 import { router } from './router';
 import AMap from 'vue-amap';
 
+
 import { Lazyload,Toast } from 'vant';
 
 Vue.use(Toast);
 Vue.use(Lazyload);
 Vue.use(AMap);
+
+Vue.prototype.$timer = [];
+
+Vue.prototype.updateDriverPosition = function (tripId){
+  App.methods.updateDriverPosition(tripId);
+};
 
 Toast.setDefaultOptions({ duration: 5000 ,className:'my-toast'});
 // 初始化vue-amap

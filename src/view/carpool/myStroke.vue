@@ -303,6 +303,7 @@
     import {Tab, Tabs, Divider, Row, Col, Button, Popup, Dialog, Field, Tabbar, TabbarItem, List} from 'vant';
     import request from '../../utils/request'
     import wx from 'weixin-js-sdk'
+    import moment from 'moment';
 
     import guideIcon from '../../static/images/guide.png'
     import chengK from './../../static/images/chengk.png'
@@ -330,13 +331,17 @@
         },
         data() {
             return {
+                carPosition: {
+                    lat: '',
+                    lon: ''
+                },
                 loading: false,
                 finished: false,
                 isOneHttp: true,
                 guide: false,
                 guideIcon: guideIcon,
                 czje: '',
-                carLineList:[],
+                carLineList: [],
                 wxData: {},
                 wxpay: false,
                 active: 1,
@@ -461,7 +466,7 @@
                         timestamp: parseInt(res.data.data.timestamp, 10), // 必填，生成签名的时间戳
                         nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
                         signature: res.data.data.signature,// 必填，签名，见附录1
-                        jsApiList: ['WeixinJSBridge', 'onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                        jsApiList: ['WeixinJSBridge', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'getLocation', 'openLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                     });
                 });
             },
@@ -646,6 +651,7 @@
             },
 
             initCarOwnerTripList() {
+                let me = this;
                 request.sendGet({
                     url: "/sharecar/trip/list",
                     params: {
@@ -657,6 +663,28 @@
                         this.carOwnerTrip.total = res.data.total;
                         if (res.data.rows.length > 0) {
                             this.carOwnerTrip.data = this.carOwnerTrip.data.concat(res.data.rows);
+                            //上传位置信息定时器
+                            for (let i = 0; i < this.carOwnerTrip.data.length; i++) {
+                                let tripId = this.carOwnerTrip.data[i].tripId;
+                                let end_date = moment(this.carOwnerTrip.data[i].tripDate, "YYYY-MM-DD HH:mm");
+                                let start_date = moment(new Date(), "YYYY-MM-DD HH:mm");
+                                let flag = end_date.diff(start_date, "hours") < 1 ? true : false;
+                                //tripState 行程状态：0 待出行 1 已完成 2 已取消 3 已终止 4 已发车 5 待确认
+                                if (flag && (this.carOwnerTrip.data[i].tripState === 0 || this.carOwnerTrip.data[i].tripState === 4 || this.carOwnerTrip.data[i].tripState === 5)) {
+                                    if (JSON.stringify(this.$timer).indexOf(tripId)<0) {
+                                        let timer = setInterval(me.updateDriverPosition(tripId), 2 * 60 * 1000);
+                                        let obj = {};
+                                        obj[tripId] = timer;
+                                        this.$timer.push(obj);
+                                    }
+                                } else {
+                                    if (JSON.stringify(this.$timer).indexOf(tripId)>0) {
+                                        for(let k in this.$timer){
+                                            clearInterval(this.$timer[k][tripId]);
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         if (!this.carOwnerTrip.data || this.carOwnerTrip.total === this.carOwnerTrip.data.length) {
@@ -665,8 +693,6 @@
                         this.loading = false;
 
                         //获取待出行的记录  定时器
-
-
 
                     }
                 })

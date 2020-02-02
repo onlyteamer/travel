@@ -59,6 +59,13 @@ const routes = [
         }
     },
     {
+        name: 'compensationRule',
+        component: () => import('./view/agreement/compensationRule.vue'),
+        meta: {
+            title: '赔偿规则'
+        }
+    },
+    {
         name: 'ownerCertificationRemind',
         component: () => import('./view/user/ownerCertificationRemind.vue'),
         meta: {
