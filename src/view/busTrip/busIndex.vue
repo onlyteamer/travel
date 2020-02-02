@@ -22,7 +22,7 @@
             <van-swipe :autoplay="3000" style="height: 200px">
                 <van-swipe-item v-for="(image, index) in images" :key="index">
                     <!--<img :src="image" width="100px" height="100px"/>-->
-                    <div :style="{width: '100%',height: '100%',backgroundSize:'cover',backgroundImage:'url('+image.imageUrl+')'}"></div>
+                    <div :style="{width: '100%',height: '100%',backgroundSize:'cover',backgroundImage:'url('+image.imageUrl+')'}" @click="linkCarouselDetail(image.id)"></div>
                 </van-swipe-item>
             </van-swipe>
         </div>
@@ -246,6 +246,11 @@
             this.initAdvList();
         },
         methods: {
+            //轮播详情
+            linkCarouselDetail(val){
+                this.$router.push({path: '/carouselDetail', query: {id: val}})
+            },
+
             showNotice(){
                 let notice = this.notice;
                 Dialog.alert({

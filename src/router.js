@@ -364,6 +364,13 @@ const routes = [
         meta: {
             title: '切换线路'
         }
+    },
+    {
+        name: 'carouselDetail',
+        component: () => import('./view/agreement/carouselDetail.vue'),
+        meta: {
+            title: '轮播详情'
+        }
     }
 ];
 
