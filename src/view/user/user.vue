@@ -105,6 +105,8 @@
                         </div>
                         <div class="func-content-item"><img src="../../static/images/user/lxkf.png"/><span>联系客服</span>
                         </div>
+                        <div class="func-content-item"><img src="../../static/images/user/bashi.png"/><span>巴士管理</span>
+                        </div>
                     </div>
                 </div>
             </div>
