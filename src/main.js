@@ -16,7 +16,7 @@ Vue.prototype.updateDriverPosition = function (tripId){
   App.methods.updateDriverPosition(tripId);
 };
 
-Toast.setDefaultOptions({ duration: 5000 ,className:'my-toast'});
+Toast.setDefaultOptions({ duration: 3000 ,className:'my-toast'});
 // 初始化vue-amap
 AMap.initAMapApiLoader({
   // 高德的key
