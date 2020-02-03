@@ -11,7 +11,7 @@
                             <p style="margin: 5px 0">
                                 <span style="color: #5E5E5E;font-weight: bold">{{userInfo.nickName}}</span>
                                 <img src="../../static/images/sexTag.png"
-                                     style="width: 12px;height: 12px;margin-left: 5px" v-if="userInfo.sex == '1'">
+                                     style="width: 12px;height: 12px;margin-left: 5px" v-if="userInfo.sex == '2'">
                                 <img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px"
                                      v-else>
 
