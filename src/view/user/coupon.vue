@@ -1,7 +1,8 @@
 <template>
-    <div>
+    <div style="background-color: #fff">
         <div >
             <van-coupon-list
+                    v-model="code"
                     :coupons="coupons"
                     :chosen-coupon="chosenCoupon"
                     :disabled-coupons="disabledCoupons"
@@ -14,6 +15,7 @@
 
 <script>
     import {NavBar,CouponCell, CouponList, Tab,Field, Tabs, Row, Col, List} from 'vant';
+    import request from '../../utils/request'
 
     const coupon = {
         available: 1,
@@ -43,7 +45,8 @@
             return {
                 chosenCoupon: -1,
                 coupons: [coupon],
-                disabledCoupons: [coupon]
+                disabledCoupons: [coupon],
+                code:'',
             }
         },
         methods: {
@@ -56,21 +59,34 @@
             onChange(index) {
                 this.chosenCoupon = index;
             },
-            onExchange(code) {
-                this.coupons.push(coupon);
+            onExchange() {
+                if(!this.code){
+                    this.$toast.fail("请填写优惠券码");
+                    return;
+                }
+                request.sendPost({
+                    url:'/user/center/redeemCoupons',
+                    params:{
+                        couponId:this.code
+                    }
+                }).then(res=>{
+                    if (res.data.code === 0) {
+                        this.$toast.success(res.data.msg);
+                    } else {
+                        this.$toast.fail(res.data.msg);
+                    }
+                });
+
             }
         }
     }
 </script>
 
 <style scoped>
-
-    /deep/ .van-nav-bar .van-icon {
-        color: #5E5E5E
-    }
     /deep/.van-button--danger{
         background-color: #0CC893;
         border: none;
+        color: #fff;
     }
     /deep/.van-tabs__line{
         background-color: #0CC893;
@@ -84,6 +100,9 @@
 
     /deep/.van-checkbox{
      display: none;
+    }
+    /deep/.van-coupon-list__field{
+        padding: 10px 16px;
     }
     /deep/.van-coupon{
         background-image: url(../../static/images/coupon_money.png);
