@@ -12,6 +12,7 @@
         <div class="notice">
             <div>
                 <van-notice-bar
+                        @click="showNotice"
                         color="#0BCA92"
                         background="#FFFFFF"
                         :left-icon="laba"
@@ -217,6 +218,7 @@
         },
 
         mounted() {
+
             this.initNotice();
             this.initData();
             this.initAdvList();
@@ -224,6 +226,17 @@
         },
 
         methods: {
+            showNotice(){
+                let notice = this.notice;
+                Dialog.alert({
+                    title: '通知',
+                    confirmButtonText:'关闭',
+                    confirmButtonColor:'#0CC893',
+                    message: notice
+                }).then(() => {
+                    // on close
+                });
+            },
             //轮播详情
             linkCarouselDetail(val){
                 this.$router.push({path: '/carouselDetail', query: {id: val}})
