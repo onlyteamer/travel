@@ -10,17 +10,19 @@
             <div class="item">
                 <van-field label-class="item-label" v-model="driverInfo.cardId" label="身份证号"></van-field>
             </div>
-            <div class="item">
-                <van-field label-class="item-label" v-model="driverInfo.driverCardId" label="驾驶证编号"></van-field>
-            </div>
+            <!--            <div class="item">-->
+            <!--                <van-field label-class="item-label" v-model="driverInfo.driverCardId" label="驾驶证编号"></van-field>-->
+            <!--            </div>-->
             <div class="upload-item">
                 <span class="item-label">上传驾驶证</span>
                 <div class="upload-wrap">
                     <div style="position: relative;width: 100%" v-if="driverInfo.driverCardimage">
-                        <img :src="baseImgUrl+driverInfo.driverCardimage"   width="100%" height="110px" />
-                        <van-icon name="close" @click="delImg3" style="font-size: 20px;position: absolute;top:-10px;right: -10px"/>
+                        <img :src="baseImgUrl+driverInfo.driverCardimage" width="100%" height="110px"/>
+                        <van-icon name="close" @click="delImg3"
+                                  style="font-size: 20px;position: absolute;top:-10px;right: -10px"/>
                     </div>
-                    <van-uploader :max-count=1  v-if="!driverInfo.driverCardimage" :after-read="uploadCallback"  :preview-image="false">
+                    <van-uploader :max-count=1 v-if="!driverInfo.driverCardimage" :after-read="uploadCallback"
+                                  :preview-image="false">
                         <img round width="54px" height="54px" :src="uploadIcon"/>
                         <div style="color: #9E9E9E;font-size: 14px">选择文件</div>
                     </van-uploader>
@@ -57,7 +59,7 @@
 </template>
 <!--车主认证-->
 <script>
-    import {NavBar, Field, Button, Uploader, Checkbox,Icon} from 'vant';
+    import {NavBar, Field, Button, Uploader, Checkbox, Icon} from 'vant';
     import uploadIcon from '../../static/images/upload.png';
 
     import request from '../../utils/request';
@@ -70,28 +72,34 @@
             [Button.name]: Button,
             [Uploader.name]: Uploader,
             [Checkbox.name]: Checkbox,
-            [Icon.name]:Icon
+            [Icon.name]: Icon
         },
         data() {
             return {
                 definition: {
                     checked: false
                 },
-                driverInfo:{
-                    driverName:"",
-                    cardId:"",
-                    driverAge:"",
-                    driverCardId:"",
-                    driverCardimage:""
+                driverInfo: {
+                    driverName: "",
+                    cardId: "",
+                    driverAge: "",
+                    driverCardimage: ""
                 },
-                baseImgUrl:context.imageServer,
+                baseImgUrl: context.imageServer,
                 imgURL: [],
                 uploadIcon: uploadIcon
             }
         },
         methods: {
-            onClickLeft() {
-                this.$router.back(-1);
+            initInfo() {
+                request.sendGet({
+                    url: '/user/center/driver/info',
+                    params: {}
+                }).then(res => {
+                    if (res.data.code === 0) {
+                        this.driverInfo = res.data.data;
+                    }
+                })
             },
             uploadCallback(uploadFile) {
                 if (uploadFile.file.size > 1024 * 1024) {
@@ -100,16 +108,16 @@
                     //设置图片路径为 获取的file的content
                     img.src = uploadFile.content;
                     let me = this;
-                    img.onload = function(){
+                    img.onload = function () {
                         let file = me.ontpys(img);
                         me.upLoadImg(file);
                     }
-                }else{
+                } else {
                     this.upLoadImg(uploadFile.file);
                 }
 
             },
-            upLoadImg(file){
+            upLoadImg(file) {
                 let param = new FormData();
                 param.append('file', file);//通过append向form对象添加数据
                 request.uploadFile({
@@ -172,40 +180,36 @@
                 content.style.height = height + 'px';
             },
             submit() {
-                if(!this.definition.checked){
+                if (!this.definition.checked) {
                     this.$toast.fail("请同意条款再操作");
                     return false;
                 }
 
-                if(!this.driverInfo.driverName){
+                if (!this.driverInfo.driverName) {
                     this.$toast.fail("司机姓名不能为空");
                     return false;
                 }
-                if(!this.driverInfo.cardId){
+                if (!this.driverInfo.cardId) {
                     this.$toast.fail("司机身份证号不能为空");
                     return false;
                 }
-                if(!this.driverInfo.driverCardId){
-                    this.$toast.fail("驾驶证编号不能为空");
-                    return false;
-                }
-                if(!this.driverInfo.driverAge){
+                if (!this.driverInfo.driverAge) {
                     this.$toast.fail("驾龄不能为空");
                     return false;
                 }
-                if(!this.driverInfo.driverCardimage){
+                if (!this.driverInfo.driverCardimage) {
                     this.$toast.fail("请上传驾驶证图片");
                     return false;
                 }
 
                 request.sendPost({
-                    url:"/user/center/driver/update",
-                    params:this.driverInfo
-                }).then(res =>{
-                    if(res.data.code == '0'){
+                    url: "/user/center/driver/update",
+                    params: this.driverInfo
+                }).then(res => {
+                    if (res.data.code == '0') {
                         this.$toast.success(res.data.msg);
-                        this.$router.push({path:'/ownerCertificationRemind'});
-                    }else {
+                        this.$router.push({path: '/ownerCertificationRemind'});
+                    } else {
                         this.$toast.fail(res.data.msg)
                     }
                 })
@@ -214,7 +218,10 @@
         },
         mounted: function () {
             this.setHeight();
-        }
+        },
+        created() {
+            this.initInfo();
+        },
     }
 </script>
 
