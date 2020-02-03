@@ -11,7 +11,10 @@
                             </div>
                             <div style="line-height:26px;">
                                 <span style="color:#5E5E5E;font-size: 14px;margin-right: 3px">性别:{{userInfo.sex===1?'男':userInfo.sex===2?'女':'未知'}}</span>
-                                <img width="13px" height="13px" src="../../static/images/sexTag.png"/>
+                                <img src="../../static/images/sexTag.png"
+                                     style="width: 12px;height: 12px;margin-left: 5px" v-if="userInfo.sex == '2'">
+                                <img src="../../static/images/man.png" style="width: 12px;height: 12px;margin-left: 5px"
+                                     v-if="userInfo.sex == '1'">
                             </div>
                             <div style="line-height:26px;">
                                 <van-icon name="phone" color="#30C80C"/>
@@ -28,66 +31,73 @@
             <div class="info-form">
                 <div class="item" style="font-size: 16px;color: #202020;font-weight: bold">真实认证</div>
                 <div class="item">
-                    <van-field label-class="item-label" label="真实姓名"></van-field>
+                    <van-field label-class="item-label" label="真实姓名" v-model="authUserInfo.realName"
+                               :readonly="authUserInfo.canModify===0?true:false"></van-field>
                 </div>
                 <div class="item">
-                    <van-field label-class="item-label" label="性别"></van-field>
+                    <van-field label-class="item-label" label="性别" v-model="authUserInfo.sex"
+                               placeholder="请输入男或女"
+                               :readonly="authUserInfo.canModify===0?true:false"></van-field>
                 </div>
                 <div class="item">
-                    <van-field label-class="item-label" label="手机号"></van-field>
+                    <van-field label-class="item-label" label="手机号" v-model="authUserInfo.phone"
+                               :readonly="true"></van-field>
                 </div>
                 <div class="item">
-                    <van-field label-class="item-label" label="身份证号"></van-field>
+                    <van-field label-class="item-label" label="身份证号" v-model="authUserInfo.cardId"
+                               :readonly="authUserInfo.canModify===0?true:false"></van-field>
                 </div>
-                <div style="font-size: 10px;color: #FF0200;line-height: 25px">
+                <div style="font-size: 14px;color: #FF0200;line-height: 25px">
                     注：请填写正确身份证号，身份证号作为您出行购买商业保险的唯一证件。
                 </div>
-                <div style="font-size: 16px;color: #202020;font-weight: bold;line-height: 33px">
-                    常用站点设置
-                </div>
-                <div style="height: 72px;padding-top: 10px;border-bottom: 1px solid #ECECEC;">
-                    <span style="font-size:14px;color: #0CC893;font-weight: bold">通勤巴士</span>
-                    <div class="item-flex">
-                        <div class="item-flex" style="flex: 0.5">
-                            <img :src="greenDot" width="24px" height="24px">
-                            <span>上班</span>
-                            <van-dropdown-menu style="flex: 1">
-                                <van-dropdown-item v-model="value3" :options="option3"/>
-                            </van-dropdown-menu>
-                            <van-icon name="arrow" color="#9E9E9E"/>
-                        </div>
-                        <div class="item-flex" style="flex: 0.5">
-                            <img :src="redDot" width="24px" height="24px">
-                            <span>下班</span>
-                            <van-dropdown-menu style="flex: 1">
-                                <van-dropdown-item v-model="value3" :options="option3"/>
-                            </van-dropdown-menu>
-                            <van-icon name="arrow" color="#9E9E9E"/>
-                        </div>
+                <!--                <div style="font-size: 16px;color: #202020;font-weight: bold;line-height: 33px">-->
+                <!--                    常用站点设置-->
+                <!--                </div>-->
+                <!--                <div style="height: 72px;padding-top: 10px;border-bottom: 1px solid #ECECEC;">-->
+                <!--                    <span style="font-size:14px;color: #0CC893;font-weight: bold">通勤巴士</span>-->
+                <!--                    <div class="item-flex">-->
+                <!--                        <div class="item-flex" style="flex: 0.5">-->
+                <!--                            <img :src="greenDot" width="24px" height="24px">-->
+                <!--                            <span>上班</span>-->
+                <!--                            <van-dropdown-menu style="flex: 1">-->
+                <!--                                <van-dropdown-item v-model="value3" :options="option3"/>-->
+                <!--                            </van-dropdown-menu>-->
+                <!--                            <van-icon name="arrow" color="#9E9E9E"/>-->
+                <!--                        </div>-->
+                <!--                        <div class="item-flex" style="flex: 0.5">-->
+                <!--                            <img :src="redDot" width="24px" height="24px">-->
+                <!--                            <span>下班</span>-->
+                <!--                            <van-dropdown-menu style="flex: 1">-->
+                <!--                                <van-dropdown-item v-model="value3" :options="option3"/>-->
+                <!--                            </van-dropdown-menu>-->
+                <!--                            <van-icon name="arrow" color="#9E9E9E"/>-->
+                <!--                        </div>-->
 
-                    </div>
-                </div>
-                <div style="height: 72px;padding-top: 10px;border-bottom: 1px solid #ECECEC;">
-                    <span style="font-size:14px;color: #0CC893;font-weight: bold">拼车</span>
-                    <div class="item-flex">
-                        <span>线路</span>
-                        <van-dropdown-menu style="flex: 1">
-                            <van-dropdown-item v-model="value3" :options="option3"/>
-                        </van-dropdown-menu>
-                        <van-icon name="arrow" color="#9E9E9E"/>
-                    </div>
-                </div>
-                <div class="item">
-                    <van-field label-class="item-label" :left-icon="greenDot" color="#0CC893" label="上车地点"
-                               placeholder="多个地点请用逗号隔开"/>
-                </div>
-                <div class="item">
-                    <van-field label-class="item-label" :left-icon="redDot" label="下车地点" placeholder="多个地点请用逗号隔开"/>
-                </div>
-                <van-button style="margin-top:15px;width: 100%;height:44px" color="#0CC893" type="default">
+                <!--                    </div>-->
+                <!--                </div>-->
+                <!--                <div style="height: 72px;padding-top: 10px;border-bottom: 1px solid #ECECEC;">-->
+                <!--                    <span style="font-size:14px;color: #0CC893;font-weight: bold">拼车</span>-->
+                <!--                    <div class="item-flex">-->
+                <!--                        <span>线路</span>-->
+                <!--                        <van-dropdown-menu style="flex: 1">-->
+                <!--                            <van-dropdown-item v-model="value3" :options="option3"/>-->
+                <!--                        </van-dropdown-menu>-->
+                <!--                        <van-icon name="arrow" color="#9E9E9E"/>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+                <!--                <div class="item">-->
+                <!--                    <van-field label-class="item-label" :left-icon="greenDot" color="#0CC893" label="上车地点"-->
+                <!--                               placeholder="多个地点请用逗号隔开"/>-->
+                <!--                </div>-->
+                <!--                <div class="item">-->
+                <!--                    <van-field label-class="item-label" :left-icon="redDot" label="下车地点" placeholder="多个地点请用逗号隔开"/>-->
+                <!--                </div>-->
+                <van-button style="margin-top:15px;width: 100%;height:44px" @click="saveAuthUserInfo" color="#0CC893"
+                            type="default">
                     修改
                 </van-button>
-                <van-button  @click="cancel" style="margin-top:15px;width: 100%;height:44px" color="#9E9E9E" type="default">
+                <van-button @click="cancel" style="margin-top:15px;width: 100%;height:44px" color="#9E9E9E"
+                            type="default">
                     取消
                 </van-button>
             </div>
@@ -114,6 +124,13 @@
         data() {
             return {
                 userInfo: {},
+                authUserInfo: {
+                    canModify: '',//标志位，如果返回1 是可以修改的，如果是0 ，是不可修改的。
+                    cardId: '',
+                    phone: '',
+                    sex: '',
+                    realName: '',
+                },
                 greenDot: greenDot,
                 redDot: redDot,
                 value3: '',
@@ -124,8 +141,8 @@
             }
         },
         methods: {
-            cancel(){
-              this.$router.back(-1);
+            cancel() {
+                this.$router.back(-1);
             },
             getCode() {
                 request.axios.get('/wx/syncauthorize')
@@ -143,17 +160,17 @@
                     console.log(error);
                 });
             },
-            getInfo(code){
+            getInfo(code) {
                 request.sendGet({
                     url: '/wx/syncwxinfo',
                     params: {
-                        code:code,
+                        code: code,
                     }
-                }).then(res=>{
-                    if(res.data.code===0){
+                }).then(res => {
+                    if (res.data.code === 0) {
                         this.$toast.success(res.data.msg);
-                        window.location.href = location.protocol+"//"+location.hostname + "/#/setting"
-                    }else{
+                        window.location.href = location.protocol + "//" + location.hostname + "/#/setting"
+                    } else {
                         this.$toast.fail(res.data.msg);
                     }
                 })
@@ -170,8 +187,76 @@
                     }
                 })
             },
+            initAuthUserInfo() {
+                request.sendGet({
+                    url: '/user/center/userauthinfo',
+                    params: {}
+                }).then(res => {
+                    if (res.data.code === 0) {
+                        this.authUserInfo = res.data.data;
+                        this.authUserInfo.sex = this.decodeSex(res.data.data.sex);
+                    }
+                })
+            },
+            checkIdCard(idCard) {
+                if (/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$/.test(idCard)
+                    || /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/.test(idCard)) {
+                    return true;
+                }
+                return false;
+            },
+            saveAuthUserInfo() {
+                if (!this.authUserInfo.realName) {
+                    this.$toast.fail("请填写真实姓名");
+                    return;
+                }
+                if (!this.authUserInfo.sex) {
+                    this.$toast.fail("请填写性别");
+                    return;
+                }
+                if (this.authUserInfo.sex !== '男' && this.authUserInfo.sex !== '女') {
+                    this.$toast.fail("请填写男或女");
+                    return;
+                }
+                if (!this.authUserInfo.cardId || !this.checkIdCard(this.authUserInfo.cardId)) {
+                    this.$toast.fail("请填写正确的身份证号");
+                    return;
+                }
+                this.authUserInfo.sex = this.encodeSex(this.authUserInfo.sex);
+                request.sendPost({
+                    url: '/user/center/userauth',
+                    params: this.authUserInfo,
+
+                }).then(res => {
+                    if (res.data.code === 0) {
+                        this.$toast.success(res.data.msg);
+                        this.initAuthUserInfo();
+                    } else {
+                        this.$toast.fail(res.data.msg);
+                    }
+                })
+            },
+            decodeSex(sex) {
+                if (sex === 2) {
+                    return '女';
+                } else if (sex === 1) {
+                    return '男';
+                } else {
+                    return '未知';
+                }
+            },
+            encodeSex(sex) {
+                if (sex === '女') {
+                    return 2;
+                } else if (sex === '男') {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            },
         },
         created() {
+            this.initAuthUserInfo();
             this.initUserData();
             let url = location.href;
             if (url.indexOf("code") != -1) {
@@ -181,7 +266,7 @@
                 this.getInfo(code);
             }
         }
-            }
+    }
 </script>
 
 <style scoped>
