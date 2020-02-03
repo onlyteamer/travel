@@ -61,10 +61,25 @@
                 <span style="color: #202020;font-size: 16px;">票价</span>
                 <span style="color: #FF0200;font-size: 22px;">￥{{amount}}</span>
             </div>
+
             <div class="btn-wrap">
                 <van-button @click="buy" style="width: 100%;height:44px" color="#0CC893" type="default">
                     确认购票
                 </van-button>
+            </div>
+            <div style="padding: 10px">
+                <div>
+                    <van-icon name="warning" color="#F55456"/>
+                    注意:
+                </div>
+                <div class="notice">
+                    <div>
+                        1、每人每次能购买一张车票
+                    </div>
+                    <div>
+                        2、如购买多张，需要多次购买
+                    </div>
+                </div>
             </div>
         </div>
 
