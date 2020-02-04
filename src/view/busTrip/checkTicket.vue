@@ -213,7 +213,8 @@
                 isOneHttp: true,
                 user: user,
                 car: car,
-                scan: scan
+                scan: scan,
+                notice2:''
             }
         },
 
@@ -227,7 +228,7 @@
 
         methods: {
             showNotice(){
-                let notice = this.notice;
+                let notice = this.notice2;
                 Dialog.alert({
                     title: '通知',
                     confirmButtonText:'关闭',
@@ -286,8 +287,8 @@
                     if (res.data.code == '0') {
                         let list = res.data.data;
                         list.forEach(e => {
-                            this.notice += e.title + "       ";
-
+                            this.notice += " ★ " + e.title + ' ★ ' + e.context + " ";
+                            this.notice2 += "<p> ★" + e.title + ' ★ </p><p>' + e.context + "</p>";
                         });
                     }
                 })
