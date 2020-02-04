@@ -23,7 +23,7 @@
                 <van-field v-model="checkCode" label="车票验证码"/>
             </div>
             <div style="height: 34px;">
-                <van-button type="primary" color="#0CC893" class="item-btn" @click="driverCheck">验证</van-button>
+                <van-button type="primary" color="#0CC893" class="item-btn" @click="driverCheck">核验车票</van-button>
             </div>
         </div>
 
@@ -172,28 +172,29 @@
                     return;
                 }
 
-                Dialog.confirm({
-                    title: '验票',
-                    message: '确认是否验票？'
-                }).then(() => {
-                    // 确定
-                    request.sendPost({
-                        url: "/bus/driverChecking",
-                        params: {
-                            isdriver: 0,
-                            checkcode: this.checkCode
-                        }
-                    }).then(res => {
-                        if (res.data.code == '0') {
-                            this.$toast.success("验票成功");
-                            this.checkCode = "";
-                        } else {
-                            this.$toast.fail(res.data.msg)
-                        }
-                    })
-                }).catch(res => {
-
+                // 确定
+                request.sendPost({
+                    url: "/bus/driverChecking",
+                    params: {
+                        isdriver: 0,
+                        checkcode: this.checkCode
+                    }
+                }).then(res => {
+                    if (res.data.code == '0') {
+                        this.$toast.success("验票成功");
+                        this.checkCode = "";
+                    } else {
+                        this.$toast.fail(res.data.msg)
+                    }
                 })
+                // Dialog.confirm({
+                //     title: '验票',
+                //     message: '确认是否验票？'
+                // }).then(() => {
+                //
+                // }).catch(res => {
+                //
+                // })
             }
         }
     }

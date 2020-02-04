@@ -105,7 +105,7 @@
                         </div>
                         <div class="func-content-item"><img src="../../static/images/user/lxkf.png"/><span>联系客服</span>
                         </div>
-                        <div class="func-content-item"><img src="../../static/images/user/bashi.png"/><span>巴士管理</span>
+                        <div class="func-content-item" @click="linkBusDriver"><img src="../../static/images/user/bashi.png"/><span>巴士管理</span>
                         </div>
                     </div>
                 </div>
@@ -182,6 +182,11 @@
             }
         },
         methods: {
+            linkBusDriver(){
+                //班车司机
+                this.$router.push({path: '/busDriver'});
+            },
+
             goMyStroke() {
                 //拼车
                 this.$router.push({path: '/myStroke'});
