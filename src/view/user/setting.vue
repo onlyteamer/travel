@@ -34,10 +34,10 @@
                     <van-field label-class="item-label" label="真实姓名" v-model="authUserInfo.realName"
                                :readonly="authUserInfo.canModify===0?true:false"></van-field>
                 </div>
-                <div class="item">
+                <div class="item" @click="showSexList">
                     <van-field label-class="item-label" label="性别" v-model="authUserInfo.sex"
-                               placeholder="请输入男或女"
-                               :readonly="authUserInfo.canModify===0?true:false"></van-field>
+                               placeholder="请选择性别"
+                               readonly ></van-field>
                 </div>
                 <div class="item">
                     <van-field label-class="item-label" label="手机号" v-model="authUserInfo.phone"
@@ -102,11 +102,26 @@
                 </van-button>
             </div>
         </div>
+
+        <van-popup
+                v-model="showSexPop"
+                position="bottom"
+                :style="{ height: '30%' }"
+        >
+            <van-picker
+                    show-toolbar
+                    title=""
+                    :visible-item-count="3"
+                    :columns="columns"
+                    @cancel="showSexPop = false"
+                    @confirm="changeSex"
+            />
+        </van-popup>
     </div>
 </template>
 <!--我的资料-->
 <script>
-    import {NavBar, Field, Button, Image, DropdownMenu, DropdownItem, Icon} from 'vant';
+    import {NavBar, Field, Button, Image, DropdownMenu, DropdownItem, Icon,Popup,Picker} from 'vant';
     import greenDot from "../../static/images/dot-green.png"
     import redDot from "../../static/images/dot-red.png"
     import request from "../../utils/request";
@@ -120,9 +135,26 @@
             [Icon.name]: Icon,
             [DropdownMenu.name]: DropdownMenu,
             [DropdownItem.name]: DropdownItem,
+            [Popup.name]:Popup,
+            [Picker.name]:Picker
         },
         data() {
             return {
+                columns:[
+                    {
+                        text:"请选择",
+                        value:"0"
+                    },
+                    {
+                        text:"男",
+                        value:"1"
+                    },
+                    {
+                        text:"女",
+                        value:"2"
+                    }
+                ],
+                showSexPop:false,
                 userInfo: {},
                 authUserInfo: {
                     canModify: '',//标志位，如果返回1 是可以修改的，如果是0 ，是不可修改的。
@@ -141,6 +173,18 @@
             }
         },
         methods: {
+            //选择性别
+            showSexList(){
+                if(this.authUserInfo.canModify != '0'){
+                    this.showSexPop = true;
+                }
+            },
+
+            changeSex(val){
+                this.authUserInfo.sex = val.text;
+                this.showSexPop = false;
+            },
+
             cancel() {
                 this.$router.back(-1);
             },
@@ -233,6 +277,7 @@
                         this.initAuthUserInfo();
                     } else {
                         this.$toast.fail(res.data.msg);
+                        this.authUserInfo.sex = this.decodeSex(this.authUserInfo.sex);
                     }
                 })
             },
