@@ -3,26 +3,27 @@
         <div class="header">
             <!--<Title :title="title" @onClickLeft="onClickLeft"></Title>-->
             <!--<van-row type="flex" justify="center" gutter="30">-->
-                <!--<van-col span="6">-->
-                    <!--<div class="logo">-->
-                        <!--<van-image-->
-                                <!--width="60"-->
-                                <!--height="60"-->
-                                <!--:src="logo"-->
-                        <!--/>-->
-                    <!--</div>-->
-                <!--</van-col>-->
-                <!--<van-col span="15">-->
-                    <!--<div class="tag">-->
-                        <!--<h3>昌坤出行</h3>-->
-                        <!--<p>让你省心、安心、放心！</p>-->
-                    <!--</div>-->
-                <!--</van-col>-->
+            <!--<van-col span="6">-->
+            <!--<div class="logo">-->
+            <!--<van-image-->
+            <!--width="60"-->
+            <!--height="60"-->
+            <!--:src="logo"-->
+            <!--/>-->
+            <!--</div>-->
+            <!--</van-col>-->
+            <!--<van-col span="15">-->
+            <!--<div class="tag">-->
+            <!--<h3>昌坤出行</h3>-->
+            <!--<p>让你省心、安心、放心！</p>-->
+            <!--</div>-->
+            <!--</van-col>-->
             <!--</van-row>-->
             <van-swipe :autoplay="3000" style="height: 200px">
                 <van-swipe-item v-for="(image, index) in images" :key="index">
                     <!--<img :src="image" width="100px" height="100px"/>-->
-                    <div :style="{width: '100%',height: '100%',backgroundSize:'cover',backgroundImage:'url('+image.imageUrl+')'}" @click="linkCarouselDetail(image.id)"></div>
+                    <div :style="{width: '100%',height: '100%',backgroundSize:'cover',backgroundImage:'url('+image.imageUrl+')'}"
+                         @click="linkCarouselDetail(image.id)"></div>
                 </van-swipe-item>
             </van-swipe>
         </div>
@@ -94,7 +95,7 @@
                 </van-tab>
             </van-tabs>
             <div align="center" style="margin-bottom: 10px">
-                <van-button @click="queryMore" color="#5083ED" style="width: 95%" >查看全部</van-button>
+                <van-button @click="queryMore" color="#5083ED" style="width: 95%">查看全部</van-button>
             </div>
         </div>
 
@@ -115,18 +116,24 @@
                             <span class="list-price">￥{{item.ticketPrice}}</span>
                         </div>
                         <div style="display: flex;align-items: center;justify-content: space-between;height: 72px">
-                            <div  @click="linkBusDetail(item.busid)" style="width: 70%">
+                            <div @click="linkBusDetail(item.busid)" style="width: 70%">
                                 <div style="display: flex;height:35px;line-height: 35px;">
-                                    <div style="width: 37%"><img :src="blueTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">{{item.starttime}}</span></div>
-                                    <div><img :src="placeUp" width="13px" height="13px"><span  style="margin-left: 7px;">{{item.startname}}</span></div>
+                                    <div style="width: 37%"><img :src="blueTime" width="13px" height="13px"><span
+                                            style="margin-left: 7px;margin-right: 13px">{{item.starttime}}</span></div>
+                                    <div><img :src="placeUp" width="13px" height="13px"><span style="margin-left: 7px;">{{item.startname}}</span>
+                                    </div>
                                 </div>
                                 <div style="display: flex;height:35px;line-height: 35px">
-                                    <div style="width: 37%"><img :src="redTime" width="13px" height="13px"><span style="margin-left: 7px;margin-right: 13px">{{item.endtime}}</span></div>
-                                    <div><img :src="placeDown" width="13px" height="13px"><span style="margin-left: 7px;">{{item.endname}}</span></div>
+                                    <div style="width: 37%"><img :src="redTime" width="13px" height="13px"><span
+                                            style="margin-left: 7px;margin-right: 13px">{{item.endtime}}</span></div>
+                                    <div><img :src="placeDown" width="13px" height="13px"><span
+                                            style="margin-left: 7px;">{{item.endname}}</span></div>
                                 </div>
                             </div>
                             <div>
-                                <van-button @click="gobuyTicket(item)" color="#0CC893" style="width: 66px;height: 37px;line-height: 37px;padding: 0">去抢票</van-button>
+                                <van-button @click="gobuyTicket(item)" color="#0CC893"
+                                            style="width: 66px;height: 37px;line-height: 37px;padding: 0">去抢票
+                                </van-button>
                             </div>
                         </div>
                     </div>
@@ -135,7 +142,8 @@
         </div>
 
         <div class="footer">
-            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="background:#5083ED ">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
                 <van-tabbar-item :icon="car" to="/busIndex">预定巴士</van-tabbar-item>
                 <van-tabbar-item :icon="scan" to="/ticketList">乘车验票</van-tabbar-item>
                 <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
@@ -203,17 +211,17 @@
             [List.name]: List,
             [Tab.name]: Tab,
             [Tabs.name]: Tabs,
-            [Swipe.name]:Swipe,
-            [SwipeItem.name]:SwipeItem,
-            [Dialog.name]:Dialog
+            [Swipe.name]: Swipe,
+            [SwipeItem.name]: SwipeItem,
+            [Dialog.name]: Dialog
         },
         data() {
             return {
-                placeDown:placeDown,
-                placeUp:placeUp,
-                notice:"",
+                placeDown: placeDown,
+                placeUp: placeUp,
+                notice: "",
                 images: [],
-                title:"绿色班车",
+                title: "绿色班车",
                 header_active: 0,
                 error: false,
                 loading: false,
@@ -234,7 +242,8 @@
                     driveTime: "",
                     week: ""
                 },
-                busTripList:[]
+                busTripList: [],
+                notice2: '',
             }
         },
         mounted() {
@@ -247,54 +256,55 @@
         },
         methods: {
             //轮播详情
-            linkCarouselDetail(val){
+            linkCarouselDetail(val) {
                 this.$router.push({path: '/carouselDetail', query: {id: val}})
             },
 
-            showNotice(){
-                let notice = this.notice;
+            showNotice() {
+                let notice = this.notice2;
+
                 Dialog.alert({
                     title: '通知',
-                    confirmButtonText:'关闭',
-                    confirmButtonColor:'#0CC893',
+                    confirmButtonText: '关闭',
+                    confirmButtonColor: '#0CC893',
                     message: notice
                 }).then(() => {
                     // on close
                 });
             },
-            queryMore(){
+            queryMore() {
                 //跳转到更多页面
-                this.$router.push({path:'/busList'})
+                this.$router.push({path: '/busList'})
             },
 
-            gobuyTicket(item){
-                this.$router.push({path:'/buyTicket',query:{'busid':item.busid,'lineid':item.lineid}});
+            gobuyTicket(item) {
+                this.$router.push({path: '/buyTicket', query: {'busid': item.busid, 'lineid': item.lineid}});
             },
             //广告位
-            initAdvList(){
+            initAdvList() {
                 //1-拼车 2-班车 3-班车验票
                 let positionId = 2;
                 request.sendGet({
-                    url:"/common/advertlist/"+ positionId,
-                    params:{}
-                }).then(res =>{
-                    if(res.data.code == '0'){
+                    url: "/common/advertlist/" + positionId,
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == '0') {
                         this.images = res.data.data;
                     }
                 })
             },
 
             //通知
-            initNotice(){
+            initNotice() {
                 request.sendGet({
-                    url:"/common/notice/list",
-                    params:{}
-                }).then(res =>{
-                    if(res.data.code == '0'){
+                    url: "/common/notice/list",
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == '0') {
                         let list = res.data.data;
-                        list.forEach(e =>{
-                            this.notice += e.title+"       ";
-
+                        list.forEach(e => {
+                            this.notice += " ★ " + e.title + ' ★ ' + e.context + " ";
+                            this.notice2 += "<p> ★" + e.title + ' ★ </p><p>' + e.context + "</p>";
                         });
                     }
                 })
@@ -303,17 +313,17 @@
             //列表
             initListData() {
                 request.sendPost({
-                    url:"/bus/hotBusList",
-                    params:{}
-                }).then(res =>{
-                    if(res.data.code == '0'){
+                    url: "/bus/hotBusList",
+                    params: {}
+                }).then(res => {
+                    if (res.data.code == '0') {
                         this.busTripList = this.busTripList.concat(res.data.rows);
                     }
                 })
             },
 
-            linkBusDetail(val){
-                this.$router.push({path:"/busDetail",query:{busid:val}})
+            linkBusDetail(val) {
+                this.$router.push({path: "/busDetail", query: {busid: val}})
             },
 
             cancel() {
@@ -337,11 +347,13 @@
                     this.$toast.fail("请填写目的地点");
                     return;
                 }
-                this.$router.push({path: '/resultList',query:{
-                        startPlace:this.strokeInfo.startPlace,
-                        endPlace:this.strokeInfo.endPlace,
-                        type:this.header_active
-                    }});
+                this.$router.push({
+                    path: '/resultList', query: {
+                        startPlace: this.strokeInfo.startPlace,
+                        endPlace: this.strokeInfo.endPlace,
+                        type: this.header_active
+                    }
+                });
             },
         },
         created() {
@@ -350,8 +362,10 @@
 </script>
 
 <style scoped>
+
     /deep/ .van-tabs__line {
         background-color: #0CC893;
+        white-space: normal;
     }
 
     /deep/ .van-tab {
@@ -440,10 +454,10 @@
     }
 
     .line {
-             color: #5083ED;
-             font-size: 14px;
-             font-weight: bold;
-         }
+        color: #5083ED;
+        font-size: 14px;
+        font-weight: bold;
+    }
 
 
     .list-price {
@@ -456,7 +470,7 @@
         width: 100%;
     }
 
-    .van-cell__title, .van-cell__value{
+    .van-cell__title, .van-cell__value {
         flex: none;
     }
 </style>
