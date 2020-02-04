@@ -6,24 +6,24 @@
                     <van-col span="12" class="item-col">
                         <div class="item-col-wrap">
                             <div style="font-size: 14px;color: white">当前积分</div>
-                            <div style="font-size: 20px;color: white;font-weight: bold">8000</div>
+                            <div style="font-size: 20px;color: white;font-weight: bold">{{definition.total}}</div>
                         </div>
                     </van-col>
                     <van-col span="12" class="item-col">
                         <div class="item-col-wrap">
                             <div style="font-size: 14px;color: white">累积积分</div>
-                            <div style="font-size: 20px;color: white;font-weight: bold">12000</div>
+                            <div style="font-size: 20px;color: white;font-weight: bold">{{definition.all}}</div>
                         </div>
                     </van-col>
                 </van-row>
                 <van-row style="height: 69px">
                     <van-col span="12" class="item-col">
                         <div style="font-size: 14px;color: white">今日获得</div>
-                        <div style="font-size: 20px;color: white;font-weight: bold">200</div>
+                        <div style="font-size: 20px;color: white;font-weight: bold">{{definition.today}}</div>
                     </van-col>
                     <van-col span="12" class="item-col">
                         <div style="font-size: 14px;color: white">累积消费</div>
-                        <div style="font-size: 20px;color: white;font-weight: bold">5000</div>
+                        <div style="font-size: 20px;color: white;font-weight: bold">{{definition.consum}}</div>
                     </van-col>
                 </van-row>
             </div>
@@ -33,18 +33,19 @@
                 <div class="content-title">积分明细</div>
                 <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
                     <div style="padding: 0 15px;background-color: white">
-                        <van-row v-for="item in list" :key="item.id" class="item">
-                            <van-col span="9" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
-                                {{item.year}}
+                        <van-row v-for="(item,index) in dataMain.data" :key="index" class="item">
+                            <van-col span="8" style="text-align:center;tcolor: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
+                                {{item.date}}
                             </van-col>
-                            <van-col span="3" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">
-                                {{item.time}}
+                            <!--                            <van-col span="3" style="color: #5E5E5E;font-size: 14px;height: 50px;line-height: 50px">-->
+                            <!--                                {{item.time}}-->
+                            <!--                            </van-col>-->
+                            <van-col span="8" style="text-align:center;color:#202020;font-size: 14px;height: 50px;line-height: 50px">
+                                {{item.operation}}
                             </van-col>
-                            <van-col span="7" style="color:#202020;font-size: 14px;height: 50px;line-height: 50px">
-                                {{item.name}}
-                            </van-col>
-                            <van-col span="5" style="color: #FF7E00;font-size: 14px;height: 50px;line-height: 50px">
-                                {{item.value}}积分
+                            <!--                            积分明细  type =1  增加积分  type=2 减积分-->
+                            <van-col span="8" style="text-align:center;color: #FF7E00;font-size: 14px;height: 50px;line-height: 50px">
+                                {{item.type===1?'+':'-'}} {{item.integralnum}}积分
                             </van-col>
                         </van-row>
                     </div>
@@ -56,6 +57,7 @@
 <!--我的积分-->
 <script>
     import {NavBar, Row, Col, List} from 'vant';
+    import requset from '../../utils/request';
 
     export default {
         components: {
@@ -66,34 +68,66 @@
         },
         data() {
             return {
+                isOneHttp: true,
                 loading: false,
                 finished: false,
-                list: [{id: '1', time: '8:30', year: '2019年12月30日', name: '拼车出行收益', value: '20', type: '1'},
-                    {id: '2', time: '8:30', year: '2019年12月30日', name: '拼车出行收益', value: '100', type: '-1'},
-                    {id: '3', time: '8:30', year: '2019年12月30日', name: '拼车出行收益', value: '80', type: '-1'},
-                    {id: '4', time: '8:30', year: '2019年12月30日', name: '拼车出行收益', value: '120', type: '1'},
-                ],
+                list: [],
+                definition: {},
+                dataMain: {
+                    data: [],
+                    pageSize: 6,
+                    pageNum: 1,
+                    total: 0
+                },
             }
         },
         methods: {
             onClickLeft() {
                 this.$router.back(-1);
             },
+            initIntegral() {
+                requset.sendGet({
+                    url: '/user/center/integraltotal',
+                    params: {}
+                }).then(res => {
+                    if (res.data.code === 0) {
+                        this.definition = res.data.data;
+                    }
+                })
+            },
+            initList() {
+                requset.sendGet({
+                    url: '/user/center/integralinfo',
+                    params: {
+                        pageNum: this.dataMain.pageNum,
+                        pageSize: this.dataMain.pageSize,
+                    }
+                }).then((res) => {
+                    this.dataMain.total = res.data.total;
+                    //判断是否是第一次请求数据
+                    if (this.isOneHttp) {
+                        this.dataMain.data = res.data.rows;
+                        this.isOneHttp = false;
+                    } else {
+                        this.dataMain.data = this.dataMain.data.concat(res.data.rows);
+                    }
+
+                    if (this.dataMain.total === this.dataMain.data.length) {
+                        this.finished = true;
+                    }
+                    this.loading = false;
+                });
+            },
             onLoad() {
-                // 异步更新数据
-                //     setTimeout(() => {
-                //         for (let i = 0; i < 10; i++) {
-                //             this.list.push(this.list.length + 1);
-                //         }
-                //         // 加载状态结束
-                //         this.loading = false;
-                //
-                //         // 数据全部加载完成
-                //         if (this.list.length >= 40) {
-                //             this.finished = true;
-                //         }
-                //     }, 500);
+                if (this.dataMain.total > this.dataMain.data.length) {
+                    this.dataMain.pageNum += 1;
+                    this.initList();
+                }
             }
+        },
+        created() {
+            this.initIntegral();
+            this.initList();
         }
     }
 </script>
@@ -103,13 +137,14 @@
         height: 35px;
         background-color: white;
         line-height: 35px;
-        border-radius: 6px 6px  0 0 ;
+        border-radius: 6px 6px 0 0;
         text-align: center;
         color: #0CC893;
         font-size: 16px;
         font-weight: bold;
     }
-    .item{
+
+    .item {
         border-bottom: 1px solid #ECECEC;
     }
 
