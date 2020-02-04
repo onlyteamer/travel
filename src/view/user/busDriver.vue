@@ -76,7 +76,7 @@
                 minDate: new Date(2020, 0, 1),
                 maxDate: new Date(2025, 10, 1),
                 showPop:false,
-                currentDate:"",
+                currentDate: new Date(),
                 dateStr: '',
                 value1: '',
                 checkCode: '',
