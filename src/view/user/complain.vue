@@ -35,6 +35,17 @@
                             <div>处理结果：</div>
                             <div style="flex:1">{{item.dealResult}}</div>
                         </div>
+                        <div class="item-li">
+                            <div style="width: 20px;margin-right: 8px;">
+                                <img src="../../static/images/busTrip/status.png"/>
+                            </div>
+                            <div>投诉状态：</div>
+<!--                            投诉状态：0、未处理 1、投诉已查看 2、投诉已处理 3、投诉已取消-->
+                            <div style="flex:1">{{item.status===0?"未处理":(item.status===1?"投诉已查看":(item.status===2?"投诉已处理":"投诉已取消"))}}</div>
+                        </div>
+                        <div class="item-li" style="justify-content: flex-end">
+                            <van-button  style="height:35px;line-height:35px;" color="#0CC893" :disabled="item.isCancel===0" @click="cancel(item.id)">取消投诉</van-button>
+                        </div>
                     </div>
                 </div>
             </van-list>
@@ -43,13 +54,14 @@
 </template>
 
 <script>
-    import {NavBar, List} from 'vant';
+    import {NavBar, List,Button} from 'vant';
     import request from '../../utils/request'
 
     export default {
         components: {
             [NavBar.name]: NavBar,
             [List.name]: List,
+            [Button.name]: Button,
         },
         data() {
             return {
@@ -68,6 +80,18 @@
             this.initData();
         },
         methods: {
+            cancel(id){
+                request.sendPost({
+                    url:'/user/center/complain/cancel/'+id,
+                    params: {}
+                }).then(res=>{
+                    if(res.data.code===0){
+                        this.$toast.success(res.data.msg);
+                    }else{
+                        this.$toast.fail(res.data.msg);
+                    }
+                })
+            },
             initData(){
                 request.sendGet({
                     url:"/user/center/complain/list",
