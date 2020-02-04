@@ -35,11 +35,11 @@
                     </van-col>
                     <van-col span="8" class="bag-col">
                         <div class="bag-wrap-item" style="font-size: 14px;color: #242424">积分</div>
-                        <div class="bag-wrap-item" style="font-size: 20px;color: #FF7E00">{{account.coupon}}</div>
+                        <div class="bag-wrap-item" style="font-size: 20px;color: #FF7E00">{{account.integral}}</div>
                     </van-col>
                     <van-col span="8" class="bag-col">
                         <div class="bag-wrap-item" style="font-size: 14px;color: #242424">优惠券</div>
-                        <div class="bag-wrap-item" style="font-size: 20px;color: #242424">{{account.integral}}</div>
+                        <div class="bag-wrap-item" style="font-size: 20px;color: #242424">{{account.coupon}}</div>
                     </van-col>
                 </van-row>
                 <div class="func-wrap">
