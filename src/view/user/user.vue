@@ -133,7 +133,7 @@
 </template>
 
 <script>
-    import {Row, Col, Image,Tabbar,TabbarItem} from 'vant';
+    import {Row, Col, Image,Tabbar,TabbarItem,Dialog} from 'vant';
     import listImg from "./../../static/images/listImg.png";
 
     import car from './../../static/images/busTrip/car.png'
@@ -156,7 +156,8 @@
             [Col.name]: Col,
             [Image.name]: Image,
             [Tabbar.name]:Tabbar,
-            [TabbarItem.name]:TabbarItem
+            [TabbarItem.name]:TabbarItem,
+            [Dialog.name]:Dialog,
         },
         data() {
             return {
@@ -176,15 +177,31 @@
                 xingC:xingC,
                 push:push,
                 person:person,
-                userInfo:{
-
-                }
+                userInfo:{},
             }
         },
         methods: {
             linkBusDriver(){
                 //班车司机
-                this.$router.push({path: '/busDriver'});
+                //是否有权进入班车管理页
+                request.sendGet({
+                    url:'/user/center/checkauth',
+                    params:{}
+                }).then(res=>{
+                    if(res.data.code===0){
+                        this.$router.push({path: '/busDriver'});
+                    }else{
+                        Dialog.alert({
+                            title: '提示',
+                            confirmButtonText: '确认',
+                            confirmButtonColor: '#0CC893',
+                            message: res.data.msg
+                        }).then(() => {
+                            // on close
+                        });
+                    }
+                });
+
             },
 
             goMyStroke() {
