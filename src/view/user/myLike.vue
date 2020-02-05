@@ -1,6 +1,6 @@
 <template>
     <div class="contain">
-<!--        <Title :title="title" @onClickLeft="onClickLeft"></Title>-->
+        <!--        <Title :title="title" @onClickLeft="onClickLeft"></Title>-->
         <div style="margin-bottom: 55px">
             <van-list
                     :offset="10"
@@ -10,7 +10,7 @@
                     @load="onLoad"
                     :immediate-check="false"
             >
-                <div class="black" v-for="(item,index) in dataMain.data" :key="item.id">
+                <div class="black" v-for="(item,index) in dataMain.data" :key="item.id" @click="goPassengerDetails(item)">
                     <van-row style="display: flex;align-items: center">
                         <van-col span="12" >
                             <div style="display: flex;align-items: center">
@@ -46,8 +46,6 @@
                 </div>
             </van-list>
         </div>
-
-
         <div style="width: 100%">
             <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
                         style="background:#5083ED ">
@@ -81,7 +79,7 @@
         },
         data(){
             return{
-                active:"",
+                active:'',
                 title:"我的关注",
                 isOneHttp: true,
                 loading: false,
@@ -112,16 +110,11 @@
                 })
             },
             goPassengerDetails(val){
-                if(val){
-                    if(val%2 != 0){
-                        this.$router.push({path:'/carOwnerDetails'});
-                    }else {
-                        this.$router.push({path:'/passengerDetails'});
-                    }
+                if(val.passInfo.isDriver===1){
+                    this.$router.push({path:'/carOwnerDetails',query:{userId:val.personalInfo.userId}});
                 }else {
-                    this.$router.push({path:'/passengerDetails'});
+                    this.$router.push({path:'/passengerDetails',query:{userId:val.personalInfo.userId}});
                 }
-
             },
             initData() {
                 request.sendGet({
