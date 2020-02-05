@@ -33,9 +33,9 @@
                                 <!--<div class="userType" v-if="item.tag == '2'" >车主</div>-->
                                 <!--<div v-else class="passer" >乘客</div>-->
                             <!--</div>-->
-                            <div>
-                                <div class="removeTag" @click="follow(item.personalInfo.userId)">关注</div>
-                            </div>
+                            <!--<div>-->
+                                <!--<div class="removeTag" @click="follow(item.personalInfo.userId)">关注</div>-->
+                            <!--</div>-->
                         </van-col>
                     </van-row>
                 </div>
@@ -110,15 +110,15 @@
                 })
             },
             goPassengerDetails(val) {
-                if (val) {
-                    if (val % 2 != 0) {
-                        this.$router.push({path: '/carOwnerDetails'});
-                    } else {
-                        this.$router.push({path: '/passengerDetails'});
-                    }
-                } else {
-                    this.$router.push({path: '/passengerDetails'});
-                }
+                // if (val) {
+                //     if (val % 2 != 0) {
+                //         this.$router.push({path: '/carOwnerDetails'});
+                //     } else {
+                //         this.$router.push({path: '/passengerDetails'});
+                //     }
+                // } else {
+                //     this.$router.push({path: '/passengerDetails'});
+                // }
 
             },
             initData() {
