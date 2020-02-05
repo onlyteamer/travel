@@ -11,7 +11,7 @@
                 <div class="row-wrap">
                     <div class="row-wrap-title">
                         <span style="font-size: 16px;color: #202020;font-weight: bold">{{item.carName}}</span>
-                        <van-button type="default" color="#0CC893" plain  @click="goEdit(item.id)"
+                        <van-button type="default" color="#0CC893" plain @click="goEdit(item.id)"
                                     style="width: 66px;height: 25px;padding: 0;line-height: 25px">编辑
                         </van-button>
                     </div>
@@ -19,25 +19,26 @@
                         <van-row style="height: 50%;display: flex;align-items: center;">
                             <van-col span="12" class="col-flex">
                                 <img src="../../static/images/cp.png" width="16px" height="14px"/>
-                                <span >车牌：</span>
+                                <span>车牌：</span>
                                 <span>{{item.carNumber}}</span>
                             </van-col>
                             <van-col span="12" class="col-flex">
                                 <img src="../../static/images/cx.png" width="17px" height="14px"/>
-                                <span >车型：</span>
+                                <span>车型：</span>
                                 <span>{{item.carType}}</span>
                             </van-col>
                         </van-row>
                         <van-row style="height: 50%;display: flex;align-items: center;">
                             <van-col span="12" class="col-flex">
                                 <img src="../../static/images/ys.png" width="15px" height="15px"/>
-                                <span >颜色：</span>
+                                <span>颜色：</span>
                                 <span>{{item.carColor}}</span>
-                                </van-col>
+                            </van-col>
                             <van-col span="12" class="col-flex">
                                 <img src="../../static/images/sfrz.png" width="17px" height="16px"/>
                                 <span>是否认证：</span>
-                                <span>{{item.isAudite === 1?'认证通过':'认证不通过'}}</span>
+                                <!-- 0 是认证不通过 1 认证通过-->
+                                <span>{{item.isAudited === 1?'认证通过':'认证不通过'}}</span>
                             </van-col>
                         </van-row>
                     </div>
@@ -48,8 +49,9 @@
 </template>
 
 <script>
-    import {NavBar, Field,Row, Col, Button, } from 'vant';
+    import {NavBar, Field, Row, Col, Button,} from 'vant';
     import request from "../../utils/request";
+
     export default {
         components: {
             [NavBar.name]: NavBar,
@@ -58,28 +60,28 @@
             [Row.name]: Row,
             [Col.name]: Col,
         },
-        data(){
-          return{
-              isOneHttp: true,
-              loading: false,
-              finished: false,
-              dataMain: {
-                  data: [],
-                  pageSize: 6,
-                  pageNum: 1,
-                  total: 0
-              },
-          }
+        data() {
+            return {
+                isOneHttp: true,
+                loading: false,
+                finished: false,
+                dataMain: {
+                    data: [],
+                    pageSize: 6,
+                    pageNum: 1,
+                    total: 0
+                },
+            }
         },
-        methods:{
+        methods: {
             onClickLeft() {
                 this.$router.back(-1);
             },
-            goAdd(){
-                this.$router.push({path:'/ownerCertificationRemind'});
+            goAdd() {
+                this.$router.push({path: '/ownerCertificationRemind'});
             },
-            goEdit(id){
-                this.$router.push({path:'/addCar', query: {'id': id}});
+            goEdit(id) {
+                this.$router.push({path: '/addCar', query: {'id': id}});
             },
             initData() {
                 request.sendPost({
@@ -95,7 +97,7 @@
                         this.dataMain.data = res.data.rows;
                         this.isOneHttp = false;
                     } else {
-                        this.dataMain.data=this.dataMain.data.concat(res.data.rows);
+                        this.dataMain.data = this.dataMain.data.concat(res.data.rows);
                     }
 
                     if (this.dataMain.total === this.dataMain.data.length) {
@@ -118,24 +120,28 @@
 </script>
 
 <style scoped>
-    .row-wrap{
+    .row-wrap {
         height: 127px;
         background-color: white;
         padding: 0 10px;
     }
-    .row-wrap-title{
+
+    .row-wrap-title {
         height: 47px;
         border-bottom: 1px solid #ECECEC;
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
-    .row-wrap-content{
+
+    .row-wrap-content {
         height: 79px;
     }
+
     .content {
         padding: 12px 15px;
     }
+
     .flex {
         height: 40px;
         display: flex;
@@ -143,15 +149,18 @@
         padding: 0 10px;
         align-items: center;
     }
-    .col-flex{
+
+    .col-flex {
         display: flex;
         align-items: center;
         justify-content: flex-start;
     }
-    .col-flex img{
+
+    .col-flex img {
         margin-right: 3px;
     }
-    .col-flex span{
+
+    .col-flex span {
         font-size: 14px;
         color: #202020;
     }
@@ -159,6 +168,7 @@
     .item {
         background-color: white;
     }
+
     /deep/ .van-nav-bar .van-icon {
         color: #5E5E5E
     }
