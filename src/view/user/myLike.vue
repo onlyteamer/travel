@@ -28,14 +28,14 @@
                                         <img src="./../../static/images/unhapply.png" style="width: 14px;height: 14px;margin: 0 5px 0 20px" /> <span>{{item.personalInfo.badConunt}}</span>
                                     </p>
                                     <p style="margin: 5px 0">
-                                        <span style="color: #5E5E5E">乘坐2次</span>
+                                        <span style="color: #5E5E5E">乘坐{{item.passInfo.passCount}}次</span>
                                     </p>
                                 </div>
                             </div>
                         </van-col>
                         <van-col span="12" align="right">
                             <div>
-                                <div class="userType" v-if="index%2 != '0'" >车主</div>
+                                <div class="userType" v-if="item.passInfo.isDriver===1" >车主</div>
                                 <div v-else class="passer" >乘客</div>
                             </div>
                             <div><div class="removeTag" @click="del(index)">不再关注</div></div>
