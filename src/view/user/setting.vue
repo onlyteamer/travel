@@ -48,7 +48,8 @@
                                :readonly="authUserInfo.canModify===0?true:false"></van-field>
                 </div>
                 <div style="font-size: 14px;color: #FF0200;line-height: 25px">
-                    注：请填写正确身份证号，身份证号作为您出行购买商业保险的唯一证件。
+                    注：1.请填写正确身份证号，身份证号作为您出行购买商业保险的唯一证件。<br>
+                    2.认证信息请认真填写，认证后需要修改信息请联管理员。
                 </div>
                 <!--                <div style="font-size: 16px;color: #202020;font-weight: bold;line-height: 33px">-->
                 <!--                    常用站点设置-->
@@ -93,6 +94,7 @@
                 <!--                    <van-field label-class="item-label" :left-icon="redDot" label="下车地点" placeholder="多个地点请用逗号隔开"/>-->
                 <!--                </div>-->
                 <van-button style="margin-top:15px;width: 100%;height:44px" @click="saveAuthUserInfo" color="#0CC893"
+                            :disabled="authUserInfo.canModify===0?true:false"
                             type="default">
                     修改
                 </van-button>
@@ -258,15 +260,15 @@
                     this.$toast.fail("请填写性别");
                     return;
                 }
-                if (this.authUserInfo.sex !== '男' && this.authUserInfo.sex !== '女') {
-                    this.$toast.fail("请填写男或女");
-                    return;
-                }
+                // if (this.authUserInfo.sex !== '男' && this.authUserInfo.sex !== '女') {
+                //     this.$toast.fail("请填写男或女");
+                //     return;
+                // }
                 if (!this.authUserInfo.cardId || !this.checkIdCard(this.authUserInfo.cardId)) {
                     this.$toast.fail("请填写正确的身份证号");
                     return;
                 }
-                this.authUserInfo.sex = this.encodeSex(this.authUserInfo.sex);
+                // this.authUserInfo.sex = this.encodeSex(this.authUserInfo.sex);
                 request.sendPost({
                     url: '/user/center/userauth',
                     params: this.authUserInfo,
@@ -277,7 +279,7 @@
                         this.initAuthUserInfo();
                     } else {
                         this.$toast.fail(res.data.msg);
-                        this.authUserInfo.sex = this.decodeSex(this.authUserInfo.sex);
+                        // this.authUserInfo.sex = this.decodeSex(this.authUserInfo.sex);
                     }
                 })
             },
