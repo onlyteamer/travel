@@ -1,7 +1,7 @@
 <template>
     <div class="contain">
 <!--        <Title :title="title" @onClickLeft="onClickLeft"></Title>-->
-        <div>
+        <div style="margin-bottom: 55px">
             <van-list
                     :offset="10"
                     v-model="loading"
@@ -10,10 +10,10 @@
                     @load="onLoad"
                     :immediate-check="false"
             >
-                <div class="black" v-for="(item,index) in dataMain.data" :key="item.id">
-                    <van-row style="display: flex;align-items: center;padding: 5px 10px;">
+                <div v-for="(item,index) in dataMain.data" :key="item.id"  >
+                    <van-row style="display: flex;align-items: center;padding: 5px 10px;" class="black">
                         <van-col span="12">
-                            <div style="display: flex;align-items: center">
+                            <div style="display: flex;align-items: center" @click="goPassengerDetails(item)">
                                 <img :src="item.personalInfo.headimgurl?item.personalInfo.headimgurl:userAvatar" style="height: 50px;width: 50px;margin-right: 10px;border-radius: 50%">
                                 <div>
                                     <p style="margin: 5px 0"><span style="color: #5E5E5E;font-weight: bold">{{item.personalInfo.nickname}}</span>
@@ -25,14 +25,17 @@
                                         <img src="./../../static/images/unhapply.png"
                                              style="width: 14px;height: 14px;margin: 0 5px 0 20px"/> <span>{{item.personalInfo.badConunt}}</span>
                                     </p>
+                                    <p style="margin: 5px 0">
+                                        <span style="color: #5E5E5E">乘坐{{item.passInfo.passCount}}次</span>
+                                    </p>
                                 </div>
                             </div>
                         </van-col>
                         <van-col span="12" align="right">
-                            <!--<div>-->
-                                <!--<div class="userType" v-if="item.tag == '2'" >车主</div>-->
-                                <!--<div v-else class="passer" >乘客</div>-->
-                            <!--</div>-->
+                            <div>
+                                <div class="userType" v-if="item.passInfo.isDriver == '1'" >车主</div>
+                                <div v-else class="passer" >乘客</div>
+                            </div>
                             <!--<div>-->
                                 <!--<div class="removeTag" @click="follow(item.personalInfo.userId)">关注</div>-->
                             <!--</div>-->
@@ -77,6 +80,7 @@
         },
         data() {
             return {
+                active:"",
                 userAvatar:avatar,
                 title: "我的粉丝",
                 isOneHttp: true,
@@ -110,15 +114,13 @@
                 })
             },
             goPassengerDetails(val) {
-                // if (val) {
-                //     if (val % 2 != 0) {
-                //         this.$router.push({path: '/carOwnerDetails'});
-                //     } else {
-                //         this.$router.push({path: '/passengerDetails'});
-                //     }
-                // } else {
-                //     this.$router.push({path: '/passengerDetails'});
-                // }
+                if (val) {
+                    if (val.passInfo.isDriver == '1'){
+                        this.$router.push({path: '/carOwnerDetails',query:{userId:val.personalInfo.userId}});
+                    } else {
+                        this.$router.push({path: '/passengerDetails',query:{userId:val.personalInfo.userId}});
+                    }
+                }
 
             },
             initData() {
