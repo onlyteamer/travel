@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="content">
+        <div class="content" style="margin-bottom: 55px">
             <div class="info-wrap">
                 <div class="info">
                     <div style="display: flex;align-items: center;justify-content: space-between;">
@@ -105,6 +105,16 @@
             </div>
         </div>
 
+        <div style="width: 100%">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
+
         <van-popup
                 v-model="showSexPop"
                 position="bottom"
@@ -123,10 +133,14 @@
 </template>
 <!--我的资料-->
 <script>
-    import {NavBar, Field, Button, Image, DropdownMenu, DropdownItem, Icon,Popup,Picker} from 'vant';
+    import {NavBar, Field, Button, Image, DropdownMenu, DropdownItem, Icon,Popup,Picker,Tabbar,TabbarItem} from 'vant';
     import greenDot from "../../static/images/dot-green.png"
     import redDot from "../../static/images/dot-red.png"
     import request from "../../utils/request";
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
 
     export default {
         components: {
@@ -138,10 +152,17 @@
             [DropdownMenu.name]: DropdownMenu,
             [DropdownItem.name]: DropdownItem,
             [Popup.name]:Popup,
-            [Picker.name]:Picker
+            [Picker.name]:Picker,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem
         },
         data() {
             return {
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person,
+                active:"",
                 columns:[
                     {
                         text:"请选择",

@@ -27,7 +27,7 @@
             </div>
         </div>
 
-        <div style="padding: 10px 15px;margin-top: 10px" v-if="showResult">
+        <div style="padding: 10px 15px;margin-top: 10px;margin-bottom: 55px" v-if="showResult">
             <div style="font-weight: bold;font-size: 16px;margin: 5px 0">查询结果：</div>
             <div>
                 <span v-text="resultDate.linename"></span>（<span v-text="resultDate.busnumber"></span>）票务情况：
@@ -35,6 +35,16 @@
                     共：<span v-text="resultDate.totalnum"></span> 张， 售出：<span v-text="resultDate.soldnum"></span>张 ， 未售出：<span v-text="resultDate.unsoldnum"></span>张 ，退票次数：<span v-text="resultDate.refundnum"></span>次
                 </p>
                 </div>
+        </div>
+
+        <div style="width: 100%">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
         </div>
 
         <van-popup v-model="showPop" position="bottom" :style="{ height: '30%' }">
@@ -52,9 +62,13 @@
 </template>
 <!--班车司机-->
 <script>
-    import {NavBar, Row, Col, Field, Button, DropdownMenu, DropdownItem, Icon,Dialog,DatetimePicker,Popup } from 'vant';
+    import {NavBar, Row, Col, Field, Button, DropdownMenu, DropdownItem, Icon,Dialog,DatetimePicker,Popup,Tabbar,TabbarItem } from 'vant';
     import request from '../../utils/request'
     import moment from 'moment'
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
 
     export default {
         components: {
@@ -68,10 +82,13 @@
             [DropdownItem.name]: DropdownItem,
             [Icon.name]: Icon,
             [Dialog.name]: Dialog,
-            [DatetimePicker.name]:DatetimePicker
+            [DatetimePicker.name]:DatetimePicker,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem
         },
         data() {
             return {
+                active:"",
                 showResult:false,
                 minDate: new Date(2020, 0, 1),
                 maxDate: new Date(2025, 10, 1),
@@ -88,7 +105,11 @@
                 },
                 resultDate:{
 
-                }
+                },
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person
             }
         },
         mounted(){

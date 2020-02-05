@@ -132,14 +132,28 @@
             </div>
 
         </div>
+
+
+        <div style="width: 100%">
+            <van-tabbar v-model="footFlag" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
     </div>
 </template>
 <!--个人中心-充值提现-->
 <script>
-    import {NavBar, Row, Col, Field, Button, Tab, Tabs} from 'vant';
+    import {NavBar, Row, Col, Field, Button, Tab, Tabs,Tabbar,TabbarItem} from 'vant';
     import request from "../../utils/request"
     import wx from 'weixin-js-sdk'
-
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
 
     export default {
         components: {
@@ -149,10 +163,13 @@
             [Button.name]: Button,
             [Field.name]: Field,
             [Tab.name]: Tab,
-            [Tabs.name]: Tabs
+            [Tabs.name]: Tabs,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem
         },
         data() {
             return {
+                footFlag:"",
                 active: "0",
                 dataMain: {
                     balance: 0,
@@ -164,6 +181,10 @@
                 czje: '',
                 txje: '',
                 wxData: {},
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person
             }
         },
         methods: {
@@ -425,6 +446,7 @@
         background-color: #F6F6F6;
         padding: 0 15px;
         position: relative;
+        margin-bottom: 55px;
     }
 
     .info-wrap {

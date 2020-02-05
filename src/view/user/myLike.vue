@@ -1,7 +1,7 @@
 <template>
     <div class="contain">
 <!--        <Title :title="title" @onClickLeft="onClickLeft"></Title>-->
-        <div >
+        <div style="margin-bottom: 55px">
             <van-list
                     :offset="10"
                     v-model="loading"
@@ -47,23 +47,41 @@
             </van-list>
         </div>
 
+
+        <div style="width: 100%">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
     </div>
 </template>
 
 <script>
     import Title from './../../components/header'
-    import { Row, Col,List} from 'vant';
+    import { Row, Col,List,Tabbar,TabbarItem} from 'vant';
     import  request from '../../utils/request'
-//TODO 字段没齐
+
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
+
     export default {
         components:{
             Title,
             [Row.name]:Row,
             [Col.name]:Col,
-            [List.name]: List
+            [List.name]: List,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem
         },
         data(){
             return{
+                active:"",
                 title:"我的关注",
                 isOneHttp: true,
                 loading: false,
@@ -74,6 +92,10 @@
                     pageNum: 1,
                     total: 0
                 },
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person
             }
         },
         methods:{

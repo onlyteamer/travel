@@ -1,6 +1,6 @@
 <template>
     <div ref="content" class="content">
-        <div class="content">
+        <div class="content" style="margin-bottom: 55px">
             <div class="item">
                 <van-field label-class="item-label" v-model="driverInfo.driverName" label="司机姓名"></van-field>
             </div>
@@ -53,18 +53,32 @@
                 </div>
             </div>
         </div>
+
+        <div style="width: 100%">
+            <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF"
+                        style="background:#5083ED ">
+                <van-tabbar-item :icon="chengK" to="/carIndex">我是乘客</van-tabbar-item>
+                <van-tabbar-item :icon="xingC" to="/myStroke">我的行程</van-tabbar-item>
+                <van-tabbar-item :icon="push" to="/pushStroke">发布行程</van-tabbar-item>
+                <van-tabbar-item :icon="person" to="/user?flag=1">个人中心</van-tabbar-item>
+            </van-tabbar>
+        </div>
+
     </div>
 
 
 </template>
 <!--车主认证-->
 <script>
-    import {NavBar, Field, Button, Uploader, Checkbox, Icon} from 'vant';
+    import {NavBar, Field, Button, Uploader, Checkbox, Icon,Tabbar,TabbarItem} from 'vant';
     import uploadIcon from '../../static/images/upload.png';
 
     import request from '../../utils/request';
     import context from "../../utils/context";
-
+    import chengK from './../../static/images/chengk.png'
+    import xingC from './../../static/images/xingC.png'
+    import push from './../../static/images/push.png'
+    import person from './../../static/images/chengk.png'
     export default {
         components: {
             [NavBar.name]: NavBar,
@@ -72,10 +86,13 @@
             [Button.name]: Button,
             [Uploader.name]: Uploader,
             [Checkbox.name]: Checkbox,
-            [Icon.name]: Icon
+            [Icon.name]: Icon,
+            [Tabbar.name]: Tabbar,
+            [TabbarItem.name]: TabbarItem
         },
         data() {
             return {
+                active:"",
                 definition: {
                     checked: false
                 },
@@ -87,7 +104,11 @@
                 },
                 baseImgUrl: context.imageServer,
                 imgURL: [],
-                uploadIcon: uploadIcon
+                uploadIcon: uploadIcon,
+                chengK: chengK,
+                xingC: xingC,
+                push: push,
+                person: person
             }
         },
         methods: {
