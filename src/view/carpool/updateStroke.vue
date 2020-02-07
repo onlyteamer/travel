@@ -263,6 +263,7 @@
                         this.tripInfo = res.data.data.tripinfo;
                         this.tripInfo.tripId= tripId;
                         let carinfo = res.data.data.carinfo;
+                        this.carData = [];
                         for (let i in carinfo) {
                             let car = {};
                             car.id = i;

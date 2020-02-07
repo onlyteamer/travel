@@ -269,7 +269,9 @@
                             this.tripInfo.tripLine = res.data.data.tripinfo.tripLine;
                             this.tripInfo.startPlace = res.data.data.tripinfo.startPlace;
                             this.tripInfo.endPlace = res.data.data.tripinfo.endPlace;
-                            this.tripInfo.direction = res.data.data.tripinfo.direction;
+                            if(res.data.data.tripinfo.direction){
+                                this.tripInfo.direction = res.data.data.tripinfo.direction;
+                            }
                             this.tripInfo.remark = res.data.data.tripinfo.remark;
                             this.tripInfo.totalSeat = res.data.data.tripinfo.totalSeat;
                             this.tripInfo.tripPrice = res.data.data.tripinfo.tripPrice;
@@ -281,6 +283,7 @@
                          }
 
                         let carinfo = res.data.data.carinfo;
+                         this.carData = [];
                         for (let i in carinfo) {
                             let car = {};
                             car.id = i;
@@ -446,6 +449,7 @@
 
                         }
                         let carinfo = res.data.data.carinfo;
+                        this.carData = [];
                         for (let i in carinfo) {
                             let car = {};
                             car.id = i;
