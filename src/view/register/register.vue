@@ -139,7 +139,7 @@
             },
             goAgreement() {
                 //协议页面
-                this.$router.push({path: '/agreement', query: {name: '绿色出行用户协议'}})
+                this.$router.push({path: '/agreement', query: {id: '1'}})
             }
         },
         mounted: function () {

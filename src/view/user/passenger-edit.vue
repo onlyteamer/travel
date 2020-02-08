@@ -68,7 +68,7 @@
             },
             goAgreement() {
                 //协议页面
-                this.$router.push({path: '/agreement', query: {name: '保险条款'}})
+                this.$router.push({path: '/agreement', query: {id: '1'}})
             },
             checkIdCard(idCard) {
                 if (/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$/.test(idCard)
