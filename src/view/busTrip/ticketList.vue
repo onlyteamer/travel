@@ -275,7 +275,8 @@
                 }
                 Dialog.confirm({
                     title: '退票',
-                    message: '是否确认退票？'
+                    message: '请问是否退票？退票将收取您2元退票手续费（官方通知的特殊情况退票除外）。\n' +
+                        '请合理安排出行，感谢您的一路相伴。'
                 }).then(() => {
                     // 确定
                     request.sendPost({
