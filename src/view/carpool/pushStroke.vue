@@ -269,18 +269,20 @@
                             this.tripInfo.tripLine = res.data.data.tripinfo.tripLine;
                             this.tripInfo.startPlace = res.data.data.tripinfo.startPlace;
                             this.tripInfo.endPlace = res.data.data.tripinfo.endPlace;
-                            if(res.data.data.tripinfo.direction!==''){
+                            if(res.data.data.tripinfo.direction===0||res.data.data.tripinfo.direction===1){
                                 this.tripInfo.direction = res.data.data.tripinfo.direction;
+
+                                for(let i=0;i<this.pointData2.length;i++){
+                                    if(this.pointData2[i].pointId == this.tripInfo.direction){
+                                        this.tripInfo.point = this.pointData2[i].pointName;
+                                    }
+                                }
                             }
                             this.tripInfo.remark = res.data.data.tripinfo.remark;
                             this.tripInfo.totalSeat = res.data.data.tripinfo.totalSeat;
                             this.tripInfo.tripPrice = res.data.data.tripinfo.tripPrice;
                         }
-                         for(let i=0;i<this.pointData2.length;i++){
-                            if(this.pointData2[i].pointId == this.tripInfo.direction){
-                                this.tripInfo.point = this.pointData2[i].pointName;
-                            }
-                         }
+
 
                         let carinfo = res.data.data.carinfo;
                          this.carData = [];
@@ -386,6 +388,7 @@
                     this.$toast.fail("价格不能为空");
                     return;
                 }
+
                 request.sendPost({
                     url: '/sharecar/trip/add',
                     params: this.tripInfo
