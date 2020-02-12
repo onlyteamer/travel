@@ -65,7 +65,7 @@
                         <van-col span="6" v-if="item.phoneBtn===1">
                             <van-button type="default" color="#0CC893" size="mini"
                                         style="line-height: 34px;height: 34px;font-size: 14px;width: 100%;"
-                                        @click="call(item.showPassenger.phone)">电话
+                                        @click="call(item.showPassenger.telphone)">电话
                             </van-button>
                         </van-col>
                         <!--tripState 行程状态：0 待出行 1 已完成 2 已取消 3 已终止 4 已发车 5 待确认 -->
