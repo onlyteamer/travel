@@ -22,7 +22,15 @@
             <van-swipe :autoplay="3000" style="height: 200px;margin-top: 0px">
                 <van-swipe-item v-for="(image, index) in images" :key="index">
                     <!--<img :src="image" width="100px" height="100px"/>-->
-                    <div :style="{width: '100%',height: '100%',backgroundSize:'cover',backgroundImage:'url('+image.imageUrl+')'}" @click="linkCarouselDetail(image.id)"></div>
+                    <div @click="linkCarouselDetail(image.id)" style="width: 100%;height: 100%">
+                        <van-image
+                                width="100%"
+                                height="100%"
+                                fit="fill"
+                                :src=image.imageUrl
+                        />
+                    </div>
+<!--                    <div :style="{width: '100%',height: '100%',backgroundSize:'cover',backgroundImage:'url('+image.imageUrl+')'}" @click="linkCarouselDetail(image.id)"></div>-->
                 </van-swipe-item>
             </van-swipe>
 
