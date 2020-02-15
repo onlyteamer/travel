@@ -243,4 +243,12 @@
     /deep/ .van-cell {
         padding-left: 0 !important;;
     }
+
+
+</style>
+
+<style>
+    .van-cell__title{
+        margin-left: 15px;
+    }
 </style>
