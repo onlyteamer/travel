@@ -38,8 +38,7 @@
                         <!--finished-text=""-->
                         <!--@load="onLoad"-->
                         <!--:immediate-check="false">-->
-                        <div v-for="(item,index) in lineDetailsList" :key="item.id"
-                             :class='index==(listSize-1)?"item-li last-station":"item-li"'>
+                        <div v-for="(item,index) in lineDetailsList" :key="item.id" :class='index==(listSize-1)?"item-li last-station":"item-li"'>
                             <img :src="lineUp" style="position: absolute;top: 0px;width: 20px;height: 23px" v-if="index == '0'">
                             <img :src="lineDown" style="position: absolute;top: 0px;width: 20px;height: 23px" v-if="index == (listSize-1)">
                             <div class="station-item">
@@ -160,7 +159,7 @@
                 }).then(res =>{
                     if(res.data.code == '0'){
                         this.lineDetails = res.data.data;
-
+                        this.title = res.data.data.linename;
                         this.queryLineDetailsList(busid);
                     }
                 })
@@ -175,7 +174,7 @@
                     }).then(res =>{
                         if(res.data.code == '0'){
                             this.lineDetailsList = res.data.rows;
-                            this.title = res.data.data.linename;
+
                             this.listSize = res.data.total;
                         }
                     })
@@ -195,7 +194,6 @@
             this.offset = height - 46 - 70 - 250  - 42;
             this.mapHeight = this.offset+'px';
             this.itemHeight =( height - 46 - 73 - 15 - 50 -15 - 10 - 45 - 50-15)+'px';
-            console.log(this.itemHeight);
         },
     }
 </script>
