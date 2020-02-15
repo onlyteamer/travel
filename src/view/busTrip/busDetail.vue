@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div>
+        <div style="background-color: white">
             <div>
                 <van-nav-bar :fixed="true" :title="title"  right-text="加入群聊"
                              @click-right="joinGroupChat"/>
@@ -25,7 +25,7 @@
                         <span class="list-price">￥{{lineDetails.ticketPrice}}</span>
                     </div>
                 </div>
-                <div class="item">
+                <div class="item" :style="{'height':itemHeight}">
                     <!--<div class="tag-wrap">-->
                     <!--<img :src="upTag">-->
                     <!--<img :src="downTag">-->
@@ -58,19 +58,18 @@
                     <span style="color: #5E5E5E;font-size: 12px;margin: 0 14px">向下滑动查看更多站点</span>
                     <img :src="down" width="11px" height="21px">
                 </div>
-            </div>
-            <div style="position: relative;margin-bottom: 50px">
-                <aMap
-                        id="userPosition"
-                        :lon="carInfo.lon"
-                        :lat="carInfo.lat"
-                        :height="mapHeight" width="100%">
-                </aMap>
-
                 <div class="passCar" @click="linkBuyTicket">乘车</div>
             </div>
-        </div>
+<!--            <div style="position: relative;margin-bottom: 50px">-->
+<!--&lt;!&ndash;                <aMap&ndash;&gt;-->
+<!--&lt;!&ndash;                        id="userPosition"&ndash;&gt;-->
+<!--&lt;!&ndash;                        :lon="carInfo.lon"&ndash;&gt;-->
+<!--&lt;!&ndash;                        :lat="carInfo.lat"&ndash;&gt;-->
+<!--&lt;!&ndash;                        :height="mapHeight" width="100%">&ndash;&gt;-->
+<!--&lt;!&ndash;                </aMap>&ndash;&gt;-->
+<!--            </div>-->
 
+        </div>
         <div class="footer">
             <van-tabbar v-model="active" active-color="rgb(12, 200, 147)" inactive-color="#FFFFFF" style="z-index: 999;background:#5083ED ">
                 <van-tabbar-item :icon="car" to="/busIndex">预定巴士</van-tabbar-item>
@@ -113,6 +112,7 @@
         },
         data() {
             return {
+                itemHeight:'',
                 active:"",
                 mapHeight: '',
                 offset: 0,
@@ -187,11 +187,14 @@
         },
         created() {
             this.initData();
+
         },
         mounted() {
             let height = window.innerHeight;
             this.offset = height - 46 - 70 - 250  - 42;
             this.mapHeight = this.offset+'px';
+            this.itemHeight =( height - 46 - 73 - 15 - 50 -15 - 10 - 45 - 50-15)+'px';
+            console.log(this.itemHeight);
         },
     }
 </script>
@@ -202,7 +205,7 @@
     }
 
     .item {
-        height: 200px;
+        /*height: 200px;*/
         padding: 15px 0;
         display: flex;
         align-items: center;
@@ -323,12 +326,13 @@
     }
 
     .passCar{
-        position: absolute;
-        bottom: 15px;
+       /*position: absolute;*/
+       /* bottom: 15px;*/
+        margin: 0 auto 15px auto;
         z-index: 999;
         width: 88%;
-        left: 50%;
-        transform: translateX(-50%);
+        /*left: 50%;*/
+        /*transform: translateX(-50%);*/
         text-align: center;
         background: #0CC893;
         padding: 12px 10px;
