@@ -22,15 +22,17 @@
 
             initData() {
                 let id = this.$route.query.id;
-                request.sendGet({
-                    url: "/common/clause/" + id,
-                    params: {}
-                }).then(res => {
-                    if (res.data.code === 0) {
-                        this.content = this.decode(res.data.data.context);
-                        this.title = res.data.data.title
-                    }
-                })
+                let me = this;
+                request.axios.get('/common/clause/'+ id)
+                    .then(function (response) {
+                            if (response.data.code === 0) {
+                                me.content = me.decode(response.data.data.context);
+                                me.title = response.data.data.title
+                            }
+                        }
+                    ).catch(function (error) {
+                    console.log(error);
+                });
             },
             decode(html) {
                 var temp = document.createElement("div");
