@@ -289,7 +289,7 @@
                     this.$toast.fail("请填写正确的身份证号");
                     return;
                 }
-                // this.authUserInfo.sex = this.encodeSex(this.authUserInfo.sex);
+                this.authUserInfo.sex = this.encodeSex(this.authUserInfo.sex);
                 request.sendPost({
                     url: '/user/center/userauth',
                     params: this.authUserInfo,
@@ -300,7 +300,7 @@
                         this.initAuthUserInfo();
                     } else {
                         this.$toast.fail(res.data.msg);
-                        // this.authUserInfo.sex = this.decodeSex(this.authUserInfo.sex);
+                        this.authUserInfo.sex = this.decodeSex(this.authUserInfo.sex);
                     }
                 })
             },
