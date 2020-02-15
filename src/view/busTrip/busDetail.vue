@@ -175,6 +175,7 @@
                     }).then(res =>{
                         if(res.data.code == '0'){
                             this.lineDetailsList = res.data.rows;
+                            this.title = res.data.data.linename;
                             this.listSize = res.data.total;
                         }
                     })
