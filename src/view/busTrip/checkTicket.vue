@@ -151,7 +151,7 @@
 
 <script>
     import Title from './../../components/header'
-    import {Row, Col, Tag, Divider, Swipe, SwipeItem, NoticeBar, List, Dialog, Tabbar, TabbarItem} from 'vant'
+    import {Row, Col, Tag, Divider,Image, Swipe, SwipeItem, NoticeBar, List, Dialog, Tabbar, TabbarItem} from 'vant'
     import laba from './../../static/images/laba.png'
     import down from '../../static/images/busTrip/down.png'
     import blueTime from './../../static/images/busTrip/blue_time.png'
@@ -187,6 +187,7 @@
             [Dialog.name]: Dialog,
             [Tabbar.name]: Tabbar,
             [TabbarItem.name]: TabbarItem,
+            [Image.name]: Image,
         },
         data() {
             return {
@@ -375,7 +376,7 @@
                            let color = me.randomHexColor();
                            // setTimeout(function() {
                            me.doDraw(color);
-                        },600);
+                        },100);
 
                     }
                 })
