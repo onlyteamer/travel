@@ -77,7 +77,7 @@
                 <van-tabbar-item :icon="user" to="/user">个人中心</van-tabbar-item>
             </van-tabbar>
         </div>
-        <van-popup v-model="wxpay" :style="{height: '45%',width:'90%'}"
+        <van-popup v-model="isWxpay" :style="{height: '45%',width:'90%'}"
                    style="background-color: white;border-radius: 10px">
             <div class="pay-title">班车充值</div>
             <div class="func-wrap">
@@ -156,7 +156,7 @@
                 active: "",
                 title: "支付",
                 paytype: '1',
-                wxpay: false,
+                isWxpay: false,
                 num: 0,
                 amount: 0,
                 czje: 50,
@@ -206,7 +206,7 @@
                     paytype: this.paytype
                 };
                 if (this.paytype === '1') {
-                    params.push('prepayId', this.wxData.prepayId)
+                    params['prepayId']= this.wxData.prepayId;
                 }
                 request.sendPost({
                     url: '/bus/buyTicket',
@@ -279,8 +279,8 @@
                     },
                     function (res) {
                         if (res.err_msg === "get_brand_wcpay_request:ok") {
-                            this.$toast.success("支付成功");
-                            if (!this.wxpay) {
+                            me.$toast.success("支付成功");
+                            if (!me.isWxpay) {
                                 me.submitOrder();
                             } else {
                                 me.recharge();
@@ -289,12 +289,12 @@
                             // 使用以上方式判断前端返回,微信团队郑重提示：
                             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                         } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
-                            this.$toast.fail("支付失败");
-                            me.$router.push({path: '/buyTicket'});
+                            me.$toast.fail("支付失败");
+                            me.$router.push({path: '/buyTicket',query: {'busid': me.busid, 'lineid': me.lineid}});
                             me.cancelTicket();
                         } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
-                            this.$toast("取消支付");
-                            me.$router.push({path: '/buyTicket'});
+                            me.$toast("取消支付");
+                            me.$router.push({path: '/buyTicket',query: {'busid': me.busid, 'lineid': me.lineid}});
                             me.cancelTicket();
                         }
                     }
@@ -311,7 +311,7 @@
                     }
                 }).then((res) => {
                     if (res.data.code === 0) {
-                        this.wxpay = false;
+                        this.isWxpay = false;
                     }
                     this.$toast(res.data.msg);
                 })
@@ -350,7 +350,7 @@
                     if (res.data.code === 0) {
                         this.submitOrder();
                     } else if (res.data.code === 100) {
-                        this.wxpay = true;
+                        this.isWxpay = true;
                     } else {
                         this.$toast.fail(res.data.msg);
                     }
