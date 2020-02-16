@@ -5,7 +5,7 @@
             <van-nav-bar :fixed="true" :title="busInfo.linename"/>
         </div>
         <div class="content">
-            <div class="line-info-wrap">
+            <div class="line-info-wrap" @click="goLineDetail">
                 <div class="line-info">
                     <div>
                         <div>
@@ -146,6 +146,9 @@
             }
         },
         methods: {
+            goLineDetail(){
+                this.$router.push({path: "/busDetail", query: {busid: this.busid}})
+            },
             nextMonth() {
                 this.currentDate = moment(this.currentDate, 'YYYY-MM').add(1, 'months');
                 this.dateTitle = this.currentDate.format('YYYY年MM月');
